@@ -46,3 +46,4 @@ updaplibs - sync my Aperture libraries to a USB flash drive
             when invoked as updhome it syncs directories in $HOME
 updsums - create or update a SUMS file which contains chksums for all files
           in that directory hierarchy
+wb - automatically downloads my favorites from wallbase.cc
