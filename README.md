@@ -6,13 +6,15 @@ Linux, OS X, and Cygwin.
 
 To clone:
     git clone https://github.com/doctorfree/Scripts.git
+
     or
+
     git clone git@github.com:doctorfree/Scripts.git
 
 Contents:
 --------
 
-any2any - Uses ffmpeg to convert from any video format to any other
+[**any2any**](any2any) - Uses ffmpeg to convert from any video format to any other
           This program works by either linking or copying any2any to a file
           which specifies the desired input and output formats by its name.
           For example, if you want to convert from WMV to MP4 then you could
