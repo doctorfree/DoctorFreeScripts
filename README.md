@@ -47,3 +47,7 @@ updaplibs - sync my Aperture libraries to a USB flash drive
 updsums - create or update a SUMS file which contains chksums for all files
           in that directory hierarchy
 wb - automatically downloads my favorites from wallbase.cc
+     You will need to configure your own Wallbase username/password as well as
+     extensively modify the favorites by both name and number so this script
+     may not be that useful to others. Get MacEarl's original and do to it
+     what I have done to this.
