@@ -1,0 +1,91 @@
+#!/bin/bash
+#
+# any2any - convert from any video format to any other
+#
+# Written 7-Mar-2014 by Ronald Joe Record <rr@ronrecord.com>
+#
+#    This program works by either linking or copying any2any to a file
+#    which specifies the desired input and output formats by its name.
+#    For example, if you want to convert from WMV to MP4 then you could
+#    create a symbolic link from any2any to wmv2mp4 as follows:
+#        ln -s any2any wmv2mp4
+#    Similarly, symbolic links (or copies or hard links) could be created
+#    to convert from any (3 lowercase letter representation) video format
+#    to any other video format. Commonly used conversions include:
+#        wmv2mkv avi2mpg wmv2mp4 and so on.
+#
+#    Naming restricton: [3 lowercase letter input]2[3 lowercase letter output]
+#    for a 7 letter name with "2" in the middle. The 3 letter prefix and suffix
+#    must also be a filename suffix that ffmpeg recognizes as a video format.
+
+ME=`basename $0`
+PRE="${ME:0:3}"
+SUF="${ME:3:3}"
+INP=`echo $PRE | tr '[:lower:]' '[:upper:]'`
+DIR=`echo $SUF | tr '[:lower:]' '[:upper:]'`
+[ -d "$DIR" ] || {
+    echo "Output directory does not exist or is not a directory. Creating."
+    mkdir -p "$DIR"
+}
+ACODEC=
+CODEC=
+SIZE=
+VCODEC=
+TELL=
+
+usage() {
+    printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec]"
+    printf "\n\t[-s size] [-d] [-u] file1 [file2 file3 ...]\n"
+    printf "\nWhere:\n\t-d indicates tell me what you would do"
+    printf "\n\t-a audio codec specifies the output audio codec"
+    printf "\n\t-v video codec specifies the output video codec"
+    printf "\n\t-s size specifies the output video size (widthxheight)"
+    printf "\n\t-c codec specifies the output codec"
+    printf "\n\t-u displays this usage message\n"
+    printf "\nExamples:\n\tCopy audio and video codecs, convert the container"
+    printf "\n\t$ME -c copy Directory/Filename"
+    printf "\n\tSpecify output video size of 640 width by 480 height"
+    printf "\n\t$ME -s 640x480 Directory/Filename"
+    printf "\n\tSpecify libx264 output video codec"
+    printf "\n\t$ME -v libx264 Directory/Filename"
+    exit 1
+}
+
+while getopts s:v:a:c:du flag; do
+    case $flag in
+        a)
+            ACODEC="-acodec $OPTARG"
+            ;;
+        c)
+            CODEC="-codec $OPTARG"
+            ;;
+        d)
+            TELL=1
+            ;;
+        s)
+            SIZE="-s $OPTARG"
+            ;;
+        v)
+            VCODEC="-vcodec $OPTARG"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+
+for i in "$@"
+do
+    [ -f "$i" ] || {
+        echo "Input file $i does not exist or is not a regular file. Skipping."
+        continue
+    }
+    j=`echo "$i" | sed -e "s/${INP}\//${DIR}\//" -e "s/\.${PRE}/\.${SUF}/"`
+    OPTS="$ACODEC $CODEC $SIZE $VCODEC"
+    if [ "$TELL" ]
+    then
+        echo "ffmpeg -i $i -loglevel warning -strict -2 $OPTS $j"
+    else
+        ffmpeg -i "$i" -loglevel warning -strict -2 $OPTS "$j"
+    fi
+done
