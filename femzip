@@ -1,0 +1,138 @@
+#!/bin/bash
+
+D=/Users/rrecord/Downloads
+
+# ___MODIFY THESE THREE SETTINGS TO MATCH THE DOWNLOADED FILE(S)___
+# Set the Photographer
+#P="Stefan Soell"
+#P="Valery Anzilov"
+P="FEMJOY Exclusive"
+#P="Peter Olssen"
+#P="Vaillo"
+#P="Iain"
+#P="Alexandr Petek"
+
+# Set the Model
+#M="VIC E."
+#M=CARISHA
+#M=CORINNA
+M=KINGA
+#M=MARYLIN
+#M="HAYDEN W."
+#M="ANGIE C."
+#M="JENNIFER M."
+#M="JASMINE A."
+#M="JOSEPHINE"
+
+# Set the extraction base directory
+B="/Volumes/My_Book_Studio/Pictures/Work/Femjoy"
+
+# Set the extraction subdirectory
+S=""
+
+########### END CONFIGURATION SECTION ##################
+
+usage() {
+    printf "Usage: femzip [-m model] [-p photographer] [-b basedir] [-o subdir] [-r]\n"
+    printf "Where:\n\tmodel is the model's name\n"
+    printf "\tphotographer is the photographer's name\n"
+    printf "\tbasedir is the destination base directory for unzipped files\n"
+    printf "\tsubdir is the destination subdirectory for unzipped files\n"
+    printf "\t-d indicates tell me what you would do without doing anything\n"
+    printf "\t-r indicates removal of the zip file after extraction\n"
+    printf "\t-u displays this usage message\n"
+    printf "Current defaults are:\n\tPhotographer = $P\n"
+    printf "\tModel = $M\n"
+    printf "\tSubdir = $S\n"
+    exit 1
+}
+
+ECHO=
+R=
+while getopts b:m:o:p:dru flag; do
+    case $flag in
+        b)
+            B="$OPTARG";
+            ;;
+        d)
+            ECHO=1;
+            ;;
+        m)
+            M="$OPTARG";
+            ;;
+        o)
+            S="$OPTARG";
+            ;;
+        p)
+            P="$OPTARG";
+            ;;
+        r)
+            R=1;
+            ;;
+        u)
+            usage;
+            ;;
+        ?)
+            usage;
+            ;;
+    esac
+done
+#shift $(( OPTIND - 1 ));
+
+[ "$S" ] || {
+    FIRST=`echo $M | awk '{ print $1 }'`
+    LAST=`echo $M | awk '{ print $2 }'`
+    MLOW=`echo $FIRST | tr '[:upper:]' '[:lower:]'`
+    FIRST="$(tr '[:lower:]' '[:upper:]' <<< ${MLOW:0:1})${MLOW:1}"
+    [ "$LAST" ] && LAST=`echo $LAST | sed -e "s/\.//g"`
+    if [ "$LAST" ]
+    then
+        S="${FIRST}_${LAST}"
+    else
+        S="${FIRST}"
+    fi
+}
+
+O="$B/$S"
+[ -d "$O" ] || {
+    if [ "$ECHO" ]
+    then
+        printf "mkdir $O\n"
+    else
+        mkdir "$O"
+    fi
+}
+cd "$D"
+for i in "$M"_"$P"_*.zip
+do
+    [ -f "$i" ] || {
+        printf "$i is not a regular file. Skipping.\n"
+        continue
+    }
+    T=`echo "$i" | sed -e "s/${M}_${P}_//" -e "s/_large.zip//"`
+    N=`echo "$T" | sed -e "s/ /_/g"`
+    [ -d "$O/$N" ] && {
+        printf "$O/$N already exists. Skipping $i"
+        continue
+    }
+    if [ "$ECHO" ]
+    then
+        printf "mkdir $O/$N\n"
+    else
+        mkdir "$O/$N"
+    fi
+    if [ "$ECHO" ]
+    then
+        printf "unzip -d $O/$N $i\n"
+     else
+        unzip -d "$O/$N" "$i"
+     fi
+    [ "$R" ] && {
+        if [ "$ECHO" ]
+        then
+            printf "rm -f $i\n"
+        else
+            rm -f "$i"
+        fi
+    }
+done

@@ -1,0 +1,183 @@
+#!/bin/bash
+#
+# femvidlinks - create symbolic links to movie files where possible to reduce
+#    duplicate storage of movies. Link into my iTunes library.
+#
+# Written 01-Dec-2013 by Ronald Joe Record <rr@ronrecord.com>
+#
+
+M="$HOME/Movies"
+I="/Volumes/Lacie_Porsche_1TB/iTunes/Home Videos"
+W="/Volumes/My_Book_Studio/Movies"
+F="$W/Work/Femjoy"
+USE_SUM=
+TELL=
+FEMJOY=
+
+usage() {
+    printf "\nUsage: femvidlinks [-M Movies Dir] [-W Work Dir] [-F Femjoy Dir]"
+    printf "\n\t[-I iTunes Dir] [-d] [-c] [-j] [-u]\n\n"
+    exit 1
+}
+
+remlink() {
+    printf "\nRemoving $2"
+    [ "$TELL" ] || rm -f "$2"
+    printf "\nLinking $1 to $2\n"
+    [ "$TELL" ] || ln -s "$1" "$2"
+}
+
+FindAndLink() {
+    find . -type f | while read i
+    do
+        found=
+        if [ -L "$i" ]
+        then
+            continue
+        else
+            b=`basename "$i"`
+            [ "$b" = "SUMS" ] && continue
+            [ "$USE_SUM" ] && ck1=`cksum "$i" | awk ' { print $1 } '`
+            [ -f "$I/$b" ] && {
+                found=1
+                if [ "$USE_SUM" ]
+                then
+                    ck2=`cksum "$I/$b" | awk ' { print $1 } '`
+                    [ $ck1 -eq $ck2 ] && {
+                        remlink "$I/$b" "$i"
+                    } 
+                else
+                    remlink "$I/$b" "$i"
+                fi
+            }
+            [ $found ] || {
+                [ "$TELL" ] && continue
+                # Maybe the filename in iTunes has been changed. Search the SUMS
+                [ "$USE_SUM" ] && {
+                    iname=`grep $ck1 "$ISUMS"`
+                    [ "$iname" ] && {
+                        b=`echo $iname | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+                        b=`echo $b | sed -e "s/\.\///"`
+                        remlink "$I/$b" "$i"
+                    }
+                }
+            }
+        fi
+    done
+}
+
+FindAndRemove() {
+    find . -type l | while read i
+    do
+        ls -lL "$i" > /dev/null 2>&1
+        [ $? -eq 0 ] || {
+            printf "\nRemoving $i"
+            [ "$TELL" ] || rm -f "$i"
+        }
+    done
+}
+
+while getopts M:W:F:I:dcju flag; do
+    case $flag in
+        M)
+            M="$OPTARG"
+            ;;
+        W)
+            W="$OPTARG"
+            ;;
+        F)
+            F="$OPTARG"
+            ;;
+        I)
+            I="$OPTARG"
+            ;;
+        d)
+            TELL=1
+            ;;
+        c)
+            USE_SUM=1
+            ;;
+        j)
+            FEMJOY=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ -d "$M" ] || {
+    echo "$M does not exist or is not a directory. Exiting."
+    exit 1
+}
+[ -d "$W" ] || {
+    echo "$W does not exist or is not a directory. Exiting."
+    exit 1
+}
+[ -d "$F" ] || {
+    echo "$F does not exist or is not a directory. Exiting."
+    exit 1
+}
+[ -d "$I" ] || {
+    echo "$I does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+ISUMS="$I"/SUMS
+# Not using this yet
+WSUMS="$W"/SUMS
+
+# Update the iTunes SUMS file first
+[ "$USE_SUM" ] && {
+    cd "$I"
+    printf "\nUpdating iTunes SUMS file ...\n"
+    updsums
+}
+
+# Link to file in iTunes library if it's a duplicate
+cd "$W"
+printf "\nFinding and symlinking duplicate files in $W ...\n"
+FindAndLink
+cd "$M"
+printf "\nFinding and symlinking duplicate files in $M ...\n"
+FindAndLink
+
+# Create and populate the Femjoy "All" folder
+[ "$FEMJOY" ] && {
+    cd "$F"
+    printf "\nCreating and populating the Femjoy 'All' folder ...\n"
+    [ -d All ] || {
+        printf "\nCreating Femjoy All directory\n"
+        [ "$TELL" ] || mkdir All
+    }
+    for d in *
+    do
+        [ "$d" = "All" ] && continue
+        [ -d $d ] && {
+            VIDS=`echo */*`
+            cd All
+            for vid in $VIDS
+            do
+                Model=`dirname $vid`
+                [ "$Model" = "All" ] && continue
+                link=`basename $vid`
+                [ -L $link ] || {
+                    printf "\nln -s ../$vid ."
+                    [ "$TELL" ] || ln -s ../$vid .
+                }
+            done
+            cd ..
+        }
+    done
+}
+
+# Remove broken links
+cd "$W"
+printf "\nRemoving broken links in $W ...\n"
+FindAndRemove
+cd "$M"
+printf "\nRemoving broken links in $M ...\n"
+FindAndRemove
+
+echo "Done."

@@ -1,0 +1,67 @@
+#!/bin/bash
+
+W="`pwd`"
+SUMS="$W/SUMS"
+TELLME=
+
+[ "$1" = "-d" ] && TELLME=1
+
+[ -r "$SUMS" ] || {
+    echo "$SUMS does not exist."
+    echo "Creating - this may take a few minutes ..."
+    if [ "$TELLME" ]
+    then
+        find . -type f | while read i
+        do
+            echo "cksum $i"
+        done
+    else
+        rm -f /tmp/sums$$
+        touch /tmp/sums$$
+        find . -type f | while read i
+        do
+            cksum "$i" >> /tmp/sums$$
+        done
+        sort /tmp/sums$$ > "$SUMS"
+        rm -f /tmp/sums$$
+    fi
+    echo "Done."
+    exit 0
+}
+
+# Remove entries in SUMS no longer in the tree
+while read f
+do
+    fnam=`echo "$f" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+    [ -f "$fnam" ] || {
+        if [ "$TELLME" ]
+        then
+            echo "grep -v $f $SUMS"
+        else
+            grep -v "$f" "$SUMS" > /tmp/sums$$
+            cp /tmp/sums$$ "$SUMS"
+            rm -f /tmp/sums$$
+        fi
+    }
+done < "$SUMS"
+
+# See if anything is new
+newer=`find . -type f -newer "$SUMS" | wc -l`
+if [ $newer -eq 0 ]
+then
+    echo "$SUMS is current"
+else
+    # Add new files
+    find . -type f | while read f
+    do
+        fixed=`echo "$f" | sed -e "s/\[/\\\\\[/g" -e "s/\]/\\\\\]/g"`
+        grep "$fixed" "$SUMS" > /dev/null || {
+            if [ "$TELLME" ]
+            then
+                echo "cksum $f"
+            else
+                cksum "$f" >> "$SUMS"
+            fi
+        }
+    done
+fi

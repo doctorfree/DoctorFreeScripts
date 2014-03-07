@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# chkall - invokes chkaplibs, chkmovdir, and chkpicdir to check the
+#    Aperture, Movies, and Pictures rsync'd directories and sync them
+#    if specified and necessary.
+#
+# Written 23-Feb-2014 by Ronald Joe Record <rr@ronrecord.com>
+#
+
+usage() {
+    printf "Usage: chkall [-f] [-h] [-n] [-r] [-u]\n"
+    printf "Where:\n\t-n indicates tell me what you would do without doing it\n"
+    printf "\t-f indicates force a sync regardless of last time-stamp\n"
+    printf "\t-h indicates use directories from $HOME\n"
+    printf "\t-r indicates run rsync to sync libraries when needed\n"
+    printf "\t-u displays this usage message\n"
+    printf "\nExample invocations:\n"
+    printf "\tReport which directories are current and which are not\n"
+    printf "\t\tchkall\n"
+    printf "\t\tor\n"
+    printf "\t\tchkall -n\n"
+    printf "\tReport which directories are current and which are not and tell\n"
+    printf "\twhat would be done if rsync were invoked\n"
+    printf "\t\tchkall -n -r\n"
+    printf "\tInvoke rsync on those directories out of sync\n"
+    printf "\t\tchkall -r\n"
+    printf "\tForce rsync on all directories regardless of time stamp\n"
+    printf "\t\tchkall -f -r\n"
+    exit 1
+}
+
+FORCE=
+TELL=
+UPD=
+MYHOME=
+while getopts fhrnu flag; do
+    case $flag in
+        f)
+            FORCE="-f"
+            ;;
+        h)
+            MYHOME="-h"
+            ;;
+        n)
+            TELL="-n"
+            ;;
+        r)
+            UPD="-r"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+
+printf "\nChecking rsync of Aperture libraries ...\n"
+chkaplibs $FORCE $TELL $UPD
+printf "\nDone checking Aperture libraries.\n"
+printf "\nChecking rsync of Movies ...\n"
+chkmovdir $FORCE $TELL $MYHOME $UPD
+printf "\nDone checking Movies.\n"
+printf "\nChecking rsync of Pictures ...\n"
+chkpicdir $FORCE $TELL $MYHOME $UPD
+printf "\nDone checking Pictures.\n"

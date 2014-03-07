@@ -1,0 +1,162 @@
+#!/bin/bash
+#
+# chkaplibs - check the Aperture libraries and see if they need to by
+#    sync'd with rsync to the USB flash drive backup
+#    Note: to check other directories use the -s, -a, and -t arguments
+#          when invoked as chkpicdir it checks directories in my Pictures dir
+#          when invoked as chkmovdir it checks directories in my Movies dir
+#          when invoked as chkhome it checks directories in $HOME
+#
+# Written 15-Feb-2014 by Ronald Joe Record <rr@ronrecord.com>
+#
+
+# The master Aperture libraries
+AP_LIBDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
+# The mounted USB stick or Aperture backup directory
+USBLIBDIR="/Volumes/Transcend/Pictures/Aperture"
+SUFFIX=".aplibrary"
+NAME="chkaplibs"
+UPSC="updaplibs"
+FORCE=
+MYHOME=
+UPD=
+TELL=
+
+usage() {
+    printf "Usage: $NAME [-h] [-n] [-r] [-u] [-a source dir] [-t dest dir]\n"
+    printf "            [-f] [-s suffix] [library name(s) ...]\n"
+    printf "\nWhere:\n\t-r indicates run rsync to sync libraries when needed\n"
+    printf "\t-f indicates force a sync regardless of last time-stamp\n"
+    printf "\t-h indicates use directories from $HOME\n"
+    printf "\t-n indicates tell me what you would do without doing it\n"
+    printf "\t-u displays this usage message\n"
+    printf "\t-a source dir sets the top-level source directory\n"
+    printf "\t-t dest dir sets the top-level destination directory\n"
+    printf "\t-s suffix sets the subdirectory suffix to look for\n"
+    printf "\tadditional arguments indicate library names to check/sync\n"
+    printf "\nWhen invoked without arguments $NAME will attempt to check\n"
+    printf "all the directories in $AP_LIBDIR\n"
+    printf "Only corresponding directories in $USBLIBDIR will be checked\n\n"
+    exit 1
+}
+
+chklib() {
+    lib=$1
+    [ -d "$USBLIBDIR/$lib" ] || continue
+    [ -f "$USBLIBDIR/.rsync_$lib" ] || {
+        if [ "$FORCE" ]
+        then
+          echo "Forced sync has been specified - $lib will by synced"
+        else
+          echo "$USBLIBDIR/.rsync_$lib does not exist. Directory will by synced"
+        fi
+        newer="sync_me"
+    }
+    echo "Checking $lib"
+    if [ "$FORCE" ] || [ "$newer" = "sync_me" ]
+    then
+        newer=1
+    else
+        newer=`find "$AP_LIBDIR/$lib" -newer "$USBLIBDIR/.rsync_$lib" | wc -l`
+    fi
+    if [ $newer -eq 0 ]
+    then
+        echo "$USBLIBDIR/$lib is current"
+    else
+        [ "$FORCE" ] || echo "$USBLIBDIR/$lib is out of date"
+        [ "$UPD" ] && {
+            if [ "$TELL" ]
+            then
+                echo "Showing what syncing $USBLIBDIR/$lib would do"
+            else
+                echo "Syncing $USBLIBDIR/$lib"
+            fi
+            if [ "$SUFFIX" ]
+            then
+                libnam=`echo $lib | sed -e "s/$SUFFIX//"`
+            else
+                libnam="$lib"
+            fi
+            $UPSC $TELL $MYHOME $libnam
+        }
+    fi
+}
+
+while getopts a:s:t:fhrnu flag; do
+    case $flag in
+        f)
+            FORCE=1
+            ;;
+        h)
+            MYHOME="-h"
+            ;;
+        r)
+            UPD=1
+            ;;
+        n)
+            TELL="-dn"
+            ;;
+        a)
+            AP_LIBDIR="$OPTARG"
+            ;;
+        s)
+            SUFFIX="$OPTARG"
+            ;;
+        t)
+            USBLIBDIR="$OPTARG"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+NAME=`basename $0`
+[ "$NAME" = "chkpicdir" ] && {
+    if [ "$MYHOME" ]
+    then
+        AP_LIBDIR="$HOME/Pictures"
+    else
+        AP_LIBDIR="/Volumes/My_Book_Studio/Pictures"
+    fi
+    USBLIBDIR="/Volumes/Transcend/Pictures"
+    SUFFIX=""
+    UPSC="updpicdir"
+}
+[ "$NAME" = "chkmovdir" ] && {
+    if [ "$MYHOME" ]
+    then
+        AP_LIBDIR="$HOME/Movies"
+    else
+        AP_LIBDIR="/Volumes/My_Book_Studio/Movies"
+    fi
+    USBLIBDIR="/Volumes/Transcend/Movies"
+    SUFFIX=""
+    UPSC="updmovdir"
+}
+[ "$NAME" = "chkhome" ] && {
+    AP_LIBDIR="$HOME"
+    USBLIBDIR="/Volumes/Transcend/Home"
+    SUFFIX=""
+    UPSC="updhome"
+}
+
+[ -d "$AP_LIBDIR" ] || {
+    echo "$AP_LIBDIR does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd "$AP_LIBDIR"
+if [ $# -eq 0 ]
+then
+  for lib in *
+  do
+      chklib $lib
+  done
+else
+  for lib in $*
+  do
+      chklib $lib$SUFFIX
+  done
+fi

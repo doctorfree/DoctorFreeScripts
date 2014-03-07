@@ -1,0 +1,109 @@
+#!/bin/bash
+#
+# mkwmv - creates a Readme.html in all subdirectories. Assumes all files of
+#            interest are WMV, MOV, MP4, or AVI
+#
+# A quick way to populate my USB flash drive of movies with HTML documents
+# to provide an initial way to navigate around.
+#
+# Written 01-Sep-2012 by Ronnie Record <flash@ronrecord.com>
+#
+# You can customize here with your own name, email, etc
+URL="http://about.me/ronrecord"
+FIRST="Ronnie"
+LAST="Record"
+EMAIL="flash@ronrecord.com"
+ADDRESS="522 Laurent Street, Santa Cruz, CA 95060"
+# End customize section
+
+H=`pwd`
+R="Readme.html"
+HEAD="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+<html>
+<head>
+<title>"
+BODY="</title>
+<meta name=\"Generator\" content=\"Vim/7.2\">
+<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\">
+</head>
+<body><font face=\"monospace\">
+<br>"
+TAIL="<br>
+Enjoy!<br>
+<a href=\"$URL\">$FIRST $LAST</a><br>
+<a href=\"mailto:$EMAIL\">$EMAIL</a><br>
+</font></body>
+</html>"
+
+Create_Readme() {
+    echo $HEAD > $R
+    echo "$1" >> $R
+    echo $BODY >> $R
+    echo "<h1>$1</h1><br>" >> $R
+}
+
+Add_Movie() {
+    [ "$1" = "Readme.html" ] || {
+      [ "$1" = "*" ] || {
+          echo "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"./$1\">
+$1</a><br>" >> $R
+          echo "&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"$2/$1\">
+$1</a><br>" >> ../$R
+      }
+    }
+}
+
+Top=
+[ -f $R ] || {
+    Top=1
+    echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">
+<html>
+<head>
+<title>$FIRST's USB Stick</title>
+<meta name=\"Generator\" content=\"Vim/7.2\">
+<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\">
+</head>
+<body><font face=\"monospace\">
+This USB stick belongs to $FIRST $LAST.<br>
+Please return to $ADDRESS<br>
+or drop it of with one of the bartenders at burger. :)<br>
+<br>
+Contact $FIRST via email: <a href=\"mailto:$EMAIL\">
+$EMAIL</a><br>
+<br>
+Contents:<br>
+<br>
+<ul>" > $R
+}
+
+for i in *
+do
+    [ -d "$i" ] && {
+        cd "$i"
+	[ "$Top" ] && {
+	    echo "<li><a href=\"$i/Readme.html\">$i</a><br><ul>" >> ../$R
+        }
+	Created=
+        [ -f $R ] || {
+	    Create_Readme "$i"
+	    Created=1
+	}
+        for j in *.wmv *.mov *.mp4 *.avi
+        do
+	    [ "$Created" ] && {
+	        Add_Movie "$j" "$i"
+	    }
+	done
+        [ "$Created" ] && {
+	    echo $TAIL >> $R
+	}
+	cd ..
+        [ "$Top" ] && {
+            echo "<br></ul>" >> $R
+        }
+    }
+    cd "$H"
+done
+[ "$Top" ] && {
+    echo "</ul><br></font></body></html>" >> $R
+}
