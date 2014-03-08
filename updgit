@@ -7,19 +7,28 @@
 #
 
 usage() {
-  printf "\nUsage: updgit [-u] [-d] [-m \"message comment\"] file1 [file2 ...]"
-  printf "\nWhere:"
-  printf "\n\t-u displays this usage message"
-  printf "\n\t-d indicates to demonstrate what you would do without doing it"
-  printf "\n\t-m comment adds the comment string as the commit message."
-  printf "\n\t   \"comment message\" must be enclosed in quotes.\n\n"
-  exit 1
+    printf "\nUsage: updgit [-u] [-a] [-d] [-m \"message comment\"] [file1 ...]"
+    printf "\nWhere:"
+    printf "\n\t-u displays this usage message."
+    printf "\n\t-a indicates to commit all staged files."
+    printf "\n\t-d indicates to demonstrate what you would do without doing it."
+    printf "\n\t-m comment adds the comment string as the commit message."
+    printf "\n\t   \"comment message\" must be enclosed in quotes."
+    printf "\n\tfile1 file2 ... lists files to be staged and commited."
+    printf "\n\tNote, you must either specify -a or a list of file(s).\n\n"
+    exit 1
 }
 
 COMMENT=
 TELL=
-while getopts m:du flag; do
+ALL=
+ADD=
+while getopts am:du flag; do
     case $flag in
+        a)
+            ALL=1
+            ADD="-a"
+            ;;
         d)
             TELL=1
             ;;
@@ -35,10 +44,20 @@ shift $(( OPTIND - 1 ))
 
 echo ""
 # Check filename arguments to verify they exist
-[ $# -eq 0 ] && {
-    echo "No filename arguments. Exiting."
-    usage
-}
+if [ "$ALL" ]
+then
+    [ $# -eq 0 ] || {
+        echo "Filename arguments with -a doesn't make sense."
+        echo "Exiting."
+        usage
+    }
+else
+    [ $# -eq 0 ] && {
+        echo "No filename arguments. Did you mean to use the -a argument ?"
+        echo "Exiting."
+        usage
+    }
+fi
 for i in "$@"
 do
     [ -f "$i" ] || {
@@ -48,20 +67,22 @@ do
     }
 done
 
-echo "git add $@"
-[ "$TELL" ] || git add $@
+[ "$ALL" ] || {
+    echo "git add $@"
+    [ "$TELL" ] || git add $@
+}
 if [ "$COMMENT" ]
 then
-    echo "git commit -m \"$COMMENT\""
+    echo "git commit $ADD -m \"$COMMENT\""
 else
-    echo "git commit"
+    echo "git commit $ADD"
 fi
 [ "$TELL" ] || {
     if [ "$COMMENT" ]
     then
-        git commit -m "$COMMENT"
+        git commit $ADD -m "$COMMENT"
     else
-        git commit
+        git commit $ADD
     fi
 }
 echo "git push origin master"

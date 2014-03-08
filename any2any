@@ -86,10 +86,6 @@ do
     # Set any options specified on the command line - the sed part is just
     # removing any leading or trailing spaces.
     OPTS=`echo "$ACODEC $CODEC $SIZE $VCODEC" | sed -e 's/^ *//' -e 's/ *$//'`
-    if [ "$TELL" ]
-    then
-        echo "ffmpeg -i $i -loglevel warning -strict -2 $OPTS $j"
-    else
-        ffmpeg -i "$i" -loglevel warning -strict -2 $OPTS "$j"
-    fi
+    echo "ffmpeg -i $i -loglevel warning -strict -2 $OPTS $j"
+    [ "$TELL" ] || ffmpeg -i "$i" -loglevel warning -strict -2 $OPTS "$j"
 done
