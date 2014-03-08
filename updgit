@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# updgit - perform the git add, git commit, and git push to the remote
+#          repository associated with this clone.
+#
+# Written 8-Mar-2014 by Ronald Joe Record <rr@ronrecord.com>
+#
+
+usage() {
+  printf "\nUsage: updgit [-u] [-d] [-m \"message comment\"] file1 [file2 ...]"
+  printf "\nWhere:"
+  printf "\n\t-u displays this usage message"
+  printf "\n\t-d indicates to demonstrate what you would do without doing it"
+  printf "\n\t-m comment adds the comment string as the commit message."
+  printf "\n\t   \"comment message\" must be enclosed in quotes.\n\n"
+  exit 1
+}
+
+COMMENT=
+TELL=
+while getopts m:du flag; do
+    case $flag in
+        d)
+            TELL=1
+            ;;
+        m)
+            COMMENT="$OPTARG"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+echo ""
+# Check filename arguments to verify they exist
+[ $# -eq 0 ] && {
+    echo "No filename arguments. Exiting."
+    usage
+}
+for i in "$@"
+do
+    [ -f "$i" ] || {
+        echo "At least one of your filename arguments: $i"
+        echo "does not exist or is not a plain file. Exiting."
+        usage
+    }
+done
+
+echo "git add $@"
+[ "$TELL" ] || git add $@
+if [ "$COMMENT" ]
+then
+    echo "git commit -m \"$COMMENT\""
+else
+    echo "git commit"
+fi
+[ "$TELL" ] || {
+    if [ "$COMMENT" ]
+    then
+        git commit -m "$COMMENT"
+    else
+        git commit
+    fi
+}
+echo "git push origin master"
+[ "$TELL" ] || git push origin master

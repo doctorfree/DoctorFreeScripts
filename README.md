@@ -100,6 +100,8 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
 
     When invoked as updhome it syncs directories in $HOME
 
+[**updgit**](updgit) - Perform the git add, git commit, and git push to the remote repository associated with this clone.
+
 [**updsums**](updsums) - Create or update a SUMS file which contains chksums
 for all files in that directory hierarchy
 
