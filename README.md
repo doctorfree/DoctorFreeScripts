@@ -78,9 +78,9 @@ Artist/Album/Tracks directory structure:
 
                  Year (Year file should just be year released in parens)
 
-[**mkseamless**](mkseamless) - Make a texture seamless. Uses ImageMagick.
+[**mkseamless**](mkseamless) - Make a texture seamless. Uses ImageMagick and
+the [**Vertical.png**](Vertical.png) image located in this repository.
 
-    Uses the [**Vertical.png**](Vertical.png) image located in this repository.
     Vertical.png should be placed in /usr/local/lib on the system where
     mkseamless is run.
 
