@@ -50,12 +50,16 @@ need to by sync'd with rsync to the USB flash drive backup
 
     When invoked as chkhome it checks directories in $HOME
 
+[**chkinst**](chkinst) - Check if installed versions of files in current directory are different in order to determine if git repository is up-to-date.
+
 [**femvidlinks**](femvidlinks) - Create symbolic links to movie files where
 possible to reduce duplicate storage of movies. Link into my iTunes library.
 
 [**femzip**](femzip) - Convenience script to unzip Femjoy photo downloads
 
 [**latest**](latest) - List the top N newest files in a directory or hierarchy
+
+[**mandelhist**](mandelhist) - Display a zoom on the Mandelbrot set with histograms using a built-in ffplay/ffmpeg filter.
 
 [**mkcomps**](mkcomps) - Join 2 or 3 images then split the resulting composite
 in half. Uses ImageMagick.

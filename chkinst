@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# chkinst - Check if installed versions of files in current directory are
+#    different in order to determine if git repository is up-to-date.
+#
+# Written 8-Mar-2014 by Ronald Joe Record
+#
+
+usage() {
+    printf "\nUsage: chkinst [-u] [-a] [-d]"
+    printf "\nWhere:"
+    printf "\n\t-u displays this usage message"
+    printf "\n\t-a indicates report on all files, not just those installed"
+    printf "\n\t-d indicates display output of a diff between files\n"
+    exit 1
+}
+
+ALL=
+DIFF=
+while getopts adu flag; do
+    case $flag in
+        a)
+            ALL=1
+            ;;
+        d)
+            DIFF=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+for i in *
+do
+    [ -d "$i" ] && continue
+    inst=`type -p "$i"`
+    [ "$inst" ] || {
+        [ "$ALL" ] && {
+            echo "$i does not appear to be installed as a command. Skipping."
+            echo ""
+        }
+        continue
+    }
+    cmp -s "$i" "$inst" || {
+        echo "$i differs from installed version $inst"
+        [ "$DIFF" ] && diff "$i" "$inst"
+        echo ""
+    }
+done

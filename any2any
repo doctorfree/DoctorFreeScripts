@@ -31,16 +31,18 @@ ACODEC=
 CODEC=
 SIZE=
 VCODEC=
+OVER=
 TELL=
 
 usage() {
     printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec]"
-    printf "\n\t[-s size] [-d] [-u] file1 [file2 file3 ...]\n"
+    printf "\n\t[-s size] [-d] [-y] [-u] file1 [file2 file3 ...]\n"
     printf "\nWhere:\n\t-d indicates tell me what you would do"
     printf "\n\t-a audio codec specifies the output audio codec"
     printf "\n\t-v video codec specifies the output video codec"
     printf "\n\t-s size specifies the output video size (widthxheight)"
     printf "\n\t-c codec specifies the output codec"
+    printf "\n\t-y indicates overwrite output files without asking"
     printf "\n\t-u displays this usage message\n"
     printf "\nExamples:\n\tCopy audio and video codecs, convert the container"
     printf "\n\t$ME -c copy Directory/Filename"
@@ -51,7 +53,7 @@ usage() {
     exit 1
 }
 
-while getopts s:v:a:c:du flag; do
+while getopts s:v:a:c:ydu flag; do
     case $flag in
         a)
             ACODEC="-acodec $OPTARG"
@@ -64,6 +66,9 @@ while getopts s:v:a:c:du flag; do
             ;;
         s)
             SIZE="-s $OPTARG"
+            ;;
+        y)
+            OVER="-y"
             ;;
         v)
             VCODEC="-vcodec $OPTARG"
@@ -85,7 +90,7 @@ do
     j=`echo "$i" | sed -e "s/${INP}\//${DIR}\//" -e "s/\.${PRE}/\.${SUF}/"`
     # Set any options specified on the command line - the sed part is just
     # removing any leading or trailing spaces.
-    OPTS=`echo "$ACODEC $CODEC $SIZE $VCODEC" | sed -e 's/^ *//' -e 's/ *$//'`
+    OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC" | sed -e 's/^ *//' -e 's/ *$//'`
     echo "ffmpeg -i $i -loglevel warning -strict -2 $OPTS $j"
     [ "$TELL" ] || ffmpeg -i "$i" -loglevel warning -strict -2 $OPTS "$j"
 done

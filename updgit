@@ -43,7 +43,7 @@ done
 shift $(( OPTIND - 1 ))
 
 echo ""
-# Check filename arguments to verify they exist
+# Check filename arguments to verify they exist or are not needed
 if [ "$ALL" ]
 then
     [ $# -eq 0 ] || {
