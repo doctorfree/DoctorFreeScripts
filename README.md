@@ -80,7 +80,7 @@ Artist/Album/Tracks directory structure:
 
 [**mkseamless**](mkseamless) - Make a texture seamless. Uses ImageMagick.
 
-    Uses the [Vertical.png](Vertical.png) image located in this repository.
+    Uses the [**Vertical.png**](Vertical.png) image located in this repository.
     Vertical.png should be placed in /usr/local/lib on the system where
     mkseamless is run.
 
