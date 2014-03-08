@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# mkseamless - make a texture seamless
+# The Vertical.png image is available at
+# http://www.flickr.com/photos/missyrestless/5493745720/
+#
+# Usage: mkseamless filename [filename ...]
+#
+# Places the output seamless texture(s) in a subdirectory "Seamless"
+#
+
+# Where are the horizontal and vertical region files located ?
+L=/usr/local/lib
+
+usage() {
+    echo "Usage: mkseamless filename [filename ...]"
+    exit 1
+}
+
+endblur() {
+    convert -blur 50 tmp3.png tmp3.png
+    convert -resize 8x8 tmp3.png tmp4.png
+    convert -blur 50 tmp4.png tmp4.png
+    convert -extent 1x1+4+4 tmp4.png tmp4.png
+    convert -resize 1024x1024 tmp4.png tmp4.png
+    convert -resize 1024x1024 tmp3.png tmp3.png
+    convert -blur 50 tmp3.png tmp3.png
+    convert tmp3.png tmp4.png -compose minus -composite tmp5.png
+    convert tmp4.png tmp3.png -compose minus -composite tmp6.png
+    convert tmp2.png tmp5.png -compose plus -composite tmp7.png
+    convert tmp6.png tmp7.png -compose minus -composite tmp2.png
+    convert tmp2.png -resize 512x512! Seamless/${img_out}.png
+}
+
+[ "$1" ] || {
+    usage
+}
+
+[ -r $L/Vertical.png ] || {
+    echo "Missing file $L/Vertical.png"
+    exit 2
+}
+cp $L/Vertical.png Vertical.png
+
+[ -r Horizontal.png ] || {
+    convert Vertical.png -rotate 90 Horizontal.png
+}
+
+[ -d Seamless ] || mkdir Seamless
+
+for img in $*
+do
+    [ "$img" = "Thumbs.db" ] && continue
+    [ -d $img ] && continue
+    echo "Starting image tile for $img, this may take a short while ..."
+    size=`identify -format '%G' "$img"`
+    img_out=`echo $img | sed -e "s/\.jpg//" -e "s/\.JPG//" -e "s/\.png//" -e "s/\.gif//" -e "s/\.GIF//" -e "s/\.svg//"`
+    convert $img -resize 1024x1024! tmp1.png
+    montage tmp1.png tmp1.png tmp1.png tmp1.png -geometry +0+0 tmp2.png
+    composite -compose CopyOpacity Vertical.png tmp1.png vert.png
+    composite -compose CopyOpacity Horizontal.png tmp1.png horz.png
+    composite -geometry +512+512 vert.png tmp2.png tmp2.png
+    composite -geometry +512+512 horz.png tmp2.png tmp2.png
+    convert -extent 1024x1024+512+512 tmp2.png tmp2.png
+    montage tmp2.png tmp2.png tmp2.png tmp2.png -geometry +0+0 tmp2.png
+    convert -extent 1024x1024+512+512 tmp2.png tmp2.png
+
+    convert tmp2.png -resize $size! Seamless/${img_out}.png
+
+    echo "Seamless/${img_out}.png created. Cleaning up."
+    rm -f tmp1.png
+    rm -f tmp2.png
+    rm -f tmp3.png
+    rm -f tmp4.png
+    rm -f tmp5.png
+    rm -f tmp6.png
+    rm -f tmp7.png
+    rm -f horz.png
+    rm -f vert.png
+done
+rm -f Vertical.png Horizontal.png
+echo "All Done !"
