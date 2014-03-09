@@ -164,7 +164,17 @@ do
         continue
     }
     # Set the output directory and filename
-    j=`echo "$i" | sed -e "s/${INP}\//${DIR}\//" -e "s/\.${PRE}/\.${SUF}/"`
+    d=`dirname "$i"`
+    if [ "$d" = "." ]
+    then
+        j=${DIR}/`echo "$i" | sed -e "s/\.${PRE}/\.${SUF}/"`
+    else
+        # I always have to guess how many backslashes to use. I love sed.
+        # Anyway, we need to turn slashes into backslashed slashes so the
+        # subsequent sed to set the output directory will work.
+        INP=`echo "$d" | sed -e 's/\//\\\\\//g'`
+        j=`echo "$i" | sed -e "s/${INP}/${DIR}/" -e "s/\.${PRE}/\.${SUF}/"`
+    fi
     echo "ffmpeg -i $i -loglevel warning -strict -2 $OPTS $j"
     [ "$TELL" ] || ffmpeg -i "$i" -loglevel warning -strict -2 $OPTS "$j"
 done
