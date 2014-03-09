@@ -4,19 +4,15 @@
 # This script is brought to you by 7sins@4geeksfromnet.com
 # and at present is actively maintained by MacEarl
 #
-#
 # This Script is written for GNU Linux, it should work under Mac OS
-#
 #
 # Revision 2.8
 # Contributed by MacEarl
 # 1. Added Option to rename files accordingly to their tags. (experimental)
 #
-#
 # Revision 2.7.1
 # Contributed by MacEarl
 # 1. Fixed Login, everything should work again (except the related wallpaper feature)
-#
 #
 # Revision 2.7
 # Contributed by MacEarl
@@ -26,12 +22,10 @@
 #    (Collections with some nsfw Images will be downloaded without the nsfw images)
 # 3. Download related Wallpapers Function does not work (it seems the related Wallpaper function was removed, if you find it please let me know)
 #
-#
 # Revision 2.6.2
 # Contributed by MacEarl
 # 1. Fixed Download related Wallpapers Fuction (just forgot to add the base64 stuff last time)
 # 2. It is now possible to download a Range of Wallpapers with all related Wallpapers
-# 
 #
 # Revision 2.6.1
 # Contributed by MacEarl
@@ -39,40 +33,33 @@
 #	 The Script now uses "base64" to decode those urls
 #	 so make sure you got that installed ;)
 #
-#
 # Revision 2.6
 # Contributed by MacEarl
 # 1. Added Function to download Related Wallpapers
-#
 #
 # Revision 2.5.1
 # Contributed by MacEarl
 # 1. Added some Explanation in Section 6 to clarify the combination of the THPP and Max_Range Variables
 #
-#
 # Revision 2.5
 # Contributed by MacEarl
 # 1. Added Function to download a specified Range of Wallpaper
-#
 #
 # Revision 2.4
 # Contributed by MacEarl and HansTester
 # 1. Fixed Login Feature (NSFW working again) (Thanks to HansTester)
 # 2. Implemented download uploads by specific User (Thanks to HansTester)
 #
-#
 # Revision 2.3
 # Contributed by MacEarl
 # 1. Added Categorize Feature
 # 2. Source Cleanup
-#
 #
 # Revision 2.2
 # Contributed by Axa-Ru and MacEarl
 # 1. Source Cleanup by Axa-Ru
 # 2. Fixed Download Code for new System
 # 3. Improved the check for already downloaded Files ( much faster ;) )
-#
 #
 # Revision 2.1
 # Contributed by MacEarl
@@ -84,26 +71,21 @@
 #     To re-enable the download of a specific Wallpaper you need to remove the
 #     Wallpaper number from the file "downloaded.txt")
 #
-#
 # Revision 2.0
 # Contributed by MacEarl
 # 1. Rewritten code for new Wallbase System
-#
 #
 # Revision 1.2.1
 # Contributed by MacEarl
 # 1. Added Login Check for new Wallpapers
 #
-#
 # Revision 1.2
 # Contributed by MacEarl
 # 1. Added a login feature to download NSFW content/category
 #
-#
 # Revision 1.1.1
 # Contributed by Hab
 # 1. Updated mkdir option with -p flag
-#
 #
 # Revision 1.1
 # Contributed by MacEarl
@@ -111,14 +93,11 @@
 # 2. Added a check for already existing Files
 # 3. Fixed a bug (imageshack mirrored files)
 #
-#
 # Revision 1.0
 # Contributed by MacEarl
 # 1. Added the much needed fixes for NSFW category
 # 2. Updated the script with more options
 # 3. Modified the script
-#
-#
 #
 # Wallpapers can be sorted according to
 #

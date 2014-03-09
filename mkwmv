@@ -6,14 +6,35 @@
 # A quick way to populate my USB flash drive of movies with HTML documents
 # to provide an initial way to navigate around.
 #
-# Written 01-Sep-2012 by Ronnie Record <flash@ronrecord.com>
+# Written 01-Sep-2012 by Ronnie Record <rr@ronrecord.com>
+#
+# Copyright (c) 2014, Ronald Joe Record
+# All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# The Software is provided "as is", without warranty of any kind, express or
+# implied, including but not limited to the warranties of merchantability,
+# fitness for a particular purpose and noninfringement. In no event shall the
+# authors or copyright holders be liable for any claim, damages or other
+# liability, whether in an action of contract, tort or otherwise, arising from,
+# out of or in connection with the Software or the use or other dealings in
+# the Software.
 #
 # You can customize here with your own name, email, etc
-URL="http://about.me/ronrecord"
-FIRST="Ronnie"
-LAST="Record"
-EMAIL="flash@ronrecord.com"
-ADDRESS="522 Laurent Street, Santa Cruz, CA 95060"
+URL="http://example.com/yourname"
+FIRST="YourFirst"
+LAST="YourLast"
+EMAIL="you@youremail.com"
+ADDRESS="555 Your Street, Your Town, Zip"
 # End customize section
 
 H=`pwd`
