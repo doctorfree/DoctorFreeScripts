@@ -37,10 +37,12 @@ ACODEC=
 VCODEC=
 PRESET=
 RATE=
+QSCALE=
 SAMPLE=
 THREAD=
 [ "$SUF" = "mp4" ] && {
     VCODEC="-vcodec libx264"
+    # See http://slhck.info/articles/crf for info on Constant Rate Factor (CRF)
     RATE="-crf 23"
     SAMPLE="-ab 128k"
     THREAD="-threads 0"
@@ -48,14 +50,16 @@ THREAD=
 [ "$SUF" = "wmv" ] && {
     ACODEC="-acodec adpcm_ms"
     VCODEC="-vcodec msmpeg4"
-    RATE=
+# See http://www.kilobitspersecond.com/2007/05/24/ffmpeg-quality-comparison
+    QSCALE="-qscale 5"
     SAMPLE="-ab 128k"
     THREAD="-threads 0"
 }
 [ "$SUF" = "avi" ] && {
     ACODEC="-acodec adpcm_ms"
     VCODEC="-vcodec libxvid"
-    RATE=
+# See http://www.kilobitspersecond.com/2007/05/24/ffmpeg-quality-comparison
+    QSCALE="-qscale 5"
     SAMPLE="-ab 128k"
     THREAD="-threads 0"
 }
@@ -63,7 +67,7 @@ THREAD=
 
 usage() {
     printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec]"
-    printf "\n\t\t[-p preset] [-r rate] [-b bitrate] [-t threads]"
+    printf "\n\t\t[-p preset] [-q scale] [-r rate] [-b bitrate] [-t threads]"
     printf "\n\t\t[-s size] [-d] [-y] [-u] file1 [file2 file3 ...]\n"
     printf "\nWhere:\n\t-d indicates tell me what you would do"
     printf "\n\t-a audio codec specifies the output audio codec"
@@ -71,6 +75,7 @@ usage() {
     printf "\n\t-s size specifies the output video size (widthxheight)"
     printf "\n\t-c codec specifies the output codec"
     printf "\n\t-p preset specifies the ffmpeg preset to use"
+    printf "\n\t-q scale specifies the qscale variable bit rate quality"
     printf "\n\t-r rate specifies the rate for Constant Rate Factor (CRF)"
     printf "\n\t\tencoding. Use \"-r 0\" to disable for formats other than x264"
     printf "\n\t-b bitrate specifies the bitrate (default 128k)"
@@ -84,10 +89,12 @@ usage() {
     printf "\n\t$ME -s 640x480 $INP/example.$SUF"
     printf "\n\tSpecify libx264 output video codec and use ipod640 preset"
     printf "\n\t$ME -v libx264 -p ipod640 $INP/example.$SUF\n"
+    printf "\n\tSpecify libx264 output video codec and variable bit rate"
+    printf "\n\t$ME -v libx264 -r 0 -q 3 $INP/example.$SUF\n"
     exit 1
 }
 
-while getopts p:r:b:t:s:v:a:c:ydu flag; do
+while getopts p:q:r:b:t:s:v:a:c:ydu flag; do
     case $flag in
         a)
             ACODEC="-acodec $OPTARG"
@@ -103,6 +110,10 @@ while getopts p:r:b:t:s:v:a:c:ydu flag; do
             ;;
         p)
             PRESET="-vpre $OPTARG"
+            ;;
+        q)
+            QSCALE="-qscale $OPTARG"
+            RATE=
             ;;
         r)
             if [ $OPTARG -eq 0 ]
@@ -133,7 +144,14 @@ shift $(( OPTIND - 1 ))
 
 # Set any options specified on the command line - the sed part is just
 # removing any leading or trailing spaces.
-OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC $PRESET $RATE $SAMPLE $THREAD" | sed -e 's/^ *//' -e 's/ *$//'`
+OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC $PRESET $QSCALE $RATE $SAMPLE $THREAD" | sed -e 's/^ *//' -e 's/ *$//'`
+# Check for incompatible ffmpeg arguments
+[ "$RATE" ] && [ "$QSCALE" ] && {
+    printf "\nCannot specify both constant and variable bit rate values."
+    printf "\nCurrent invocation would invoke:\n\nffmpeg -i INPUT -loglevel warning -strict -2 $OPTS OUTPUT\n"
+    printf "\nExiting.\n"
+    exit 1
+}
 
 # Display usage message and exit if -u was given on the command line.
 # We delay until now in order to gather up all the other command line options.

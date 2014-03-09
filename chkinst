@@ -5,6 +5,8 @@
 #
 # Written 8-Mar-2014 by Ronald Joe Record
 #
+# Note: this script assumes the files in your git repository are named the
+#       same as their installed counterparts
 
 usage() {
     printf "\nUsage: chkinst [-u] [-a] [-d]"
@@ -13,6 +15,12 @@ usage() {
     printf "\n\t-a indicates report on all files, not just those installed"
     printf "\n\t-d indicates display output of a diff between files\n"
     exit 1
+}
+
+differ() {
+    echo "$1 differs from installed version $2"
+    [ "$DIFF" ] && diff "$1" "$2"
+    echo ""
 }
 
 ALL=
@@ -43,9 +51,12 @@ do
         }
         continue
     }
-    cmp -s "$i" "$inst" || {
-        echo "$i differs from installed version $inst"
-        [ "$DIFF" ] && diff "$i" "$inst"
-        echo ""
+    # Special case wb as the installed version has a wallbase user/password
+    [ "$i" = "wb" ] && {
+        dnum=`diff "$i" "$inst" | wc -l`
+        [ $dnum -gt 8 ] && differ "$i" "$inst"
+        continue
     }
+    # For everything but wb just use cmp
+    cmp -s "$i" "$inst" || differ "$i" "$inst"
 done
