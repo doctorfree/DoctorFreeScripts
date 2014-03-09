@@ -1,6 +1,6 @@
 #!/bin/bash
 
-D=/Users/rrecord/Downloads
+D=$HOME/Downloads
 
 # ___MODIFY THESE THREE SETTINGS TO MATCH THE DOWNLOADED FILE(S)___
 # Set the Photographer

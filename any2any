@@ -27,36 +27,73 @@ DIR=`echo $SUF | tr '[:lower:]' '[:upper:]'`
     echo "Output directory does not exist or is not a directory. Creating."
     mkdir -p "$DIR"
 }
-ACODEC=
+
 CODEC=
 SIZE=
-VCODEC=
 OVER=
 TELL=
+USAGE=
+ACODEC=
+VCODEC=
+PRESET=
+RATE=
+SAMPLE=
+THREAD=
+[ "$SUF" = "mp4" ] && {
+    VCODEC="-vcodec libx264"
+    RATE="-crf 23"
+    SAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+[ "$SUF" = "wmv" ] && {
+    ACODEC="-acodec adpcm_ms"
+    VCODEC="-vcodec msmpeg4"
+    RATE=
+    SAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+[ "$SUF" = "avi" ] && {
+    ACODEC="-acodec adpcm_ms"
+    VCODEC="-vcodec libxvid"
+    RATE=
+    SAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+# TODO: Add desired default settings for other format encodings here
 
 usage() {
     printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec]"
-    printf "\n\t[-s size] [-d] [-y] [-u] file1 [file2 file3 ...]\n"
+    printf "\n\t\t[-p preset] [-r rate] [-b bitrate] [-t threads]"
+    printf "\n\t\t[-s size] [-d] [-y] [-u] file1 [file2 file3 ...]\n"
     printf "\nWhere:\n\t-d indicates tell me what you would do"
     printf "\n\t-a audio codec specifies the output audio codec"
     printf "\n\t-v video codec specifies the output video codec"
     printf "\n\t-s size specifies the output video size (widthxheight)"
     printf "\n\t-c codec specifies the output codec"
+    printf "\n\t-p preset specifies the ffmpeg preset to use"
+    printf "\n\t-r rate specifies the rate for Constant Rate Factor (CRF)"
+    printf "\n\t\tencoding. Use \"-r 0\" to disable for formats other than x264"
+    printf "\n\t-b bitrate specifies the bitrate (default 128k)"
+    printf "\n\t-t threads specifies the number of threads to use"
     printf "\n\t-y indicates overwrite output files without asking"
     printf "\n\t-u displays this usage message\n"
+    printf "\nCurrent invocation defaults to:\n\nffmpeg -i INPUT -loglevel warning -strict -2 $OPTS OUTPUT\n"
     printf "\nExamples:\n\tCopy audio and video codecs, convert the container"
-    printf "\n\t$ME -c copy Directory/Filename"
+    printf "\n\t$ME -c copy $INP/example.$SUF"
     printf "\n\tSpecify output video size of 640 width by 480 height"
-    printf "\n\t$ME -s 640x480 Directory/Filename"
-    printf "\n\tSpecify libx264 output video codec"
-    printf "\n\t$ME -v libx264 Directory/Filename"
+    printf "\n\t$ME -s 640x480 $INP/example.$SUF"
+    printf "\n\tSpecify libx264 output video codec and use ipod640 preset"
+    printf "\n\t$ME -v libx264 -p ipod640 $INP/example.$SUF\n"
     exit 1
 }
 
-while getopts s:v:a:c:ydu flag; do
+while getopts p:r:b:t:s:v:a:c:ydu flag; do
     case $flag in
         a)
             ACODEC="-acodec $OPTARG"
+            ;;
+        b)
+            SAMPLE="-ab $OPTARG"
             ;;
         c)
             CODEC="-codec $OPTARG"
@@ -64,8 +101,22 @@ while getopts s:v:a:c:ydu flag; do
         d)
             TELL=1
             ;;
+        p)
+            PRESET="-vpre $OPTARG"
+            ;;
+        r)
+            if [ $OPTARG -eq 0 ]
+            then
+                RATE=
+            else
+                RATE="-crf $OPTARG"
+            fi
+            ;;
         s)
             SIZE="-s $OPTARG"
+            ;;
+        t)
+            THREAD="-threads $OPTARG"
             ;;
         y)
             OVER="-y"
@@ -74,11 +125,19 @@ while getopts s:v:a:c:ydu flag; do
             VCODEC="-vcodec $OPTARG"
             ;;
         u)
-            usage
+            USAGE=1
             ;;
     esac
 done
 shift $(( OPTIND - 1 ))
+
+# Set any options specified on the command line - the sed part is just
+# removing any leading or trailing spaces.
+OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC $PRESET $RATE $SAMPLE $THREAD" | sed -e 's/^ *//' -e 's/ *$//'`
+
+# Display usage message and exit if -u was given on the command line.
+# We delay until now in order to gather up all the other command line options.
+[ "$USAGE" ] && usage
 
 for i in "$@"
 do
@@ -88,9 +147,6 @@ do
     }
     # Set the output directory and filename
     j=`echo "$i" | sed -e "s/${INP}\//${DIR}\//" -e "s/\.${PRE}/\.${SUF}/"`
-    # Set any options specified on the command line - the sed part is just
-    # removing any leading or trailing spaces.
-    OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC" | sed -e 's/^ *//' -e 's/ *$//'`
     echo "ffmpeg -i $i -loglevel warning -strict -2 $OPTS $j"
     [ "$TELL" ] || ffmpeg -i "$i" -loglevel warning -strict -2 $OPTS "$j"
 done
