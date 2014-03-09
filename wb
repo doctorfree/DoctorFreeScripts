@@ -327,6 +327,8 @@
 USER=yourusername
 # Enter your password
 PASS=yourpassword
+# Location of your Wallbase download directory
+PREFIX="/Volumes/My_Book_Studio/Pictures/Work/Wallbase"
  
 # For accepted values see Section 6
 MAX_RANGE=480
@@ -343,8 +345,6 @@ SIZE=gteq
 # For accepted Thumbnails per page see Section 6
 THPP=60
 # For download location see Section 7
-#PREFIX=/home/Doctorfree/Users/Doctorfree/4Sync/Pictures/Wallbase
-PREFIX="/Volumes/My Book Studio/Pictures/Work/Wallbase"
 LOCATION=/"$PREFIX"/Space
 # Best of : see Section 8
 TIME=0

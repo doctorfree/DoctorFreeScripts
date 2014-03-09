@@ -30,11 +30,13 @@
 #
 
 usage() {
-    printf "\nUsage: chkinst [-u] [-a] [-d]"
+    printf "\nUsage: chkinst [-u] [-a] [-d] [-f] [-i]"
     printf "\nWhere:"
     printf "\n\t-u displays this usage message"
     printf "\n\t-a indicates report on all files, not just those installed"
-    printf "\n\t-d indicates display output of a diff between files\n"
+    printf "\n\t-d indicates display output of a diff between files"
+    printf "\n\t-f indicates force update of installed file(s)"
+    printf "\n\t-i indicates prompt for update of installed file(s)\n"
     exit 1
 }
 
@@ -42,17 +44,47 @@ differ() {
     echo "$1 differs from installed version $2"
     [ "$DIFF" ] && diff "$1" "$2"
     echo ""
+    [ "$UPD" ] && {
+        if [ "$FORCE" ]
+        then
+            cp "$1" "$2"
+        else
+            while true
+            do
+                read -p "Do you want to install the new version ? (y/n) " yn
+                case $yn in
+                    [Yy]* ) cp "$1" "$2"; break;;
+                    [Nn]* ) break;;
+                        * ) echo "Please answer yes or no.";;
+                esac
+            done
+        fi
+    }
+}
+
+check() {
+    dnum=`diff "$1" "$2" | wc -l`
+    [ $dnum -gt $3 ] && differ "$1" "$2"
 }
 
 ALL=
 DIFF=
-while getopts adu flag; do
+UPD=
+FORCE=
+while getopts adfiu flag; do
     case $flag in
         a)
             ALL=1
             ;;
         d)
             DIFF=1
+            ;;
+        i)
+            UPD=1
+            ;;
+        d)
+            UPD=1
+            FORCE=1
             ;;
         u)
             usage
@@ -72,12 +104,18 @@ do
         }
         continue
     }
-    # Special case wb as the installed version has a wallbase user/password
-    [ "$i" = "wb" ] && {
-        dnum=`diff "$i" "$inst" | wc -l`
-        [ $dnum -gt 8 ] && differ "$i" "$inst"
-        continue
-    }
-    # For everything but wb just use cmp
-    cmp -s "$i" "$inst" || differ "$i" "$inst"
+    # Special cases as the installed version may have configuration changes
+    # The 3rd argument to the check() function is the number of lines the
+    # installed script can differ before we report it differs.
+    case "$i" in
+        wb)
+            check "$i" "$inst" 8
+            ;;
+        mkreadme|mkwmv)
+            check "$i" "$inst" 12
+            ;;
+        *)
+            cmp -s "$i" "$inst" || differ "$i" "$inst"
+            ;;
+    esac
 done
