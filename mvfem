@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# mvfem - Rename a downloaded Femjoy zip archive that contains two model
+#         names to use only one model's name so it will work with femzip
+#
+
+D=$HOME/Downloads
+
+usage() {
+   printf "\nUsage: mvfem [-ridu] -m Model1 -p Model2"
+   printf "\n\tRename Femjoy zip archive from:"
+   printf "\n\t\tModel1_Model2_Photographer_Set_whatever.zip to"
+   printf "\n\t\tModel1_Photographer_Set_whatever.zip"
+   printf "\nWhere:"
+   printf "\n\t-r reverses the roles of Model1 and Model2"
+   printf "\n\t-i replaces %2e with ."
+   printf "\n\t-d tells you what it would do"
+   printf "\n\t-u displays this usage message"
+   exit 1
+}
+
+DOT=
+ECHO=
+REVERSE=
+while getopts m:p:rdiu flag; do
+    case $flag in
+        d)
+            ECHO=1;
+            ;;
+        i)
+            DOT=1;
+            ;;
+        r)
+            REVERSE=1;
+            ;;
+        m)
+            M="$OPTARG";
+            ;;
+        p)
+            P="$OPTARG";
+            ;;
+        u)
+            usage;
+            ;;
+        ?)
+            usage;
+            ;;
+    esac
+done
+
+cd "$D"
+for i in "$M"*"$P"_*.zip
+do
+    [ -f "$i" ] || {
+        printf "$i is not a regular file. Skipping.\n"
+        continue
+    }
+    if [ "$DOT" ]
+    then
+        T=`echo "$i" | sed -e "s/\%2e/\./g"`
+        if [ "$ECHO" ]
+        then
+            echo "mv $i $T"
+            echo ""
+        else
+            mv "$i" "$T"
+        fi
+    else
+        if [ "$REVERSE" ]
+        then
+            T=`echo "$i" | sed -e "s/${M}, ${P}_/${P}_/"`
+        else
+            T=`echo "$i" | sed -e "s/${M}, ${P}_/${M}_/"`
+        fi
+        if [ "$ECHO" ]
+        then
+            printf "mv $i $T\n"
+        else
+            mv "$i" "$T"
+        fi
+    fi
+done

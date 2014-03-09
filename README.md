@@ -94,6 +94,8 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
     populate my USB flash drive of movies with HTML documents to provide an
     initial way to navigate around.
 
+[**mvfem**](mvfem) - Rename a downloaded Femjoy zip archive that contains two model names to use only one model's name so it will work with femzip.
+
 [**updaplibs**](updaplibs) - Sync my Aperture libraries to a USB flash drive
 
     Note: to sync other directories use the -s, -a, and -t arguments
