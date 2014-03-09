@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# add2itunes - Add the media files provided as arguments to the iTunes library
+#
+# Written 8-Mar-2014 by Ronald Joe Record <rr@ronrecord.com>
+#
+
+HERE=`pwd`
+for i in "$@"
+do
+    if [ -f "$i" ]
+    then
+        # Construct full pathname of file
+        dnam=`dirname "$i"`
+        cd "$dnam"
+        pathname=`pwd`
+        j="$pathname"/`basename "$i"`
+        cd "$HERE"
+        echo "Adding file $i to iTunes"
+        osascript -e "tell application \"iTunes\" to add POSIX file \"$j\""
+    fi
+done

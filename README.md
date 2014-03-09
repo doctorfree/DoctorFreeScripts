@@ -15,6 +15,8 @@ To clone:
 Contents:
 --------
 
+[**add2itunes**](add2itunes) - Add the media files provided as arguments to the iTunes library. Uses OS X osascript to execute AppleScript.
+
 [**any2any**](any2any) - Uses ffmpeg to convert from any video format to any other
 
       This program works by either linking or copying any2any to a file
