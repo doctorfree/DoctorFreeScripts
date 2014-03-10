@@ -40,6 +40,11 @@ usage() {
     exit 1
 }
 
+update() {
+    printf "\nCopying $1 to $2\n"
+    cp "$1" "$2"
+}
+
 differ() {
     echo "$1 differs from installed version $2"
     [ "$DIFF" ] && diff "$1" "$2"
@@ -47,13 +52,13 @@ differ() {
     [ "$UPD" ] && {
         if [ "$FORCE" ]
         then
-            cp "$1" "$2"
+            update "$1" "$2"
         else
             while true
             do
                 read -p "Do you want to install the new version ? (y/n) " yn
                 case $yn in
-                    [Yy]* ) cp "$1" "$2"; break;;
+                    [Yy]* ) update "$1" "$2"; break;;
                     [Nn]* ) break;;
                         * ) echo "Please answer yes or no.";;
                 esac
