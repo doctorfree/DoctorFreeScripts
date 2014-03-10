@@ -82,7 +82,7 @@ while getopts adfiu flag; do
         i)
             UPD=1
             ;;
-        d)
+        f)
             UPD=1
             FORCE=1
             ;;
