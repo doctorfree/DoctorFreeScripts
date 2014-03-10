@@ -43,14 +43,18 @@
 #
 
 ME=`basename $0`
-PRE="${ME:0:3}"
-SUF="${ME:4:3}"
-INP=`echo $PRE | tr '[:lower:]' '[:upper:]'`
-DIR=`echo $SUF | tr '[:lower:]' '[:upper:]'`
-[ -d "$DIR" ] || {
-    echo "Output directory does not exist or is not a directory. Creating."
-    mkdir -p "$DIR"
-}
+if [ "$ME" = "any2any" ]
+then
+    PRE="wmv"
+    SUF="mp4"
+    INP="WMV"
+    DIR="MP4"
+else
+    PRE="${ME:0:3}"
+    SUF="${ME:4:3}"
+    INP=`echo $PRE | tr '[:lower:]' '[:upper:]'`
+    DIR=`echo $SUF | tr '[:lower:]' '[:upper:]'`
+fi
 
 CODEC=
 SIZE=
@@ -203,6 +207,19 @@ OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC $PRESET $QSCALE $RATE $ASAMPLE $V
 # Display usage message and exit if -u was given on the command line.
 # We delay until now in order to gather up all the other command line options.
 [ "$USAGE" ] && usage
+
+[ -d "$DIR" ] || {
+    printf "\nOutput directory $DIR does not exist or is not a directory.\n"
+    while true
+    do
+        read -p "Do you want to create the output directory ? (y/n) " yn
+        case $yn in
+            [Yy]* ) mkdir -p "$DIR"; break;;
+            [Nn]* ) printf "\nExiting.\n"; exit 1;;
+                * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
 
 for i in "$@"
 do
