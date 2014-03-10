@@ -62,14 +62,15 @@ VCODEC=
 PRESET="-preset slow"
 QSCALE=
 RATE=
-SAMPLE=
+ASAMPLE=
+VSAMPLE=
 THREAD=
 ITUNES=
 [ "$SUF" = "mp4" ] && {
     VCODEC="-vcodec libx264"
 # See http://slhck.info/articles/crf for info on Constant Rate Factor (CRF)
     RATE="-crf 23"
-    SAMPLE="-ab 128k"
+    ASAMPLE="-ab 128k"
     THREAD="-threads 0"
 }
 [ "$SUF" = "wmv" ] && {
@@ -77,60 +78,66 @@ ITUNES=
     VCODEC="-vcodec msmpeg4"
 # See http://www.kilobitspersecond.com/2007/05/24/ffmpeg-quality-comparison
     QSCALE="-qscale 5"
-    SAMPLE="-ab 128k"
+    ASAMPLE="-ab 128k"
     THREAD="-threads 0"
 }
 [ "$SUF" = "avi" ] && {
     ACODEC="-acodec adpcm_ms"
     VCODEC="-vcodec libxvid"
     QSCALE="-qscale 5"
-    SAMPLE="-ab 128k"
+    ASAMPLE="-ab 128k"
     THREAD="-threads 0"
 }
 # TODO: Add desired default settings for other format encodings here
 
 usage() {
-    printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec]"
-    printf "\n\t\t[-p preset] [-q scale] [-r rate] [-b bitrate] [-t threads]"
-    printf "\n\t\t[-s size] [-d] [-y] [-u] file1 [file2 file3 ...]\n"
-    printf "\nWhere:\n\t-d indicates tell me what you would do"
-    printf "\n\t-a audio codec specifies the output audio codec"
-    printf "\n\t-v video codec specifies the output video codec"
-    printf "\n\t-s size specifies the output video size (widthxheight)"
-    printf "\n\t-c codec specifies the output codec"
-    printf "\n\t-i indicates add the converted file to iTunes"
-    printf "\n\t-p preset specifies the ffmpeg preset to use"
-    printf "\n\t\t Useful presets:"
-    printf "\n\t\t ultrafast superfast veryfast faster fast medium slow"
-    printf "\n\t\t slower veryslow. Default preset is 'slow'"
-    printf "\n\t-q scale specifies the qscale variable bit rate quality"
-    printf "\n\t-r rate specifies the rate for Constant Rate Factor (CRF)"
-    printf "\n\t\tencoding. Use \"-r 0\" to disable for formats other than x264"
-    printf "\n\t-b bitrate specifies the bitrate (default 128k)"
-    printf "\n\t-t threads specifies the number of threads to use"
-    printf "\n\t-y indicates overwrite output files without asking"
-    printf "\n\t-u displays this usage message\n"
-    printf "\nCurrent invocation defaults to:\n\nffmpeg -i INPUT -loglevel warning -strict -2 $OPTS OUTPUT\n"
-    printf "\nExamples:\n\tCopy audio and video codecs, convert the container"
-    printf "\n\t\t$ME -c copy $INP/example.$SUF"
-    printf "\n\tSpecify output video size of 640 width by 480 height"
-    printf "\n\t\t$ME -s 640x480 $INP/example.$SUF"
-    printf "\n\tSpecify libx264 output video codec and use ipod640 preset"
-    printf "\n\t\t$ME -v libx264 -p ipod640 $INP/example.$SUF"
-    printf "\n\tSpecify 512k bitrate and add converted file to iTunes"
-    printf "\n\t\t$ME -b 512k -i $INP/example.$SUF"
-    printf "\n\tSpecify libx264 output video codec and variable bit rate"
-    printf "\n\t\t$ME -v libx264 -r 0 -q 3 $INP/example.$SUF\n"
-    exit 1
+  printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec] [-p preset]"
+  printf "\n\t\t[-q scale] [-r rate] [-b audio bitrate] [-z video bitrate]"
+  printf "\n\t\t[-s size] [-t threads] [-d] [-y] [-u] file1 [file2 file3 ...]"
+  printf "\n\nWhere:\n\t-d indicates tell me what you would do"
+  printf "\n\t-a audio codec specifies the output audio codec"
+  printf "\n\t-v video codec specifies the output video codec"
+  printf "\n\t-s size specifies the output video size (widthxheight)"
+  printf "\n\t-c codec specifies the output codec"
+  printf "\n\t-i indicates add the converted file to iTunes"
+  printf "\n\t-p preset specifies the ffmpeg preset to use"
+  printf "\n\t\t Useful presets:"
+  printf "\n\t\t ultrafast superfast veryfast faster fast medium slow"
+  printf "\n\t\t slower veryslow. Default preset is 'slow'"
+  printf "\n\t-q scale specifies the qscale variable bit rate quality"
+  printf "\n\t-r rate specifies the rate for Constant Rate Factor (CRF)"
+  printf "\n\t\tencoding. Use \"-r 0\" to disable for formats other than x264"
+  printf "\n\t-b bitrate specifies the bitrate (default 128k)"
+  printf "\n\t-t threads specifies the number of threads to use"
+  printf "\n\t-y indicates overwrite output files without asking"
+  printf "\n\t-u displays this usage message\n"
+  printf "\nCurrent invocation defaults to:\n\nffmpeg -i INPUT -loglevel warning -strict -2 $OPTS OUTPUT\n"
+  printf "\nExamples:"
+  printf "\n\tThe most common use is conversion using the default parameters"
+  printf "\n\t\t$ME $INP/example.$SUF"
+  printf "\n\tCopy audio and video codecs, convert the container"
+  printf "\n\t\t$ME -c copy $INP/example.$SUF"
+  printf "\n\tSpecify output video size of 640 width by 480 height"
+  printf "\n\t\t$ME -s 640x480 $INP/example.$SUF"
+  printf "\n\tSpecify libx264 output video codec and use ipod640 preset"
+  printf "\n\t\t$ME -v libx264 -p ipod640 $INP/example.$SUF"
+  printf "\n\tSpecify 512k bitrate and add converted file to iTunes"
+  printf "\n\t\t$ME -b 512k -i $INP/example.$SUF"
+  printf "\n\tSpecify libx264 output video codec and variable bit rate"
+  printf "\n\t\t$ME -v libx264 -r 0 -q 3 $INP/example.$SUF\n"
+  exit 1
 }
 
-while getopts p:q:r:b:t:s:v:a:c:iydu flag; do
+while getopts p:q:r:b:t:s:v:z:a:c:iydu flag; do
     case $flag in
         a)
             ACODEC="-acodec $OPTARG"
             ;;
         b)
-            SAMPLE="-ab $OPTARG"
+            ASAMPLE="-ab $OPTARG"
+            ;;
+        z)
+            VSAMPLE="-vb $OPTARG"
             ;;
         c)
             CODEC="-codec $OPTARG"
@@ -139,7 +146,14 @@ while getopts p:q:r:b:t:s:v:a:c:iydu flag; do
             TELL=1
             ;;
         i)
-            ITUNES=1
+            inst=`type -p osascript`
+            if [ "$inst" ]
+            then
+                ITUNES=1
+            else
+                echo "AppleScript is not supported on this platform."
+                echo "Unable to automate the installation in iTunes."
+            fi
             ;;
         p)
             PRESET="-preset $OPTARG"
@@ -177,7 +191,7 @@ shift $(( OPTIND - 1 ))
 
 # Set any options specified on the command line - the sed part is just
 # removing any leading or trailing spaces.
-OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC $PRESET $QSCALE $RATE $SAMPLE $THREAD" | sed -e 's/^ *//' -e 's/ *$//'`
+OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC $PRESET $QSCALE $RATE $ASAMPLE $VSAMPLE $THREAD" | sed -e 's/^ *//' -e 's/ *$//'`
 # Check for incompatible ffmpeg arguments
 [ "$RATE" ] && [ "$QSCALE" ] && {
     printf "\nCannot specify both constant and variable bit rate values."
