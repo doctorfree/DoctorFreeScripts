@@ -27,6 +27,7 @@
 # the Software.
 #
 
+A="$HOME/Pictures/Aperture Slideshows"
 M="$HOME/Movies"
 I="/Volumes/Lacie_Porsche_1TB/iTunes/Home Videos"
 W="/Volumes/My_Book_Studio/Movies"
@@ -37,7 +38,16 @@ FEMJOY=
 
 usage() {
     printf "\nUsage: femvidlinks [-M Movies Dir] [-W Work Dir] [-F Femjoy Dir]"
-    printf "\n\t[-I iTunes Dir] [-d] [-c] [-j] [-u]\n\n"
+    printf "\n\t[-A Aperture Dir] [-I iTunes Dir] [-d] [-c] [-j] [-u]\n"
+    printf "\nWhere:\n\t-d indicates tell me what you would do"
+    printf "\n\t-c indicates use chksums"
+    printf "\n\t-j indicates populate the Femjoy \"All\" folder"
+    printf "\n\t-u displays this usage message\n"
+    printf "\nDefaults are:\n\tMovies Dir = $M"
+    printf "\n\tWork Dir = $W"
+    printf "\n\tFemjoy Dir = $F"
+    printf "\n\tAperture Dir = $A"
+    printf "\n\tiTunes Dir = $I\n\n"
     exit 1
 }
 
@@ -98,8 +108,11 @@ FindAndRemove() {
     done
 }
 
-while getopts M:W:F:I:dcju flag; do
+while getopts A:M:W:F:I:dcju flag; do
     case $flag in
+        A)
+            A="$OPTARG"
+            ;;
         M)
             M="$OPTARG"
             ;;
@@ -153,19 +166,39 @@ WSUMS="$W"/SUMS
 [ "$USE_SUM" ] && {
     cd "$I"
     printf "\nUpdating iTunes SUMS file ...\n"
-    updsums
+    [ "$TELL" ] || updsums
 }
 
 # Link to file in iTunes library if it's a duplicate
-cd "$W"
-printf "\nFinding and symlinking duplicate files in $W ...\n"
-FindAndLink
-cd "$M"
-printf "\nFinding and symlinking duplicate files in $M ...\n"
-FindAndLink
+if [ -d "$W" ]
+then
+    cd "$W"
+    printf "\nFinding and symlinking duplicate files in $W ...\n"
+    FindAndLink
+else
+    echo "$W does not exist or is not a directory. Skipping."
+fi
+if [ -d "$M" ]
+then
+    cd "$M"
+    printf "\nFinding and symlinking duplicate files in $M ...\n"
+    FindAndLink
+else
+    echo "$M does not exist or is not a directory. Skipping."
+fi
+if [ -d "$A" ]
+then
+    cd "$A"
+    printf "\nFinding and symlinking duplicate files in $A ...\n"
+    FindAndLink
+else
+    echo "$A does not exist or is not a directory. Skipping."
+fi
 
 # Create and populate the Femjoy "All" folder
 [ "$FEMJOY" ] && {
+  if [ -d "$F" ]
+  then
     cd "$F"
     printf "\nCreating and populating the Femjoy 'All' folder ...\n"
     [ -d All ] || {
@@ -191,14 +224,35 @@ FindAndLink
             cd ..
         }
     done
+  else
+    echo "$F does not exist or is not a directory. Skipping."
+  fi
 }
 
 # Remove broken links
-cd "$W"
-printf "\nRemoving broken links in $W ...\n"
-FindAndRemove
-cd "$M"
-printf "\nRemoving broken links in $M ...\n"
-FindAndRemove
+if [ -d "$W" ]
+then
+    cd "$W"
+    printf "\nRemoving broken links in $W ...\n"
+    FindAndRemove
+else
+    echo "$W does not exist or is not a directory. Skipping."
+fi
+if [ -d "$M" ]
+then
+    cd "$M"
+    printf "\nRemoving broken links in $M ...\n"
+    FindAndRemove
+else
+    echo "$M does not exist or is not a directory. Skipping."
+fi
+if [ -d "$A" ]
+then
+    cd "$A"
+    printf "\nRemoving broken links in $A ...\n"
+    FindAndRemove
+else
+    echo "$A does not exist or is not a directory. Skipping."
+fi
 
 echo "Done."
