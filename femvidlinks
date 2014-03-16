@@ -68,12 +68,16 @@ FindAndLink() {
         else
             b=`basename "$i"`
             [ "$b" = "SUMS" ] && continue
-            [ "$USE_SUM" ] && ck1=`cksum "$i" | awk ' { print $1 } '`
+            [ "$USE_SUM" ] && {
+                ck1 =`grep "$i" SUMS | awk ' { print $1 } '`
+                [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
+            }
             [ -f "$I/$b" ] && {
                 found=1
                 if [ "$USE_SUM" ]
                 then
-                    ck2=`cksum "$I/$b" | awk ' { print $1 } '`
+                    ck2 =`grep "$b" "$I/SUMS" | awk ' { print $1 } '`
+                    [ "$ck2" ] || ck2=`cksum "$I/$b" | awk ' { print $1 } '`
                     [ $ck1 -eq $ck2 ] && {
                         remlink "$I/$b" "$i"
                     } 
@@ -173,6 +177,11 @@ WSUMS="$W"/SUMS
 if [ -d "$W" ]
 then
     cd "$W"
+    # Update the SUMS file if we are using cksums
+    [ "$USE_SUM" ] && {
+        printf "\nUpdating $W/SUMS\n"
+        [ "$TELL" ] || updsums
+    }
     printf "\nFinding and symlinking duplicate files in $W ...\n"
     FindAndLink
 else
@@ -181,6 +190,11 @@ fi
 if [ -d "$M" ]
 then
     cd "$M"
+    # Update the SUMS file if we are using cksums
+    [ "$USE_SUM" ] && {
+        printf "\nUpdating $M/SUMS\n"
+        [ "$TELL" ] || updsums
+    }
     printf "\nFinding and symlinking duplicate files in $M ...\n"
     FindAndLink
 else
@@ -189,6 +203,11 @@ fi
 if [ -d "$A" ]
 then
     cd "$A"
+    # Update the SUMS file if we are using cksums
+    [ "$USE_SUM" ] && {
+        printf "\nUpdating $A/SUMS\n"
+        [ "$TELL" ] || updsums
+    }
     printf "\nFinding and symlinking duplicate files in $A ...\n"
     FindAndLink
 else
