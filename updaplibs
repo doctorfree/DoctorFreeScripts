@@ -37,12 +37,14 @@ NAME="updaplibs"
 MYHOME=
 TELL=
 DRY=
+FOLLOW=
 
 usage() {
     printf "Usage: $NAME [-d] [-h] [-n] [-u] [-a source dir] [-t dest dir]\n"
-    printf "                 [-s suffix] source-subdir [source-subdir2 ...]\n"
+    printf "            [-L] [-s suffix] source-subdir [source-subdir2 ...]\n"
     printf "Where:\n\t-d indicates a dry run sync (no changes)\n"
     printf "\t-h indicates use directories from your HOME dir\n"
+    printf "\t-L indicates follow symbolic links\n"
     printf "\t-n indicates tell me what you would do without doing it\n"
     printf "\t-u displays this usage message\n"
     printf "\t-a source dir sets the top-level source directory\n"
@@ -56,13 +58,16 @@ usage() {
     exit 1
 }
 
-while getopts a:s:t:dhnu flag; do
+while getopts a:s:t:dhLnu flag; do
     case $flag in
         d)
             DRY="n"
             ;;
         h)
             MYHOME=1
+            ;;
+        L)
+            FOLLOW="--copy-links"
             ;;
         n)
             TELL=1
@@ -131,20 +136,20 @@ then
     if [ "$TELL" ]
     then
         echo ""
-        echo "rsync -qa$DRY $DEL $AP_LIBDIR/$lib $TRANSCEND" 
+        echo "rsync -qa$DRY $FOLLOW $DEL $AP_LIBDIR/$lib $TRANSCEND" 
     else
         if [ "$DRY" ]
         then
-            rsync -van $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+            rsync -van $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
         else
-            rsync -Wqa $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+            rsync -Wqa $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
             touch "$TRANSCEND/.rsync_$lib"
         fi
     fi
     echo "done."
   done
 else
-    for libnam in $*
+    for libnam in "$@"
     do
       lib="$libnam$SUFFIX"
       [ -d "$AP_LIBDIR/$lib" ] || {
@@ -157,13 +162,13 @@ else
       if [ "$TELL" ]
       then
           echo ""
-          echo "rsync -qa$DRY $DEL $AP_LIBDIR/$lib $TRANSCEND" 
+          echo "rsync -qa$DRY $FOLLOW $DEL $AP_LIBDIR/$lib $TRANSCEND" 
       else
           if [ "$DRY" ]
           then
-              rsync -van $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+              rsync -van $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
           else
-              rsync -Wqa $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+              rsync -Wqa $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
               touch "$TRANSCEND/.rsync_$lib"
           fi
       fi
