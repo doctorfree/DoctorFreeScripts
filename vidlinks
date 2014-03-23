@@ -69,7 +69,7 @@ FindAndLink() {
             b=`basename "$i"`
             [ "$b" = "SUMS" ] && continue
             [ "$USE_SUM" ] && {
-                ck1 =`grep "$i" SUMS | awk ' { print $1 } '`
+                ck1=`grep "$i" SUMS | awk ' { print $1 } '`
                 [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
             }
             [ -f "$I/$b" ] && {
