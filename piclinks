@@ -1,0 +1,186 @@
+#!/bin/bash
+#
+# piclinks - create symbolic links to photo files where possible to reduce
+#    duplicate storage of photographs. Link into my Aperture libraries.
+#
+# Written 23-Mar-2014 by Ronald Joe Record <rr@ronrecord.com>
+# Based on vidlinks https://github.com/doctorfree/Scripts/blob/master/vidlinks
+#
+# Copyright (c) 2014, Ronald Joe Record
+# All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# The Software is provided "as is", without warranty of any kind, express or
+# implied, including but not limited to the warranties of merchantability,
+# fitness for a particular purpose and noninfringement. In no event shall the
+# authors or copyright holders be liable for any claim, damages or other
+# liability, whether in an action of contract, tort or otherwise, arising from,
+# out of or in connection with the Software or the use or other dealings in
+# the Software.
+#
+
+P="$HOME/Pictures"
+W="/Volumes/My_Book_Studio/Pictures/Work"
+LIBS="/Volumes/My_Book_Studio/Pictures/Libraries"
+TELL=
+PICS=
+
+usage() {
+    printf "\nUsage: piclinks [-P Pictures Dir] [-W Work Dir]"
+    printf "\n\t[-A Aperture Libraries Dir] [-h] [-d] [-u]\n"
+    printf "\nWhere:\n\t-d indicates tell me what you would do"
+    printf "\n\t-h indicates also search Home Pictures directory"
+    printf "\n\t-u displays this usage message\n"
+    printf "\nDefaults are:\n\tHome Pictures Dir = $P"
+    printf "\n\tWork Dir = $W"
+    printf "\n\tAperture Libraries Dir = $LIBS\n\n"
+    exit 1
+}
+
+remlink() {
+    printf "\nRemoving $2"
+    [ "$TELL" ] || rm -f "$2"
+    printf "\nLinking $1 to $2\n"
+    [ "$TELL" ] || ln -s "$1" "$2"
+}
+
+FindAndLink() {
+    find . -type f | while read i
+    do
+        if [ -L "$i" ]
+        then
+            continue
+        else
+            b=`basename "$i"`
+            [ "$b" = "SUMS" ] && continue
+            ck1=`grep "$i" SUMS | awk ' { print $1 } '`
+            [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
+            # Could be in multiple Aperture libraries, use the first one
+            for lib in "$LIBS"/*.aplibrary/Masters
+            do
+                b=`grep "$ck1" "$lib/SUMS" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+                ck2=`echo $b | sed -e "s/\.\///"`
+                [ "$ck2" ] || continue
+                remlink "$lib/$ck2" "$i"
+                break
+            done
+        fi
+    done
+}
+
+FindAndRemove() {
+    find . -type l | while read i
+    do
+        ls -lL "$i" > /dev/null 2>&1
+        [ $? -eq 0 ] || {
+            printf "\nRemoving $i"
+            [ "$TELL" ] || rm -f "$i"
+        }
+    done
+}
+
+while getopts A:P:W:dhu flag; do
+    case $flag in
+        A)
+            LIBS="$OPTARG"
+            ;;
+        P)
+            P="$OPTARG"
+            ;;
+        W)
+            W="$OPTARG"
+            ;;
+        d)
+            TELL=1
+            ;;
+        h)
+            PICS=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "$PICS" ] && {
+    [ -d "$P" ] || {
+        echo "$P does not exist or is not a directory. Exiting."
+        exit 1
+    }
+}
+[ -d "$W" ] || {
+    echo "$W does not exist or is not a directory. Exiting."
+    exit 1
+}
+[ -d "$LIBS" ] || {
+    echo "$LIBS does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+# Update the Aperture libraries SUMS files first
+cd "$LIBS"
+printf "\nUpdating Aperture libraries SUMS files ...\n"
+[ "$TELL" ] || {
+    for aplib in *.aplibrary/Masters
+    do
+        cd "$aplib"
+        updsums
+        cd ../..
+    done
+}
+
+# Link to file in Aperture library if it's a duplicate
+if [ -d "$W" ]
+then
+    cd "$W"
+    printf "\nUpdating $W/SUMS\n"
+    [ "$TELL" ] || updsums
+    printf "\nFinding and symlinking duplicate files in $W ...\n"
+    FindAndLink
+else
+    echo "$W does not exist or is not a directory. Skipping."
+fi
+[ "$PICS" ] && {
+    if [ -d "$P" ]
+    then
+        cd "$P"
+        printf "\nUpdating $P/SUMS\n"
+        [ "$TELL" ] || updsums
+        printf "\nFinding and symlinking duplicate files in $P ...\n"
+        FindAndLink
+    else
+        echo "$P does not exist or is not a directory. Skipping."
+    fi
+}
+
+# Remove broken links
+if [ -d "$W" ]
+then
+    cd "$W"
+    printf "\nRemoving broken links in $W ...\n"
+    FindAndRemove
+else
+    echo "$W does not exist or is not a directory. Skipping."
+fi
+[ "$PICS" ] && {
+    if [ -d "$P" ]
+    then
+        cd "$P"
+        printf "\nRemoving broken links in $P ...\n"
+        FindAndRemove
+    else
+        echo "$P does not exist or is not a directory. Skipping."
+    fi
+}
+
+echo "Done."

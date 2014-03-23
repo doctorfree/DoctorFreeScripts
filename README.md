@@ -97,6 +97,9 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
 
 [**mvfem**](mvfem) - Rename a downloaded Femjoy zip archive that contains two model names to use only one model's name so it will work with femzip.
 
+[**piclinks**](piclinks) - Create symbolic links to photo files where
+possible to reduce duplicate storage of photos. Link into my Aperture libraries.
+
 [**updaplibs**](updaplibs) - Sync my Aperture libraries to a USB flash drive
 
     Note: to sync other directories use the -s, -a, and -t arguments
