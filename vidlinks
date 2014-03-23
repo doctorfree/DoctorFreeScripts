@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# femvidlinks - create symbolic links to movie files where possible to reduce
+# vidlinks - create symbolic links to movie files where possible to reduce
 #    duplicate storage of movies. Link into my iTunes library.
 #
 # Written 01-Dec-2013 by Ronald Joe Record <rr@ronrecord.com>
@@ -37,7 +37,7 @@ TELL=
 FEMJOY=
 
 usage() {
-    printf "\nUsage: femvidlinks [-M Movies Dir] [-W Work Dir] [-F Femjoy Dir]"
+    printf "\nUsage: vidlinks [-M Movies Dir] [-W Work Dir] [-F Femjoy Dir]"
     printf "\n\t[-A Aperture Dir] [-I iTunes Dir] [-d] [-c] [-j] [-u]\n"
     printf "\nWhere:\n\t-d indicates tell me what you would do"
     printf "\n\t-c indicates use chksums"

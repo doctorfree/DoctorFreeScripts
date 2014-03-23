@@ -56,9 +56,6 @@ need to by sync'd with rsync to the USB flash drive backup
 
 [**chkinst**](chkinst) - Check if installed versions of files in current directory are different in order to determine if git repository is up-to-date.
 
-[**femvidlinks**](femvidlinks) - Create symbolic links to movie files where
-possible to reduce duplicate storage of movies. Link into my iTunes library.
-
 [**femzip**](femzip) - Convenience script to unzip Femjoy photo downloads
 
 [**latest**](latest) - List the top N newest files in a directory or hierarchy
@@ -114,6 +111,9 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
 
 [**updsums**](updsums) - Create or update a SUMS file which contains chksums
 for all files in that directory hierarchy
+
+[**vidlinks**](vidlinks) - Create symbolic links to movie files where
+possible to reduce duplicate storage of movies. Link into my iTunes library.
 
 [**wb**](wb) - Automatically downloads my favorites from wallbase.cc
 
