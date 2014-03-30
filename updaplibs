@@ -38,6 +38,7 @@ MYHOME=
 TELL=
 DRY=
 FOLLOW=
+USAGE=
 
 usage() {
     printf "Usage: $NAME [-d] [-h] [-n] [-u] [-a source dir] [-t dest dir]\n"
@@ -82,7 +83,7 @@ while getopts a:s:t:dhLnu flag; do
             TRANSCEND="$OPTARG"
             ;;
         u)
-            usage
+            USAGE=1
             ;;
     esac
 done
@@ -114,6 +115,7 @@ NAME=`basename $0`
     TRANSCEND="/Volumes/Transcend/Home"
     SUFFIX=""
 }
+[ "$USAGE" ] && usage
 
 [ -d "$TRANSCEND" ] || {
     echo "$TRANSCEND does not exist or is not a directory. Exiting."
