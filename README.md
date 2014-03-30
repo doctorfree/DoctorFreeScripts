@@ -100,9 +100,11 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
 [**piclinks**](piclinks) - Create symbolic links to photo files where
 possible to reduce duplicate storage of photos. Link into my Aperture libraries.
 
-[**updaplibs**](updaplibs) - Sync my Aperture libraries to a USB flash drive
+[**upd**](upd) - Sync specified libraries/directories to a USB flash drive
 
     Note: to sync other directories use the -s, -a, and -t arguments
+
+    When invoked as updaplibs it syncs directories in my Aperture libraries
 
     When invoked as updpicdir it syncs directories in my Pictures dir
 
@@ -115,7 +117,7 @@ possible to reduce duplicate storage of photos. Link into my Aperture libraries.
 [**updsums**](updsums) - Create or update a SUMS file which contains chksums
 for all files in that directory hierarchy
 
-[**updtranscend**](updtranscend) - Convenience script to frontend the rsyncs needed to sync my Transcend flash drive.
+[**updflash**](updflash) - Convenience script to frontend the rsyncs needed to sync my flash drive using my "upd" script.
 
 [**vidlinks**](vidlinks) - Create symbolic links to movie files where
 possible to reduce duplicate storage of movies. Link into my iTunes library.
