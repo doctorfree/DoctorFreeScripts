@@ -1,8 +1,9 @@
 #!/bin/bash
 #
-# chkaplibs - check the Aperture libraries and see if they need to by
+# chk - check the specified directories/libraries and see if they need to by
 #    sync'd with rsync to the USB flash drive backup
 #    Note: to check other directories use the -s, -a, and -t arguments
+#          when invoked as chkaplibs it checks directories in my Apertures libs
 #          when invoked as chkpicdir it checks directories in my Pictures dir
 #          when invoked as chkmovdir it checks directories in my Movies dir
 #          when invoked as chkhome it checks directories in $HOME
@@ -35,20 +36,27 @@
 AP_LIBDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
 # The mounted USB stick or Aperture backup directory
 USBLIBDIR="/Volumes/Transcend/Pictures/Aperture"
+# Defaults to checking Aperture libraries
 SUFFIX=".aplibrary"
 NAME="chkaplibs"
-UPSC="updaplibs"
+UPSC="upd"
 FORCE=
+MOVDIR=
+PICDIR=
+HOMEDIR=
 MYHOME=
 UPD=
 TELL=
 
 usage() {
     printf "Usage: $NAME [-h] [-n] [-r] [-u] [-a source dir] [-t dest dir]\n"
-    printf "            [-f] [-s suffix] [library name(s) ...]\n"
+    printf "    [-H] [-M] [-P] [-f] [-s suffix] [library name(s) ...]\n"
     printf "\nWhere:\n\t-r indicates run rsync to sync libraries when needed\n"
     printf "\t-f indicates force a sync regardless of last time-stamp\n"
     printf "\t-h indicates use directories from $HOME\n"
+    printf "\t-H indicates act like invoked as chkhome\n"
+    printf "\t-M indicates act like invoked as chkmovdir\n"
+    printf "\t-P indicates act like invoked as chkpicdir\n"
     printf "\t-n indicates tell me what you would do without doing it\n"
     printf "\t-u displays this usage message\n"
     printf "\t-a source dir sets the top-level source directory\n"
@@ -103,13 +111,22 @@ chklib() {
     fi
 }
 
-while getopts a:s:t:fhrnu flag; do
+while getopts a:s:t:fhHPMrnu flag; do
     case $flag in
         f)
             FORCE=1
             ;;
         h)
             MYHOME="-h"
+            ;;
+        H)
+            HOMEDIR=1
+            ;;
+        M)
+            MOVDIR=1
+            ;;
+        P)
+            PICDIR=1
             ;;
         r)
             UPD=1
@@ -134,7 +151,7 @@ done
 shift $(( OPTIND - 1 ))
 
 NAME=`basename $0`
-[ "$NAME" = "chkpicdir" ] && {
+[ "$PICDIR" ] || [ "$NAME" = "chkpicdir" ] && {
     if [ "$MYHOME" ]
     then
         AP_LIBDIR="$HOME/Pictures"
@@ -143,9 +160,9 @@ NAME=`basename $0`
     fi
     USBLIBDIR="/Volumes/Transcend/Pictures"
     SUFFIX=""
-    UPSC="updpicdir"
+    UPSC="upd -P"
 }
-[ "$NAME" = "chkmovdir" ] && {
+[ "$MOVDIR" ] || [ "$NAME" = "chkmovdir" ] && {
     if [ "$MYHOME" ]
     then
         AP_LIBDIR="$HOME/Movies"
@@ -154,13 +171,13 @@ NAME=`basename $0`
     fi
     USBLIBDIR="/Volumes/Transcend/Movies"
     SUFFIX=""
-    UPSC="updmovdir"
+    UPSC="upd -M"
 }
-[ "$NAME" = "chkhome" ] && {
+[ "$HOMEDIR" ] || [ "$NAME" = "chkhome" ] && {
     AP_LIBDIR="$HOME"
     USBLIBDIR="/Volumes/Transcend/Home"
     SUFFIX=""
-    UPSC="updhome"
+    UPSC="upd -H"
 }
 
 [ -d "$AP_LIBDIR" ] || {

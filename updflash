@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# updtranscend - update my Transcend flash drive that stores backups of my
-#                movies, pictures, documents, source, etc
+# updflash - update my flash drive that stores backups of my movies, pictures,
+#            documents, source, etc. This script uses my "upd" script
 #
-# The mount point for the Transcend flash drive
+# The mount point for the flash drive
 TRAN_DIR=/Volumes/Transcend
 # A directory that we know exists there
 TEST_DIR="$TRAN_DIR"/Pictures
@@ -21,7 +21,7 @@ PIC_WORK_DIR="$PIC_DIR/$WORK"
 MOV_DIR="$MBS/Movies"
 MOV_WORK_DIR="$MOV_DIR/$WORK"
 
-# Check if the Transcend flash drive is mounted in its proper location
+# Check if the flash drive is mounted in its proper location
 [ -d "$TEST_DIR" ] || {
     # Sometimes we gotta wake it up
     ls "$TEST_DIR" > /dev/null 2>&1
@@ -33,31 +33,31 @@ MOV_WORK_DIR="$MOV_DIR/$WORK"
 }
 
 # First, update the backup of my Aperture libraries
-updaplibs
+upd
 
 # Next, the Aperture slide shows for which I have created symbolic links
-# into my iTunes library so use the -L option to updpicdir
+# into my iTunes library so use the -L option to upd
 if [ -d "$SLIDE_DIR" ]
 then
-    updpicdir -h -L "$APERT_DIR"
+    upd -P -h -L "$APERT_DIR"
 else
     echo "$SLIDE_DIR does not exist or is not a directory. Skipping."
 fi
 
 # Sync the "work" photos for which I have created symbolic links
-# into my Aperture libraries so use the -L option to updpicdir
+# into my Aperture libraries so use the -L option to upd
 if [ -d "$PIC_WORK_DIR" ]
 then
-    updpicdir -L "$WORK"
+    upd -P -L "$WORK"
 else
     echo "$PIC_WORK_DIR does not exist or is not a directory. Skipping."
 fi
 
 # Sync the "work" movies for which I have created symbolic links
-# into my iTunes library so use the -L option to updmovdir
+# into my iTunes library so use the -L option to upd
 if [ -d "$MOV_WORK_DIR" ]
 then
-    updmovdir -L "$WORK"
+    upd -M -L "$WORK"
 else
     echo "$MOV_WORK_DIR does not exist or is not a directory. Skipping."
 fi
@@ -67,7 +67,7 @@ for dir in Documents Movies Pictures bin src
 do
     if [ -d "$HOME/$dir" ]
     then
-        updhome "$dir"
+        upd -H "$dir"
     else
         echo "$HOME/$dir does not exist or is not a directory. Skipping."
     fi

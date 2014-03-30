@@ -1,10 +1,11 @@
 #!/bin/bash
 #
-# updaplibs - sync my Aperture libraries to a USB flash drive
+# upd - sync specified directories/libraries to a USB flash drive
 #    Note: to sync other directories use the -s, -a, and -t arguments
-#          when invoked as updpicdir it syncs directories in my Pictures dir
-#          when invoked as updmovdir it syncs directories in my Movies dir
-#          when invoked as updhome it syncs directories in $HOME
+#        when invoked as updaplibs it syncs directories in my Apertures library
+#        when invoked as updpicdir it syncs directories in my Pictures dir
+#        when invoked as updmovdir it syncs directories in my Movies dir
+#        when invoked as updhome it syncs directories in $HOME
 #
 # Written 10-Feb-2014 by Ronald Joe Record <rr@ronrecord.com>
 #
@@ -29,12 +30,17 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
-
+# Where to sync from
 AP_LIBDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
+# Where to sync to
 TRANSCEND="/Volumes/Transcend/Pictures/Aperture"
+# Default to syncing my Aperture libraries
 SUFFIX=".aplibrary"
 NAME="updaplibs"
 MYHOME=
+PICDIR=
+MOVDIR=
+HOMEDIR=
 TELL=
 DRY=
 FOLLOW=
@@ -42,10 +48,13 @@ USAGE=
 
 usage() {
     printf "Usage: $NAME [-d] [-h] [-n] [-u] [-a source dir] [-t dest dir]\n"
-    printf "            [-L] [-s suffix] source-subdir [source-subdir2 ...]\n"
+    printf "    [-P] [-M] [-H] [-L] [-s suffix] source-subdir [subdir2 ...]\n"
     printf "Where:\n\t-d indicates a dry run sync (no changes)\n"
     printf "\t-h indicates use directories from your HOME dir\n"
     printf "\t-L indicates follow symbolic links\n"
+    printf "\t-P indicates use the Pictures directory (like updpicdir)\n"
+    printf "\t-M indicates use the Movies directory (like updmovdir)\n"
+    printf "\t-H indicates use the Home directory (like updhome)\n"
     printf "\t-n indicates tell me what you would do without doing it\n"
     printf "\t-u displays this usage message\n"
     printf "\t-a source dir sets the top-level source directory\n"
@@ -59,7 +68,7 @@ usage() {
     exit 1
 }
 
-while getopts a:s:t:dhLnu flag; do
+while getopts a:s:t:dhLPMHnu flag; do
     case $flag in
         d)
             DRY="n"
@@ -70,8 +79,17 @@ while getopts a:s:t:dhLnu flag; do
         L)
             FOLLOW="--copy-links"
             ;;
+        H)
+            HOMEDIR=1
+            ;;
         n)
             TELL=1
+            ;;
+        P)
+            PICDIR=1
+            ;;
+        M)
+            MOVDIR=1
             ;;
         a)
             AP_LIBDIR="$OPTARG"
@@ -90,7 +108,7 @@ done
 shift $(( OPTIND - 1 ))
 
 NAME=`basename $0`
-[ "$NAME" = "updpicdir" ] && {
+[ "$PICDIR" ] || [ "$NAME" = "updpicdir" ] && {
     if [ "$MYHOME" ]
     then
         AP_LIBDIR="$HOME/Pictures"
@@ -100,7 +118,7 @@ NAME=`basename $0`
     TRANSCEND="/Volumes/Transcend/Pictures"
     SUFFIX=""
 }
-[ "$NAME" = "updmovdir" ] && {
+[ "$MOVDIR" ] || [ "$NAME" = "updmovdir" ] && {
     if [ "$MYHOME" ]
     then
         AP_LIBDIR="$HOME/Movies"
@@ -110,7 +128,7 @@ NAME=`basename $0`
     TRANSCEND="/Volumes/Transcend/Movies"
     SUFFIX=""
 }
-[ "$NAME" = "updhome" ] && {
+[ "$HOMEDIR" ] || [ "$NAME" = "updhome" ] && {
     AP_LIBDIR="$HOME"
     TRANSCEND="/Volumes/Transcend/Home"
     SUFFIX=""
