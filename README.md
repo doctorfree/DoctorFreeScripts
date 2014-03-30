@@ -115,6 +115,8 @@ possible to reduce duplicate storage of photos. Link into my Aperture libraries.
 [**updsums**](updsums) - Create or update a SUMS file which contains chksums
 for all files in that directory hierarchy
 
+[**updtranscend**](updtranscend) - Convenience script to frontend the rsyncs needed to sync my Transcend flash drive.
+
 [**vidlinks**](vidlinks) - Create symbolic links to movie files where
 possible to reduce duplicate storage of movies. Link into my iTunes library.
 
