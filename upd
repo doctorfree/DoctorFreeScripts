@@ -45,13 +45,15 @@ TELL=
 DRY=
 FOLLOW=
 USAGE=
+VERB="q"
 
 usage() {
     printf "Usage: $NAME [-d] [-h] [-n] [-u] [-a source dir] [-t dest dir]\n"
-    printf "    [-P] [-M] [-H] [-L] [-s suffix] source-subdir [subdir2 ...]\n"
+    printf " [-v] [-P] [-M] [-H] [-L] [-s suffix] source-subdir [subdir2 ...]\n"
     printf "Where:\n\t-d indicates a dry run sync (no changes)\n"
     printf "\t-h indicates use directories from your HOME dir\n"
     printf "\t-L indicates follow symbolic links\n"
+    printf "\t-v indicates verbose rsync output\n"
     printf "\t-P indicates use the Pictures directory (like updpicdir)\n"
     printf "\t-M indicates use the Movies directory (like updmovdir)\n"
     printf "\t-H indicates use the Home directory (like updhome)\n"
@@ -68,7 +70,7 @@ usage() {
     exit 1
 }
 
-while getopts a:s:t:dhLPMHnu flag; do
+while getopts a:s:t:dhLPMHnuv flag; do
     case $flag in
         d)
             DRY="n"
@@ -102,6 +104,9 @@ while getopts a:s:t:dhLPMHnu flag; do
             ;;
         u)
             USAGE=1
+            ;;
+        v)
+            VERB=v
             ;;
     esac
 done
@@ -156,13 +161,13 @@ then
     if [ "$TELL" ]
     then
         echo ""
-        echo "rsync -qa$DRY $FOLLOW $DEL $AP_LIBDIR/$lib $TRANSCEND" 
+        echo "rsync -${VERB}a$DRY $FOLLOW $DEL $AP_LIBDIR/$lib $TRANSCEND" 
     else
         if [ "$DRY" ]
         then
             rsync -van $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
         else
-            rsync -Wqa $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+            rsync -Wa$VERB $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
             touch "$TRANSCEND/.rsync_$lib"
         fi
     fi
@@ -182,13 +187,13 @@ else
       if [ "$TELL" ]
       then
           echo ""
-          echo "rsync -qa$DRY $FOLLOW $DEL $AP_LIBDIR/$lib $TRANSCEND" 
+          echo "rsync -${VERB}a$DRY $FOLLOW $DEL $AP_LIBDIR/$lib $TRANSCEND" 
       else
           if [ "$DRY" ]
           then
               rsync -van $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
           else
-              rsync -Wqa $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+              rsync -W${VERB}a $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
               touch "$TRANSCEND/.rsync_$lib"
           fi
       fi
