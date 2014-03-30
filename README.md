@@ -39,14 +39,13 @@ Contents:
       and suffix must also be a filename suffix that ffmpeg recognizes
       as a supported video format.
 
-[**chkall**](chkall) - Invokes chkaplibs, chkmovdir, and chkpicdir to check
-the Aperture, Movies, and Pictures rsync'd directories and sync them if
-specified and necessary
+[**chkall**](chkall) - Invokes "chk" to check the Aperture, Movies, and Pictures rsync'd directories and sync them if specified and necessary
 
-[**chkaplibs**](chkaplibs) - Check the Aperture libraries and see if they
-need to by sync'd with rsync to the USB flash drive backup
+[**chk**](chk) - Check the specified directories/libraries and see if they need to by sync'd with rsync to the USB flash drive backup
 
     Note: to check other directories use the -s, -a, and -t arguments
+
+    When invoked as chkaplibs it checks directories in my Apertures libraries
 
     When invoked as chkpicdir it checks directories in my Pictures dir
 
