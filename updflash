@@ -3,6 +3,32 @@
 # updflash - update my flash drive that stores backups of my movies, pictures,
 #            documents, source, etc. This script uses my "upd" script
 #
+# Written 28-Mar-2014 by Ronald Joe Record <rr@ronrecord.com>
+#
+# Copyright (c) 2014, Ronald Joe Record
+# All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# The Software is provided "as is", without warranty of any kind, express or
+# implied, including but not limited to the warranties of merchantability,
+# fitness for a particular purpose and noninfringement. In no event shall the
+# authors or copyright holders be liable for any claim, damages or other
+# liability, whether in an action of contract, tort or otherwise, arising from,
+# out of or in connection with the Software or the use or other dealings in
+# the Software.
+#
+# Modify the following default locations to suit your needs
+#
+########### DEFAULT LOCATIONS ######################
 # The mount point for the flash drive
 TRAN_DIR=/Volumes/Transcend
 # A directory that we know exists there
@@ -20,6 +46,9 @@ PIC_WORK_DIR="$PIC_DIR/$WORK"
 # Where I store my movies
 MOV_DIR="$MBS/Movies"
 MOV_WORK_DIR="$MOV_DIR/$WORK"
+# Directories in my Home directory that I want to backup
+HOME_DIRS="Documents Movies Music Pictures bin src"
+########### END DEFAULT LOCATIONS ######################
 
 # Check if the flash drive is mounted in its proper location
 [ -d "$TEST_DIR" ] || {
@@ -63,7 +92,7 @@ else
 fi
 
 # Finally, sync some of the directories in my home directory
-for dir in Documents Movies Pictures bin src
+for dir in $HOME_DIRS
 do
     if [ -d "$HOME/$dir" ]
     then
