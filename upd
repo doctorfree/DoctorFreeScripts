@@ -43,7 +43,7 @@ MOVDIR=
 HOMEDIR=
 TELL=
 DRY=
-FOLLOW=
+FOLLOW="--exclude='.DS_Store'"
 USAGE=
 VERB="q"
 
@@ -79,7 +79,7 @@ while getopts a:s:t:dhLPMHnuv flag; do
             MYHOME=1
             ;;
         L)
-            FOLLOW="--copy-links"
+            FOLLOW="--copy-links --exclude='.DS_Store'"
             ;;
         H)
             HOMEDIR=1
