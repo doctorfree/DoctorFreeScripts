@@ -1,9 +1,11 @@
 #!/bin/bash
 #
 # updflash - update my flash drive that stores backups of my movies, pictures,
-#            documents, source, etc. This script uses my "upd" script
+#            documents, source, etc.
 #
 # Written 28-Mar-2014 by Ronald Joe Record <rr@ronrecord.com>
+#
+# Note: This script is dependent on my "upd" and "chk" scripts
 #
 # Copyright (c) 2014, Ronald Joe Record
 # All rights reserved.
@@ -26,16 +28,21 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
-# Modify the following default locations to suit your needs
+# Modify the following default locations to suit your needs.
+# This script invokes the upd script. You may also wish to customize
+# the default locations in the upd script.
 #
 ########### DEFAULT LOCATIONS ######################
 # The mount point for the flash drive
 TRAN_DIR=/Volumes/Transcend
 # A directory that we know exists there
 TEST_DIR="$TRAN_DIR"/Pictures
-# Where my Aperture slideshows are stored
-APERT_DIR="Aperture Slideshows"
-SLIDE_DIR="$HOME/Pictures/$APERT_DIR"
+# My iTunes library
+LACIE="/Volumes/Lacie_Porsche_1TB"
+ITUNES="$LACIE/iTunes"
+# My Aperture libraries
+APLIBS="/Volumes/My_Book_Studio/Pictures/Libraries"
+APLIBS_DEST="$TRAN_DIR/Pictures/Aperture"
 # The mount point for the My Book Studio drive that holds my pics and movies
 MBS="/Volumes/My_Book_Studio"
 # The name of my "work" directory
@@ -50,6 +57,82 @@ MOV_WORK_DIR="$MOV_DIR/$WORK"
 HOME_DIRS="Documents Movies Music Pictures bin src"
 ########### END DEFAULT LOCATIONS ######################
 
+usage() {
+    printf "Usage: $0 [-n] [-a] [-c] [-i] [-p] [-m] [-h] [-u]\n"
+    printf "Where:\n\t-n indicates to tell me what you would do\n"
+    printf "\t-u indicates display this usage message and exit\n"
+    printf "\t-a indicates rsync the Aperture libraries\n"
+    printf "\t-c indicates check if rsync is needed before sync'ing\n"
+    printf "\t-i indicates rsync the iTunes library\n"
+    printf "\t-p indicates rsync the Pictures directory\n"
+    printf "\t-m indicates rsync the Movies directory\n"
+    printf "\t-h indicates rsync the Home directory\n\n"
+    printf "When invoked with no arguments all directories will be sync'd.\n\n"
+    exit 1
+}
+
+# Default to non-dry run
+DRY=
+# Default to no check
+CHK=
+# If no arguments or the only argument is -n then rsync all dirs
+DO_ALL=
+if [ $# -eq 0 ]
+then
+    DO_ALL=1
+else
+    if [ $# -eq 1 ]
+    then
+        if [ "$1" = "-n" ]
+        then
+            DO_ALL=1
+        fi
+    fi
+fi
+if [ "$DO_ALL" ]
+then
+    DO_APERT=1
+    DO_ITUNES=1
+    DO_PIC=1
+    DO_MOV=1
+    DO_HOME=1
+else
+    DO_APERT=
+    DO_ITUNES=
+    DO_PIC=
+    DO_MOV=
+    DO_HOME=
+fi
+while getopts acipmhnu flag; do
+    case $flag in
+        a)
+            DO_APERT=1
+            ;;
+        c)
+            CHK=1
+            ;;
+        i)
+            DO_ITUNES=1
+            ;;
+        p)
+            DO_PIC=1
+            ;;
+        m)
+            DO_MOV=1
+            ;;
+        h)
+            DO_HOME=1
+            ;;
+        n)
+            DRY="-n"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
 # Check if the flash drive is mounted in its proper location
 [ -d "$TEST_DIR" ] || {
     # Sometimes we gotta wake it up
@@ -61,43 +144,82 @@ HOME_DIRS="Documents Movies Music Pictures bin src"
     }
 }
 
-# First, update the backup of my Aperture libraries
-upd
-
-# Next, the Aperture slide shows for which I have created symbolic links
-# into my iTunes library so use the -L option to upd
-if [ -d "$SLIDE_DIR" ]
-then
-    upd -P -h -L "$APERT_DIR"
-else
-    echo "$SLIDE_DIR does not exist or is not a directory. Skipping."
-fi
-
-# Sync the "work" photos for which I have created symbolic links
-# into my Aperture libraries so use the -L option to upd
-if [ -d "$PIC_WORK_DIR" ]
-then
-    upd -P -L "$WORK"
-else
-    echo "$PIC_WORK_DIR does not exist or is not a directory. Skipping."
-fi
-
-# Sync the "work" movies for which I have created symbolic links
-# into my iTunes library so use the -L option to upd
-if [ -d "$MOV_WORK_DIR" ]
-then
-    upd -M -L "$WORK"
-else
-    echo "$MOV_WORK_DIR does not exist or is not a directory. Skipping."
-fi
-
-# Finally, sync some of the directories in my home directory
-for dir in $HOME_DIRS
-do
-    if [ -d "$HOME/$dir" ]
+[ "$DO_APERT" ] && {
+    # Update the backup of my Aperture libraries
+    if [ -d "$APLIBS" ]
     then
-        upd -H "$dir"
+        if [ "$CHK" ]
+        then
+            chk $DRY -r -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
+        else
+            # Equivalent of "upd -A"
+            upd $DRY -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
+        fi
     else
-        echo "$HOME/$dir does not exist or is not a directory. Skipping."
+        echo "$ITUNES does not exist or is not a directory. Skipping."
     fi
-done
+}
+
+[ "$DO_ITUNES" ] && {
+    # Update the backup of my iTunes library
+    if [ -d "$ITUNES" ]
+    then
+        if [ "$CHK" ]
+        then
+            chk $DRY -r -a "$LACIE" -t "$TRAN_DIR" iTunes
+        else
+            # Equivalent of "upd -I"
+            upd $DRY -a "$LACIE" -t "$TRAN_DIR" iTunes
+        fi
+    else
+        echo "$ITUNES does not exist or is not a directory. Skipping."
+    fi
+ }
+
+[ "$DO_PIC" ] && {
+    # Sync the work photos
+    if [ -d "$PIC_WORK_DIR" ]
+    then
+        if [ "$CHK" ]
+        then
+            chk $DRY -r -P "$WORK"
+        else
+            upd $DRY -P "$WORK"
+        fi
+    else
+        echo "$PIC_WORK_DIR does not exist or is not a directory. Skipping."
+    fi
+ }
+
+[ "$DO_MOV" ] && {
+    # Sync the work movies
+    if [ -d "$MOV_WORK_DIR" ]
+    then
+        if [ "$CHK" ]
+        then
+            chk $DRY -r -M "$WORK"
+        else
+            upd $DRY -M "$WORK"
+        fi
+    else
+        echo "$MOV_WORK_DIR does not exist or is not a directory. Skipping."
+    fi
+}
+
+[ "$DO_HOME" ] && {
+    # Sync some of the directories in my home directory
+    for dir in $HOME_DIRS
+    do
+        if [ -d "$HOME/$dir" ]
+        then
+            if [ "$CHK" ]
+            then
+                chk $DRY -r -H "$dir"
+            else
+                upd $DRY -H "$dir"
+            fi
+        else
+            echo "$HOME/$dir does not exist or is not a directory. Skipping."
+        fi
+    done
+}

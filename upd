@@ -3,6 +3,7 @@
 # upd - sync specified directories/libraries to a USB flash drive
 #    Note: to sync other directories use the -s, -a, and -t arguments
 #        when invoked as updaplibs it syncs directories in my Apertures library
+#        when invoked as upditunes it syncs directories in my iTunes library
 #        when invoked as updpicdir it syncs directories in my Pictures dir
 #        when invoked as updmovdir it syncs directories in my Movies dir
 #        when invoked as updhome it syncs directories in $HOME
@@ -30,14 +31,15 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
-# Where to sync from
-AP_LIBDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
+# Where to sync from - defaults to current working directory
+SOURCEDIR=`pwd`
 # Where to sync to
-TRANSCEND="/Volumes/Transcend/Pictures/Aperture"
-# Default to syncing my Aperture libraries
-SUFFIX=".aplibrary"
-NAME="updaplibs"
+TRANSCEND="/Volumes/Transcend/`basename $SOURCEDIR`"
+SUFFIX=
+NAME="upd"
 MYHOME=
+APERT_DIR=
+ITUNES_DIR=
 PICDIR=
 MOVDIR=
 HOMEDIR=
@@ -50,11 +52,14 @@ VERB="q"
 
 usage() {
     printf "Usage: $NAME [-d] [-h] [-n] [-u] [-a source dir] [-t dest dir]\n"
-    printf " [-v] [-P] [-M] [-H] [-L] [-s suffix] source-subdir [subdir2 ...]\n"
+    printf "    [-v] [-A] [-I] [-P] [-M] [-H] [-L] [-s suffix]\n"
+    printf "    source-subdir [subdir2 subdir3 ...]\n"
     printf "Where:\n\t-d indicates a dry run sync (no changes)\n"
     printf "\t-h indicates use directories from your HOME dir\n"
     printf "\t-L indicates follow symbolic links\n"
     printf "\t-v indicates verbose rsync output\n"
+    printf "\t-A indicates use the Aperture libraries (like updaplibs)\n"
+    printf "\t-I indicates use the iTunes library (like upditunes)\n"
     printf "\t-P indicates use the Pictures directory (like updpicdir)\n"
     printf "\t-M indicates use the Movies directory (like updmovdir)\n"
     printf "\t-H indicates use the Home directory (like updhome)\n"
@@ -66,12 +71,12 @@ usage() {
     printf "\tsource-dir is the master directory hierarchy to sync from\n"
     printf "\tdest-dir is the directory hierarchy to be sync'd\n"
     printf "\nWhen invoked without arguments $NAME will attempt to sync\n"
-    printf "all the directories in $TRANSCEND\n"
-    printf "with corresponding directories in $AP_LIBDIR\n\n"
+    printf "all the directories in $TRANSCEND with\n"
+    printf "corresponding directories in the current working directory.\n\n"
     exit 1
 }
 
-while getopts a:s:t:dhLPMHnuv flag; do
+while getopts a:s:t:dhAILPMHnuv flag; do
     case $flag in
         d)
             DRY="n"
@@ -88,6 +93,12 @@ while getopts a:s:t:dhLPMHnuv flag; do
         n)
             TELL=1
             ;;
+        A)
+            APERT_DIR=1
+            ;;
+        I)
+            ITUNES_DIR=1
+            ;;
         P)
             PICDIR=1
             ;;
@@ -95,7 +106,7 @@ while getopts a:s:t:dhLPMHnuv flag; do
             MOVDIR=1
             ;;
         a)
-            AP_LIBDIR="$OPTARG"
+            SOURCEDIR="$OPTARG"
             ;;
         s)
             SUFFIX="$OPTARG"
@@ -114,61 +125,72 @@ done
 shift $(( OPTIND - 1 ))
 
 NAME=`basename $0`
+[ "$APERT_DIR" ] || [ "$NAME" = "updaplibs" ] && {
+    SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
+    TRANSCEND="/Volumes/Transcend/Pictures/Aperture"
+    SUFFIX=".aplibrary"
+}
+[ "$ITUNES_DIR" ] || [ "$NAME" = "upditunes" ] && {
+    SOURCEDIR="/Volumes/Lacie_Porsche_1TB/iTunes"
+    TRANSCEND="/Volumes/Transcend/iTunes"
+}
 [ "$PICDIR" ] || [ "$NAME" = "updpicdir" ] && {
     if [ "$MYHOME" ]
     then
-        AP_LIBDIR="$HOME/Pictures"
+        SOURCEDIR="$HOME/Pictures"
     else
-        AP_LIBDIR="/Volumes/My_Book_Studio/Pictures"
+        SOURCEDIR="/Volumes/My_Book_Studio/Pictures"
     fi
     TRANSCEND="/Volumes/Transcend/Pictures"
-    SUFFIX=""
 }
 [ "$MOVDIR" ] || [ "$NAME" = "updmovdir" ] && {
     if [ "$MYHOME" ]
     then
-        AP_LIBDIR="$HOME/Movies"
+        SOURCEDIR="$HOME/Movies"
     else
-        AP_LIBDIR="/Volumes/My_Book_Studio/Movies"
+        SOURCEDIR="/Volumes/My_Book_Studio/Movies"
     fi
     TRANSCEND="/Volumes/Transcend/Movies"
-    SUFFIX=""
 }
 [ "$HOMEDIR" ] || [ "$NAME" = "updhome" ] && {
-    AP_LIBDIR="$HOME"
+    SOURCEDIR="$HOME"
     TRANSCEND="/Volumes/Transcend/Home"
-    SUFFIX=""
 }
 [ "$USAGE" ] && usage
 
-[ -d "$TRANSCEND" ] || {
-    echo "$TRANSCEND does not exist or is not a directory. Exiting."
+[ "$SOURCEDIR" = "/" ] && {
+    echo "Use of / as source directory is not supported. Exiting."
     exit 1
 }
 
-cd "$TRANSCEND"
+[ -d "$SOURCEDIR" ] || {
+    echo "$SOURCEDIR does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd "$SOURCEDIR"
 
 if [ $# -eq 0 ]
 then
   for lib in *$SUFFIX
   do
-    [ -d "$AP_LIBDIR/$lib" ] || {
-        echo "$AP_LIBDIR/$lib does not exist or is not a directory. Skipping."
+    [ -d "$SOURCEDIR/$lib" ] || {
+        echo "$SOURCEDIR/$lib does not exist or is not a directory. Skipping."
         continue
     }
-    echo -n "Syncing $AP_LIBDIR/$lib to $TRANSCEND/$lib with rsync ... "
+    echo -n "Syncing $SOURCEDIR/$lib to $TRANSCEND/$lib with rsync ... "
     DEL="--delete"
     [ -f "$TRANSCEND/$lib/.do_not_delete" ] && DEL=""
     if [ "$TELL" ]
     then
         echo ""
-        echo "rsync -${VERB}a$DRY $FOLLOW $DEL $AP_LIBDIR/$lib $TRANSCEND" 
+        echo "rsync -${VERB}a$DRY $FOLLOW $DEL $SOURCEDIR/$lib $TRANSCEND" 
     else
         if [ "$DRY" ]
         then
-            rsync -van $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+            rsync -van $FOLLOW $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
         else
-            rsync -Wa$VERB $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+            rsync -Wa$VERB $FOLLOW $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
             touch "$TRANSCEND/.rsync_$lib"
         fi
     fi
@@ -178,23 +200,23 @@ else
     for libnam in "$@"
     do
       lib="$libnam$SUFFIX"
-      [ -d "$AP_LIBDIR/$lib" ] || {
-        echo "$AP_LIBDIR/$lib does not exist or is not a directory. Skipping."
+      [ -d "$SOURCEDIR/$lib" ] || {
+        echo "$SOURCEDIR/$lib does not exist or is not a directory. Skipping."
         continue
       }
-      echo -n "Syncing $AP_LIBDIR/$lib to $TRANSCEND/$lib with rsync ... "
+      echo -n "Syncing $SOURCEDIR/$lib to $TRANSCEND/$lib with rsync ... "
       DEL="--delete"
       [ -f "$TRANSCEND/$lib/.do_not_delete" ] && DEL=""
       if [ "$TELL" ]
       then
           echo ""
-          echo "rsync -${VERB}a$DRY $FOLLOW $DEL $AP_LIBDIR/$lib $TRANSCEND" 
+          echo "rsync -${VERB}a$DRY $FOLLOW $DEL $SOURCEDIR/$lib $TRANSCEND" 
       else
           if [ "$DRY" ]
           then
-              rsync -van $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+              rsync -van $FOLLOW $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
           else
-              rsync -W${VERB}a $FOLLOW $DEL "$AP_LIBDIR/$lib" "$TRANSCEND" 
+              rsync -W${VERB}a $FOLLOW $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
               touch "$TRANSCEND/.rsync_$lib"
           fi
       fi
