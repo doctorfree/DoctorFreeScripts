@@ -45,14 +45,14 @@ APLIBS="/Volumes/My_Book_Studio/Pictures/Libraries"
 APLIBS_DEST="$TRAN_DIR/Pictures/Aperture"
 # The mount point for the My Book Studio drive that holds my pics and movies
 MBS="/Volumes/My_Book_Studio"
-# The name of my "work" directory
-WORK=Work
 # Where I store my photos
 PIC_DIR="$MBS/Pictures"
-PIC_WORK_DIR="$PIC_DIR/$WORK"
+# Picture directories to sync
+PIC_SUB_DIRS="Art Dragonflies Work"
 # Where I store my movies
 MOV_DIR="$MBS/Movies"
-MOV_WORK_DIR="$MOV_DIR/$WORK"
+# Movies directories to sync
+MOV_SUB_DIRS="Artists Ripped Work"
 # Directories in my Home directory that I want to backup
 HOME_DIRS="Documents Movies Music Pictures bin src"
 ########### END DEFAULT LOCATIONS ######################
@@ -152,7 +152,7 @@ shift $(( OPTIND - 1 ))
         then
             chk $DRY -r -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
         else
-            # Equivalent of "upd -A"
+            # Equivalent of "upd -A ..."
             upd $DRY -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
         fi
     else
@@ -168,7 +168,7 @@ shift $(( OPTIND - 1 ))
         then
             chk $DRY -r -a "$LACIE" -t "$TRAN_DIR" iTunes
         else
-            # Equivalent of "upd -I"
+            # Equivalent of "upd -I ..."
             upd $DRY -a "$LACIE" -t "$TRAN_DIR" iTunes
         fi
     else
@@ -177,33 +177,41 @@ shift $(( OPTIND - 1 ))
  }
 
 [ "$DO_PIC" ] && {
-    # Sync the work photos
-    if [ -d "$PIC_WORK_DIR" ]
-    then
-        if [ "$CHK" ]
+    # Sync the photo dirs
+    for i in $PIC_SUB_DIRS
+    do
+        if [ -d "$PIC_DIR/$i" ]
         then
-            chk $DRY -r -P "$WORK"
+            if [ "$CHK" ]
+            then
+                chk $DRY -r -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
+            else
+                # Equivalent of "upd -P ..."
+                upd $DRY -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
+            fi
         else
-            upd $DRY -P "$WORK"
+            echo "$PIC_DIR/$i does not exist or is not a directory. Skipping."
         fi
-    else
-        echo "$PIC_WORK_DIR does not exist or is not a directory. Skipping."
-    fi
+    done
  }
 
 [ "$DO_MOV" ] && {
-    # Sync the work movies
-    if [ -d "$MOV_WORK_DIR" ]
-    then
-        if [ "$CHK" ]
+    # Sync the movies directories
+    for i in $MOV_SUB_DIRS
+    do
+        if [ -d "$MOV_DIR/$i" ]
         then
-            chk $DRY -r -M "$WORK"
+            if [ "$CHK" ]
+            then
+                chk $DRY -r -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
+            else
+                # Equivalent of "upd -M ..."
+                upd $DRY -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
+            fi
         else
-            upd $DRY -M "$WORK"
+            echo "$MOV_DIR/$i does not exist or is not a directory. Skipping."
         fi
-    else
-        echo "$MOV_WORK_DIR does not exist or is not a directory. Skipping."
-    fi
+    done
 }
 
 [ "$DO_HOME" ] && {
@@ -214,9 +222,10 @@ shift $(( OPTIND - 1 ))
         then
             if [ "$CHK" ]
             then
-                chk $DRY -r -H "$dir"
+                chk $DRY -r -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
             else
-                upd $DRY -H "$dir"
+                # Equivalent of "upd -H ..."
+                upd $DRY -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
             fi
         else
             echo "$HOME/$dir does not exist or is not a directory. Skipping."
