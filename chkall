@@ -74,11 +74,17 @@ while getopts fhrnu flag; do
 done
 
 printf "\nChecking rsync of Aperture libraries ...\n"
-chk $FORCE $TELL $UPD
+chk -A $FORCE $TELL $UPD
 printf "\nDone checking Aperture libraries.\n"
+printf "\nChecking rsync of iTunes library ...\n"
+chk -I $FORCE $TELL $UPD
+printf "\nDone checking iTunes library.\n"
 printf "\nChecking rsync of Movies ...\n"
 chk -M $FORCE $TELL $MYHOME $UPD
 printf "\nDone checking Movies.\n"
 printf "\nChecking rsync of Pictures ...\n"
 chk -P $FORCE $TELL $MYHOME $UPD
 printf "\nDone checking Pictures.\n"
+printf "\nChecking rsync of Home directories ...\n"
+chk -H $FORCE $TELL $MYHOME $UPD
+printf "\nDone checking Home.\n"
