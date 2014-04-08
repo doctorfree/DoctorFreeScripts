@@ -94,6 +94,8 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
     populate my USB flash drive of movies with HTML documents to provide an
     initial way to navigate around.
 
+[**musiclinks**](musiclinks) - Create symbolic links to music files where possible to reduce duplicate storage of songs. Link into my iTunes library.
+
 [**mvfem**](mvfem) - Rename a downloaded Femjoy zip archive that contains two model names to use only one model's name so it will work with femzip.
 
 [**piclinks**](piclinks) - Create symbolic links to photo files where
@@ -118,8 +120,7 @@ for all files in that directory hierarchy
 
 [**updflash**](updflash) - Convenience script to frontend the rsyncs needed to sync my flash drive using my "upd" script.
 
-[**vidlinks**](vidlinks) - Create symbolic links to movie files where
-possible to reduce duplicate storage of movies. Link into my iTunes library.
+[**vidlinks**](vidlinks) - Create symbolic links to movie files where possible to reduce duplicate storage of movies. Link into my iTunes library.
 
 [**wb**](wb) - Automatically downloads my favorites from wallbase.cc
 
