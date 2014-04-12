@@ -47,6 +47,7 @@ update() {
 
 differ() {
     echo "$1 differs from installed version $2"
+    echo ""
     [ "$DIFF" ] && diff "$1" "$2"
     echo ""
     [ "$UPD" ] && {
@@ -69,7 +70,7 @@ differ() {
 
 check() {
     dnum=`diff "$1" "$2" | wc -l`
-    [ $dnum -gt $3 ] && differ "$1" "$2"
+    [ $dnum -ne $3 ] && differ "$1" "$2"
 }
 
 ALL=
@@ -100,19 +101,49 @@ shift $(( OPTIND - 1 ))
 
 for i in *
 do
+    # Skip directories
     [ -d "$i" ] && continue
-    inst=`type -p "$i"`
+    # Scripts can be either commands or startup configuration files in $HOME 
+    case "$i" in
+        bash_aliases|bash_profile|bashrc|dircolors|vimrc)
+            if [ -f "$HOME/.$i" ]
+            then
+                inst="$HOME/.$i"
+            else
+                inst=
+            fi
+            ;;
+        *)
+            inst=`type -p "$i"`
+            ;;
+    esac
     [ "$inst" ] || {
         [ "$ALL" ] && {
-            echo "$i does not appear to be installed as a command. Skipping."
+            echo "$i does not appear to be installed. Skipping."
             echo ""
         }
         continue
     }
-    # Special cases as the installed version may have configuration changes
+    # Special cases as the installed version may have configuration changes.
     # The 3rd argument to the check() function is the number of lines the
-    # installed script can differ before we report it differs.
+    # installed script can differ before we report it differs. This number
+    # will differ from system to system so change it for your purposes. To
+    # determine what the number should be, run the command:
+    #     diff $i $inst | wc -l
+    # where $i is the source file and $inst is the installed version.
+    # This functionality is mostly for me, the maintainer and distributor.
+    #
     case "$i" in
+        # I have heavily modified Bash startup files for work.
+        bash_aliases)
+            check "$i" "$inst" 79
+            ;;
+        bash_profile)
+            check "$i" "$inst" 11
+            ;;
+        bashrc)
+            check "$i" "$inst" 37
+            ;;
         wb)
             check "$i" "$inst" 8
             ;;
