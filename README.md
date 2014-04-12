@@ -2,7 +2,7 @@ Scripts
 =======
 
 Utility Bash shell scripts I've written - typically these will run on Unix,
-Linux, OS X, and Cygwin.
+Linux, OS X, and Cygwin. Includes some custom Bash and Vim startup scripts.
 
 To clone:
 
@@ -39,6 +39,12 @@ Contents:
       and suffix must also be a filename suffix that ffmpeg recognizes
       as a supported video format.
 
+[**bash_aliases**](bash_aliases) - Bash aliases, install in $HOME/.bash_aliases
+
+[**bash_profile**](bash_profile) - Bash profile, install in $HOME/.bash_profile
+
+[**bashrc**](bashrc) - Bash startup, install in $HOME/.bashrc
+
 [**chkall**](chkall) - Invokes "chk" to check the Aperture, Movies, and Pictures rsync'd directories and sync them if specified and necessary
 
 [**chk**](chk) - Check the specified directories/libraries and see if they need to by sync'd with rsync to the USB flash drive backup
@@ -54,6 +60,8 @@ Contents:
     When invoked as chkhome it checks directories in $HOME
 
 [**chkinst**](chkinst) - Check if installed versions of files in current directory are different in order to determine if git repository is up-to-date.
+
+[**dircolors**](dircolors) - Settings for the dircolors utility to enable color support of ls. Install as $HOME/.dircolors
 
 [**femzip**](femzip) - Convenience script to unzip Femjoy photo downloads
 
@@ -123,6 +131,8 @@ for all files in that directory hierarchy
 [**updflash**](updflash) - Convenience script to frontend the rsyncs needed to sync my flash drive using my "upd" script.
 
 [**vidlinks**](vidlinks) - Create symbolic links to movie files where possible to reduce duplicate storage of movies. Link into my iTunes library.
+
+[**vimrc**](vimrc) - Vim startup configuration file. Install as $HOME/.vimrc
 
 [**wb**](wb) - Automatically downloads my favorites from wallbase.cc
 
