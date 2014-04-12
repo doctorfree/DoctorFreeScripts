@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+# stop_leapd - convenience script to stop the Leap Motion daemon and
+#      move it's auto-start functionality out of the way so it does not
+#      get automatically started on system startup
+#
+# Written 12-Apr-2014 by Ronald Joe Record <rr@ronrecord.com>
+#
+# Use in conjunctin with the Bash functions start-leap() and stop-leap()
+# to replace automatic startup with manual startup/shutdown :
+#
+# function start-leap() {
+#     RUNNING=`ps -ef | grep "Leap Motion" | grep leapd`
+#     [ "$RUNNING" ] || {
+#         /Applications/Leap\ Motion.app/Contents/MacOS/leapd > /dev/null 2>&1 &
+#         sleep 1
+#     }
+#     RUNNING=`ps -ef | grep "Leap Motion" | grep -v leapd | grep -v grep`
+#     [ "$RUNNING" ] || {
+#         open /Applications/Leap\ Motion.app
+#     }
+# }
+# function stop-leap() {
+#     RUNNING=`ps -ef | grep "Leap Motion" | grep leapd`
+#     [ "$RUNNING" ] && killall leapd
+#     RUNNING=`ps -ef | grep "Leap Motion" | grep -v leapd | grep -v grep`
+#     [ "$RUNNING" ] && killall Leap\ Motion
+# }
+
+# The Launch scripts (use relative paths for tar's sake)
+LEAPD="Library/LaunchDaemons/com.leapmotion.leapd.plist"
+MOTION="Library/LaunchAgents/com.leapmotion.Leap-Motion.plist"
+
+# Stop the currently running leapd daemon instance
+RUNNING=`ps -ef | grep "Leap Motion" | grep leapd`
+[ "$RUNNING" ] && sudo launchctl unload "/$LEAPD"
+
+# Kill the Leap Motion application
+RUNNING=`ps -ef | grep "Leap Motion" | grep -v grep`
+[ "$RUNNING" ] && sudo killall Leap\ Motion
+
+# Backup and remove the LaunchAgent script that starts the Leap Motion.app
+# and the LaunchDaemon script that starts the leapd daemon on startup
+cd /
+[ -f "$LEAPD" ] && [ -f "$MOTION" ] && {
+    tar cf - "$LEAPD" "$MOTION" | gzip -9 > $HOME/LeapMotionDaemonStart.tar.gz
+    sudo rm -f "$LEAPD" "$MOTION"
+}

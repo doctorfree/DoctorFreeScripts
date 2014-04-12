@@ -101,6 +101,8 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
 [**piclinks**](piclinks) - Create symbolic links to photo files where
 possible to reduce duplicate storage of photos. Link into my Aperture libraries.
 
+[**stop_leapd**](stop_leapd) - Stop the Leap Motion daemon and agent then backup and remove the plist files so they do not auto start. Includes Bash functions to replace auto start with manual start/stop
+
 [**upd**](upd) - Sync specified libraries/directories to a USB flash drive
 
     Note: to sync other directories use the -s, -a, and -t arguments
