@@ -2,10 +2,13 @@
 #
 # any2any - convert from any video format to any other
 #
-# Written 7-Mar-2014 by Ronald Joe Record <rr@ronrecord.com>
+# Written 7-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
 #
 #    This program works by either linking or copying any2any to a file
 #    which specifies the desired input and output formats by its name.
+#    Alternately, the -i and -o command line options can be used to specify
+#    the input and output file formats.
+#
 #    For example, if you want to convert from WMV to MP4 then you could
 #    create a symbolic link from any2any to wmv2mp4 as follows:
 #        ln -s any2any wmv2mp4
@@ -70,40 +73,20 @@ ASAMPLE=
 VSAMPLE=
 THREAD=
 ITUNES=
-[ "$SUF" = "mp4" ] && {
-    VCODEC="-vcodec libx264"
-# See http://slhck.info/articles/crf for info on Constant Rate Factor (CRF)
-    RATE="-crf 23"
-    ASAMPLE="-ab 128k"
-    THREAD="-threads 0"
-}
-[ "$SUF" = "wmv" ] && {
-    ACODEC="-acodec adpcm_ms"
-    VCODEC="-vcodec msmpeg4"
-# See http://www.kilobitspersecond.com/2007/05/24/ffmpeg-quality-comparison
-    QSCALE="-qscale 5"
-    ASAMPLE="-ab 128k"
-    THREAD="-threads 0"
-}
-[ "$SUF" = "avi" ] && {
-    ACODEC="-acodec adpcm_ms"
-    VCODEC="-vcodec libxvid"
-    QSCALE="-qscale 5"
-    ASAMPLE="-ab 128k"
-    THREAD="-threads 0"
-}
-# TODO: Add desired default settings for other format encodings here
 
 usage() {
   printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec] [-p preset]"
+  printf "\n\t\t[-i input format (lower case)] [-o output format (lower case)]"
   printf "\n\t\t[-q scale] [-r rate] [-b audio bitrate] [-z video bitrate]"
-  printf "\n\t\t[-s size] [-t threads] [-d] [-y] [-u] file1 [file2 file3 ...]"
+  printf "\n\t\t[-s size] [-t threads] [-I] [-d] [-y] [-u] file1 [file2 ...]"
   printf "\n\nWhere:\n\t-d indicates tell me what you would do"
+  printf "\n\t-i input format specifies the 3 letter lower case input format"
+  printf "\n\t-o output format specifies the 3 letter lower case output format"
   printf "\n\t-a audio codec specifies the output audio codec"
   printf "\n\t-v video codec specifies the output video codec"
   printf "\n\t-s size specifies the output video size (widthxheight)"
   printf "\n\t-c codec specifies the output codec"
-  printf "\n\t-i indicates add the converted file to iTunes"
+  printf "\n\t-I indicates add the converted file to iTunes"
   printf "\n\t-p preset specifies the ffmpeg preset to use"
   printf "\n\t\t Useful presets:"
   printf "\n\t\t ultrafast superfast veryfast faster fast medium slow"
@@ -126,19 +109,27 @@ usage() {
   printf "\n\tSpecify libx264 output video codec and use ipod640 preset"
   printf "\n\t\t$ME -v libx264 -p ipod640 $INP/example.$SUF"
   printf "\n\tSpecify 512k bitrate and add converted file to iTunes"
-  printf "\n\t\t$ME -b 512k -i $INP/example.$SUF"
+  printf "\n\t\t$ME -b 512k -I $INP/example.$SUF"
   printf "\n\tSpecify libx264 output video codec and variable bit rate"
   printf "\n\t\t$ME -v libx264 -r 0 -q 3 $INP/example.$SUF\n"
   exit 1
 }
 
-while getopts p:q:r:b:t:s:v:z:a:c:iydu flag; do
+while getopts i:o:p:q:r:b:t:s:v:z:a:c:Iydu flag; do
     case $flag in
         a)
             ACODEC="-acodec $OPTARG"
             ;;
         b)
             ASAMPLE="-ab $OPTARG"
+            ;;
+        i)
+            PRE=$OPTARG
+            INP=`echo $PRE | tr '[:lower:]' '[:upper:]'`
+            ;;
+        o)
+            SUF=$OPTARG
+            DIR=`echo $SUF | tr '[:lower:]' '[:upper:]'`
             ;;
         z)
             VSAMPLE="-vb $OPTARG"
@@ -193,6 +184,31 @@ while getopts p:q:r:b:t:s:v:z:a:c:iydu flag; do
 done
 shift $(( OPTIND - 1 ))
 
+# Set ffmpeg conversion options based upon the desired output format
+[ "$SUF" = "mp4" ] && {
+    VCODEC="-vcodec libx264"
+# See http://slhck.info/articles/crf for info on Constant Rate Factor (CRF)
+    RATE="-crf 23"
+    ASAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+[ "$SUF" = "wmv" ] && {
+    ACODEC="-acodec adpcm_ms"
+    VCODEC="-vcodec msmpeg4"
+# See http://www.kilobitspersecond.com/2007/05/24/ffmpeg-quality-comparison
+    QSCALE="-qscale 5"
+    ASAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+[ "$SUF" = "avi" ] && {
+    ACODEC="-acodec adpcm_ms"
+    VCODEC="-vcodec libxvid"
+    QSCALE="-qscale 5"
+    ASAMPLE="-ab 128k"
+    THREAD="-threads 0"
+}
+# TODO: Add desired default settings for other format encodings here.
+#
 # Set any options specified on the command line - the sed part is just
 # removing any leading or trailing spaces.
 OPTS=`echo "$OVER $ACODEC $CODEC $SIZE $VCODEC $PRESET $QSCALE $RATE $ASAMPLE $VSAMPLE $THREAD" | sed -e 's/^ *//' -e 's/ *$//'`
