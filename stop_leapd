@@ -1,13 +1,19 @@
 #!/bin/bash
 #
-# stop_leapd - convenience script to stop the Leap Motion daemon and
-#      move it's auto-start functionality out of the way so it does not
-#      get automatically started on system startup
+# stop_leapd - convenience script to stop the Leap Motion daemon and agent
+#      then move it's auto-start functionality out of the way so it does not
+#      get automatically started on system startup.
+#
+# Note this is OS X specific.
 #
 # Written 12-Apr-2014 by Ronald Joe Record <rr@ronrecord.com>
 #
 # Use in conjunctin with the Bash functions start-leap() and stop-leap()
 # to replace automatic startup with manual startup/shutdown :
+#
+# Add these two functions to your .bashrc and you will then be able to start
+# and stop the Leap Motion daemon and agent simply by typing "start-leap" and
+# "stop-leap" at the Bash shell prompt.
 #
 # function start-leap() {
 #     RUNNING=`ps -ef | grep "Leap Motion" | grep leapd`
