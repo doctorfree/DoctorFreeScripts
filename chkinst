@@ -30,27 +30,47 @@
 #
 
 usage() {
-    printf "\nUsage: chkinst [-u] [-a] [-d] [-f] [-i]"
+    printf "\nUsage: chkinst [-u] [-a] [-d] [-f] [-i] [-n]"
     printf "\nWhere:"
     printf "\n\t-u displays this usage message"
     printf "\n\t-a indicates report on all files, not just those installed"
     printf "\n\t-d indicates display output of a diff between files"
     printf "\n\t-f indicates force update of installed file(s)"
-    printf "\n\t-i indicates prompt for update of installed file(s)\n"
+    printf "\n\t-i indicates prompt for update of installed file(s)"
+    printf "\n\t-n indicates tell me what you would copy without doing it\n"
     exit 1
 }
 
 update() {
     printf "\nCopying $1 to $2\n"
-    cp "$1" "$2"
+    [ "$TELL" ] || cp "$1" "$2"
 }
 
 differ() {
     echo "$1 differs from installed version $2"
     echo ""
-    [ "$DIFF" ] && diff "$1" "$2"
-    echo ""
+    [ "$DIFF" ] && {
+        diff "$1" "$2"
+        echo ""
+    }
     [ "$UPD" ] && {
+        REFORCE=
+        FOUND=
+        for cmd in $DIFFER
+        do
+            [ "$1" = "$cmd" ] && {
+                FOUND=1
+                break
+            }
+        done
+        [ "$FOUND" ] && {
+            echo "Looks like you need to update one of your customized files."
+            echo "$1 is on your list of files to prompt before installing."
+            [ "$FORCE" ] && {
+                FORCE=
+                REFORCE=1
+            }
+        }
         if [ "$FORCE" ]
         then
             update "$1" "$2"
@@ -64,6 +84,7 @@ differ() {
                         * ) echo "Please answer yes or no.";;
                 esac
             done
+            [ "$REFORCE" ] && FORCE=1
         fi
     }
 }
@@ -75,9 +96,14 @@ check() {
 
 ALL=
 DIFF=
+TELL=
 UPD=
 FORCE=
-while getopts adfiu flag; do
+# List of installed files which differ from those in my git repo due to
+# tailoring for my own use. These will not get force installed without first
+# prompting you if you really want to.
+DIFFER="bash_aliases bash_profile bashrc mkreadme mkwmv wb"
+while getopts adfinu flag; do
     case $flag in
         a)
             ALL=1
@@ -91,6 +117,9 @@ while getopts adfiu flag; do
         f)
             UPD=1
             FORCE=1
+            ;;
+        n)
+            TELL=1
             ;;
         u)
             usage
