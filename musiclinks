@@ -3,7 +3,7 @@
 # musiclinks - create symbolic links to song files where possible to reduce
 #    duplicate storage of music. Link into my iTunes library.
 #
-# Written 01-Dec-2013 by Ronald Joe Record <rr@ronrecord.com>
+# Written 01-Dec-2013 by Ronald Joe Record <rr at ronrecord dot com>
 #
 # Copyright (c) 2014, Ronald Joe Record
 # All rights reserved.
