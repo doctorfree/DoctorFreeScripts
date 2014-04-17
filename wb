@@ -5,7 +5,8 @@
 # and at present is actively maintained by MacEarl
 #
 # This Script is written for GNU Linux, it should work under Mac OS
-# [Note: This version works on Mac OS X. The MacEarl version does not]
+# [Note: This version works on Mac OS X. The MacEarl version may not, depending
+#    on your pathnames and whether there are spaces in file or directory names]
 #
 # Revision 3.0.0
 # 1. Modified for use on Mac OS X and configured for use with my favorites
