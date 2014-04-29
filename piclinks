@@ -62,7 +62,9 @@ FindAndLink() {
         else
             b=`basename "$i"`
             [ "$b" = "SUMS" ] && continue
-            ck1=`grep "$i" SUMS | awk ' { print $1 } '`
+            # Backslash the brackets in any filenames so grep doesn't choke
+            fixed=`echo "$i" | sed -e "s/\[/\\\\\[/g" -e "s/\]/\\\\\]/g"`
+            ck1=`grep "$fixed" SUMS | awk ' { print $1 } '`
             [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
             # Could be in multiple Aperture libraries, use the first one
             for lib in "$LIBS"/*.aplibrary/Masters

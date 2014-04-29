@@ -66,10 +66,12 @@ FindAndLink() {
         then
             continue
         else
-            b=`basename "$i"`
+            # Backslash the brackets in any filenames so grep doesn't choke
+            b=`basename "$i" | sed -e "s/\[/\\\\\[/g" -e "s/\]/\\\\\]/g"`
             [ "$b" = "SUMS" ] && continue
             [ "$USE_SUM" ] && {
-                ck1=`grep "$i" SUMS | awk ' { print $1 } '`
+                fixed=`echo "$i" | sed -e "s/\[/\\\\\[/g" -e "s/\]/\\\\\]/g"`
+                ck1=`grep "$fixed" SUMS | awk ' { print $1 } '`
                 [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
             }
             [ -f "$I/$b" ] && {

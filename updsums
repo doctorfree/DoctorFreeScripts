@@ -61,11 +61,13 @@ while read f
 do
     fnam=`echo "$f" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
     [ -f "$fnam" ] || {
+        # Backslash the brackets in any filenames so grep doesn't choke
+        fixed=`echo "$f" | sed -e "s/\[/\\\\\[/g" -e "s/\]/\\\\\]/g"`
         if [ "$TELLME" ]
         then
             echo "grep -v $f $SUMS"
         else
-            grep -v "$f" "$SUMS" > /tmp/sums$$
+            grep -v "$fixed" "$SUMS" > /tmp/sums$$
             cp /tmp/sums$$ "$SUMS"
             rm -f /tmp/sums$$
         fi
