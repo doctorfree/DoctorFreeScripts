@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# clndl - Moves the most recently downloaded versions of files to their regular
+#    filename without the (#) in the name. By default, relies on the Mac OS X
+#    convention of inserting (#) in the name of newer version filenames.
+# So, if you had files in the $DL directory named:
+#     foo.txt, foo(1).txt, and foo(2).txt
+# running clndl would move foo(2).txt to foo.txt and remove foo(1).txt
+#
+# The directory where you want to remove older versions of the files
+DL=$HOME/Downloads
+
+[ -d "$DL" ] || {
+    echo "$DL does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd "$DL"
+for i in 9 8 7 6 5 4 3 2 1
+do
+    FILES=`echo *\($i\)*`
+    [ "$FILES" = "*("$i")*" ] && continue
+    ls -1 *\($i\)* | while read f
+    do
+        new=`echo "$f" | sed -e "s/($i)//"`
+        mv "$f" "$new"
+        # Remove all intermediate versions with this filename
+        j=`expr $i - 1`
+        while [ $j -gt 0 ]
+        do
+            old=`echo "$f" | sed -e "s/($i)/($j)/"`
+            rm -f "$old"
+            j=`expr $j - 1`
+        done
+    done
+done

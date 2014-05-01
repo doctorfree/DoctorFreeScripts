@@ -61,6 +61,8 @@ Contents:
 
 [**chkinst**](chkinst) - Check if installed versions of files in current directory are different in order to determine if git repository is up-to-date.
 
+[**clndl**](clndl) - Moves the most recently downloaded versions of files to their regular filename without the (#) in the name. By default, relies on the Mac OS X convention of inserting (#) in the name of newer version filenames.
+
 [**dircolors**](dircolors) - Settings for the dircolors utility to enable color support of ls. Install as $HOME/.dircolors
 
 [**femzip**](femzip) - Convenience script to unzip Femjoy photo downloads
