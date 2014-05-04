@@ -9,6 +9,41 @@
 #
 # The directory where you want to remove older versions of the files
 DL=$HOME/Downloads
+USE_CWD=
+TELL=
+VERB=
+
+usage() {
+    printf "Usage: clndl [-c] [-d directory] [-n] [-u] [-v]\n"
+    printf "Where:\n\t-c indicates use current working directory\n"
+    printf "\t-d directory indicates use specified directory\n"
+    printf "\t-n indicates tell me what you would do but don't do it\n"
+    printf "\t-v indicates tell me what you are doing as you do it\n"
+    printf "\t-u displays this usage message\n\n"
+    exit 1
+}
+
+while getopts d:cnuv flag; do
+    case $flag in
+        c)
+            USE_CWD=1
+            DL="."
+            ;;
+        d)
+            DL=$OPTARG
+            ;;
+        n)
+            TELL=1
+            VERB=1
+            ;;
+        v)
+            VERB=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
 
 [ -d "$DL" ] || {
     echo "$DL does not exist or is not a directory. Exiting."
@@ -23,13 +58,15 @@ do
     ls -1 *\($i\)* | while read f
     do
         new=`echo "$f" | sed -e "s/($i)//"`
-        mv "$f" "$new"
+        [ "$VERB" ] && echo "mv $f $new"
+        [ "$TELL" ] || mv "$f" "$new"
         # Remove all intermediate versions with this filename
         j=`expr $i - 1`
         while [ $j -gt 0 ]
         do
             old=`echo "$f" | sed -e "s/($i)/($j)/"`
-            rm -f "$old"
+            [ "$VERB" ] && echo "rm -f $old"
+            [ "$TELL" ] || rm -f "$old"
             j=`expr $j - 1`
         done
     done
