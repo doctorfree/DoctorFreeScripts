@@ -67,6 +67,8 @@ Contents:
 
 [**femzip**](femzip) - Convenience script to unzip Femjoy photo downloads
 
+[**findempty**](findempty) - Find and report empty directories. Optionally, remove them.
+
 [**latest**](latest) - List the top N newest files in a directory or hierarchy
 
 [**mandelhist**](mandelhist) - Display a zoom on the Mandelbrot set with histograms using a built-in ffplay/ffmpeg filter.
