@@ -30,25 +30,25 @@ D=$HOME/Downloads
 
 # ___MODIFY THESE THREE SETTINGS TO MATCH THE DOWNLOADED FILE(S)___
 # Set the Photographer
-#P="Stefan Soell"
+P="Stefan Soell"
 #P="Valery Anzilov"
-P="FEMJOY Exclusive"
+#P="FEMJOY Exclusive"
 #P="Peter Olssen"
 #P="Vaillo"
 #P="Iain"
 #P="Alexandr Petek"
 
 # Set the Model
-#M="VIC E."
-#M=CARISHA
+M=CARISHA
 #M=CORINNA
-M=KINGA
+#M=KINGA
 #M=MARYLIN
 #M="HAYDEN W."
 #M="ANGIE C."
 #M="JENNIFER M."
 #M="JASMINE A."
 #M="JOSEPHINE"
+#M="VIC E."
 
 # Set the extraction base directory
 B="/Volumes/My_Book_Studio/Pictures/Work/Femjoy"
