@@ -36,9 +36,9 @@ usage() {
    printf "\n\t\tModel1_Photographer_Set_whatever.zip"
    printf "\nWhere:"
    printf "\n\t-r reverses the roles of Model1 and Model2"
-   printf "\n\t-i replaces %2e with ."
+   printf "\n\t-i replaces %%2e with ."
    printf "\n\t-d tells you what it would do"
-   printf "\n\t-u displays this usage message"
+   printf "\n\t-u displays this usage message\n"
    exit 1
 }
 
