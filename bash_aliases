@@ -11,6 +11,7 @@ alias whence='type -a'
 alias fusesx='ssh -l root 192.168.103.130'
 # Project working directories
 alias mbs='cd "/Volumes/My_Book_Studio"'
+alias mbsa='cd "/Volumes/My_Book_Studio/Audio"'
 alias mbsm='cd "/Volumes/My_Book_Studio/Movies/Work"'
 alias mbsp='cd "/Volumes/My_Book_Studio/Pictures/Work"'
 alias lacie='cd /Volumes/Lacie_Porsche_1TB'
