@@ -106,7 +106,7 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
     populate my USB flash drive of movies with HTML documents to provide an
     initial way to navigate around.
 
-[**musiclinks**](musiclinks) - Create symbolic links to music files where possible to reduce duplicate storage of songs. Link into my iTunes library.
+[**audlinks**](audlinks) - Create symbolic links to audio files where possible to reduce duplicate storage of songs. Link into my iTunes library.
 
 [**mvfem**](mvfem) - Rename a downloaded Femjoy zip archive that contains two model names to use only one model's name so it will work with femzip.
 
