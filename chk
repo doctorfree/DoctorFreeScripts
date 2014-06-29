@@ -49,6 +49,7 @@ HOMEDIR=
 MYHOME=
 UPD=
 TELL=
+USAGE=
 
 usage() {
     printf "Usage: $NAME [-h] [-n] [-r] [-u] [-a source_dir] [-t dest_dir]\n"
@@ -159,7 +160,7 @@ while getopts a:s:t:fhAIHPLMrnu flag; do
             USBLIBDIR="$OPTARG"
             ;;
         u)
-            usage
+            USAGE=1
             ;;
     esac
 done
@@ -218,6 +219,8 @@ NAME=`basename $0`
 [ "$SOURCEDIR" ] || SOURCEDIR=`pwd`
 # The mounted USB stick or backup directory
 [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/`basename $SOURCEDIR`"
+
+[ "$USAGE" ] && usage
 
 [ -d "$SOURCEDIR" ] || {
     echo "$SOURCEDIR does not exist or is not a directory. Exiting."
