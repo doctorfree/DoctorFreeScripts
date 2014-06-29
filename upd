@@ -6,6 +6,7 @@
 #        when invoked as upditunes it syncs directories in my iTunes library
 #        when invoked as updpicdir it syncs directories in my Pictures dir
 #        when invoked as updmovdir it syncs directories in my Movies dir
+#        when invoked as updauddir it syncs directories in my Audio dir
 #        when invoked as updhome it syncs directories in $HOME
 #
 # Written 10-Feb-2014 by Ronald Joe Record <rr at ronrecord dot com>
@@ -31,16 +32,15 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
-# Where to sync from - defaults to current working directory
-SOURCEDIR=`pwd`
-# Where to sync to
-TRANSCEND="/Volumes/Transcend/`basename $SOURCEDIR`"
+SOURCEDIR=
+TRANSCEND=
 SUFFIX=
 NAME="upd"
 MYHOME=
 APERT_DIR=
 ITUNES_DIR=
 PICDIR=
+AUDDIR=
 MOVDIR=
 HOMEDIR=
 TELL=
@@ -52,13 +52,14 @@ VERB="q"
 
 usage() {
     printf "Usage: $NAME [-d] [-h] [-n] [-u] [-a source dir] [-t dest dir]\n"
-    printf "    [-v] [-A] [-I] [-P] [-M] [-H] [-L] [-s suffix]\n"
+    printf "    [-v] [-A] [-I] [-P] [-M] [-H] [-L] [-l] [-s suffix]\n"
     printf "    source-subdir [subdir2 subdir3 ...]\n"
     printf "Where:\n\t-d indicates a dry run sync (no changes)\n"
     printf "\t-h indicates use directories from your HOME dir\n"
-    printf "\t-L indicates follow symbolic links\n"
+    printf "\t-l indicates follow symbolic links\n"
     printf "\t-v indicates verbose rsync output\n"
-    printf "\t-A indicates use the Aperture libraries (like updaplibs)\n"
+    printf "\t-A indicates use the Audio directory (like updauddir)\n"
+    printf "\t-L indicates use the Aperture libraries (like updaplibs)\n"
     printf "\t-I indicates use the iTunes library (like upditunes)\n"
     printf "\t-P indicates use the Pictures directory (like updpicdir)\n"
     printf "\t-M indicates use the Movies directory (like updmovdir)\n"
@@ -76,7 +77,7 @@ usage() {
     exit 1
 }
 
-while getopts a:s:t:dhAILPMHnuv flag; do
+while getopts a:s:t:dhAILPMHlnuv flag; do
     case $flag in
         d)
             DRY="n"
@@ -84,7 +85,7 @@ while getopts a:s:t:dhAILPMHnuv flag; do
         h)
             MYHOME=1
             ;;
-        L)
+        l)
             FOLLOW="--copy-links $EXCLUDE"
             ;;
         H)
@@ -94,10 +95,13 @@ while getopts a:s:t:dhAILPMHnuv flag; do
             TELL=1
             ;;
         A)
-            APERT_DIR=1
+            AUDDIR=1
             ;;
         I)
             ITUNES_DIR=1
+            ;;
+        L)
+            APERT_DIR=1
             ;;
         P)
             PICDIR=1
@@ -126,36 +130,51 @@ shift $(( OPTIND - 1 ))
 
 NAME=`basename $0`
 [ "$APERT_DIR" ] || [ "$NAME" = "updaplibs" ] && {
-    SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
-    TRANSCEND="/Volumes/Transcend/Pictures/Aperture"
+    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
+    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Pictures/Aperture"
     SUFFIX=".aplibrary"
 }
 [ "$ITUNES_DIR" ] || [ "$NAME" = "upditunes" ] && {
-    SOURCEDIR="/Volumes/Lacie_Porsche_1TB/iTunes"
-    TRANSCEND="/Volumes/Transcend/iTunes"
+    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/Lacie_Porsche_1TB/iTunes"
+    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/iTunes"
 }
 [ "$PICDIR" ] || [ "$NAME" = "updpicdir" ] && {
     if [ "$MYHOME" ]
     then
-        SOURCEDIR="$HOME/Pictures"
+        [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Pictures"
     else
-        SOURCEDIR="/Volumes/My_Book_Studio/Pictures"
+        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures"
     fi
-    TRANSCEND="/Volumes/Transcend/Pictures"
+    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Pictures"
+}
+[ "$AUDDIR" ] || [ "$NAME" = "updauddir" ] && {
+    if [ "$MYHOME" ]
+    then
+        [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Audio"
+    else
+        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Audio"
+    fi
+    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Audio"
 }
 [ "$MOVDIR" ] || [ "$NAME" = "updmovdir" ] && {
     if [ "$MYHOME" ]
     then
-        SOURCEDIR="$HOME/Movies"
+        [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Movies"
     else
-        SOURCEDIR="/Volumes/My_Book_Studio/Movies"
+        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Movies"
     fi
-    TRANSCEND="/Volumes/Transcend/Movies"
+    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Movies"
 }
 [ "$HOMEDIR" ] || [ "$NAME" = "updhome" ] && {
-    SOURCEDIR="$HOME"
-    TRANSCEND="/Volumes/Transcend/Home"
+    [ "$SOURCEDIR" ] || SOURCEDIR="$HOME"
+    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Home"
 }
+
+# Where to sync from - defaults to current working directory
+[ "$SOURCEDIR" ] || SOURCEDIR=`pwd`
+# Where to sync to
+[ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/`basename $SOURCEDIR`"
+
 [ "$USAGE" ] && usage
 
 [ "$SOURCEDIR" = "/" ] && {

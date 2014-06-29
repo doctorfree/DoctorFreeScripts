@@ -49,6 +49,10 @@ MBS="/Volumes/My_Book_Studio"
 PIC_DIR="$MBS/Pictures"
 # Picture directories to sync
 PIC_SUB_DIRS="Art Dragonflies Work"
+# Where I store my audio
+AUD_DIR="$MBS/Audio"
+# Audio directories to sync
+AUD_SUB_DIRS="Audacity Ripped"
 # Where I store my movies
 MOV_DIR="$MBS/Movies"
 # Movies directories to sync
@@ -58,12 +62,13 @@ HOME_DIRS="Documents Movies Music Pictures bin src"
 ########### END DEFAULT LOCATIONS ######################
 
 usage() {
-    printf "Usage: $0 [-n] [-a] [-c] [-i] [-p] [-m] [-h] [-u]\n"
+    printf "Usage: $0 [-n] [-a] [-c] [-i] [-l] [-p] [-m] [-h] [-u]\n"
     printf "Where:\n\t-n indicates to tell me what you would do\n"
     printf "\t-u indicates display this usage message and exit\n"
-    printf "\t-a indicates rsync the Aperture libraries\n"
+    printf "\t-a indicates rsync the Audio directory\n"
     printf "\t-c indicates check if rsync is needed before sync'ing\n"
     printf "\t-i indicates rsync the iTunes library\n"
+    printf "\t-l indicates rsync the Aperture libraries\n"
     printf "\t-p indicates rsync the Pictures directory\n"
     printf "\t-m indicates rsync the Movies directory\n"
     printf "\t-h indicates rsync the Home directory\n\n"
@@ -95,24 +100,29 @@ then
     DO_ITUNES=1
     DO_PIC=1
     DO_MOV=1
+    DO_AUD=1
     DO_HOME=1
 else
     DO_APERT=
     DO_ITUNES=
     DO_PIC=
     DO_MOV=
+    DO_AUD=
     DO_HOME=
 fi
-while getopts acipmhnu flag; do
+while getopts acilpmhnu flag; do
     case $flag in
         a)
-            DO_APERT=1
+            DO_AUD=1
             ;;
         c)
             CHK=1
             ;;
         i)
             DO_ITUNES=1
+            ;;
+        l)
+            DO_APERT=1
             ;;
         p)
             DO_PIC=1
@@ -152,11 +162,11 @@ shift $(( OPTIND - 1 ))
         then
             chk $DRY -r -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
         else
-            # Equivalent of "upd -A ..."
+            # Equivalent of "upd -L ..."
             upd $DRY -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
         fi
     else
-        echo "$ITUNES does not exist or is not a directory. Skipping."
+        echo "$APLIBS does not exist or is not a directory. Skipping."
     fi
 }
 
@@ -194,6 +204,25 @@ shift $(( OPTIND - 1 ))
         fi
     done
  }
+
+[ "$DO_AUD" ] && {
+    # Sync the audio directories
+    for i in $AUD_SUB_DIRS
+    do
+        if [ -d "$AUD_DIR/$i" ]
+        then
+            if [ "$CHK" ]
+            then
+                chk $DRY -r -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
+            else
+                # Equivalent of "upd -A ..."
+                upd $DRY -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
+            fi
+        else
+            echo "$AUD_DIR/$i does not exist or is not a directory. Skipping."
+        fi
+    done
+}
 
 [ "$DO_MOV" ] && {
     # Sync the movies directories

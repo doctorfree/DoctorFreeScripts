@@ -3,10 +3,11 @@
 # chk - check the specified directories/libraries and see if they need to by
 #    sync'd with rsync to the USB flash drive backup
 #    Note: to check other directories use the -s, -a, and -t arguments
-#          when invoked as chkaplibs it checks directories in my Apertures libs
+#          when invoked as chkaplibs it checks directories in my Aperture libs
 #          when invoked as chkitunes it checks directories in my iTunes library
 #          when invoked as chkpicdir it checks directories in my Pictures dir
 #          when invoked as chkmovdir it checks directories in my Movies dir
+#          when invoked as chkauddir it checks directories in my Audio dir
 #          when invoked as chkhome it checks directories in $HOME
 #
 # Written 15-Feb-2014 by Ronald Joe Record <rr at ronrecord dot com>
@@ -33,17 +34,15 @@
 # the Software.
 #
 
-# Where to check the sync from
-# Defaults to checking current working directory
-SOURCEDIR=`pwd`
-# The mounted USB stick or backup directory
-USBLIBDIR="/Volumes/Transcend/`basename $SOURCEDIR`"
+SOURCEDIR=
+USBLIBDIR=
 SUFFIX=
 NAME="chk"
 UPSC="upd"
 FORCE=
 APERT_DIR=
 ITUNES_DIR=
+AUDDIR=
 MOVDIR=
 PICDIR=
 HOMEDIR=
@@ -52,20 +51,22 @@ UPD=
 TELL=
 
 usage() {
-    printf "Usage: $NAME [-h] [-n] [-r] [-u] [-a source dir] [-t dest dir]\n"
-    printf "  [-A] [-I] [-H] [-M] [-P] [-f] [-s suffix] [library name(s) ...]\n"
+    printf "Usage: $NAME [-h] [-n] [-r] [-u] [-a source_dir] [-t dest_dir]\n"
+    printf "  [-A] [-I] [-H] [-L] [-M] [-P] [-f] [-s suffix]\n"
+    printf "  [library name(s) ...]\n"
     printf "\nWhere:\n\t-r indicates run rsync to sync libraries when needed\n"
     printf "\t-f indicates force a sync regardless of last time-stamp\n"
     printf "\t-h indicates use directories from $HOME\n"
-    printf "\t-A indicates act like invoked as chkaplibs\n"
+    printf "\t-A indicates act like invoked as chkauddir\n"
     printf "\t-I indicates act like invoked as chkitunes\n"
     printf "\t-H indicates act like invoked as chkhome\n"
+    printf "\t-L indicates act like invoked as chkaplibs\n"
     printf "\t-M indicates act like invoked as chkmovdir\n"
     printf "\t-P indicates act like invoked as chkpicdir\n"
     printf "\t-n indicates tell me what you would do without doing it\n"
     printf "\t-u displays this usage message\n"
-    printf "\t-a source dir sets the top-level source directory\n"
-    printf "\t-t dest dir sets the top-level destination directory\n"
+    printf "\t-a source_dir sets the top-level source directory\n"
+    printf "\t-t dest_dir sets the top-level destination directory\n"
     printf "\t-s suffix sets the subdirectory suffix to look for\n"
     printf "\tadditional arguments indicate library names to check/sync\n"
     printf "\nWhen invoked without arguments $NAME will attempt to check\n"
@@ -116,7 +117,7 @@ chklib() {
     fi
 }
 
-while getopts a:s:t:fhAIHPMrnu flag; do
+while getopts a:s:t:fhAIHPLMrnu flag; do
     case $flag in
         f)
             FORCE=1
@@ -125,13 +126,16 @@ while getopts a:s:t:fhAIHPMrnu flag; do
             MYHOME="-h"
             ;;
         A)
-            APERT_DIR=1
+            AUDDIR=1
             ;;
         I)
             ITUNES_DIR=1
             ;;
         H)
             HOMEDIR=1
+            ;;
+        L)
+            APERT_DIR=1
             ;;
         M)
             MOVDIR=1
@@ -163,41 +167,57 @@ shift $(( OPTIND - 1 ))
 
 NAME=`basename $0`
 [ "$APERT_DIR" ] || [ "$NAME" = "chkaplibs" ] && {
-    SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
-    USBLIBDIR="/Volumes/Transcend/Pictures/Aperture"
+    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
+    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Pictures/Aperture"
     SUFFIX=".aplibrary"
-    UPSC="upd -A"
+    UPSC="upd -L"
 }
 [ "$PICDIR" ] || [ "$NAME" = "chkpicdir" ] && {
     if [ "$MYHOME" ]
     then
-        SOURCEDIR="$HOME/Pictures"
+        [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Pictures"
     else
-        SOURCEDIR="/Volumes/My_Book_Studio/Pictures"
+        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures"
     fi
-    USBLIBDIR="/Volumes/Transcend/Pictures"
+    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Pictures"
     UPSC="upd -P"
+}
+[ "$AUDDIR" ] || [ "$NAME" = "chkauddir" ] && {
+    if [ "$MYHOME" ]
+    then
+        [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Audio"
+    else
+        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Audio"
+    fi
+    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Audio"
+    UPSC="upd -A"
 }
 [ "$MOVDIR" ] || [ "$NAME" = "chkmovdir" ] && {
     if [ "$MYHOME" ]
     then
-        SOURCEDIR="$HOME/Movies"
+        [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Movies"
     else
-        SOURCEDIR="/Volumes/My_Book_Studio/Movies"
+        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Movies"
     fi
-    USBLIBDIR="/Volumes/Transcend/Movies"
+    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Movies"
     UPSC="upd -M"
 }
 [ "$HOMEDIR" ] || [ "$NAME" = "chkhome" ] && {
-    SOURCEDIR="$HOME"
-    USBLIBDIR="/Volumes/Transcend/Home"
+    [ "$SOURCEDIR" ] || SOURCEDIR="$HOME"
+    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Home"
     UPSC="upd -H"
 }
 [ "$ITUNES_DIR" ] || [ "$NAME" = "chkitunes" ] && {
-    SOURCEDIR="/Volumes/Lacie_Porsche_1TB/iTunes"
-    USBLIBDIR="/Volumes/Transcend/iTunes"
+    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/Lacie_Porsche_1TB/iTunes"
+    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/iTunes"
     UPSC="upd -I"
 }
+
+# Where to check the sync from
+# Defaults to checking current working directory
+[ "$SOURCEDIR" ] || SOURCEDIR=`pwd`
+# The mounted USB stick or backup directory
+[ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/`basename $SOURCEDIR`"
 
 [ -d "$SOURCEDIR" ] || {
     echo "$SOURCEDIR does not exist or is not a directory. Exiting."
