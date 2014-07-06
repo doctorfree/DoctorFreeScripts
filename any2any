@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# any2any - convert from any video format to any other
+# any2any - convert from any audio/video format to any other
 #
 # Written 7-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
 #
@@ -13,15 +13,17 @@
 #    create a symbolic link from any2any to wmv2mp4 as follows:
 #        ln -s any2any wmv2mp4
 #    Similarly, symbolic links (or copies or hard links) could be created
-#    to convert from any (3 lowercase letter representation) video format
-#    to any other video format. Commonly used conversions include:
+#    to convert from any (3 lowercase letter representation) audio/video format
+#    to any other audio/video format. Commonly used conversions include:
 #        wmv2mkv avi2mpg wmv2mp4 and so on.
 #
 #    Naming restricton: [3 lowercase letter input]2[3 lowercase letter output]
 #    for a 7 letter name with "2" in the middle. The 3 letter prefix and suffix
-#    must also be a filename suffix that ffmpeg recognizes as a video format.
+#    must also be a filename suffix that ffmpeg recognizes as a valid
+#    audio/video format.
+#
 #    For example, the following are filenames that conform to this restriction:
-#        wmv2mp4 avi2mpg wmv2mkv
+#        ape2m4a flv2mp4 mkv2mp4 wmv2mp4 avi2mpg wmv2mkv wma2m4a
 #
 # Copyright (c) 2014, Ronald Joe Record
 # All rights reserved.

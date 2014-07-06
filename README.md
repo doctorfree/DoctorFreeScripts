@@ -19,7 +19,7 @@ Contents:
 
 [**add2itunes**](add2itunes) - Add the media files provided as arguments to the iTunes library. Uses OS X osascript to execute AppleScript.
 
-[**any2any**](any2any) - Uses ffmpeg to convert from any video format to any other
+[**any2any**](any2any) - Uses ffmpeg to convert from any audio/video format to any other
 
       This program works by either linking or copying any2any to a file
       which specifies the desired input and output formats by its name.
@@ -29,15 +29,15 @@ Contents:
           ln -s any2any wmv2mp4
 
       Similarly, symbolic links (or copies or hard links) could be created
-      to convert from any (3 lowercase letter representation) video format
-      to any other video format. Commonly used conversions include:
+      to convert from any (3 lowercase letter representation) audio/video format
+      to any other audio/video format. Commonly used conversions include:
 
           wmv2mkv avi2mpg wmv2mp4 and so on.
  
       Naming restricton: [3 lowercase letters]2[3 lowercase letters]
       for a 7 letter name with "2" in the middle. The 3 letter prefix
       and suffix must also be a filename suffix that ffmpeg recognizes
-      as a supported video format.
+      as a supported audio/video format.
 
 [**bash_aliases**](bash_aliases) - Bash aliases, install in $HOME/.bash_aliases
 
