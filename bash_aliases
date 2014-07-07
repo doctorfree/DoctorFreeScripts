@@ -9,6 +9,8 @@ alias dutop='du -h -d 0'
 alias whence='type -a'
 # My Fusion ESXi 5.5.0 VM
 alias fusesx='ssh -l root 192.168.103.130'
+# Convenience alias to log an entry to my Day One journal
+alias log="~/Scripts/logtodayone.rb"
 # Project working directories
 alias mbs='cd "/Volumes/My_Book_Studio"'
 alias mbsa='cd "/Volumes/My_Book_Studio/Audio"'
