@@ -193,6 +193,7 @@ if [ $# -eq 0 ]
 then
   for lib in *$SUFFIX
   do
+    [ "$lib" = "*" ] && lib=
     [ -d "$SOURCEDIR/$lib" ] || {
         echo "$SOURCEDIR/$lib does not exist or is not a directory. Skipping."
         continue
@@ -219,6 +220,7 @@ else
     for libnam in "$@"
     do
       lib="$libnam$SUFFIX"
+      [ "$lib" = "*" ] && lib=
       [ -d "$SOURCEDIR/$lib" ] || {
         echo "$SOURCEDIR/$lib does not exist or is not a directory. Skipping."
         continue

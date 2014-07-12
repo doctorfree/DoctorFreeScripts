@@ -52,11 +52,11 @@ PIC_SUB_DIRS="Art Dragonflies Work"
 # Where I store my audio
 AUD_DIR="$MBS/Audio"
 # Audio directories to sync
-AUD_SUB_DIRS="Audacity Ripped"
+AUD_SUB_DIRS="Audacity"
 # Where I store my movies
 MOV_DIR="$MBS/Movies"
 # Movies directories to sync
-MOV_SUB_DIRS="Artists Ripped Work"
+MOV_SUB_DIRS="Artists Work"
 # Directories in my Home directory that I want to backup
 HOME_DIRS="Documents Movies Music Pictures bin src"
 ########### END DEFAULT LOCATIONS ######################
