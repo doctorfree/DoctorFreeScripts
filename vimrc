@@ -29,9 +29,9 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
-set tabstop=8
+set tabstop=4
 set shiftwidth=4
-set softtabstop=8
+set softtabstop=4
 set expandtab
 if &t_Co > 255
   " colorscheme zenburn
