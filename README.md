@@ -69,6 +69,8 @@ Contents:
 
 [**findempty**](findempty) - Find and report empty directories. Optionally, remove them.
 
+[**findgrep**](findgrep) - Recursive grep in current directory.
+
 [**latest**](latest) - List the top N newest files in a directory or hierarchy
 
 [**mandelhist**](mandelhist) - Display a zoom on the Mandelbrot set with histograms using a built-in ffplay/ffmpeg filter.
