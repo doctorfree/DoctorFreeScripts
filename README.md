@@ -65,6 +65,8 @@ Contents:
 
 [**dircolors**](dircolors) - Settings for the dircolors utility to enable color support of ls. Install as $HOME/.dircolors
 
+[**eject**](eject) - Convenience script to eject the CD/DVD
+
 [**femzip**](femzip) - Convenience script to unzip Femjoy photo downloads
 
 [**findempty**](findempty) - Find and report empty directories. Optionally, remove them.
