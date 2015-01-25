@@ -19,3 +19,6 @@ alias mbsp='cd "/Volumes/My_Book_Studio/Pictures/Work"'
 alias lacie='cd /Volumes/Lacie_Porsche_1TB'
 alias itunes='cd /Volumes/Lacie_Porsche_1TB/iTunes'
 alias transcend='cd /Volumes/Transcend'
+# Easily switch between JDK versions
+alias setjdk6='export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)'
+alias setjdk7='export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)'

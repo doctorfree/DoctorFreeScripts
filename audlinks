@@ -61,25 +61,51 @@ FindAndLink() {
             continue
         else
             b=`basename "$i"`
+            echo "$b" | grep ":" > /dev/null && {
+                b=`echo "$b" | sed -e "s/:/_/g"`
+            }
+            d=`dirname "$i"`
+            title=`basename "$d"`
+            echo "$title" | grep ":" > /dev/null && {
+                title=`echo "$title" | sed -e "s/:/_/g"`
+            }
+            e=`dirname "$d"`
+            artist=`basename "$e"`
             [ "$b" = "SUMS" ] && continue
             [ "$USE_SUM" ] && {
                 ck1=`grep "$i" SUMS | awk ' { print $1 } '`
                 [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
             }
-            [ -f "$I/$b" ] && {
-                found=1
+            [ -f "$I/$artist/$title/$b" ] && found="$b"
+            [ "$found" ] || {
+                # Check for file with track number added as prefix
+                [ -d "$I/$artist/$title" ] && {
+                    pushd "$I/$artist/$title" > /dev/null
+                    for song in [0-9][0-9]*
+                    do
+                        notrack=${song:3}
+                        if [ "$b" = "$notrack" ]
+                        then
+                            found="$song"
+                            break
+                        fi
+                    done
+                    popd > /dev/null
+                }
+            }
+            [ "$found" ] && {
                 if [ "$USE_SUM" ]
                 then
-                    ck2 =`grep "$b" "$I/SUMS" | awk ' { print $1 } '`
-                    [ "$ck2" ] || ck2=`cksum "$I/$b" | awk ' { print $1 } '`
+                    ck2 =`grep "$found" "$I/SUMS" | awk ' { print $1 } '`
+                    [ "$ck2" ] || ck2=`cksum "$I/$artist/$title/$found" | awk ' { print $1 } '`
                     [ $ck1 -eq $ck2 ] && {
-                        remlink "$I/$b" "$i"
+                        remlink "$I/$artist/$title/$found" "$i"
                     } 
                 else
-                    remlink "$I/$b" "$i"
+                    remlink "$I/$artist/$title/$found" "$i"
                 fi
             }
-            [ $found ] || {
+            [ "$found" ] || {
                 [ "$TELL" ] && continue
                 # Maybe the filename in iTunes has been changed. Search the SUMS
                 [ "$USE_SUM" ] && {
@@ -130,14 +156,6 @@ while getopts M:W:I:dcu flag; do
 done
 shift $(( OPTIND - 1 ))
 
-[ -d "$M" ] || {
-    echo "$M does not exist or is not a directory. Exiting."
-    exit 1
-}
-[ -d "$W" ] || {
-    echo "$W does not exist or is not a directory. Exiting."
-    exit 1
-}
 [ -d "$I" ] || {
     echo "$I does not exist or is not a directory. Exiting."
     exit 1
