@@ -50,7 +50,7 @@ Archive() {
             echo "tar cf - $Arch_Dir | gzip -9 > ${Nospace}-Audacity.tar.gz" 
             echo "rm -rf $Arch_Dir"
         else
-            printf "\n\tCreating compressed tar archive of $Arch_Dir ... "
+            printf "\tCreating compressed tar archive of $Arch_Dir ... "
             tar cf - "$Arch_Dir" | gzip -9 > "${Nospace}-Audacity.tar.gz"
             rm -rf "$Arch_Dir"
             printf "done.\n"
@@ -90,7 +90,7 @@ do
         continue
     }
 
-    printf "\nArchiving and compressing titles by $Artist ..."
+    printf "\nArchiving and compressing titles by ${Artist}\n"
     cd "$Artist"
 
     for Album in *
@@ -160,5 +160,5 @@ do
         fi
     done
     cd ..
-    printf "\nDone archiving and compressing titles by $Artist\n"
+    printf "Done archiving and compressing titles by $Artist\n"
 done
