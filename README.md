@@ -75,6 +75,8 @@ Contents:
 
 [**filenuminc**](filenuminc) - Convenience script to rename files beginning with a track number after increasing the number by some previously ripped number of tracks.  For example, the command "filenuminc 11" would rename "04 My Song.mp3" to "15 My Song.mp3".
 
+[**filenumset**](filenumset) - Convenience script to rename files beginning without a track number to a filename with track number as prefix. For example, the command "filenumset foo.mp3" might rename "foo.mp3" to "5 foo.mp3".
+
 [**findempty**](findempty) - Find and report empty directories. Optionally, remove them.
 
 [**findgrep**](findgrep) - Recursive grep in current directory.
