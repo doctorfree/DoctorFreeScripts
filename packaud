@@ -28,13 +28,16 @@
 
 # Set this to your Audacity project directory or specify with the -a option
 AUD_DIR="/Volumes/My_Book_Studio/Audio/Audacity"
+REPORT=
+DONE=1
 TELL=
 USAGE=
 
 usage() {
-    printf "\nUsage: packaud [-a audacity dir] [-d] [-u]\n"
+    printf "\nUsage: packaud [-a audacity dir] [-d] [-r] [-u]\n"
     printf "\nWhere:\n\taudacity dir is your Audacity project directory\n"
     printf "\t-d indicates a dry run (tell me what you would do)\n"
+    printf "\t-r report which artist/titles are not compressed archives\n"
     printf "\t-u displays this usage message\n"
     printf "\nAudacity directory = ${AUD_DIR}\n\n"
     exit 1
@@ -60,12 +63,16 @@ Archive() {
     fi
 }
 
-while getopts a:du flag; do
+while getopts a:dru flag; do
     case $flag in
         a)
             AUD_DIR="$OPTARG"
             ;;
         d)
+            TELL=1
+            ;;
+        r)
+            REPORT=1
             TELL=1
             ;;
         u)
@@ -90,7 +97,7 @@ do
         continue
     }
 
-    printf "\nArchiving and compressing titles by ${Artist}\n"
+    [ "$REPORT" ] || printf "\nArchiving and compressing titles by ${Artist}\n"
     cd "$Artist"
 
     for Album in *
@@ -103,26 +110,39 @@ do
             Aname="${Album:0:${#Album}-4}"
             [ -d "${Aname}_data" ] || {
               [ -f "${Aname}.aup" ] && {
-                echo "Found aup file $Album but no data dir. Skipping."
+                printf "\nFound aup file ${Artist}/${Album} but no data dir."
+                printf " Skipping.\n"
                 continue
               }
             }
             if [ -d "$Aname" ]
             then
-                echo "$Aname already exists. Skipping."
+                if [ "$REPORT" ]
+                then
+                    echo "Found directory ${Artist}/${Aname}"
+                    DONE=
+                else
+                    echo "$Aname already exists. Skipping."
+                fi
                 continue
             else
-                mkdir "$Aname"
+                [ "$TELL" ] || mkdir "$Aname"
             fi
             if [ "$TELL" ]
             then
-                echo "mv $Album $Aname"
-                echo "mv ${Aname}_data $Aname"
+                if [ "$REPORT" ]
+                then
+                    echo "Need to archive and compress ${Artist}/${Aname}"
+                    DONE=
+                else
+                    echo "mv $Album $Aname"
+                    echo "mv ${Aname}_data $Aname"
+                fi
             else
                 mv "$Album" "$Aname"
                 mv "${Aname}_data" "$Aname"
             fi
-            Archive "$Aname"
+            [ "$REPORT" ] || Archive "$Aname"
             continue
         }
         Last="${Album: -5}"
@@ -130,35 +150,57 @@ do
             Aname="${Album:0:${#Album}-5}"
             [ -f "${Aname}.aup" ] || {
               [ -d "${Aname}_data" ] && {
-                echo "Found data dir $Album but no project file. Skipping."
+                printf "\nFound data ${Artist}/${Album} but no project file."
+                printf " Skipping.\n"
                 continue
               }
             }
             if [ -d "$Aname" ]
             then
-                echo "$Aname already exists. Skipping."
+                if [ "$REPORT" ]
+                then
+                    echo "Found directory ${Artist}/${Aname}"
+                    DONE=
+                else
+                    echo "$Aname already exists. Skipping."
+                fi
                 continue
             else
-                mkdir "$Aname"
+                [ "$TELL" ] || mkdir "$Aname"
             fi
             if [ "$TELL" ]
             then
-                echo "mv $Album $Aname"
-                echo "mv ${Aname}.aup $Aname"
+                if [ "$REPORT" ]
+                then
+                    echo "Need to archive and compress ${Artist}/${Aname}"
+                    DONE=
+                else
+                    echo "mv $Album $Aname"
+                    echo "mv ${Aname}.aup $Aname"
+                fi
             else
                 mv "$Album" "$Aname"
                 mv "${Aname}.aup" "$Aname"
             fi
-            Archive "$Aname"
+            [ "$REPORT" ] || Archive "$Aname"
             continue
         }
         if [ -d "$Album" ]
         then
-            Archive "$Album"
+            if [ "$REPORT" ]
+            then
+                echo "Need to archive and compress ${Artist}/${Album}"
+                DONE=
+            else
+                Archive "$Album"
+            fi
         else
             echo "$Album does not exist or is not a directory. Skipping."
         fi
     done
     cd ..
-    printf "Done archiving and compressing titles by $Artist\n"
+    [ "$REPORT" ] || printf "Done archiving and compressing titles by $Artist\n"
 done
+
+[ "$DONE" ] && echo "All artists/titles archived and compressed"
+exit 0
