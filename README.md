@@ -39,6 +39,8 @@ Contents:
       and suffix must also be a filename suffix that ffmpeg recognizes
       as a supported audio/video format.
 
+[**audlinks**](audlinks) - Create symbolic links to audio files where possible to reduce duplicate storage of songs. Link into my iTunes library.
+
 [**bash_aliases**](bash_aliases) - Bash aliases, install in $HOME/.bash_aliases
 
 [**bash_profile**](bash_profile) - Bash profile, install in $HOME/.bash_profile
@@ -63,11 +65,15 @@ Contents:
 
 [**clndl**](clndl) - Moves the most recently downloaded versions of files to their regular filename without the (#) in the name. By default, relies on the Mac OS X convention of inserting (#) in the name of newer version filenames.
 
+[**dash2space**](dash2space) - Convenience script to replace the first occurence of "-" in all MP3 filenames in this directory with " ". For example, this would rename "03-My Song.mp3" to "03 My Song.mp3".
+
 [**dircolors**](dircolors) - Settings for the dircolors utility to enable color support of ls. Install as $HOME/.dircolors
 
 [**eject**](eject) - Convenience script to eject the CD/DVD
 
 [**femzip**](femzip) - Convenience script to unzip Femjoy photo downloads
+
+[**filenuminc**](filenuminc) - Convenience script to rename files beginning with a track number after increasing the number by some previously ripped number of tracks.  For example, the command "filenuminc 11" would rename "04 My Song.mp3" to "15 My Song.mp3".
 
 [**findempty**](findempty) - Find and report empty directories. Optionally, remove them.
 
@@ -109,8 +115,6 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
     Assumes all files of interest are WMV, MOV, MP4, or AVI. A quick way to
     populate my USB flash drive of movies with HTML documents to provide an
     initial way to navigate around.
-
-[**audlinks**](audlinks) - Create symbolic links to audio files where possible to reduce duplicate storage of songs. Link into my iTunes library.
 
 [**mvfem**](mvfem) - Rename a downloaded Femjoy zip archive that contains two model names to use only one model's name so it will work with femzip.
 
