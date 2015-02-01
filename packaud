@@ -32,12 +32,14 @@ REPORT=
 DONE=1
 TELL=
 USAGE=
+VERBOSE=
 
 usage() {
-    printf "\nUsage: packaud [-a audacity dir] [-d] [-r] [-u]\n"
+    printf "\nUsage: packaud [-a audacity dir] [-d] [-r] [-v] [-u]\n"
     printf "\nWhere:\n\taudacity dir is your Audacity project directory\n"
     printf "\t-d indicates a dry run (tell me what you would do)\n"
     printf "\t-r report which artist/titles are not compressed archives\n"
+    printf "\t-v verbose mode\n"
     printf "\t-u displays this usage message\n"
     printf "\nAudacity directory = ${AUD_DIR}\n\n"
     exit 1
@@ -63,7 +65,7 @@ Archive() {
     fi
 }
 
-while getopts a:dru flag; do
+while getopts a:druv flag; do
     case $flag in
         a)
             AUD_DIR="$OPTARG"
@@ -74,6 +76,9 @@ while getopts a:dru flag; do
         r)
             REPORT=1
             TELL=1
+            ;;
+        v)
+            VERBOSE=1
             ;;
         u)
             USAGE=1
@@ -93,11 +98,17 @@ cd "$AUD_DIR"
 for Artist in *
 do
     [ -d "$Artist" ] || {
-        echo "$Artist does not exist or is not a directory. Skipping."
+        [ "$VERBOSE" ] && {
+            echo "$Artist does not exist or is not a directory. Skipping."
+        }
         continue
     }
 
-    [ "$REPORT" ] || printf "\nArchiving and compressing titles by ${Artist}\n"
+    [ "$REPORT" ] || {
+        [ "$VERBOSE" ] && {
+            printf "\nArchiving and compressing titles by ${Artist}\n"
+        }
+    }
     cd "$Artist"
 
     for Album in *
@@ -195,12 +206,21 @@ do
                 Archive "$Album"
             fi
         else
-            echo "$Album does not exist or is not a directory. Skipping."
+            [ "$VERBOSE" ] && {
+                echo "$Album does not exist or is not a directory. Skipping."
+            }
         fi
     done
     cd ..
-    [ "$REPORT" ] || printf "Done archiving and compressing titles by $Artist\n"
+    [ "$REPORT" ] || {
+        [ "$VERBOSE" ] && {
+            printf "Done archiving and compressing titles by $Artist\n"
+        }
+    }
 done
 
-[ "$DONE" ] && echo "All artists/titles archived and compressed"
+[ "$DONE" ] && {
+    [ "$REPORT" ] && echo "All artists/titles archived and compressed"
+}
+
 exit 0
