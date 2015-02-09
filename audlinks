@@ -130,6 +130,7 @@ FindAndRemove() {
             [ "$TELL" ] || rm -f "$i"
         }
     done
+    printf "\n"
 }
 
 while getopts M:W:I:dcu flag; do

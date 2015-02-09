@@ -33,12 +33,14 @@ W="/Volumes/My_Book_Studio/Pictures/Work"
 LIBS="/Volumes/My_Book_Studio/Pictures/Libraries"
 TELL=
 PICS=
+QUICK=
 
 usage() {
     printf "\nUsage: piclinks [-P Pictures Dir] [-W Work Dir]"
-    printf "\n\t[-A Aperture Libraries Dir] [-h] [-d] [-u]\n"
+    printf "\n\t[-A Aperture Libraries Dir] [-h] [-d] [-q] [-u]\n"
     printf "\nWhere:\n\t-d indicates tell me what you would do"
     printf "\n\t-h indicates also search Home Pictures directory"
+    printf "\n\t-q indicates quick run (do not redo SUMS)"
     printf "\n\t-u displays this usage message\n"
     printf "\nDefaults are:\n\tHome Pictures Dir = $P"
     printf "\n\tWork Dir = $W"
@@ -90,7 +92,7 @@ FindAndRemove() {
     done
 }
 
-while getopts A:P:W:dhu flag; do
+while getopts A:P:W:dhqu flag; do
     case $flag in
         A)
             LIBS="$OPTARG"
@@ -106,6 +108,9 @@ while getopts A:P:W:dhu flag; do
             ;;
         h)
             PICS=1
+            ;;
+        q)
+            QUICK=1
             ;;
         u)
             usage
@@ -131,22 +136,26 @@ shift $(( OPTIND - 1 ))
 
 # Update the Aperture libraries SUMS files first
 cd "$LIBS"
-printf "\nUpdating Aperture libraries SUMS files ...\n"
-[ "$TELL" ] || {
-    for aplib in *.aplibrary/Masters
-    do
-        cd "$aplib"
-        updsums
-        cd ../..
-    done
+[ "$QUICK" ] || {
+    printf "\nUpdating Aperture libraries SUMS files ...\n"
+    [ "$TELL" ] || {
+        for aplib in *.aplibrary/Masters
+        do
+            cd "$aplib"
+            updsums
+            cd ../..
+        done
+    }
 }
 
 # Link to file in Aperture library if it's a duplicate
 if [ -d "$W" ]
 then
     cd "$W"
-    printf "\nUpdating $W/SUMS\n"
-    [ "$TELL" ] || updsums
+    [ "$QUICK" ] || {
+        printf "\nUpdating $W/SUMS\n"
+        [ "$TELL" ] || updsums
+    }
     printf "\nFinding and symlinking duplicate files in $W ...\n"
     FindAndLink
 else
@@ -156,8 +165,10 @@ fi
     if [ -d "$P" ]
     then
         cd "$P"
-        printf "\nUpdating $P/SUMS\n"
-        [ "$TELL" ] || updsums
+        [ "$QUICK" ] || {
+            printf "\nUpdating $P/SUMS\n"
+            [ "$TELL" ] || updsums
+        }
         printf "\nFinding and symlinking duplicate files in $P ...\n"
         FindAndLink
     else
