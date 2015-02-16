@@ -30,18 +30,23 @@
 I="/Volumes/Lacie_Porsche_1TB/iTunes/Music"
 M="$HOME/Music"
 W="/Volumes/My_Book_Studio/Audio/Imported"
+WORK=1
+MUSE=
 USE_SUM=
 TELL=
 
 usage() {
     printf "\nUsage: audlinks [-M Music Dir] [-W Work Dir]"
-    printf "\n\t[-I iTunes Dir] [-d] [-c] [-u]\n"
+    printf "\n\t[-I iTunes Dir] [-b] [-d] [-c] [-m] [-u]\n"
     printf "\nWhere:\n\t-d indicates tell me what you would do"
+    printf "\n\t-b indicates search both work and music directories"
     printf "\n\t-c indicates use chksums"
+    printf "\n\t-m indicates only search music directory"
     printf "\n\t-u displays this usage message\n"
     printf "\nDefaults are:\n\tMusic Dir = $M"
     printf "\n\tWork Dir = $W"
-    printf "\n\tiTunes Dir = $I\n\n"
+    printf "\n\tiTunes Dir = $I\n"
+    printf "\nBy default only the work directory is searched.\n\n"
     exit 1
 }
 
@@ -133,7 +138,7 @@ FindAndRemove() {
     printf "\n"
 }
 
-while getopts M:W:I:dcu flag; do
+while getopts M:W:I:bdcmu flag; do
     case $flag in
         M)
             M="$OPTARG"
@@ -144,11 +149,18 @@ while getopts M:W:I:dcu flag; do
         I)
             I="$OPTARG"
             ;;
+        b)
+            MUSE=1
+            ;;
         d)
             TELL=1
             ;;
         c)
             USE_SUM=1
+            ;;
+        m)
+            MUSE=1
+            WORK=
             ;;
         u)
             usage
@@ -174,9 +186,10 @@ MSUMS="$M"/SUMS
     [ "$TELL" ] || updsums
 }
 
-# Link to file in iTunes library if it's a duplicate
-if [ -d "$W" ]
-then
+[ "$WORK" ] && {
+  # Link to file in iTunes library if it's a duplicate
+  if [ -d "$W" ]
+  then
     cd "$W"
     # Update the SUMS file if we are using cksums
     [ "$USE_SUM" ] && {
@@ -185,11 +198,14 @@ then
     }
     printf "\nFinding and symlinking duplicate files in $W ...\n"
     FindAndLink
-else
+  else
     echo "$W does not exist or is not a directory. Skipping."
-fi
-if [ -d "$M" ]
-then
+  fi
+}
+
+[ "$MUSE" ] && {
+  if [ -d "$M" ]
+  then
     cd "$M"
     # Update the SUMS file if we are using cksums
     [ "$USE_SUM" ] && {
@@ -198,26 +214,32 @@ then
     }
     printf "\nFinding and symlinking duplicate files in $M ...\n"
     FindAndLink
-else
+  else
     echo "$M does not exist or is not a directory. Skipping."
-fi
+  fi
+}
 
-# Remove broken links
-if [ -d "$W" ]
-then
+[ "$WORK" ] && {
+  # Remove broken links
+  if [ -d "$W" ]
+  then
     cd "$W"
     printf "\nRemoving broken links in $W ...\n"
     FindAndRemove
-else
+  else
     echo "$W does not exist or is not a directory. Skipping."
-fi
-if [ -d "$M" ]
-then
+  fi
+}
+
+[ "$MUSE" ] && {
+  if [ -d "$M" ]
+  then
     cd "$M"
     printf "\nRemoving broken links in $M ...\n"
     FindAndRemove
-else
+  else
     echo "$M does not exist or is not a directory. Skipping."
-fi
+  fi
+}
 
 echo "Done."
