@@ -28,10 +28,11 @@
 #
 
 usage() {
-    printf "Usage: chkall [-f] [-h] [-n] [-r] [-u]\n"
+    printf "Usage: chkall [-f] [-h] [-H] [-n] [-r] [-u]\n"
     printf "Where:\n\t-n indicates tell me what you would do without doing it\n"
     printf "\t-f indicates force a sync regardless of last time-stamp\n"
     printf "\t-h indicates use directories from $HOME\n"
+    printf "\t-H indicates also sync directories in $HOME\n"
     printf "\t-r indicates run rsync to sync libraries when needed\n"
     printf "\t-u displays this usage message\n"
     printf "\nExample invocations:\n"
@@ -53,13 +54,17 @@ FORCE=
 TELL=
 UPD=
 MYHOME=
-while getopts fhrnu flag; do
+SYNCHOME=
+while getopts fhHrnu flag; do
     case $flag in
         f)
             FORCE="-f"
             ;;
         h)
             MYHOME="-h"
+            ;;
+        H)
+            SYNCHOME=1
             ;;
         n)
             TELL="-n"
@@ -88,6 +93,9 @@ printf "\nDone checking Movies.\n"
 printf "\nChecking rsync of Pictures ...\n"
 chk -P $FORCE $TELL $MYHOME $UPD
 printf "\nDone checking Pictures.\n"
-printf "\nChecking rsync of Home directories ...\n"
-chk -H $FORCE $TELL $MYHOME $UPD
-printf "\nDone checking Home.\n"
+[ "$SYNCHOME" ] && {
+    printf "\nChecking rsync of Home directories ...\n"
+    chk -H $FORCE $TELL $MYHOME $UPD
+    printf "\nDone checking Home.\n"
+}
+printf "\nDone.\n"
