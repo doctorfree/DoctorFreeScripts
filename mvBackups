@@ -10,6 +10,7 @@ OLD_BACKUP_DB="/Volumes/My_Book_Studio/Backups.backupdb"
 NEW_BACKUP_DB="/Volumes/LaCie_8TB/Backups.backupdb"
 BYPASS="/System/Library/Extensions/TMSafetyNet.kext/Contents/Helpers/bypass"
 SHOWME=
+SHOW_USAGE=
 CMD=`basename $0`
 
 usage() {
@@ -20,7 +21,9 @@ usage() {
     printf "\t-b path-to-bypass specifies the location of the bypass command\n"
     printf "\t-s path-to-source-db specifies the previous backup location\n"
     printf "\t-d path-to-destination-db specifies the new backup location\n"
-    printf "\t-u prints this usage message and exits\n\n"
+    printf "\t-u prints this usage message and exits\n"
+    printf "\nWith these arguments I would execute the following command:\n"
+    printf "\nsudo ${BYPASS} mv ${OLD_BACKUP_DB} ${NEW_BACKUP_DB}\n\n"
     exit 1
 }
 
@@ -39,7 +42,7 @@ while getopts b:d:s:nu flag; do
             SHOWME=1;
             ;;
         u)
-            usage;
+            SHOW_USAGE=1;
             ;;
     esac
 done
@@ -70,6 +73,8 @@ shift $((OPTIND - 1));
     usage
 }
 
+[ "${SHOW_USAGE}" ] && usage
+
 printf "\nUsing ${BYPASS} to move Time Machine backups at:"
 printf "\n\t${OLD_BACKUP_DB}\nto\n\t${NEW_BACKUP_DB}\n"
 
@@ -87,11 +92,11 @@ printf "\n\t${OLD_BACKUP_DB}\nto\n\t${NEW_BACKUP_DB}\n"
 
 [ "$SHOWME" ] && {
     printf "\n\nWould execute the following command:\n"
-    printf "\nsudo /System/Library/Extensions/TMSafetyNet.kext/Contents/Helpers/bypass mv ${OLD_BACKUP_DB} ${NEW_BACKUP_DB}\n\n"
+    printf "\nsudo ${BYPASS} mv ${OLD_BACKUP_DB} ${NEW_BACKUP_DB}\n\n"
     exit 0
 }
 
 printf "\nMoving Time Machine backups at:"
 printf "\n\t${OLD_BACKUP_DB}\nto\n\t${NEW_BACKUP_DB}\n"
 printf "\nThis make take a while.\n"
-sudo /System/Library/Extensions/TMSafetyNet.kext/Contents/Helpers/bypass mv "${OLD_BACKUP_DB}" "${NEW_BACKUP_DB}"
+sudo ${BYPASS} mv "${OLD_BACKUP_DB}" "${NEW_BACKUP_DB}"

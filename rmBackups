@@ -10,6 +10,7 @@ BACKUP_DB="/Volumes/My_Book_Studio/Backups.backupdb"
 BYPASS="/System/Library/Extensions/TMSafetyNet.kext/Contents/Helpers/bypass"
 SHOWME=
 CMD=`basename $0`
+SHOW_USAGE=
 
 usage() {
     printf "\nUsage: $CMD [-n] [-b path-to-bypass] [-d path-to-backupdb] [-u]\n"
@@ -17,7 +18,9 @@ usage() {
     printf "\t-n indicates no execution, just tell me what you would do\n"
     printf "\t-b path-to-bypass specifies the location of the bypass command\n"
     printf "\t-d path-to-backupdb specifies the backup database location\n"
-    printf "\t-u prints this usage message and exits\n\n"
+    printf "\t-u prints this usage message and exits\n"
+    printf "\nWith these arguments I would execute the following command:\n"
+    printf "\nsudo ${BYPASS} rm -rf ${BACKUP_DB}\n\n"
     exit 1
 }
 
@@ -33,7 +36,7 @@ while getopts b:d:nu flag; do
             SHOWME=1;
             ;;
         u)
-            usage;
+            SHOW_USAGE=1;
             ;;
     esac
 done
@@ -56,6 +59,8 @@ shift $((OPTIND - 1));
     usage
 }
 
+[ "${SHOW_USAGE}" ] && usage
+
 printf "\nUsing ${BYPASS} to completely remove Time Machine backups at:"
 printf "\n\t${BACKUP_DB}\n"
 
@@ -73,11 +78,11 @@ printf "\n\t${BACKUP_DB}\n"
 
 [ "$SHOWME" ] && {
     printf "\n\nWould execute the following command:\n"
-    printf "\nsudo /System/Library/Extensions/TMSafetyNet.kext/Contents/Helpers/bypass rm -rf ${BACKUP_DB}\n\n"
+    printf "\nsudo ${BYPASS} rm -rf ${BACKUP_DB}\n\n"
     exit 0
 }
 
 printf "\nRemoving Time Machine backups at:"
 printf "\n\t${BACKUP_DB}\n"
 printf "\nThis make take a while.\n"
-sudo /System/Library/Extensions/TMSafetyNet.kext/Contents/Helpers/bypass rm -rf "${BACKUP_DB}"
+sudo ${BYPASS} rm -rf "${BACKUP_DB}"
