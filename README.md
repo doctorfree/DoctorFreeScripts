@@ -120,6 +120,8 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
     populate my USB flash drive of movies with HTML documents to provide an
     initial way to navigate around.
 
+[**mvBackups**](mvBackups) - Move Time Machine backups with bypass command.
+
 [**mvfem**](mvfem) - Rename a downloaded Femjoy zip archive that contains two model names to use only one model's name so it will work with femzip.
 
 [**only**](only) - Report files or directories only in one directory hierarchy but not in a second directory hierarchy.
@@ -127,6 +129,8 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
 [**packaud**](packaud) - archive and compress my Audacity project files.
 
 [**piclinks**](piclinks) - Create symbolic links to photo files where possible to reduce duplicate storage of photos. Link into my Aperture libraries.
+
+[**rmBackups**](rmBackups) - Remove Time Machine backups with bypass command.
 
 [**stop_leapd**](stop_leapd) - Stop the Leap Motion daemon and agent then backup and remove the plist files so they do not auto start. Includes Bash functions to replace auto start with manual start/stop
 
