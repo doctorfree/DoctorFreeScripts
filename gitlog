@@ -84,32 +84,37 @@
 DAYS=1
 SINCE=
 NAME_ONLY=
+REVERSE=
 USAGE=
 FULL=
 
 usage() {
-    printf "Usage: gitlog [-f] [-n] [-s days] [-u]\n"
+    printf "Usage: gitlog [-f] [-n] [-r] [-s days] [-u]\n"
     printf "Where:\n\t-n indicates name-only output mode"
     printf "\n\t-f specifies full log output (do not pretty format the output)"
+    printf "\n\t-r displays the log entries in reverse order.\n"
     printf "\n\t-s # specifies log output for the last # days only"
     printf "\n\t-u displays this usage message.\n"
     printf "\nWould have executed the following command:"
     if [ "$FULL" ]
     then
-        printf "\n\tgit log $NAME_ONLY $SINCE\n\n"
+        printf "\n\tgit log $REVERSE $NAME_ONLY $SINCE\n\n"
     else
-        printf "\n\tgit log --pretty=format:\"%%an, %%ad :%%n   %%s\" $NAME_ONLY $SINCE\n\n"
+        printf "\n\tgit log $REVERSE --pretty=format:\"%%an, %%ad :%%n   %%s\" $NAME_ONLY $SINCE\n\n"
     fi
     exit 1
 }
 
-while getopts fns:u flag; do
+while getopts fnrs:u flag; do
     case $flag in
         f)
             FULL=1
             ;;
         n)
             NAME_ONLY="--name-only";
+            ;;
+        r)
+            REVERSE="--reverse";
             ;;
         s)
             SINCE="--since=$OPTARG.days";
@@ -127,9 +132,9 @@ then
 else
     if [ "$FULL" ]
     then
-        git log $NAME_ONLY $SINCE
+        git log $REVERSE $NAME_ONLY $SINCE
     else
-        git log --pretty=format:"%an, %ad :%n   %s" $NAME_ONLY $SINCE
+        git log $REVERSE --pretty=format:"%an, %ad :%n   %s" $NAME_ONLY $SINCE
      fi
 fi
 
