@@ -168,10 +168,10 @@ do
             check "$i" "$inst" 107
             ;;
         bash_profile)
-            check "$i" "$inst" 11
+            check "$i" "$inst" 16
             ;;
         bashrc)
-            check "$i" "$inst" 37
+            check "$i" "$inst" 49
             ;;
         wb)
             check "$i" "$inst" 8
