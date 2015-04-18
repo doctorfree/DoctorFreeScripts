@@ -165,13 +165,13 @@ do
     case "$i" in
         # I have heavily modified Bash startup files for work.
         bash_aliases)
-            check "$i" "$inst" 107
+            check "$i" "$inst" 115
             ;;
         bash_profile)
             check "$i" "$inst" 16
             ;;
         bashrc)
-            check "$i" "$inst" 49
+            check "$i" "$inst" 65
             ;;
         wb)
             check "$i" "$inst" 8
