@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# wikivim - Applescript used in conjunction with "It's All Text" Firefox
+#     Add-on to edit Wikipedia (or any text edited in the browser) with Vim.
+#
+# Written 04-Jul-2015 by Ronald Joe Record <rr at ronrecord dot com>
+#
+# Copyright (c) 2015, Ronald Joe Record
+# All rights reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# The Software is provided "as is", without warranty of any kind, express or
+# implied, including but not limited to the warranties of merchantability,
+# fitness for a particular purpose and noninfringement. In no event shall the
+# authors or copyright holders be liable for any claim, damages or other
+# liability, whether in an action of contract, tort or otherwise, arising from,
+# out of or in connection with the Software or the use or other dealings in
+# the Software.
+#
+# This also works but I prefer iTerm 2
+# exec /usr/X11/bin/xterm -fg cyan -bg black -bw 2 -bd cyan \
+#                         -fn lucidasanstypewriter-18 -e $VISUAL ${1+"$@"}
+#
+# Use Apple Script to open a Vim editing session in iTerm 2
+: ${VISUAL='vi'}
+arg="\\\"${1+"$@"}\\\""
+cmd="$VISUAL ${arg}"
+
+osascript &>/dev/null <<EOF
+	activate application "iTerm 2"
+	tell application "iTerm 2"
+	    set myterm to (make new terminal)
+	    tell myterm
+			set mysession to (make new session at the end of sessions)
+			tell mysession
+				exec command "$cmd"
+			end tell
+	    end tell
+    end tell
+EOF

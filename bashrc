@@ -83,6 +83,11 @@ function stop-leap() {
     [ "$RUNNING" ] && killall Leap\ Motion
 }
 
+# Source in the iTerm 2 tab function if it exists
+if [ -f ~/.tab_bash ]; then
+    . ~/.tab_bash
+fi
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
