@@ -161,3 +161,5 @@ for all files in that directory hierarchy
      extensively modify the favorites by both name and number so this script
      may not be that useful to others. Get MacEarl's original and do to it
      what I have done to this.
+
+[**wikivim**](wikivim) - Use in conjunction with It's All Text Firefox Add-On to use Vim to edit wiki pages. On OS X use Applescript and iTerm 2, otherwise use Bash and xterm.
