@@ -27,10 +27,20 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
+# Why doesn't this work:
+#               activate mySession
+#               set mySessionName to name of mySession
+#               if useCurrent then
+#                   repeat with thisSession in sessions of myTerminal
+#                       set thisName to name of thisSession
+#                       if thisName is not equal to mySessionName then
+#                           terminate thisSession
+#                       end if
+#                   end repeat
+#               end if
 
 : ${VISUAL='vi'}
 arg="\\\"${1+"$@"}\\\""
-cmd="$VISUAL ${arg}"
 app="iTerm 2"
 
 if [ `uname -s` != "Darwin" ]
@@ -39,13 +49,32 @@ then
                             -fn lucidasanstypewriter-18 -e $VISUAL ${1+"$@"}
 else
     osascript &>/dev/null <<EOF
-        activate application "$app"
+        if application "$app" is running then
+            set useCurrent to false
+        else
+            set useCurrent to true
+        end if
+        set cmd to "$VISUAL ${arg}"
         tell application "$app"
-            set myterm to (make new terminal)
-            tell myterm
-                set mysession to (make new session at the end of sessions)
-                tell mysession
-                    exec command "$cmd"
+            activate
+            if (count of terminals) = 0 then
+                set myTerminal to (make new terminal)
+            else
+                set myTerminal to current terminal
+            end if
+            tell myTerminal
+                if useCurrent then
+                    if (count of sessions) = 0 then
+                        set cmdSess to (make new session at the end of sessions)
+                    else
+                        set cmdSess to first session
+                    end if
+                else
+                    set cmdSess to (make new session at the end of sessions)
+                end if
+                activate cmdSess
+                tell cmdSess
+                    exec command cmd
                 end tell
             end tell
         end tell
