@@ -47,6 +47,19 @@ Contents:
 
 [**bashrc**](bashrc) - Bash startup, install in $HOME/.bashrc
 
+[**cap2any**](cap2any) - Uses ffmpeg to capture screen video and write to the specified audio/video format
+
+     This program works by either linking or copying cap2any to a file
+     which specifies the desired output format by its name.
+     Alternately, the -o command line option can be used to specify
+     the output file format.
+ 
+     For example, if you want to capture to MP4 then you could
+     create a symbolic link from cap2any to cap2mp4 as follows:
+         ln -s cap2any cap2mp4
+     Similarly, symbolic links (or copies or hard links) could be created to
+     capture to any other audio/video format. Default output format is AVI.
+
 [**chkall**](chkall) - Invokes "chk" to check the Aperture, Movies, and Pictures rsync'd directories and sync them if specified and necessary
 
 [**chk**](chk) - Check the specified directories/libraries and see if they need to by sync'd with rsync to the USB flash drive backup
