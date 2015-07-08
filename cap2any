@@ -96,12 +96,106 @@
 # $ ffmpeg -f avfoundation -pixel_format bgr0 -i "default:none" out.avi
 # 
 
+GetVideoNum() {
+    video_devs=
+    video_nums=
+    ${FFMPEG} -f avfoundation -list_devices true -i "" 2>&1 | grep AVFoundation | grep -v "devices:" | egrep -i "Video|Camera|Screen" | awk ' { for(i=6;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}' > /tmp/__avout$$
+    while read line
+    do
+        devnam=`echo $line | awk ' { for(i=2;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS } '`
+        devnum=`echo $line | awk ' { print $1 } '`
+        if [ "$video_devs" ]
+        then
+            video_devs="$video_devs, \"$devnam\""
+            video_nums="$video_nums, \"$devnum\""
+        else
+            video_devs="\"$devnam\""
+            video_nums="\"$devnum\""
+        fi
+    done < /tmp/__avout$$
+    video_devs="$video_devs, \"default\""
+    video_nums="$video_nums, \"default\""
+    video_devs="$video_devs, \"none\""
+    video_nums="$video_nums, \"none\""
+
+    selected_video_device=$(osascript <<EOF
+        set video_devices to {$video_devs}
+        set video_numbers to {$video_nums}
+        set video_device to (choose from list video_devices with title "AVFoundation Video Devices" with prompt "Select a video device" default items {"$default_video_device"})
+
+        set video_number to "$default_video_number"
+        if video_device is false then
+            set video_device to "$default_video_device"
+        else
+            set video_number to item (list_position((video_device as string), video_devices)) of video_numbers
+        end if
+        return video_number as string
+
+        on list_position(this_item, this_list)
+            repeat with i from 1 to count of this_list
+                if item i of this_list is this_item then return i
+            end repeat
+            return 0
+        end list_position
+EOF)
+    VIDEO=`echo ${selected_video_device} | sed -e "s/\[//" -e "s/\]//"`
+}
+
+GetAudioNum() {
+    audio_devs=
+    audio_nums=
+    ${FFMPEG} -f avfoundation -list_devices true -i "" 2>&1 | grep AVFoundation | grep -v "devices:" | egrep -i "Audio|Sound|Microphone" | awk ' { for(i=6;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}' > /tmp/__avout$$
+    while read line
+    do
+        devnam=`echo $line | awk ' { for(i=2;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS } '`
+        devnum=`echo $line | awk ' { print $1 } '`
+        if [ "$audio_devs" ]
+        then
+            audio_devs="$audio_devs, \"$devnam\""
+            audio_nums="$audio_nums, \"$devnum\""
+        else
+            audio_devs="\"$devnam\""
+            audio_nums="\"$devnum\""
+        fi
+    done < /tmp/__avout$$
+    audio_devs="$audio_devs, \"default\""
+    audio_nums="$audio_nums, \"default\""
+    audio_devs="$audio_devs, \"none\""
+    audio_nums="$audio_nums, \"none\""
+
+    selected_audio_device=$(osascript <<EOF
+        set audio_devices to {$audio_devs}
+        set audio_numbers to {$audio_nums}
+        set audio_device to (choose from list audio_devices with title "AVFoundation Audio Devices" with prompt "Select an audio device" default items {"$default_audio_device"})
+
+        if audio_device is false then
+            set audio_device to "$default_audio_device"
+            set audio_number to "$default_audio_number"
+        else
+            set audio_number to item (list_position((audio_device as string), audio_devices)) of audio_numbers
+        end if
+        return audio_number as string
+
+        on list_position(this_item, this_list)
+            repeat with i from 1 to count of this_list
+                if item i of this_list is this_item then return i
+            end repeat
+            return 0
+        end list_position
+EOF)
+    AUDIO=`echo ${selected_audio_device} | sed -e "s/\[//" -e "s/\]//"`
+}
+
 # I put the latest experimental ffmpeg in /usr/local/bin but if it's not there
 # simply revert to whatever is first in our PATH
 FFMPEG=/usr/local/bin/ffmpeg
 [ -x ${FFMPEG} ] || FFMPEG=ffmpeg
-VIDEO=`${FFMPEG} -f avfoundation -list_devices true -i "" 2>&1 | grep AVFoundation | grep Capture | grep screen | awk ' { print $6 } ' | sed -e "s/\[//" -e "s/\]//"`
-AUDIO=`${FFMPEG} -f avfoundation -list_devices true -i "" 2>&1 | grep AVFoundation | grep Built | grep Microphone | awk ' { print $6 } ' | sed -e "s/\[//" -e "s/\]//"`
+prompt_video=1
+prompt_audio=1
+default_audio_device=`${FFMPEG} -f avfoundation -list_devices true -i "" 2>&1 | grep AVFoundation | grep Built | grep Microphone | head -1 | awk ' { for(i=7;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+default_audio_number=`${FFMPEG} -f avfoundation -list_devices true -i "" 2>&1 | grep AVFoundation | grep Built | grep Microphone | head -1 | awk ' {print $6}'`
+default_video_device=`${FFMPEG} -f avfoundation -list_devices true -i "" 2>&1 | grep AVFoundation | grep Capture | grep screen | head -1 | awk ' { for(i=7;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+default_video_number=`${FFMPEG} -f avfoundation -list_devices true -i "" 2>&1 | grep AVFoundation | grep Capture | grep screen | head -1 | awk ' { print $6 }'`
 
 ME=`basename $0`
 if [ "$ME" = "cap2any" ]
@@ -171,9 +265,11 @@ while getopts A:V:o:p:q:r:b:t:s:v:z:a:c:Iydu flag; do
     case $flag in
         A)
             AUDIO="$OPTARG"
+            prompt_audio=
             ;;
         V)
             VIDEO="$OPTARG"
+            prompt_video=
             ;;
         a)
             ACODEC="-acodec $OPTARG"
@@ -238,6 +334,16 @@ while getopts A:V:o:p:q:r:b:t:s:v:z:a:c:Iydu flag; do
 done
 shift $(( OPTIND - 1 ))
 
+[ "$USAGE" ] || {
+    [ "$prompt_audio" ] && GetAudioNum
+    [ "$prompt_video" ] && GetVideoNum
+}
+[ "$AUDIO" ] || {
+    AUDIO=`echo ${default_audio_number} | sed -e "s/\[//" -e "s/\]//"`
+}
+[ "$VIDEO" ] || {
+    VIDEO=`echo ${default_video_number} | sed -e "s/\[//" -e "s/\]//"`
+}
 OUT_DIR=$HOME/Movies/ScreenCaps/$DIR
 [ -d "${OUT_DIR}" ] || mkdir -p "${OUT_DIR}"
 OUT_FILE=${OUT_DIR}/capture_$$.$SUF
