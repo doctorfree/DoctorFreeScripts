@@ -96,7 +96,6 @@
 # $ ffmpeg -f avfoundation -pixel_format bgr0 -i "default:none" out.avi
 # 
 
-# TODO: add text based interface for those systems that do not have osascript
 GetVideoNum() {
     video_devs=
     video_nums=
@@ -109,40 +108,63 @@ GetVideoNum() {
         then
             video_devs="$video_devs, \"$devnam\""
             video_nums="$video_nums, \"$devnum\""
+            video_dev_names=("${video_dev_names[@]}" "$devnam")
+            video_dev_numbs=("${video_dev_numbs[@]}" "$devnum")
         else
             video_devs="\"$devnam\""
             video_nums="\"$devnum\""
+            video_dev_names=("$devnam")
+            video_dev_numbs=("$devnum")
         fi
     done < /tmp/__avout$$
-    video_devs="$video_devs, \"default\""
-    video_nums="$video_nums, \"default\""
-    video_devs="$video_devs, \"none\""
-    video_nums="$video_nums, \"none\""
+    video_devs="$video_devs, \"default\", \"none\""
+    video_nums="$video_nums, \"default\", \"none\""
+    video_dev_names=("${video_dev_names[@]}" "default" "none")
+    video_dev_numbs=("${video_dev_numbs[@]}" "default" "none")
 
-    selected_video_device=$(osascript <<EOF
-        set video_devices to {$video_devs}
-        set video_numbers to {$video_nums}
-        set video_device to (choose from list video_devices with title "AVFoundation Video Devices" with prompt "Select a video device" default items {"$default_video_device"})
-
-        set video_number to "$default_video_number"
-        if video_device is false then
-            set video_device to "$default_video_device"
-        else
-            set video_number to item (list_position((video_device as string), video_devices)) of video_numbers
-        end if
-        return video_number as string
-
-        on list_position(this_item, this_list)
-            repeat with i from 1 to count of this_list
-                if item i of this_list is this_item then return i
-            end repeat
-            return 0
-        end list_position
+    if [ "$APPLE_SCRIPT" ]
+    then
+        selected_video_device=$(osascript <<EOF
+            set video_devices to {$video_devs}
+            set video_numbers to {$video_nums}
+            set video_device to (choose from list video_devices with title "AVFoundation Video Devices" with prompt "Select a video device" default items {"$default_video_device"})
+    
+            set video_number to "$default_video_number"
+            if video_device is false then
+                set video_device to "$default_video_device"
+            else
+                set video_number to item (list_position((video_device as string), video_devices)) of video_numbers
+            end if
+            return video_number as string
+    
+            on list_position(this_item, this_list)
+                repeat with i from 1 to count of this_list
+                    if item i of this_list is this_item then return i
+                end repeat
+                return 0
+            end list_position
 EOF)
-    VIDEO=`echo ${selected_video_device} | sed -e "s/\[//" -e "s/\]//"`
+        VIDEO=`echo ${selected_video_device} | sed -e "s/\[//" -e "s/\]//"`
+    else
+        # Use the Bash select statement to get user device selection
+        video_num_size=${#video_dev_numbs[@]}
+        printf '\nSelect the video device you wish to capture:\n\n'
+        PS3='Video device number? '
+        select device in "${video_dev_names[@]}"
+        do
+            if ([ $REPLY -gt 0 ] && [ $REPLY -le $video_num_size ])
+            then
+                video_index=`expr $REPLY - 1`
+                video_device=${video_dev_numbs[$video_index]}
+                VIDEO=`echo ${video_device} | sed -e "s/\[//" -e "s/\]//"`
+                break
+            else
+                printf "Unexpected reply: $REPLY"
+            fi
+        done
+    fi
 }
 
-# TODO: add text based interface for those systems that do not have osascript
 GetAudioNum() {
     audio_devs=
     audio_nums=
@@ -155,37 +177,61 @@ GetAudioNum() {
         then
             audio_devs="$audio_devs, \"$devnam\""
             audio_nums="$audio_nums, \"$devnum\""
+            audio_dev_names=("${audio_dev_names[@]}" "$devnam")
+            audio_dev_numbs=("${audio_dev_numbs[@]}" "$devnum")
         else
             audio_devs="\"$devnam\""
             audio_nums="\"$devnum\""
+            audio_dev_names=("$devnam")
+            audio_dev_numbs=("$devnum")
         fi
     done < /tmp/__avout$$
-    audio_devs="$audio_devs, \"default\""
-    audio_nums="$audio_nums, \"default\""
-    audio_devs="$audio_devs, \"none\""
-    audio_nums="$audio_nums, \"none\""
+    audio_devs="$audio_devs, \"default\", \"none\""
+    audio_nums="$audio_nums, \"default\", \"none\""
+    audio_dev_names=("${audio_dev_names[@]}" "default" "none")
+    audio_dev_numbs=("${audio_dev_numbs[@]}" "default" "none")
 
-    selected_audio_device=$(osascript <<EOF
-        set audio_devices to {$audio_devs}
-        set audio_numbers to {$audio_nums}
-        set audio_device to (choose from list audio_devices with title "AVFoundation Audio Devices" with prompt "Select an audio device" default items {"$default_audio_device"})
-
-        if audio_device is false then
-            set audio_device to "$default_audio_device"
-            set audio_number to "$default_audio_number"
-        else
-            set audio_number to item (list_position((audio_device as string), audio_devices)) of audio_numbers
-        end if
-        return audio_number as string
-
-        on list_position(this_item, this_list)
-            repeat with i from 1 to count of this_list
-                if item i of this_list is this_item then return i
-            end repeat
-            return 0
-        end list_position
+    if [ "$APPLE_SCRIPT" ]
+    then
+        selected_audio_device=$(osascript <<EOF
+            set audio_devices to {$audio_devs}
+            set audio_numbers to {$audio_nums}
+            set audio_device to (choose from list audio_devices with title "AVFoundation Audio Devices" with prompt "Select an audio device" default items {"$default_audio_device"})
+    
+            if audio_device is false then
+                set audio_device to "$default_audio_device"
+                set audio_number to "$default_audio_number"
+            else
+                set audio_number to item (list_position((audio_device as string), audio_devices)) of audio_numbers
+            end if
+            return audio_number as string
+    
+            on list_position(this_item, this_list)
+                repeat with i from 1 to count of this_list
+                    if item i of this_list is this_item then return i
+                end repeat
+                return 0
+            end list_position
 EOF)
-    AUDIO=`echo ${selected_audio_device} | sed -e "s/\[//" -e "s/\]//"`
+        AUDIO=`echo ${selected_audio_device} | sed -e "s/\[//" -e "s/\]//"`
+    else
+        # Use the Bash select statement to get user device selection
+        audio_num_size=${#audio_dev_numbs[@]}
+        printf '\nSelect the audio device you wish to capture:\n\n'
+        PS3='Audio device number? '
+        select device in "${audio_dev_names[@]}"
+        do
+            if ([ $REPLY -gt 0 ] && [ $REPLY -le $audio_num_size ])
+            then
+                audio_index=`expr $REPLY - 1`
+                audio_device=${audio_dev_numbs[$audio_index]}
+                AUDIO=`echo ${audio_device} | sed -e "s/\[//" -e "s/\]//"`
+                break
+            else
+                printf "Unexpected reply: $REPLY"
+            fi
+        done
+    fi
 }
 
 # I put the latest experimental ffmpeg in /usr/local/bin but if it's not there
@@ -222,6 +268,8 @@ QSCALE=
 RATE=
 ASAMPLE=
 VSAMPLE=
+CHARACTER=
+APPLE_SCRIPT=
 THREAD=
 ITUNES=
 
@@ -230,8 +278,9 @@ usage() {
   printf "\n\t\t[-V screen device index] [-A audio device index]"
   printf "\n\t\t[-o output format (lower case)] [-O output filename no suffix]"
   printf "\n\t\t[-q scale] [-r rate] [-b audio bitrate] [-z video bitrate]"
-  printf "\n\t\t[-s size] [-t threads] [-I] [-d] [-D] [-y] [-u]"
+  printf "\n\t\t[-s size] [-t threads] [-I] [-C] [-d] [-D] [-y] [-u]"
   printf "\n\nWhere:\n\t-d indicates tell me what you would do"
+  printf "\n\t-C indicates use the character interface, ignore AppleScript"
   printf "\n\t-D indicates use default audio and video devices, don't prompt"
   printf "\n\t-o output format specifies the 3 letter lower case output format"
   printf "\n\t-O output filename specifies the output filename without suffix"
@@ -266,7 +315,7 @@ usage() {
   exit 1
 }
 
-while getopts A:V:o:O:p:q:r:b:t:s:v:z:a:c:IydDu flag; do
+while getopts A:V:o:O:p:q:r:b:t:s:v:z:a:c:IydCDu flag; do
     case $flag in
         A)
             AUDIO="$OPTARG"
@@ -295,6 +344,9 @@ while getopts A:V:o:O:p:q:r:b:t:s:v:z:a:c:IydDu flag; do
         c)
             CODEC="-codec $OPTARG"
             ;;
+        C)
+            CHARACTER=1
+            ;;
         d)
             TELL=1
             ;;
@@ -303,14 +355,7 @@ while getopts A:V:o:O:p:q:r:b:t:s:v:z:a:c:IydDu flag; do
             prompt_video=
             ;;
         I)
-            inst=`type -p osascript`
-            if [ "$inst" ]
-            then
-                ITUNES=1
-            else
-                echo "AppleScript is not supported on this platform."
-                echo "Unable to automate the installation in iTunes."
-            fi
+            ITUNES=1
             ;;
         p)
             PRESET="-preset $OPTARG"
@@ -346,6 +391,20 @@ while getopts A:V:o:O:p:q:r:b:t:s:v:z:a:c:IydDu flag; do
 done
 shift $(( OPTIND - 1 ))
 
+inst=`type -p osascript`
+[ "$inst" ] && APPLE_SCRIPT=1
+[ "$CHARACTER" ] && APPLE_SCRIPT=
+if ([ "$APPLE_SCRIPT" ] && [ "$ITUNES" ])
+then
+    echo "Capture will automatically be imported into iTunes"
+else
+    if [ "$ITUNES" ]
+    then
+        echo "AppleScript is not supported on this platform."
+        echo "Unable to automate the installation in iTunes."
+        ITUNES=
+    fi
+fi
 OUT_DIR=$HOME/Movies/ScreenCaps/$DIR
 [ -d "${OUT_DIR}" ] || mkdir -p "${OUT_DIR}"
 [ "${OUT_PRE}" ] || OUT_PRE="capture_$$"
@@ -385,7 +444,7 @@ CAP="-f avfoundation -i $VIDEO:$AUDIO ${PIX} ${RAT} ${LOG} ${EXP} ${VSY}"
 # We delay until now in order to gather up all the other command line options.
 [ "$USAGE" ] && usage
 
-echo "${FFMPEG} ${CAP} ${OPTS} ${OUT_FILE}"
+printf "\n${FFMPEG} ${CAP} ${OPTS} ${OUT_FILE}\n"
 [ "$TELL" ] || {
     ${FFMPEG} ${CAP} ${OPTS} ${OUT_FILE}
 
