@@ -68,14 +68,18 @@ FindAndLink() {
             fixed=`echo "$i" | sed -e "s/\[/\\\\\[/g" -e "s/\]/\\\\\]/g"`
             ck1=`grep "$fixed" SUMS | awk ' { print $1 } '`
             [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
-            # Could be in multiple Aperture libraries, use the first one
-            for lib in "$LIBS"/*.aplibrary/Masters
+            # Could be in multiple Aperture, migrated Aperture, or Photos
+            # libraries, use the first one we find searching Photos then
+            # Aperture then migrated Aperture.
+            for lib in "$LIBS"/*.photoslibrary/Masters "$LIBS"/*.aplibrary/Masters "$LIBS"/*.migratedaplibrary/Masters
             do
-                b=`grep "$ck1" "$lib/SUMS" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
-                ck2=`echo $b | sed -e "s/\.\///"`
-                [ "$ck2" ] || continue
-                remlink "$lib/$ck2" "$i"
-                break
+                [ -d "$lib" ] && {
+                    b=`grep "$ck1" "$lib/SUMS" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+                    ck2=`echo $b | sed -e "s/\.\///"`
+                    [ "$ck2" ] || continue
+                    remlink "$lib/$ck2" "$i"
+                    break
+                }
             done
         fi
     done
@@ -139,11 +143,13 @@ cd "$LIBS"
 [ "$QUICK" ] || {
     printf "\nUpdating Aperture libraries SUMS files ...\n"
     [ "$TELL" ] || {
-        for aplib in *.aplibrary/Masters
+        for aplib in *.photoslibrary/Masters *.aplibrary/Masters *.migratedaplibrary/Masters
         do
-            cd "$aplib"
-            updsums
-            cd ../..
+            [ -d "$aplib" ] && {
+                cd "$aplib"
+                updsums
+                cd ../..
+            }
         done
     }
 }
@@ -196,4 +202,4 @@ fi
     fi
 }
 
-echo "Done."
+printf "\n\nDone."
