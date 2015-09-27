@@ -92,6 +92,8 @@ Contents:
 
 [**filenumset**](filenumset) - Convenience script to rename files beginning without a track number to a filename with track number as prefix. For example, the command "filenumset foo.mp3" might rename "foo.mp3" to "5 foo.mp3".
 
+[**find2import**](find2import) - Find and report photo albums and movies that may not have already been imported to iTunes
+
 [**findempty**](findempty) - Find and report empty directories. Optionally, remove them.
 
 [**findgrep**](findgrep) - Recursive grep in current directory.
