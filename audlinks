@@ -27,18 +27,23 @@
 # the Software.
 #
 
-I="/Volumes/Lacie_Porsche_1TB/iTunes/Music"
+ITUNES="/Volumes/Lacie_Porsche_1TB/iTunes"
+A="${ITUNES}/Audiobooks"
+I="${ITUNES}/Music"
 M="$HOME/Music"
 W="/Volumes/My_Book_Studio/Audio/Imported"
+B="${W}/Audiobooks"
 WORK=1
 MUSE=
+BOOK=
 USE_SUM=
 TELL=
 
 usage() {
     printf "\nUsage: audlinks [-M Music Dir] [-W Work Dir]"
-    printf "\n\t[-I iTunes Dir] [-b] [-d] [-c] [-m] [-u]\n"
+    printf "\n\t[-I iTunes Dir] [-a] [-b] [-d] [-c] [-m] [-u]\n"
     printf "\nWhere:\n\t-d indicates tell me what you would do"
+    printf "\n\t-a indicates search audiobooks directory"
     printf "\n\t-b indicates search both work and music directories"
     printf "\n\t-c indicates use chksums"
     printf "\n\t-m indicates only search music directory"
@@ -58,6 +63,13 @@ remlink() {
 }
 
 FindAndLink() {
+    T="$1"
+    abook=
+    [ "$T" = "$A" ] && {
+        abook=1
+        # iTunes doesn't use the audiobook title in its library hierarchy
+        title=
+    }
     find . -type f | while read i
     do
         found=
@@ -70,9 +82,11 @@ FindAndLink() {
                 b=`echo "$b" | sed -e "s/:/_/g"`
             }
             d=`dirname "$i"`
-            title=`basename "$d"`
-            echo "$title" | grep ":" > /dev/null && {
-                title=`echo "$title" | sed -e "s/:/_/g"`
+            [ "$abook" ] || {
+                title=`basename "$d"`
+                echo "$title" | grep ":" > /dev/null && {
+                    title=`echo "$title" | sed -e "s/:/_/g"`
+                }
             }
             e=`dirname "$d"`
             artist=`basename "$e"`
@@ -81,11 +95,11 @@ FindAndLink() {
                 ck1=`grep "$i" SUMS | awk ' { print $1 } '`
                 [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
             }
-            [ -f "$I/$artist/$title/$b" ] && found="$b"
+            [ -f "$T/$artist/$title/$b" ] && found="$b"
             [ "$found" ] || {
                 # Check for file with track number added as prefix
-                [ -d "$I/$artist/$title" ] && {
-                    pushd "$I/$artist/$title" > /dev/null
+                [ -d "$T/$artist/$title" ] && {
+                    pushd "$T/$artist/$title" > /dev/null
                     for song in [0-9][0-9]*
                     do
                         notrack=${song:3}
@@ -101,13 +115,13 @@ FindAndLink() {
             [ "$found" ] && {
                 if [ "$USE_SUM" ]
                 then
-                    ck2 =`grep "$found" "$I/SUMS" | awk ' { print $1 } '`
-                    [ "$ck2" ] || ck2=`cksum "$I/$artist/$title/$found" | awk ' { print $1 } '`
+                    ck2 =`grep "$found" "$T/SUMS" | awk ' { print $1 } '`
+                    [ "$ck2" ] || ck2=`cksum "$T/$artist/$title/$found" | awk ' { print $1 } '`
                     [ $ck1 -eq $ck2 ] && {
-                        remlink "$I/$artist/$title/$found" "$i"
+                        remlink "$T/$artist/$title/$found" "$i"
                     } 
                 else
-                    remlink "$I/$artist/$title/$found" "$i"
+                    remlink "$T/$artist/$title/$found" "$i"
                 fi
             }
             [ "$found" ] || {
@@ -118,7 +132,7 @@ FindAndLink() {
                     [ "$iname" ] && {
                         b=`echo $iname | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
                         b=`echo $b | sed -e "s/\.\///"`
-                        remlink "$I/$b" "$i"
+                        remlink "$T/$b" "$i"
                     }
                 }
             }
@@ -138,7 +152,7 @@ FindAndRemove() {
     printf "\n"
 }
 
-while getopts M:W:I:bdcmu flag; do
+while getopts M:W:I:abdcmu flag; do
     case $flag in
         M)
             M="$OPTARG"
@@ -148,6 +162,9 @@ while getopts M:W:I:bdcmu flag; do
             ;;
         I)
             I="$OPTARG"
+            ;;
+        a)
+            BOOK=1
             ;;
         b)
             MUSE=1
@@ -197,9 +214,25 @@ MSUMS="$M"/SUMS
         [ "$TELL" ] || updsums
     }
     printf "\nFinding and symlinking duplicate files in $W ...\n"
-    FindAndLink
+    FindAndLink "$I"
   else
     echo "$W does not exist or is not a directory. Skipping."
+  fi
+}
+
+[ "$BOOK" ] && {
+  if [ -d "$B" ]
+  then
+    cd "$B"
+    # Update the SUMS file if we are using cksums
+    [ "$USE_SUM" ] && {
+        printf "\nUpdating $M/SUMS\n"
+        [ "$TELL" ] || updsums
+    }
+    printf "\nFinding and symlinking duplicate files in $B ...\n"
+    FindAndLink "$A"
+  else
+    echo "$B does not exist or is not a directory. Skipping."
   fi
 }
 
@@ -213,7 +246,7 @@ MSUMS="$M"/SUMS
         [ "$TELL" ] || updsums
     }
     printf "\nFinding and symlinking duplicate files in $M ...\n"
-    FindAndLink
+    FindAndLink "$I"
   else
     echo "$M does not exist or is not a directory. Skipping."
   fi
