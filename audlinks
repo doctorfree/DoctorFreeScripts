@@ -27,7 +27,7 @@
 # the Software.
 #
 
-ITUNES="/Volumes/Lacie_Porsche_1TB/iTunes"
+ITUNES="/Volumes/LaCie_4TB/iTunes"
 A="${ITUNES}/Audiobooks"
 I="${ITUNES}/Music"
 M="$HOME/Music"

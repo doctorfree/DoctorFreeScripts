@@ -135,7 +135,7 @@ NAME=`basename $0`
     SUFFIX=".aplibrary"
 }
 [ "$ITUNES_DIR" ] || [ "$NAME" = "upditunes" ] && {
-    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/Lacie_Porsche_1TB/iTunes"
+    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/LaCie_4TB/iTunes"
     [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/iTunes"
 }
 [ "$PICDIR" ] || [ "$NAME" = "updpicdir" ] && {

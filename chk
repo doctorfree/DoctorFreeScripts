@@ -209,7 +209,7 @@ NAME=`basename $0`
     UPSC="upd -H"
 }
 [ "$ITUNES_DIR" ] || [ "$NAME" = "chkitunes" ] && {
-    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/Lacie_Porsche_1TB/iTunes"
+    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/LaCie_4TB/iTunes"
     [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/iTunes"
     UPSC="upd -I"
 }

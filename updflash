@@ -38,7 +38,7 @@ TRAN_DIR=/Volumes/Transcend
 # A directory that we know exists there
 TEST_DIR="$TRAN_DIR"/Pictures
 # My iTunes library
-LACIE="/Volumes/Lacie_Porsche_1TB"
+LACIE="/Volumes/LaCie_4TB"
 ITUNES="$LACIE/iTunes"
 # My Aperture libraries
 APLIBS="/Volumes/My_Book_Studio/Pictures/Libraries"

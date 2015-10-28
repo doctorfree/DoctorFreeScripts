@@ -27,7 +27,7 @@
 # the Software.
 
 #FIRST="$HOME/Music/iTunes/iTunes Media/Music"
-FIRST="/Volumes/Lacie_Porsche_1TB/iTunes/Music"
+FIRST="/Volumes/LaCie_4TB/iTunes/Music"
 SECOND="/Volumes/My_Book_Studio/Transcend"
 
 usage() {
