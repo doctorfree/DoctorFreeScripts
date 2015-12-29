@@ -100,7 +100,7 @@ usage() {
     then
         printf "\n\tgit log $REVERSE $NAME_ONLY $SINCE\n\n"
     else
-        printf "\n\tgit log $REVERSE --pretty=format:\"%%an, %%ad :%%n   %%s\" $NAME_ONLY $SINCE\n\n"
+        printf "\n\tgit log $REVERSE --pretty=format:\"%%an, %%ad %%h :%%n   %%s\" $NAME_ONLY $SINCE\n\n"
     fi
     exit 1
 }
@@ -134,7 +134,7 @@ else
     then
         git log $REVERSE $NAME_ONLY $SINCE
     else
-        git log $REVERSE --pretty=format:"%an, %ad :%n   %s" $NAME_ONLY $SINCE
+        git log $REVERSE --pretty=format:"%an, %ad %h :%n   %s" $NAME_ONLY $SINCE
      fi
 fi
 

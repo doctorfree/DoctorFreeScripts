@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # piclinks - create symbolic links to photo files where possible to reduce
-#    duplicate storage of photographs. Link into my Aperture libraries.
+#    duplicate storage of photographs. Link into my Photos/Aperture libraries.
 #
 # Written 23-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
 # Based on vidlinks https://github.com/doctorfree/Scripts/blob/master/vidlinks
@@ -37,14 +37,14 @@ QUICK=
 
 usage() {
     printf "\nUsage: piclinks [-P Pictures Dir] [-W Work Dir]"
-    printf "\n\t[-A Aperture Libraries Dir] [-h] [-d] [-q] [-u]\n"
+    printf "\n\t[-A Photos/Aperture Libraries Dir] [-h] [-d] [-q] [-u]\n"
     printf "\nWhere:\n\t-d indicates tell me what you would do"
     printf "\n\t-h indicates also search Home Pictures directory"
     printf "\n\t-q indicates quick run (do not redo SUMS)"
     printf "\n\t-u displays this usage message\n"
     printf "\nDefaults are:\n\tHome Pictures Dir = $P"
     printf "\n\tWork Dir = $W"
-    printf "\n\tAperture Libraries Dir = $LIBS\n\n"
+    printf "\n\tPhotos/Aperture Libraries Dir = $LIBS\n\n"
     exit 1
 }
 
@@ -141,7 +141,7 @@ shift $(( OPTIND - 1 ))
 # Update the Aperture libraries SUMS files first
 cd "$LIBS"
 [ "$QUICK" ] || {
-    printf "\nUpdating Aperture libraries SUMS files ...\n"
+    printf "\nUpdating Photos/Aperture libraries SUMS files ...\n"
     [ "$TELL" ] || {
         for aplib in *.photoslibrary/Masters *.aplibrary/Masters *.migratedaplibrary/Masters
         do
@@ -154,7 +154,7 @@ cd "$LIBS"
     }
 }
 
-# Link to file in Aperture library if it's a duplicate
+# Link to file in Photos/Aperture library if it's a duplicate
 if [ -d "$W" ]
 then
     cd "$W"

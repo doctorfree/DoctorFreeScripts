@@ -2,7 +2,8 @@
 #
 # upd - sync specified directories/libraries to a USB flash drive
 #    Note: to sync other directories use the -s, -a, and -t arguments
-#        when invoked as updaplibs it syncs directories in my Apertures library
+#        when invoked as updaplibs it syncs directories in my Aperture library
+#        when invoked as updphotoslibs it syncs directories in my Photos library
 #        when invoked as upditunes it syncs directories in my iTunes library
 #        when invoked as updpicdir it syncs directories in my Pictures dir
 #        when invoked as updmovdir it syncs directories in my Movies dir
@@ -47,6 +48,7 @@ TELL=
 DRY=
 EXCLUDE="--delete-excluded --exclude .DS_Store"
 FOLLOW="$EXCLUDE"
+IGN="--max-size=4G"
 USAGE=
 VERB="q"
 
@@ -59,7 +61,7 @@ usage() {
     printf "\t-l indicates follow symbolic links\n"
     printf "\t-v indicates verbose rsync output\n"
     printf "\t-A indicates use the Audio directory (like updauddir)\n"
-    printf "\t-L indicates use the Aperture libraries (like updaplibs)\n"
+    printf "\t-L indicates use the Photos libraries (like updaplibs)\n"
     printf "\t-I indicates use the iTunes library (like upditunes)\n"
     printf "\t-P indicates use the Pictures directory (like updpicdir)\n"
     printf "\t-M indicates use the Movies directory (like updmovdir)\n"
@@ -77,10 +79,13 @@ usage() {
     exit 1
 }
 
-while getopts a:s:t:dhAILPMHlnuv flag; do
+while getopts a:s:t:dehAILPMHlnuv flag; do
     case $flag in
         d)
             DRY="n"
+            ;;
+        e)
+            IGN="$IGN --ignore-errors"
             ;;
         h)
             MYHOME=1
@@ -129,9 +134,14 @@ done
 shift $(( OPTIND - 1 ))
 
 NAME=`basename $0`
-[ "$APERT_DIR" ] || [ "$NAME" = "updaplibs" ] && {
+[ "$APERT_DIR" ] || [ "$NAME" = "updphotoslibs" ] && {
     [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
-    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Pictures/Aperture"
+    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Pictures/Libraries"
+    SUFFIX=".photoslibrary"
+}
+[ "$NAME" = "updaplibs" ] && {
+    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
+    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Pictures/Libraries"
     SUFFIX=".aplibrary"
 }
 [ "$ITUNES_DIR" ] || [ "$NAME" = "upditunes" ] && {
@@ -204,13 +214,13 @@ then
     if [ "$TELL" ]
     then
         echo ""
-        echo "rsync -${VERB}a$DRY $FOLLOW $DEL $SOURCEDIR/$lib $TRANSCEND" 
+        echo "rsync -${VERB}a$DRY $FOLLOW $IGN $DEL $SOURCEDIR/$lib $TRANSCEND" 
     else
         if [ "$DRY" ]
         then
-            rsync -van $FOLLOW $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
+            rsync -van $FOLLOW $IGN $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
         else
-            rsync -Wa$VERB $FOLLOW $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
+            rsync -Wa$VERB $FOLLOW $IGN $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
             touch "$TRANSCEND/.rsync_$lib"
         fi
     fi
@@ -231,13 +241,13 @@ else
       if [ "$TELL" ]
       then
           echo ""
-          echo "rsync -${VERB}a$DRY $FOLLOW $DEL $SOURCEDIR/$lib $TRANSCEND" 
+          echo "rsync -${VERB}a$DRY $FOLLOW $IGN $DEL $SOURCEDIR/$lib $TRANSCEND" 
       else
           if [ "$DRY" ]
           then
-              rsync -van $FOLLOW $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
+              rsync -van $FOLLOW $IGN $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
           else
-              rsync -W${VERB}a $FOLLOW $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
+              rsync -W${VERB}a $FOLLOW $IGN $DEL "$SOURCEDIR/$lib" "$TRANSCEND" 
               touch "$TRANSCEND/.rsync_$lib"
           fi
       fi

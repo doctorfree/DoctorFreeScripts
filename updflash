@@ -36,13 +36,13 @@
 # The mount point for the flash drive
 TRAN_DIR=/Volumes/Transcend
 # A directory that we know exists there
-TEST_DIR="$TRAN_DIR"/Pictures
+TEST_DIR="$TRAN_DIR"
 # My iTunes library
 LACIE="/Volumes/LaCie_4TB"
 ITUNES="$LACIE/iTunes"
-# My Aperture libraries
+# My Photos libraries
 APLIBS="/Volumes/My_Book_Studio/Pictures/Libraries"
-APLIBS_DEST="$TRAN_DIR/Pictures/Aperture"
+APLIBS_DEST="$TRAN_DIR/Pictures/Libraries"
 # The mount point for the My Book Studio drive that holds my pics and movies
 MBS="/Volumes/My_Book_Studio"
 # Where I store my photos
@@ -62,13 +62,16 @@ HOME_DIRS="Documents Movies Music Pictures bin src"
 ########### END DEFAULT LOCATIONS ######################
 
 usage() {
-    printf "Usage: $0 [-n] [-a] [-c] [-i] [-l] [-p] [-m] [-h] [-u]\n"
+    printf "Usage: $0 [-n] [-a] [-c] [-e] [-i] [-APl] [-p] [-m] [-h] [-u]\n"
     printf "Where:\n\t-n indicates to tell me what you would do\n"
     printf "\t-u indicates display this usage message and exit\n"
     printf "\t-a indicates rsync the Audio directory\n"
     printf "\t-c indicates check if rsync is needed before sync'ing\n"
+    printf "\t-e indicates ignore rsync errors\n"
     printf "\t-i indicates rsync the iTunes library\n"
-    printf "\t-l indicates rsync the Aperture libraries\n"
+    printf "\t-A indicates rsync the Aperture libraries\n"
+    printf "\t-P indicates rsync the Apple Photos libraries\n"
+    printf "\t-l indicates rsync both Aperture and Photos libraries\n"
     printf "\t-p indicates rsync the Pictures directory\n"
     printf "\t-m indicates rsync the Movies directory\n"
     printf "\t-h indicates rsync the Home directory\n\n"
@@ -76,6 +79,8 @@ usage() {
     exit 1
 }
 
+# Do not ignore errors
+IGN=
 # Default to non-dry run
 DRY=
 # Default to no check
@@ -97,6 +102,7 @@ fi
 if [ "$DO_ALL" ]
 then
     DO_APERT=1
+    DO_PHOTO=1
     DO_ITUNES=1
     DO_PIC=1
     DO_MOV=1
@@ -104,13 +110,14 @@ then
     DO_HOME=1
 else
     DO_APERT=
+    DO_PHOTO=
     DO_ITUNES=
     DO_PIC=
     DO_MOV=
     DO_AUD=
     DO_HOME=
 fi
-while getopts acilpmhnu flag; do
+while getopts aceiAPlpmhnu flag; do
     case $flag in
         a)
             DO_AUD=1
@@ -118,11 +125,21 @@ while getopts acilpmhnu flag; do
         c)
             CHK=1
             ;;
+        e)
+            IGN="-e"
+            ;;
         i)
             DO_ITUNES=1
             ;;
+        A)
+            DO_APERT=1
+            ;;
+        P)
+            DO_PHOTO=1
+            ;;
         l)
             DO_APERT=1
+            DO_PHOTO=1
             ;;
         p)
             DO_PIC=1
@@ -160,10 +177,26 @@ shift $(( OPTIND - 1 ))
     then
         if [ "$CHK" ]
         then
-            chk $DRY -r -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
+            chk $IGN $DRY -r -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
         else
             # Equivalent of "upd -L ..."
-            upd $DRY -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
+            upd $IGN $DRY -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
+        fi
+    else
+        echo "$APLIBS does not exist or is not a directory. Skipping."
+    fi
+}
+
+[ "$DO_PHOTO" ] && {
+    # Update the backup of my Apple Photos libraries
+    if [ -d "$APLIBS" ]
+    then
+        if [ "$CHK" ]
+        then
+            chk $IGN $DRY -r -a "$APLIBS" -s ".photoslibrary" -t "$APLIBS_DEST"
+        else
+            # Equivalent of "upd -L ..."
+            upd $IGN $DRY -a "$APLIBS" -s ".photoslibrary" -t "$APLIBS_DEST"
         fi
     else
         echo "$APLIBS does not exist or is not a directory. Skipping."
@@ -176,10 +209,10 @@ shift $(( OPTIND - 1 ))
     then
         if [ "$CHK" ]
         then
-            chk $DRY -r -a "$LACIE" -t "$TRAN_DIR" iTunes
+            chk $IGN $DRY -r -a "$LACIE" -t "$TRAN_DIR" iTunes
         else
             # Equivalent of "upd -I ..."
-            upd $DRY -a "$LACIE" -t "$TRAN_DIR" iTunes
+            upd $IGN $DRY -a "$LACIE" -t "$TRAN_DIR" iTunes
         fi
     else
         echo "$ITUNES does not exist or is not a directory. Skipping."
@@ -194,10 +227,10 @@ shift $(( OPTIND - 1 ))
         then
             if [ "$CHK" ]
             then
-                chk $DRY -r -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
+                chk $IGN $DRY -r -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
             else
                 # Equivalent of "upd -P ..."
-                upd $DRY -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
+                upd $IGN $DRY -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
             fi
         else
             echo "$PIC_DIR/$i does not exist or is not a directory. Skipping."
@@ -213,10 +246,10 @@ shift $(( OPTIND - 1 ))
         then
             if [ "$CHK" ]
             then
-                chk $DRY -r -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
+                chk $IGN $DRY -r -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
             else
                 # Equivalent of "upd -A ..."
-                upd $DRY -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
+                upd $IGN $DRY -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
             fi
         else
             echo "$AUD_DIR/$i does not exist or is not a directory. Skipping."
@@ -232,10 +265,10 @@ shift $(( OPTIND - 1 ))
         then
             if [ "$CHK" ]
             then
-                chk $DRY -r -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
+                chk $IGN $DRY -r -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
             else
                 # Equivalent of "upd -M ..."
-                upd $DRY -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
+                upd $IGN $DRY -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
             fi
         else
             echo "$MOV_DIR/$i does not exist or is not a directory. Skipping."
@@ -251,10 +284,10 @@ shift $(( OPTIND - 1 ))
         then
             if [ "$CHK" ]
             then
-                chk $DRY -r -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
+                chk $IGN $DRY -r -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
             else
                 # Equivalent of "upd -H ..."
-                upd $DRY -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
+                upd $IGN $DRY -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
             fi
         else
             echo "$HOME/$dir does not exist or is not a directory. Skipping."

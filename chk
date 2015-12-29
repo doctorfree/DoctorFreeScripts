@@ -3,7 +3,7 @@
 # chk - check the specified directories/libraries and see if they need to by
 #    sync'd with rsync to the USB flash drive backup
 #    Note: to check other directories use the -s, -a, and -t arguments
-#          when invoked as chkaplibs it checks directories in my Aperture libs
+#          when invoked as chkaplibs it checks directories in my Photosn libs
 #          when invoked as chkitunes it checks directories in my iTunes library
 #          when invoked as chkpicdir it checks directories in my Pictures dir
 #          when invoked as chkmovdir it checks directories in my Movies dir
@@ -40,6 +40,7 @@ SUFFIX=
 NAME="chk"
 UPSC="upd"
 FORCE=
+IGNORE=
 APERT_DIR=
 ITUNES_DIR=
 AUDDIR=
@@ -113,15 +114,18 @@ chklib() {
             else
                 libnam="$lib"
             fi
-            $UPSC $TELL $MYHOME $libnam
+            $UPSC $IGNORE $TELL $MYHOME $libnam
         }
     fi
 }
 
-while getopts a:s:t:fhAIHPLMrnu flag; do
+while getopts a:s:t:efhAIHPLMrnu flag; do
     case $flag in
         f)
             FORCE=1
+            ;;
+        e)
+            IGNORE="-e"
             ;;
         h)
             MYHOME="-h"
@@ -167,9 +171,15 @@ done
 shift $(( OPTIND - 1 ))
 
 NAME=`basename $0`
-[ "$APERT_DIR" ] || [ "$NAME" = "chkaplibs" ] && {
+[ "$APERT_DIR" ] || [ "$NAME" = "chkphotoslibs" ] && {
     [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
-    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Pictures/Aperture"
+    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Pictures/Libraries"
+    SUFFIX=".photoslibrary"
+    UPSC="upd -L"
+}
+[ "$NAME" = "chkaplibs" ] && {
+    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
+    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Pictures/Libraries"
     SUFFIX=".aplibrary"
     UPSC="upd -L"
 }
