@@ -38,21 +38,6 @@ usage() {
     exit 1
 }
 
-endblur() {
-    convert -blur 50 tmp3.png tmp3.png
-    convert -resize 8x8 tmp3.png tmp4.png
-    convert -blur 50 tmp4.png tmp4.png
-    convert -extent 1x1+4+4 tmp4.png tmp4.png
-    convert -resize 1024x1024 tmp4.png tmp4.png
-    convert -resize 1024x1024 tmp3.png tmp3.png
-    convert -blur 50 tmp3.png tmp3.png
-    convert tmp3.png tmp4.png -compose minus -composite tmp5.png
-    convert tmp4.png tmp3.png -compose minus -composite tmp6.png
-    convert tmp2.png tmp5.png -compose plus -composite tmp7.png
-    convert tmp6.png tmp7.png -compose minus -composite tmp2.png
-    convert tmp2.png -resize 512x512! Seamless/${img_out}.png
-}
-
 [ "$1" ] || {
     usage
 }
@@ -91,11 +76,6 @@ do
     echo "Seamless/${img_out}.png created. Cleaning up."
     rm -f tmp1.png
     rm -f tmp2.png
-    rm -f tmp3.png
-    rm -f tmp4.png
-    rm -f tmp5.png
-    rm -f tmp6.png
-    rm -f tmp7.png
     rm -f horz.png
     rm -f vert.png
 done
