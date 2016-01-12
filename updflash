@@ -48,7 +48,7 @@ MBS="/Volumes/My_Book_Studio"
 # Where I store my photos
 PIC_DIR="$MBS/Pictures"
 # Picture directories to sync
-PIC_SUB_DIRS="Art Dragonflies Work"
+PIC_SUB_DIRS="Art Dragonflies ScreenSavers Work"
 # Where I store my audio
 AUD_DIR="$MBS/Audio"
 # Audio directories to sync
@@ -58,7 +58,7 @@ MOV_DIR="$MBS/Movies"
 # Movies directories to sync
 MOV_SUB_DIRS="Artists Work"
 # Directories in my Home directory that I want to backup
-HOME_DIRS="Documents Movies Music Pictures bin src"
+HOME_DIRS="Box* Dropbox Horizon Documents Movies Music Pictures bin src"
 ########### END DEFAULT LOCATIONS ######################
 
 usage() {
@@ -71,6 +71,7 @@ usage() {
     printf "\t-i indicates rsync the iTunes library\n"
     printf "\t-A indicates rsync the Aperture libraries\n"
     printf "\t-P indicates rsync the Apple Photos libraries\n"
+    printf "\t-L indicates follow symbolic links\n"
     printf "\t-l indicates rsync both Aperture and Photos libraries\n"
     printf "\t-p indicates rsync the Pictures directory\n"
     printf "\t-m indicates rsync the Movies directory\n"
@@ -79,10 +80,14 @@ usage() {
     exit 1
 }
 
+# Follow symbolic links
+FLW=
 # Do not ignore errors
 IGN=
 # Default to non-dry run
 DRY=
+# Exclude the specified file or directory
+EXCLUDE=
 # Default to no check
 CHK=
 # If no arguments or the only argument is -n then rsync all dirs
@@ -107,7 +112,8 @@ then
     DO_PIC=1
     DO_MOV=1
     DO_AUD=1
-    DO_HOME=1
+    DO_ALL_HOME=1
+    DO_HOME=
 else
     DO_APERT=
     DO_PHOTO=
@@ -115,15 +121,19 @@ else
     DO_PIC=
     DO_MOV=
     DO_AUD=
+    DO_ALL_HOME=
     DO_HOME=
 fi
-while getopts aceiAPlpmhnu flag; do
+while getopts acE:eiAPlLpmhHnu flag; do
     case $flag in
         a)
             DO_AUD=1
             ;;
         c)
             CHK=1
+            ;;
+        E)
+            EXCLUDE="-E $OPTARG"
             ;;
         e)
             IGN="-e"
@@ -137,6 +147,9 @@ while getopts aceiAPlpmhnu flag; do
         P)
             DO_PHOTO=1
             ;;
+        L)
+            FLW="-l"
+            ;;
         l)
             DO_APERT=1
             DO_PHOTO=1
@@ -146,6 +159,9 @@ while getopts aceiAPlpmhnu flag; do
             ;;
         m)
             DO_MOV=1
+            ;;
+        H)
+            DO_ALL_HOME=1
             ;;
         h)
             DO_HOME=1
@@ -159,6 +175,7 @@ while getopts aceiAPlpmhnu flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
+IGN="$IGN $EXCLUDE"
 
 # Check if the flash drive is mounted in its proper location
 [ -d "$TEST_DIR" ] || {
@@ -180,7 +197,7 @@ shift $(( OPTIND - 1 ))
             chk $IGN $DRY -r -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
         else
             # Equivalent of "upd -L ..."
-            upd $IGN $DRY -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
+            upd $IGN $DRY $FLW -a "$APLIBS" -s ".aplibrary" -t "$APLIBS_DEST"
         fi
     else
         echo "$APLIBS does not exist or is not a directory. Skipping."
@@ -196,7 +213,7 @@ shift $(( OPTIND - 1 ))
             chk $IGN $DRY -r -a "$APLIBS" -s ".photoslibrary" -t "$APLIBS_DEST"
         else
             # Equivalent of "upd -L ..."
-            upd $IGN $DRY -a "$APLIBS" -s ".photoslibrary" -t "$APLIBS_DEST"
+            upd $IGN $DRY $FLW -a "$APLIBS" -s ".photoslibrary" -t "$APLIBS_DEST"
         fi
     else
         echo "$APLIBS does not exist or is not a directory. Skipping."
@@ -212,7 +229,7 @@ shift $(( OPTIND - 1 ))
             chk $IGN $DRY -r -a "$LACIE" -t "$TRAN_DIR" iTunes
         else
             # Equivalent of "upd -I ..."
-            upd $IGN $DRY -a "$LACIE" -t "$TRAN_DIR" iTunes
+            upd $IGN $DRY $FLW -a "$LACIE" -t "$TRAN_DIR" iTunes
         fi
     else
         echo "$ITUNES does not exist or is not a directory. Skipping."
@@ -230,7 +247,7 @@ shift $(( OPTIND - 1 ))
                 chk $IGN $DRY -r -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
             else
                 # Equivalent of "upd -P ..."
-                upd $IGN $DRY -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
+                upd $IGN $DRY $FLW -a "$PIC_DIR" -t "$TRAN_DIR/Pictures" "$i"
             fi
         else
             echo "$PIC_DIR/$i does not exist or is not a directory. Skipping."
@@ -249,7 +266,7 @@ shift $(( OPTIND - 1 ))
                 chk $IGN $DRY -r -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
             else
                 # Equivalent of "upd -A ..."
-                upd $IGN $DRY -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
+                upd $IGN $DRY $FLW -a "$AUD_DIR" -t "$TRAN_DIR/Audio" "$i"
             fi
         else
             echo "$AUD_DIR/$i does not exist or is not a directory. Skipping."
@@ -268,7 +285,7 @@ shift $(( OPTIND - 1 ))
                 chk $IGN $DRY -r -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
             else
                 # Equivalent of "upd -M ..."
-                upd $IGN $DRY -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
+                upd $IGN $DRY $FLW -a "$MOV_DIR" -t "$TRAN_DIR/Movies" "$i"
             fi
         else
             echo "$MOV_DIR/$i does not exist or is not a directory. Skipping."
@@ -287,10 +304,26 @@ shift $(( OPTIND - 1 ))
                 chk $IGN $DRY -r -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
             else
                 # Equivalent of "upd -H ..."
-                upd $IGN $DRY -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
+                upd $IGN $DRY $FLW -a "$HOME" -t "$TRAN_DIR/Home" "$dir"
             fi
         else
             echo "$HOME/$dir does not exist or is not a directory. Skipping."
         fi
     done
+}
+
+[ "$DO_ALL_HOME" ] && {
+    # Sync my entire home directory
+    if [ -d "$HOME" ]
+    then
+        if [ "$CHK" ]
+        then
+            chk $IGN $DRY -r -a "${HOME}/" -t "$TRAN_DIR/Home"
+        else
+            # Equivalent of "upd -H ..."
+            upd $IGN $DRY $FLW -a "$HOME" -t "$TRAN_DIR/Home"
+        fi
+    else
+        echo "$HOME does not exist or is not a directory. Skipping."
+    fi
 }

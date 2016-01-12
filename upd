@@ -46,8 +46,8 @@ MOVDIR=
 HOMEDIR=
 TELL=
 DRY=
-EXCLUDE="--delete-excluded --exclude .DS_Store"
-FOLLOW="$EXCLUDE"
+EXCLUDE=
+FOLLOW=
 IGN="--max-size=4G"
 USAGE=
 VERB="q"
@@ -79,10 +79,13 @@ usage() {
     exit 1
 }
 
-while getopts a:s:t:dehAILPMHlnuv flag; do
+while getopts a:E:s:t:dehAILPMHlnuv flag; do
     case $flag in
         d)
             DRY="n"
+            ;;
+        E)
+            EXCLUDE="--exclude $OPTARG"
             ;;
         e)
             IGN="$IGN --ignore-errors"
@@ -91,7 +94,7 @@ while getopts a:s:t:dehAILPMHlnuv flag; do
             MYHOME=1
             ;;
         l)
-            FOLLOW="--copy-links $EXCLUDE"
+            FOLLOW="--copy-links"
             ;;
         H)
             HOMEDIR=1
@@ -132,6 +135,8 @@ while getopts a:s:t:dehAILPMHlnuv flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
+EXCLUDE="--delete-excluded --exclude .DS_Store $EXCLUDE"
+FOLLOW="$FOLLOW $EXCLUDE"
 
 NAME=`basename $0`
 [ "$APERT_DIR" ] || [ "$NAME" = "updphotoslibs" ] && {
@@ -204,8 +209,8 @@ then
   for lib in *$SUFFIX
   do
     [ "$lib" = "*" ] && lib=
-    [ -d "$SOURCEDIR/$lib" ] || {
-        echo "$SOURCEDIR/$lib does not exist or is not a directory. Skipping."
+    [ -e "$SOURCEDIR/$lib" ] || {
+        echo "$SOURCEDIR/$lib does not exist. Skipping."
         continue
     }
     echo -n "Syncing $SOURCEDIR/$lib to $TRANSCEND/$lib with rsync ... "
