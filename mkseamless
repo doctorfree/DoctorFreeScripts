@@ -2,7 +2,7 @@
 #
 # mkseamless - make a texture seamless
 # The Vertical.png image is available at
-# http://www.flickr.com/photos/missyrestless/5493745720/
+# https://github.com/doctorfree/Scripts/blob/master/Vertical.png
 #
 # Usage: mkseamless filename [filename ...]
 #
