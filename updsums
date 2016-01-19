@@ -30,8 +30,10 @@
 W="`pwd`"
 SUMS="$W/SUMS"
 TELLME=
+FORCE=
 
 [ "$1" = "-d" ] && TELLME=1
+[ "$1" = "-f" ] && FORCE=1
 
 [ -r "$SUMS" ] || {
     echo "$SUMS does not exist."
@@ -75,8 +77,12 @@ do
 done < "$SUMS"
 
 # See if anything is new
-#newer=`find . -type f -newer "$SUMS" | wc -l`
-newer=`find . \( -type f -or -type d \) -newer "$SUMS" | wc -l`
+if [ "$FORCE" ]
+then
+    newer=10
+else
+    newer=`find . \( -type f -or -type d \) -newer "$SUMS" | wc -l`
+fi
 if [ $newer -lt 2 ]
 then
     echo "$SUMS is current"
