@@ -1,0 +1,55 @@
+#!/bin/bash
+
+BASE="$HOME/Documents/My Documents/ronrecord.com/httpdocs/Themes/Chrome/Backgrounds"
+IMAG="Hyperbolic_Honeycomb.png"
+BACK="$BASE/$IMAG"
+OUTP="Icon"
+SIZE="320x320"
+ALL=
+
+[ "$1" ] && {
+    if [ "$1" = "-a" ]
+    then
+        ALL=1
+    else
+        [ -f "$BASE/$1".png ] && {
+            IMAG="$1".png
+            OUTP="$1"
+        }
+    fi
+}
+BACK="$BASE/$IMAG"
+
+convert -size $SIZE canvas:none -font Bookman-DemiItalic -pointsize 30 \
+        -draw "text 68,40 Doctorfree's" -channel RGBA -blur 0x6 -fill darkred \
+        -stroke magenta -draw "text 65,37 Doctorfree's" icontop.png
+
+convert -size $SIZE canvas:none -font Bookman-DemiItalic -pointsize 30 \
+  -draw 'text 25,300 "Fractal Funhouse"' -channel RGBA -blur 0x6 -fill darkred \
+  -stroke magenta -draw 'text 22,297 "Fractal Funhouse"' iconbot.png
+
+convert -size $SIZE -composite iconbot.png icontop.png -geometry ${SIZE}+0+0 \
+        -depth 8 text320.png
+
+if [ "$ALL" ]
+then
+    for img in "${BASE}"/*.png
+    do
+        BACK="$img"
+        OUTF=`basename "$BACK"`
+        OUTP=`echo "$OUTF" | sed -e "s/.png//"`
+        echo "Creating 128x128 icon for $OUTP"
+        convert -size $SIZE -gravity center -composite "$BACK" \
+            text320.png -geometry 864x720 -depth 8 icon320.png
+        convert -geometry 96x96\! icon320.png icon96.png
+        convert icon96.png -background none -gravity center \
+            -extent 128x128 ${OUTP}_128.png
+    done
+else
+    echo "Creating 128x128 icon for $OUTP"
+    convert -size $SIZE -gravity center -composite "$BACK" \
+        text320.png -geometry 864x720 -depth 8 icon320.png
+    convert -geometry 96x96\! icon320.png icon96.png
+    convert icon96.png -background none -gravity center -extent 128x128 ${OUTP}_128.png
+fi
+rm -f icontop.png iconbot.png text320.png icon320.png icon96.png
