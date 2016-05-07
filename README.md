@@ -76,6 +76,10 @@ Contents:
 
 [**chkinst**](chkinst) - Check if installed versions of files in current directory are different in order to determine if git repository is up-to-date.
 
+[**chrome-themes/mktheme**](chrome-themes/mktheme) - Create a Google Chrome theme using a specified background image and corresponding manifest, theme images, private key, etc.
+
+[**chrome-themes/Icons/mkicon**](chrome-themes/Icons/mkicon) - Create Google Chrome theme icons using ImageMagick and a freely licensed background image from Wikimedia Commons
+
 [**clndl**](clndl) - Moves the most recently downloaded versions of files to their regular filename without the (#) in the name. By default, relies on the Mac OS X convention of inserting (#) in the name of newer version filenames.
 
 [**cpBackups**](cpBackups) - Copy, Move, or Remove Time Machine backups with bypass command. Depending on how this command is invoked (cpBackups, mvBackups, or rmBackups) or what arguments are supplied on the command-line, this will copy, move, or remove Time Machine backups using the bypass command
