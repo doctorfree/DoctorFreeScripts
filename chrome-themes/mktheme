@@ -168,10 +168,10 @@ do
        "${image_dir}"/ntp_background.${SUFF}
     cp "${ICON}" "${theme_dir}"/icon_128.png
     # If there is a private key for this theme, copy it into the theme dir
-    [ -f "${BASE_DIR}/Keys/${theme}.pem" ] && {
-        echo "Copying private key for ${theme}"
-        cp "${BASE_DIR}/Keys/${theme}.pem" "${theme_dir}"/key.pem
-    }
+    # [ -f "${BASE_DIR}/Keys/${theme}.pem" ] && {
+    #     echo "Copying private key for ${theme}"
+    #     cp "${BASE_DIR}/Keys/${theme}.pem" "${theme_dir}"/key.pem
+    # }
     [ "$ZIP" ] && {
         echo "Zipping ${theme}"
         cd "${BASE_DIR}"
