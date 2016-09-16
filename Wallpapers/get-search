@@ -1,0 +1,18 @@
+#!/bin/bash
+
+QUERY="$*"
+QDIR=`echo ${QUERY} | sed -e "s/ /_/g"`
+DDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven/${QDIR}"
+
+[ -d "${DDIR}" ] || mkdir -p "${DDIR}"
+cd "${DDIR}"
+page=1
+pics=`echo *.jpg`
+[ "$pics" = "*.jpg" ] || {
+    numpics=`ls -1 *.jpg | wc -l`
+    numpage=`expr $numpics / 24`
+    page=`expr $numpage + 1`
+}
+
+wh -l "${DDIR}" -n 480 -s $page -t search -c 111 -f 001 -q "${QUERY}" -p 0
+

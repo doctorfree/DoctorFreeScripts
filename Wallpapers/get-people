@@ -1,0 +1,22 @@
+#!/bin/bash
+
+DDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven/People"
+
+[ -d "${DDIR}" ] || mkdir -p "${DDIR}"
+cd "${DDIR}"
+page=1
+pics=`echo *.jpg`
+[ "$pics" = "*.jpg" ] || {
+    numpics=`ls -1 *.jpg | wc -l`
+    numpage=`expr $numpics / 24`
+    page=`expr $numpage + 1`
+}
+
+wh -l "${DDIR}" \
+   -n 480 \
+   -s $page \
+   -t standard \
+   -c 001 \
+   -f 001 \
+   -p 0
+

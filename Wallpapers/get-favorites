@@ -1,0 +1,10 @@
+#!/bin/bash
+
+wh -l /Volumes/My_Book_Studio/Pictures/Work/Wallhaven/Favorites \
+   -n 480 \
+   -s 1 \
+   -t favorites \
+   -c 111 \
+   -f 111 \
+   -p 0
+

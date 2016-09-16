@@ -1,0 +1,122 @@
+#!/bin/bash
+
+DUPFILE="duplicates.txt"
+NEWDUPS="newduplicates.txt"
+LINKEM=
+DUPDIR=
+if [ "$1" = "-l" ]
+then
+    LINKEM=1
+else
+    [ "$1" ] && {
+        DUPDIR="$1"
+        [ -d "$DUPDIR" ] || {
+            echo "$DUPDIR not a directory or does not exist. Exiting."
+            exit 1
+        }
+    }
+fi
+
+[ "$LINKEM" ] || {
+    rm -f ${NEWDUPS}
+    touch ${NEWDUPS}
+}
+
+[ -f ${DUPFILE} ] || {
+    cat */downloaded.txt | sort | uniq -d > ${DUPFILE}
+}
+
+if [ "$LINKEM" ]
+then
+    while read num
+    do
+        numfiles=0
+        DUPS=`echo */wallhaven-${num}\.???`
+        for dup in ${DUPS}
+        do
+            [ -L "$dup" ] || {
+                numfiles=`expr $numfiles + 1`
+            }
+        done
+        [ $numfiles -eq 1 ] && continue
+        link=
+        for dup in ${DUPS}
+        do
+            [ "$link" ] || {
+                [ -L "${dup}" ] || {
+                    link="${dup}"
+                }
+                continue
+            }
+            [ -L "${dup}" ] && continue
+            picdir=`dirname "$dup"`
+            [ -d "${picdir}" ] || {
+                echo "Unknown directory path ${picdir}. Skipping $dup"
+                continue
+            }
+            cd "${picdir}"
+            rm -f wallhaven-${num}\.???
+            ln -s ../"${link}" .
+            cd ..
+        done
+    done < ${DUPFILE}
+else
+    if [ "$DUPDIR" ]
+    then
+        cd "$DUPDIR"
+        H=`pwd`
+        for pic in *.jpg *.png
+        do
+            numfiles=0
+            DUPS=`echo ../*/$pic`
+            for dup in ${DUPS}
+            do
+                [ -L "$dup" ] || {
+                    numfiles=`expr $numfiles + 1`
+                }
+            done
+            [ $numfiles -eq 1 ] && continue
+            link=
+            for dup in ${DUPS}
+            do
+                [ "$link" ] || {
+                    [ -L "${dup}" ] || {
+                        link="${dup}"
+                    }
+                    continue
+                }
+                [ -L "${dup}" ] && continue
+                picdir=`dirname "$dup"`
+                [ -d "${picdir}" ] || {
+                    echo "Unknown directory path ${picdir}. Skipping $dup"
+                    continue
+                }
+                cd "${picdir}"
+                rm -f $pic
+                ln -s ${link} .
+                cd $H
+            done
+        done
+    else
+        while read num
+        do
+            numfiles=0
+            DUPS=`echo */wallhaven-${num}\.???`
+            for dup in ${DUPS}
+            do
+                [ -L "$dup" ] || {
+                    numfiles=`expr $numfiles + 1`
+                }
+            done
+            [ $numfiles -eq 1 ] || {
+                echo $num >> ${NEWDUPS}
+            }
+        done < ${DUPFILE}
+    fi
+fi
+
+[ "$LINKEM" ] || {
+    [ "$DUPDIR" ] || {
+        mv ${NEWDUPS} ${DUPFILE}
+    }
+}
