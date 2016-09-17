@@ -10,8 +10,8 @@ then
 else
     [ "$1" ] && {
         DUPDIR="$1"
-        [ -d "$DUPDIR" ] || {
-            echo "$DUPDIR not a directory or does not exist. Exiting."
+        [ -d "${DUPDIR}" ] || {
+            echo "${DUPDIR} not a directory or does not exist. Exiting."
             exit 1
         }
     }
@@ -61,9 +61,9 @@ then
         done
     done < ${DUPFILE}
 else
-    if [ "$DUPDIR" ]
+    if [ "${DUPDIR}" ]
     then
-        cd "$DUPDIR"
+        cd "${DUPDIR}"
         H=`pwd`
         for pic in *.jpg *.png
         do
@@ -116,7 +116,7 @@ else
 fi
 
 [ "$LINKEM" ] || {
-    [ "$DUPDIR" ] || {
+    [ "${DUPDIR}" ] || {
         mv ${NEWDUPS} ${DUPFILE}
     }
 }

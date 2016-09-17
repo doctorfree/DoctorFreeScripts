@@ -6,11 +6,18 @@ DDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven/People"
 cd "${DDIR}"
 page=1
 pics=`echo *.jpg`
+numpics=0
+pngs=`echo *.png`
+numpngs=0
 [ "$pics" = "*.jpg" ] || {
     numpics=`ls -1 *.jpg | wc -l`
-    numpage=`expr $numpics / 24`
-    page=`expr $numpage + 1`
 }
+[ "$pngs" = "*.png" ] || {
+    numpngs=`ls -1 *.png | wc -l`
+}
+totpics=`expr $numpics + $numpngs`
+numpage=`expr $totpics / 24`
+page=`expr $numpage + 1`
 
 wh -l "${DDIR}" \
    -n 480 \
