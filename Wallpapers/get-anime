@@ -2,6 +2,28 @@
 
 DDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven/Anime"
 
+query=
+numdown=480
+categories=010
+filters=001
+
+while getopts n:c:f:q: flag; do
+    case $flag in
+        n)
+            numdown=$OPTARG
+            ;;
+        c)
+            categories=$OPTARG
+            ;;
+        f)
+            filters=$OPTARG
+            ;;
+        q)
+            query="$OPTARG"
+    esac
+done
+shift $(( OPTIND - 1 ))
+
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
 cd "${DDIR}"
 page=1
@@ -20,8 +42,10 @@ numpage=`expr $totpics / 24`
 page=`expr $numpage + 1`
 
 wh -l "${DDIR}" \
-   -n 480 \
+   -n $numdown \
    -s $page \
+   -c $categories \
+   -f $filters \
    -t standard \
    -p 0
 

@@ -2,28 +2,55 @@
 
 DDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven/People"
 
+query=
+numdown=480
+page=
+categories=001
+filters=001
+
+while getopts n:c:f:p:q: flag; do
+    case $flag in
+        n)
+            numdown=$OPTARG
+            ;;
+        c)
+            categories=$OPTARG
+            ;;
+        f)
+            filters=$OPTARG
+            ;;
+        p)
+            page=$OPTARG
+            ;;
+        q)
+            query="$OPTARG"
+    esac
+done
+shift $(( OPTIND - 1 ))
+
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
 cd "${DDIR}"
-page=1
-pics=`echo *.jpg`
-numpics=0
-pngs=`echo *.png`
-numpngs=0
-[ "$pics" = "*.jpg" ] || {
-    numpics=`ls -1 *.jpg | wc -l`
+[ $page ] || {
+    pics=`echo *.jpg`
+    numpics=0
+    pngs=`echo *.png`
+    numpngs=0
+    [ "$pics" = "*.jpg" ] || {
+        numpics=`ls -1 *.jpg | wc -l`
+    }
+    [ "$pngs" = "*.png" ] || {
+        numpngs=`ls -1 *.png | wc -l`
+    }
+    totpics=`expr $numpics + $numpngs`
+    numpage=`expr $totpics / 24`
+    page=`expr $numpage + 1`
 }
-[ "$pngs" = "*.png" ] || {
-    numpngs=`ls -1 *.png | wc -l`
-}
-totpics=`expr $numpics + $numpngs`
-numpage=`expr $totpics / 24`
-page=`expr $numpage + 1`
 
 wh -l "${DDIR}" \
-   -n 480 \
+   -n $numdown \
    -s $page \
    -t standard \
-   -c 001 \
-   -f 001 \
+   -c $categories \
+   -f $filters \
    -p 0
 

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+rm -f newbroken.txt
+touch newbroken.txt
+H=`pwd`
+while read broken
+do
+    lsl=`ls -l $broken`
+    echo $lsl | grep /Anime/ > /dev/null && {
+        target=`basename $broken`
+        [ -f Misc/$target ] || {
+            echo $broken >> newbroken.txt
+            continue
+        }
+        rm -f $broken
+        sdir=`dirname $broken`
+        cd "$sdir"
+        [ -f ../Misc/$target ] && ln -s ../Misc/$target .
+        cd "$H"
+    }
+done < broken.txt

@@ -2,10 +2,11 @@
 
 query=
 numdown=480
+page=
 categories=111
 filters=001
 
-while getopts n:c:f:q: flag; do
+while getopts n:c:f:p:q: flag; do
     case $flag in
         n)
             numdown=$OPTARG
@@ -16,6 +17,9 @@ while getopts n:c:f:q: flag; do
         f)
             filters=$OPTARG
             ;;
+        p)
+            page=$OPTARG
+            ;;
         q)
             query="$OPTARG"
     esac
@@ -23,25 +27,26 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$query" ] || query="$*"
-QDIR=`echo ${query} | sed -e "s/ /_/g"`
+QDIR=`echo ${query} | sed -e "s/ /_/g" -e "s/+/_/g"`
 DDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven/${QDIR}"
 
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
 cd "${DDIR}"
-page=1
-pics=`echo *.jpg`
-numpics=0
-pngs=`echo *.png`
-numpngs=0
-[ "$pics" = "*.jpg" ] || {
-    numpics=`ls -1 *.jpg | wc -l`
+[ "$page" ] || {
+    pics=`echo *.jpg`
+    numpics=0
+    pngs=`echo *.png`
+    numpngs=0
+    [ "$pics" = "*.jpg" ] || {
+        numpics=`ls -1 *.jpg | wc -l`
+    }
+    [ "$pngs" = "*.png" ] || {
+        numpngs=`ls -1 *.png | wc -l`
+    }
+    totpics=`expr $numpics + $numpngs`
+    numpage=`expr $totpics / 24`
+    page=`expr $numpage + 1`
 }
-[ "$pngs" = "*.png" ] || {
-    numpngs=`ls -1 *.png | wc -l`
-}
-totpics=`expr $numpics + $numpngs`
-numpage=`expr $totpics / 24`
-page=`expr $numpage + 1`
 
 wh -l "${DDIR}" -n $numdown -s $page -t search \
                 -c $categories -f $filters -q "${query}" -p 0
