@@ -26,8 +26,23 @@ fi
     cat */downloaded.txt | sort | uniq -d > ${DUPFILE}
 }
 
+status() {
+    numd=$1
+    comp=$2
+    perdone=`echo "$comp/$numd" | bc -l`
+    statlen=`echo "($perdone*75)/1" | bc`
+    remain=`echo "74-$statlen" | bc`
+    percent=`echo "($perdone*100)/1" | bc`
+    printf '%0.s#' $(seq 1 $statlen)
+    [ $percent -lt 100 ] && printf '%0.s_' $(seq 1 $remain)
+    printf " $percent%%"
+    printf "\r"
+}
+
 if [ "$LINKEM" ]
 then
+    numdups=`cat ${DUPFILE} | wc -l`
+    completed=0
     while read num
     do
         numfiles=0
@@ -38,7 +53,11 @@ then
                 numfiles=`expr $numfiles + 1`
             }
         done
-        [ $numfiles -eq 1 ] && continue
+        [ $numfiles -eq 1 ] && {
+            completed=`expr $completed + 1`
+            status $numdups $completed
+            continue
+        }
         link=
         for dup in ${DUPS}
         do
@@ -59,14 +78,21 @@ then
             ln -s ../"${link}" .
             cd ..
         done
+        completed=`expr $completed + 1`
+        status $numdups $completed
     done < ${DUPFILE}
 else
     if [ "${DUPDIR}" ]
     then
+        printf "\nCreating symbolic links in ${DUPDIR}\n"
         cd "${DUPDIR}"
         H=`pwd`
+        numdups=`ls -1 *.jpg *.png 2> /dev/null | wc -l`
+        completed=0
         for pic in *.jpg *.png
         do
+            [ "$pic" = "*.jpg" ] && continue
+            [ "$pic" = "*.png" ] && continue
             numfiles=0
             DUPS=`echo ../*/$pic`
             for dup in ${DUPS}
@@ -75,7 +101,11 @@ else
                     numfiles=`expr $numfiles + 1`
                 }
             done
-            [ $numfiles -eq 1 ] && continue
+            [ $numfiles -eq 1 ] && {
+                completed=`expr $completed + 1`
+                status $numdups $completed
+                continue
+            }
             link=
             for dup in ${DUPS}
             do
@@ -96,8 +126,13 @@ else
                 ln -s ${link} .
                 cd $H
             done
+            completed=`expr $completed + 1`
+            status $numdups $completed
         done
+        printf "\nDONE\n"
     else
+        numdups=`cat ${DUPFILE} | wc -l`
+        completed=0
         while read num
         do
             numfiles=0
@@ -111,6 +146,8 @@ else
             [ $numfiles -eq 1 ] || {
                 echo $num >> ${NEWDUPS}
             }
+            completed=`expr $completed + 1`
+            status $numdups $completed
         done < ${DUPFILE}
     fi
 fi
