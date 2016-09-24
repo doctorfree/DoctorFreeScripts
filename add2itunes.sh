@@ -1,11 +1,10 @@
 #!/bin/bash
 #
-# add2itunes - Add the media files provided as arguments to the iTunes library
-#
-# Written 8-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file add2itunes.sh
+## @author Written 8-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
+## @brief Add the media files provided as arguments to the iTunes library
+## @copyright Copyright (c) 2014, Ronald Joe Record, All rights reserved.
+## @version 1.0.1
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

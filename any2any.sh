@@ -1,32 +1,31 @@
 #!/bin/bash
 #
-# any2any - convert from any audio/video format to any other
-#
-# Written 7-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-#    This program works by either linking or copying any2any to a file
-#    which specifies the desired input and output formats by its name.
-#    Alternately, the -i and -o command line options can be used to specify
-#    the input and output file formats.
-#
-#    For example, if you want to convert from WMV to MP4 then you could
-#    create a symbolic link from any2any to wmv2mp4 as follows:
-#        ln -s any2any wmv2mp4
-#    Similarly, symbolic links (or copies or hard links) could be created
-#    to convert from any (3 lowercase letter representation) audio/video format
-#    to any other audio/video format. Commonly used conversions include:
-#        wmv2mkv avi2mpg wmv2mp4 and so on.
-#
-#    Naming restricton: [3 lowercase letter input]2[3 lowercase letter output]
-#    for a 7 letter name with "2" in the middle. The 3 letter prefix and suffix
-#    must also be a filename suffix that ffmpeg recognizes as a valid
-#    audio/video format.
-#
-#    For example, the following are filenames that conform to this restriction:
-#        ape2m4a flv2mp4 mkv2mp4 wmv2mp4 avi2mpg wmv2mkv wma2m4a
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file any2any.sh
+## @author Written 7-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
+## @brief Convert from any audio/video format to any other
+## @copyright Copyright (c) 2014, Ronald Joe Record, All rights reserved.
+## @version 1.0.1
+##
+##   This program works by either linking or copying any2any to a file
+##   which specifies the desired input and output formats by its name.
+##   Alternately, the -i and -o command line options can be used to specify
+##   the input and output file formats.
+##
+##   For example, if you want to convert from WMV to MP4 then you could
+##   create a symbolic link from any2any to wmv2mp4 as follows:
+##       ln -s any2any wmv2mp4
+##   Similarly, symbolic links (or copies or hard links) could be created
+##   to convert from any (3 lowercase letter representation) audio/video format
+##   to any other audio/video format. Commonly used conversions include:
+##       wmv2mkv avi2mpg wmv2mp4 and so on.
+##
+##   Naming restricton: [3 lowercase letter input]2[3 lowercase letter output]
+##   for a 7 letter name with "2" in the middle. The 3 letter prefix and suffix
+##   must also be a filename suffix that ffmpeg recognizes as a valid
+##   audio/video format.
+##
+##   For example, the following are filenames that conform to this restriction:
+##       ape2m4a flv2mp4 mkv2mp4 wmv2mp4 avi2mpg wmv2mkv wma2m4a
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -76,6 +75,7 @@ VSAMPLE=
 THREAD=
 ITUNES=
 
+## @fn
 usage() {
   printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec] [-p preset]"
   printf "\n\t\t[-i input format (lower case)] [-o output format (lower case)]"
@@ -189,7 +189,7 @@ shift $(( OPTIND - 1 ))
 # Set ffmpeg conversion options based upon the desired output format
 [ "$SUF" = "mp4" ] && {
     VCODEC="-vcodec libx264"
-# See http://slhck.info/articles/crf for info on Constant Rate Factor (CRF)
+## See http://slhck.info/articles/crf for info on Constant Rate Factor (CRF)
     RATE="-crf 23"
     ASAMPLE="-ab 128k"
     THREAD="-threads 0"
@@ -197,7 +197,7 @@ shift $(( OPTIND - 1 ))
 [ "$SUF" = "wmv" ] && {
     ACODEC="-acodec adpcm_ms"
     VCODEC="-vcodec msmpeg4"
-# See http://www.kilobitspersecond.com/2007/05/24/ffmpeg-quality-comparison
+## See http://www.kilobitspersecond.com/2007/05/24/ffmpeg-quality-comparison
     QSCALE="-qscale 5"
     ASAMPLE="-ab 128k"
     THREAD="-threads 0"

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# chk - check the specified directories/libraries and see if they need to by
+# chk - check the specified directories/libraries and see if they need to be
 #    sync'd with rsync to the USB flash drive backup
 #    Note: to check other directories use the -s, -a, and -t arguments
 #          when invoked as chkaplibs it checks directories in my Photosn libs

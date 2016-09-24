@@ -102,7 +102,9 @@ FORCE=
 # List of installed files which differ from those in my git repo due to
 # tailoring for my own use. These will not get force installed without first
 # prompting you if you really want to.
-DIFFER="bash_aliases bash_profile bashrc mkreadme mkwmv wb"
+DIFFER="bash_aliases bash_profile bashrc mkreadme.sh mkwmv.sh \
+        Wallpapers/wb.sh Wallpapers/wh.sh"
+
 while getopts adfinu flag; do
     case $flag in
         a)
@@ -132,6 +134,8 @@ for i in *
 do
     # Skip directories
     [ -d "$i" ] && continue
+    # Strip any .sh suffix
+    j=`echo $i | sed -e "s/\.sh$//"`
     # Scripts can be either commands or startup configuration files in $HOME 
     case "$i" in
         bash_aliases|bash_profile|bashrc|dircolors|vimrc)
@@ -143,7 +147,7 @@ do
             fi
             ;;
         *)
-            inst=`type -p "$i"`
+            inst=`type -p "$j"`
             ;;
     esac
     [ "$inst" ] || {
@@ -173,10 +177,13 @@ do
         bashrc)
             check "$i" "$inst" 72
             ;;
-        wb)
+        Wallpapers/wh.sh)
             check "$i" "$inst" 8
             ;;
-        mkreadme|mkwmv)
+        Wallpapers/wb.sh)
+            check "$i" "$inst" 8
+            ;;
+        mkreadme.sh|mkwmv.sh)
             check "$i" "$inst" 12
             ;;
         *)

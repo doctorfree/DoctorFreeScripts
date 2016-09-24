@@ -1,4 +1,13 @@
 #!/bin/bash
+#
+## get-search - Download Wallhaven images matching the specified search terms.
+##
+## Downloaded files are placed in a subdirectory based on the search terms
+## or the subdirectory specified in the -l option. If no subdirectory is
+## specified on the command line then the subdirectory name is the search
+## phrase with all occurrences of '+' and space replaced by '_'. After the
+## search and download is completed, duplicate files in the download directory
+## are symlinked.
 
 [ -r ./utils ] && . ./utils
 [ "$WHDIR" ] || WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
@@ -24,7 +33,8 @@ DDIR="${WHDIR}/${QDIR}"
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
 cd "${DDIR}"
 
-# Try to set a reasonable start page if one has not been specified
+## Try to set a reasonable start page if one has not been specified by
+## counting the number of previously downloaded images and divide by 24
 [ "$page" ] || {
     pics=`echo *.jpg`
     numpics=0

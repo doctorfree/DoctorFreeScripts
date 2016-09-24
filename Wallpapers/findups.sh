@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+## findups - find and symlink duplicate files
 
 [ -r ./utils ] && . ./utils
 
