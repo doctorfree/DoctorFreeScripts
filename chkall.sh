@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-# chkall - invokes "chk" to check the Aperture, Movies, and Pictures
-#          rsync'd directories and sync them if specified and necessary.
-#
-# Written 23-Feb-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file chkall.sh
+## @brief Invokes chk to check & sync the media rsync'd directories
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 23-Feb-2014
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,11 @@
 # the Software.
 #
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "Usage: chkall [-f] [-h] [-H] [-n] [-r] [-u]\n"
     printf "Where:\n\t-n indicates tell me what you would do without doing it\n"

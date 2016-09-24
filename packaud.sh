@@ -1,11 +1,12 @@
 #!/bin/bash
 #
-# packaud - archive and compress my Audacity project files
-#
-# Written 30-Jan-2015 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2015, Ronald Joe Record
-# All rights reserved.
+## @file packaud.sh
+## @brief Archive and compress my Audacity project files
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 30-Jan-2015
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +35,11 @@ TELL=
 USAGE=
 VERBOSE=
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: packaud [-a audacity dir] [-d] [-r] [-v] [-u]\n"
     printf "\nWhere:\n\taudacity dir is your Audacity project directory\n"
@@ -45,6 +51,9 @@ usage() {
     exit 1
 }
 
+## @fn Archive()
+## @brief Create a compressed tar archive of the specified directory
+## @param param1 Directory to archive
 Archive() {
     Arch_Dir="$1"
     if [ -d "$Arch_Dir" ]

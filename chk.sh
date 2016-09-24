@@ -1,19 +1,20 @@
 #!/bin/bash
 #
-# chk - check the specified directories/libraries and see if they need to be
-#    sync'd with rsync to the USB flash drive backup
-#    Note: to check other directories use the -s, -a, and -t arguments
-#          when invoked as chkaplibs it checks directories in my Photosn libs
-#          when invoked as chkitunes it checks directories in my iTunes library
-#          when invoked as chkpicdir it checks directories in my Pictures dir
-#          when invoked as chkmovdir it checks directories in my Movies dir
-#          when invoked as chkauddir it checks directories in my Audio dir
-#          when invoked as chkhome it checks directories in $HOME
-#
-# Written 15-Feb-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file chk.sh
+## @brief Check if the specified directories/libraries need to be sync'd
+## @remark Sync with rsync to the USB flash drive backup
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 15-Feb-2014
+## @version 1.0.1
+##
+##   Note: to check other directories use the -s, -a, and -t arguments
+##         when invoked as chkaplibs it checks directories in my Photosn libs
+##         when invoked as chkitunes it checks directories in my iTunes library
+##         when invoked as chkpicdir it checks directories in my Pictures dir
+##         when invoked as chkmovdir it checks directories in my Movies dir
+##         when invoked as chkauddir it checks directories in my Audio dir
+##         when invoked as chkhome it checks directories in $HOME
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -52,6 +53,11 @@ UPD=
 TELL=
 USAGE=
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "Usage: $NAME [-h] [-n] [-r] [-u] [-a source_dir] [-t dest_dir]\n"
     printf "  [-A] [-I] [-H] [-L] [-M] [-P] [-f] [-s suffix]\n"
@@ -77,6 +83,9 @@ usage() {
     exit 1
 }
 
+## @fn chklib()
+## @brief Check if specified library directory needs to be sync'd
+## @param param1 first argument specifies library directory name
 chklib() {
     lib=$1
     [ -d "$USBLIBDIR/$lib" ] || continue
@@ -224,8 +233,8 @@ NAME=`basename $0`
     UPSC="upd -I"
 }
 
-# Where to check the sync from
-# Defaults to checking current working directory
+#  Where to check the sync from
+## Defaults to checking current working directory
 [ "$SOURCEDIR" ] || SOURCEDIR=`pwd`
 # The mounted USB stick or backup directory
 [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/`basename $SOURCEDIR`"

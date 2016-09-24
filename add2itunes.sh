@@ -1,10 +1,13 @@
 #!/bin/bash
 #
 ## @file add2itunes.sh
-## @author Written 8-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
 ## @brief Add the media files provided as arguments to the iTunes library
-## @copyright Copyright (c) 2014, Ronald Joe Record, All rights reserved.
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 8-Mar-2014
 ## @version 1.0.1
+##
+## @remark Uses osascript to embed AppleScript in a Bash shell script
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

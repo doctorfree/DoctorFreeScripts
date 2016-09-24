@@ -1,19 +1,20 @@
 #!/bin/bash
 #
-# upd - sync specified directories/libraries to a USB flash drive
-#    Note: to sync other directories use the -s, -a, and -t arguments
-#        when invoked as updaplibs it syncs directories in my Aperture library
-#        when invoked as updphotoslibs it syncs directories in my Photos library
-#        when invoked as upditunes it syncs directories in my iTunes library
-#        when invoked as updpicdir it syncs directories in my Pictures dir
-#        when invoked as updmovdir it syncs directories in my Movies dir
-#        when invoked as updauddir it syncs directories in my Audio dir
-#        when invoked as updhome it syncs directories in $HOME
-#
-# Written 10-Feb-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file upd.sh
+## @brief Sync specified directories/libraries to a USB flash drive
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 10-Feb-2014
+## @version 1.0.1
+##
+## Note: to sync other directories use the -s, -a, and -t arguments
+##     when invoked as updaplibs it syncs directories in my Aperture library
+##     when invoked as updphotoslibs it syncs directories in my Photos library
+##     when invoked as upditunes it syncs directories in my iTunes library
+##     when invoked as updpicdir it syncs directories in my Pictures dir
+##     when invoked as updmovdir it syncs directories in my Movies dir
+##     when invoked as updauddir it syncs directories in my Audio dir
+##     when invoked as updhome it syncs directories in $HOME
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -52,6 +53,11 @@ IGN="--max-size=4G"
 USAGE=
 VERB="q"
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "Usage: $NAME [-d] [-h] [-n] [-u] [-a source dir] [-t dest dir]\n"
     printf "    [-v] [-A] [-I] [-P] [-M] [-H] [-L] [-l] [-s suffix]\n"

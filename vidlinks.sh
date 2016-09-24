@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-# vidlinks - create symbolic links to movie files where possible to reduce
-#    duplicate storage of movies. Link into my iTunes library.
-#
-# Written 01-Dec-2013 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file vidlinks.sh
+## @brief Create symbolic links to movie files where possible
+## @remark Reduce duplicate storage of movies, link into my iTunes library
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 01-Dec-2013
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +38,11 @@ USE_SUM=
 TELL=
 FEMJOY=
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: vidlinks [-M Movies Dir] [-W Work Dir] [-F Femjoy Dir]"
     printf "\n\t[-A Aperture Dir] [-I iTunes Dir] [-d] [-c] [-j] [-u]\n"
@@ -52,6 +58,10 @@ usage() {
     exit 1
 }
 
+## @fn remlink()
+## @brief Remove file and replace it with a symbolic link
+## @param param1 Source file to use for symbolic link
+## @param param2 File to remove and replace
 remlink() {
     printf "\nRemoving $2"
     [ "$TELL" ] || rm -f "$2"
@@ -59,6 +69,9 @@ remlink() {
     [ "$TELL" ] || ln -s "$1" "$2"
 }
 
+## @fn FindAndLink()
+## @brief Recursively find and symlink duplicate files in current directory
+## @param none
 FindAndLink() {
     find . -type f | while read i
     do
@@ -104,6 +117,9 @@ FindAndLink() {
     done
 }
 
+## @fn FindAndRemove()
+## @brief Recursively find and broken symbolic links in current directory
+## @param none
 FindAndRemove() {
     find . -type l | while read i
     do

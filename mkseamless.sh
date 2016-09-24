@@ -1,15 +1,18 @@
 #!/bin/bash
 #
-# mkseamless - make a texture seamless
-# The Vertical.png image is available at
-# https://github.com/doctorfree/Scripts/blob/master/Vertical.png
-#
-# Usage: mkseamless filename [filename ...]
-#
-# Places the output seamless texture(s) in a subdirectory "Seamless"
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file mkseamless.sh
+## @brief Make a texture seamless
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date
+## @version 1.0.1
+##
+## The Vertical.png image is available at
+## https://github.com/doctorfree/Scripts/blob/master/Vertical.png
+##
+## Usage: mkseamless filename [filename ...]
+##
+## Places the output seamless texture(s) in a subdirectory "Seamless"
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +36,11 @@
 # Where are the horizontal and vertical region files located ?
 L=/usr/local/lib
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     echo "Usage: mkseamless filename [filename ...]"
     exit 1

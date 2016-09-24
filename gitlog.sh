@@ -1,11 +1,12 @@
 #!/bin/bash
 #
-# gitlog - pretty format the output of "git log ..."
-#
-# Written 11-Mar-2015 by Ronald Joe Record
-#
-# Copyright (c) 2015, Ronald Joe Record
-# All rights reserved.
+## @file gitlog.sh
+## @brief Pretty format the output of "git log ..."
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 11-Mar-2015
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,61 +26,61 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
-# Useful options for git log --pretty=format
-#
-# Option    Description of Output
-# 
-# %H    Commit hash
-# %h    Abbreviated commit hash
-# %T    Tree hash
-# %t    Abbreviated tree hash
-# %P    Parent hashes
-# %p    Abbreviated parent hashes
-# %an   Author name
-# %ae   Author e-mail
-# %ad   Author date (format respects the --date=option)
-# %ar   Author date, relative
-# %cn   Committer name
-# %ce   Committer email
-# %cd   Committer date
-# %cr   Committer date, relative
-# %s    Subject
-#
-# General git log options
-#
-# -p    Show the patch introduced with each commit.
-# --stat Show statistics for files modified in each commit.
-# --shortstat Display only the changed/insertions/deletions line from
-#             the --stat command.
-# --name-only Show the list of files modified after the commit information.
-# --name-status Show the list of files affected with added/modified/deleted
-#               information as well.
-# --abbrev-commit Show only the first few characters of the SHA-1 checksum
-#                 instead of all 40.
-# --relative-date Display the date in a relative format (for example, “2 weeks
-#                 ago”) instead of using the full date format.
-# --graph Display an ASCII graph of the branch and merge history beside the
-#         log output.
-# --pretty Show commits in an alternate format. Options include oneline, short,
-#          full, fuller, and format (where you specify your own format).
-#
-# Options to filter output of git log
-#
-# -(n) Show only the last n commits
-# --since, --after Limit the commits to those made after the specified date.
-# --until, --before Limit the commits to those made before the specified date.
-# --author Only show commits in which the author entry matches the
-#          specified string.
-# --committer Only show commits in which the committer entry matches the
-#             specified string.
-# --grep Only show commits with a commit message containing the string
-# -S Only show commits adding or removing code matching the string
-# 
-# The last really useful option to pass to git log as a filter is a path.
-# If you specify a directory or file name, you can limit the log output to
-# commits that introduced a change to those files. This is always the last
-# option and is generally preceded by double dashes (--) to separate the
-# paths from the options.
+## Useful options for git log --pretty=format
+##
+## Option    Description of Output
+## 
+## %H    Commit hash
+## %h    Abbreviated commit hash
+## %T    Tree hash
+## %t    Abbreviated tree hash
+## %P    Parent hashes
+## %p    Abbreviated parent hashes
+## %an   Author name
+## %ae   Author e-mail
+## %ad   Author date (format respects the --date=option)
+## %ar   Author date, relative
+## %cn   Committer name
+## %ce   Committer email
+## %cd   Committer date
+## %cr   Committer date, relative
+## %s    Subject
+##
+## General git log options
+##
+## -p    Show the patch introduced with each commit.
+## --stat Show statistics for files modified in each commit.
+## --shortstat Display only the changed/insertions/deletions line from
+##             the --stat command.
+## --name-only Show the list of files modified after the commit information.
+## --name-status Show the list of files affected with added/modified/deleted
+##               information as well.
+## --abbrev-commit Show only the first few characters of the SHA-1 checksum
+##                 instead of all 40.
+## --relative-date Display the date in a relative format (for example, “2 weeks
+##                 ago”) instead of using the full date format.
+## --graph Display an ASCII graph of the branch and merge history beside the
+##         log output.
+## --pretty Show commits in an alternate format. Options include oneline, short,
+##          full, fuller, and format (where you specify your own format).
+##
+## Options to filter output of git log
+##
+## -(n) Show only the last n commits
+## --since, --after Limit the commits to those made after the specified date.
+## --until, --before Limit the commits to those made before the specified date.
+## --author Only show commits in which the author entry matches the
+##          specified string.
+## --committer Only show commits in which the committer entry matches the
+##             specified string.
+## --grep Only show commits with a commit message containing the string
+## -S Only show commits adding or removing code matching the string
+## 
+## The last really useful option to pass to git log as a filter is a path.
+## If you specify a directory or file name, you can limit the log output to
+## commits that introduced a change to those files. This is always the last
+## option and is generally preceded by double dashes (--) to separate the
+## paths from the options.
 
 DAYS=1
 SINCE=
@@ -88,6 +89,11 @@ REVERSE=
 USAGE=
 FULL=
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "Usage: gitlog [-f] [-n] [-r] [-s days] [-u]\n"
     printf "Where:\n\t-n indicates name-only output mode"

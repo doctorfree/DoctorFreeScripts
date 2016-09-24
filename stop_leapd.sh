@@ -1,15 +1,14 @@
 #!/bin/bash
 #
-# stop_leapd - convenience script to stop the Leap Motion daemon and agent
-#      then move it's auto-start functionality out of the way so it does not
-#      get automatically started on system startup.
-#
-# Note this is OS X specific.
-#
-# Written 12-Apr-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file stop_leapd.sh
+## @brief Convenience script to stop the Leap Motion daemon and agent
+## @remark Moves the auto-start function to disable startup on system startup
+## @remark Note this is OS X specific
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 12-Apr-2014
+## @version 1.0.1
+##
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,31 +28,32 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
-# Use in conjunctin with the Bash functions start-leap() and stop-leap()
-# to replace automatic startup with manual startup/shutdown :
+## Use in conjunctin with the Bash functions start-leap() and stop-leap()
+## to replace automatic startup with manual startup/shutdown :
+##
+## Add these two functions to your .bashrc and you will then be able to start
+## and stop the Leap Motion daemon and agent simply by typing "start-leap" and
+## "stop-leap" at the Bash shell prompt.
+##
+## function start-leap() {
+##     RUNNING=`ps -ef | grep "Leap Motion" | grep leapd`
+##     [ "$RUNNING" ] || {
+##        /Applications/Leap\ Motion.app/Contents/MacOS/leapd > /dev/null 2>&1 &
+##        sleep 1
+##     }
+##     RUNNING=`ps -ef | grep "Leap Motion" | grep -v leapd | grep -v grep`
+##     [ "$RUNNING" ] || {
+##         open /Applications/Leap\ Motion.app
+##     }
+## }
+## function stop-leap() {
+##     RUNNING=`ps -ef | grep "Leap Motion" | grep leapd`
+##     [ "$RUNNING" ] && killall leapd
+##     RUNNING=`ps -ef | grep "Leap Motion" | grep -v leapd | grep -v grep`
+##     [ "$RUNNING" ] && killall Leap\ Motion
+## }
+##
 #
-# Add these two functions to your .bashrc and you will then be able to start
-# and stop the Leap Motion daemon and agent simply by typing "start-leap" and
-# "stop-leap" at the Bash shell prompt.
-#
-# function start-leap() {
-#     RUNNING=`ps -ef | grep "Leap Motion" | grep leapd`
-#     [ "$RUNNING" ] || {
-#         /Applications/Leap\ Motion.app/Contents/MacOS/leapd > /dev/null 2>&1 &
-#         sleep 1
-#     }
-#     RUNNING=`ps -ef | grep "Leap Motion" | grep -v leapd | grep -v grep`
-#     [ "$RUNNING" ] || {
-#         open /Applications/Leap\ Motion.app
-#     }
-# }
-# function stop-leap() {
-#     RUNNING=`ps -ef | grep "Leap Motion" | grep leapd`
-#     [ "$RUNNING" ] && killall leapd
-#     RUNNING=`ps -ef | grep "Leap Motion" | grep -v leapd | grep -v grep`
-#     [ "$RUNNING" ] && killall Leap\ Motion
-# }
-
 # The Launch scripts (use relative paths for tar's sake)
 LEAPD="Library/LaunchDaemons/com.leapmotion.leapd.plist"
 MOTION="Library/LaunchAgents/com.leapmotion.Leap-Motion.plist"

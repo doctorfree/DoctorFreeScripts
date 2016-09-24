@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-# updgit - perform the git add, git commit, and git push to the remote
-#          repository associated with this clone.
-#
-# Written 8-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file updgit.sh
+## @brief Perform git add/commit/push to the repo associated with this clone
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 8-Mar-2014
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,11 @@
 # the Software.
 #
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: updgit [-u] [-a] [-d] [-m \"message comment\"] [file1 ...]"
     printf "\nWhere:"

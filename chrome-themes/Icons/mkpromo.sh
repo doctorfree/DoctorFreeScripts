@@ -1,4 +1,12 @@
 #!/bin/bash
+#
+## @file chrome-themes/Icons/mkpromo.sh
+## @brief Create promotional images for use in Chrome theme store
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 17-May-2016
+## @version 1.0.1
+##
 
 SIZE="320x320"
 PRO1="440x280"

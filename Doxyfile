@@ -51,14 +51,14 @@ PROJECT_BRIEF          = "Bash scripts written by Ron Record"
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = /Users/rrecord/src/Scripts/Bash-Logo.png
+PROJECT_LOGO           = $(HOME)/src/Scripts/Scripts-Logo.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = /Users/rrecord/src/Scripts/doc
+OUTPUT_DIRECTORY       = $(HOME)/src/Scripts/doc
 
 # If the CREATE_SUBDIRS tag is set to YES then doxygen will create 4096 sub-
 # directories (in 2 levels) under the output directory of each output format and
@@ -292,6 +292,7 @@ OPTIMIZE_OUTPUT_VHDL   = NO
 # the files are not read by doxygen.
 
 EXTENSION_MAPPING      = sh=C \
+                         md=C \
                          no_extension=C
 
 # If the MARKDOWN_SUPPORT tag is enabled then doxygen pre-processes all comments
@@ -782,7 +783,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = /Users/rrecord/src/Scripts
+INPUT                  = $(HOME)/src/Scripts
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -807,7 +808,8 @@ INPUT_ENCODING         = UTF-8
 # *.m, *.markdown, *.md, *.mm, *.dox, *.py, *.pyw, *.f90, *.f, *.for, *.tcl,
 # *.vhd, *.vhdl, *.ucf, *.qsf, *.as and *.js.
 
-FILE_PATTERNS          = *.sh
+FILE_PATTERNS          = *.sh \
+                         *.md
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
@@ -896,7 +898,7 @@ IMAGE_PATH             =
 # need to set EXTENSION_MAPPING for the extension otherwise the files are not
 # properly processed by doxygen.
 
-INPUT_FILTER           = "/opt/local/bin/gsed -n -f /Users/rrecord/src/bash-doxygen-master/doxygen-bash.sed --"
+INPUT_FILTER           = "/opt/local/bin/gsed -n -f $(HOME)/src/bash-doxygen-master/doxygen-bash.sed --"
 
 # The FILTER_PATTERNS tag can be used to specify filters on a per file pattern
 # basis. Doxygen will compare the file name with each pattern and apply the

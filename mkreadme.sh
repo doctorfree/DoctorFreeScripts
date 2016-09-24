@@ -1,23 +1,24 @@
 #!/bin/bash
 #
-# mkreadme - creates a 00_Readme.html in all subdirectories. Assumes a directory
-#     and file structure of Artist/Album/Tracks.
-#
-# A quick way to populate my USB drives with HTML documents to provide
-# an initial way to navigate around. This currently only dives two levels
-# deep to allow for Artist/Album/Tracks directory structure:
-#
-# Artist Name/
-#     Album Name/
-#         Pics/if-any.jpg (put cover art and other pics in Pics folder)
-#         Track1.m4a
-#         Track2.m4a (and so on, any file format)
-#         Year (contents of Year file should just be year released in parens)
-#
-# Written 23-Aug-2012 by Ronnie Record <flash@ronrecord.com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file mkreadme.sh
+## @brief Creates a 00_Readme.html in all subdirectories
+## @remark Assumes a directory and file structure of Artist/Album/Tracks.
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 23-Aug-2012
+## @version 1.0.1
+##
+## A quick way to populate my USB drives with HTML documents to provide
+## an initial way to navigate around. This currently only dives two levels
+## deep to allow for Artist/Album/Tracks directory structure:
+##
+## Artist Name/
+##     Album Name/
+##         Pics/if-any.jpg (put cover art and other pics in Pics folder)
+##         Track1.m4a
+##         Track2.m4a (and so on, any file format)
+##         Year (contents of Year file should just be year released in parens)
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -66,6 +67,9 @@ Enjoy!<br>
 </font></body>
 </html>"
 
+## @fn Create_Readme()
+## @brief Concatenate the header, supplied HTML text, body, and tags
+## @param param1 Directory in which to create Readme
 Create_Readme() {
     echo $HEAD > $R
     echo "$1" >> $R
@@ -73,6 +77,9 @@ Create_Readme() {
     echo "<h1>$1</h1><br>" >> $R
 }
 
+## @fn Add_Album()
+## @brief Add an album to Readme in specified directory
+## @param param1 Directory in which to add album to Readme
 Add_Album() {
     [ "$1" = "$R" ] || {
       [ "$1" = "*" ] || {
@@ -82,6 +89,9 @@ $1</a><br>" >> $R
     }
 }
 
+## @fn Add_Track()
+## @brief Add a track to an album in Readme of specified directory
+## @param param1 Directory in which to add track to album in Readme
 Add_Track() {
     [ "$1" = "$R" ] || {
       [ "$1" = "*" ] || {
@@ -153,15 +163,15 @@ do
             }
         }
         cd "$i"
-	[ "$Top" ] && {
-	    echo "<li><a href=\"$i/$R\">$i</a><br><ul>" >> ../$R
+        [ "$Top" ] && {
+	        echo "<li><a href=\"$i/$R\">$i</a><br><ul>" >> ../$R
         }
-	Created=
+        Created=
         [ -f $R ] || {
-	    Create_Readme "$i"
+	        Create_Readme "$i"
             echo $ALBUMS >> $R
-	    Created=1
-	}
+	        Created=1
+	    }
         EMPTY=
         FILES=
         for j in *
@@ -180,40 +190,40 @@ do
                 FILES=
 	        cd "$j"
 	        [ "$Top" ] && {
-		    y=
-		    [ -r Year ] && y=`cat Year`
+		        y=
+		        [ -r Year ] && y=`cat Year`
 	            echo "<li><a href=\"$i/$j/$R\">
 $i - &quot;$j&quot; $y</a><br>" >> ../../$R
-                }
-                [ -f $R ] || {
+            }
+            [ -f $R ] || {
 	            Create_Readme "$j"
-		    echo "<h2>$i</h2><br><br>" >> $R
-                    echo $TRACKS >> $R
+		        echo "<h2>$i</h2><br><br>" >> $R
+                echo $TRACKS >> $R
 	            for k in *
 	            do
-			[ "$k" = "Year" ] && continue
-			[ -d "$k" ] && continue
+			        [ "$k" = "Year" ] && continue
+			        [ -d "$k" ] && continue
 	                Add_Track "$k"
 	            done
-		    [ -d Pics ] && {
-		        for pic in Pics/*
-			do
-			    [ "$pic" = "Pics/*" ] && continue
-			    echo "<br><a href=\"$pic\"><img src=\"$pic\" alt=\"$pic\" border=0><br>" >> $R
-			done
+		        [ -d Pics ] && {
+		            for pic in Pics/*
+			        do
+			            [ "$pic" = "Pics/*" ] && continue
+			            echo "<br><a href=\"$pic\"><img src=\"$pic\" alt=\"$pic\" border=0><br>" >> $R
+			        done
 	            }
-		    echo $TAIL >> $R
+		        echo $TAIL >> $R
 	        }
-		cd ..
-	    }
-	    [ "$Created" ] && {
-	        Add_Album "$j"
-	    }
-	done
+		    cd ..
+	        }
+	        [ "$Created" ] && {
+	            Add_Album "$j"
+	        }
+	    done
         [ "$Created" ] && {
-	    echo $TAIL >> $R
-	}
-	cd ..
+	        echo $TAIL >> $R
+	    }
+	    cd ..
         [ "$Top" ] && {
             echo "<br></ul>" >> $R
         }

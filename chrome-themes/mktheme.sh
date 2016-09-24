@@ -1,13 +1,14 @@
 #!/bin/bash
 #
-# mktheme - create a Google Chrome theme using a specified background image
-#     and corresponding manifest, theme images, private key, etc.
+## @file chrome-themes/mktheme.sh
+## @brief Create a Google Chrome theme using a specified background image
+## @remark Use corresponding manifest, theme images, private key, etc.
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 24-Apr-2016
+## @version 1.0.1
+##
 #
-# Written 24-Apr-2016 by Ronald Joe Record <themes at ronrecord dot com>
-#
-# Copyright (c) 2016, Ronald Joe Record
-# All rights reserved.
-# 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -40,6 +41,11 @@ SEM=
 INQ=
 ZIP=
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "Usage: mktheme [-a] [-B /full/path/to/base_dir] \n"
     printf "\t\t[-b relative_base_dir] [-i] [-r] [-s] [-u] [-z]\n"

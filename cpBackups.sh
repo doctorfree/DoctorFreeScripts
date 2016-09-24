@@ -1,18 +1,23 @@
 #!/bin/bash
 #
-# cpBackups - Copy Time Machine backups with bypass command
-# mvbackups - Move Time Machine backups with bypass command
-# rmBackups - Remove Time Machine backups with bypass command
-#
-# Written 28-Mar-2015 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Depending on how this command is invoked (cpBackups, mvBackups, or rmBackups)
-# or what arguments are supplied on the command-line, this will copy, move,
-# or remove Time Machine backups using the bypass command
-#
-# A simple "mv ..." or even "sudo mv ..." wouldn't work on Time Machine
-# backups as I got many many "operation not permitted" failures.
-# Same for attempted copies and removal. Use of the bypass command avoids this.
+## @file cpBackups.sh
+## @brief Copy/Move/Remove Time Machine backups with bypass command
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 28-Mar-2015
+## @version 1.0.1
+##
+## cpBackups - Copy Time Machine backups with bypass command
+## mvbackups - Move Time Machine backups with bypass command
+## rmBackups - Remove Time Machine backups with bypass command
+##
+## Depending on how this command is invoked (cpBackups, mvBackups, or rmBackups)
+## or what arguments are supplied on the command-line, this will copy, move,
+## or remove Time Machine backups using the bypass command
+##
+## A simple "mv ..." or even "sudo mv ..." wouldn't work on Time Machine
+## backups as I got many many "operation not permitted" failures.
+## Same for attempted copies and removal. Use of the bypass command avoids this.
 #
 
 OLD_BACKUP_DB="/Volumes/My_Book_Studio/Backups.backupdb"
@@ -27,6 +32,11 @@ CP_CMD="cp -a"
 MV_CMD="mv"
 RM_CMD="rm -rf"
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: $CMD [-cmr] [-n] [-b path-to-bypass]\n"
     printf "\t[-s path-to-source-db] [-d path-to-destination-db] [-u]\n"

@@ -1,4 +1,12 @@
 #!/bin/bash
+#
+## @file get-number.sh
+## @brief Download Wallhaven wallpaper by number
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2016
+## @version 1.0.1
+##
 
 [ -r ./utils ] && . ./utils
 [ "$WHDIR" ] || WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"

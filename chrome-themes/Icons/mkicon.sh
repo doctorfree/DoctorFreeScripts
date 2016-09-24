@@ -1,9 +1,13 @@
 #!/bin/bash
 #
-# mkicon - create Google Chrome theme icons using ImageMagick and a freely
-#    licensed background image from Wikimedia Commons
-#
-# Written May 1, 2016 by Ronald Joe Record
+## @file chrome-themes/Icons/mkicon.sh
+## @brief Create Google Chrome theme icons using ImageMagick
+## @remark Uses freely licensed background images from Wikimedia Commons
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written May 1, 2016
+## @version 1.0.1
+##
 #
 # Copyright (c) 2016, Ronald Joe Record
 # All rights reserved.

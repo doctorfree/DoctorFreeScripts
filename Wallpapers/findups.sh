@@ -1,6 +1,12 @@
 #!/bin/bash
 #
-## findups - find and symlink duplicate files
+## @file findups.sh
+## @brief Find and symlink duplicate files
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2016
+## @version 1.0.1
+##
 
 [ -r ./utils ] && . ./utils
 

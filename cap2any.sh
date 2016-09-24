@@ -1,47 +1,48 @@
 #!/bin/bash
 #
-# cap2any - capture the screen and output to the specified audio/video format
-#
-# Written 6-Jul-2015 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# From https://trac.ffmpeg.org/wiki/Capture/Desktop
-#
-# Use the avfoundation device:
-#
-# ffmpeg -f avfoundation -list_devices true -i ""
-#
-# This will enumerate all the available input devices including
-# screens ready to be captured. Once you've figured out the device
-# index corresponding to the screen to be captured use:
-#
-# ffmpeg -f avfoundation -i "<screen device index>:<audio device index>" out.m4v
-#
-# This will capture the screen from <screen device index> and audio from
-# <audio device index> into the output file out.m4v.
-#
-# Uses the default options for audio/video encoding from my any2any script
-#
-#    This program works by either linking or copying cap2any to a file
-#    which specifies the desired output format by its name.
-#    Alternately, the -o command line option can be used to specify
-#    the output file format.
-#
-#    For example, if you want to capture to MP4 then you could
-#    create a symbolic link from cap2any to cap2mp4 as follows:
-#        ln -s cap2any cap2mp4
-#    Similarly, symbolic links (or copies or hard links) could be created to
-#    capture to any other audio/video format.
-#
-#    Naming restricton: cap2[3 lowercase letter output]
-#    for a 7 letter name beginning with "cap2". The 3 letter prefix and
-#    suffix must also be a filename suffix that ffmpeg recognizes as a valid
-#    audio/video format.
-#
-#    For example, the following are filenames that conform to this restriction:
-#        cap2mp4 cap2mpg cap2mkv cap2m4a cap2wmv
-#
-# Copyright (c) 2015, Ronald Joe Record
-# All rights reserved.
+## @file cap2any.sh
+## @brief Capture the screen and output to the specified audio/video format
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2015, Ronald Joe Record, all rights reserved.
+## @date Written 6-Jul-2015
+## @version 1.0.1
+##
+## See https://trac.ffmpeg.org/wiki/Capture/Desktop
+##
+## Use the avfoundation device:
+##
+## ffmpeg -f avfoundation -list_devices true -i ""
+##
+## This will enumerate all the available input devices including
+## screens ready to be captured. Once you've figured out the device
+## index corresponding to the screen to be captured use:
+##
+## ffmpeg -f avfoundation -i "<scr device index>:<aud device index>" out.m4v
+##
+## This will capture the screen from <screen device index> and audio from
+## <audio device index> into the output file out.m4v.
+##
+## Uses the default options for audio/video encoding from my any2any script
+##
+##    This program works by either linking or copying cap2any to a file
+##    which specifies the desired output format by its name.
+##    Alternately, the -o command line option can be used to specify
+##    the output file format.
+##
+##    For example, if you want to capture to MP4 then you could
+##    create a symbolic link from cap2any to cap2mp4 as follows:
+##        ln -s cap2any cap2mp4
+##    Similarly, symbolic links (or copies or hard links) could be created to
+##    capture to any other audio/video format.
+##
+##    Naming restricton: cap2[3 lowercase letter output]
+##    for a 7 letter name beginning with "cap2". The 3 letter prefix and
+##    suffix must also be a filename suffix that ffmpeg recognizes as a valid
+##    audio/video format.
+##
+##    For example, the following are filenames that conform to this restriction:
+##        cap2mp4 cap2mpg cap2mkv cap2m4a cap2wmv
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -61,41 +62,46 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
-# AVFoundation supports the following options:
-# 
-# -list_devices <TRUE|FALSE>
-#    If set to true, a list of all available input devices is given showing
-#    all device names and indices.
-# -video_device_index <INDEX>
-#    Specify the video device by its index. Overrides anything given in the
-#    input filename.
-# -audio_device_index <INDEX>
-#    Specify the audio device by its index. Overrides anything given in the
-#    input filename.
-# -pixel_format <FORMAT>
-#    Request the video device to use a specific pixel format. If the specified
-#    format is not supported, a list of available formats is given und the first
-#    one in this list is used instead. Available pixel formats are: monob,
-#    rgb555be, rgb555le, rgb565be, rgb565le, rgb24, bgr24, 0rgb, bgr0, 0bgr,
-#    rgb0, bgr48be, uyvy422, yuva444p, yuva444p16le, yuv444p, yuv422p16,
-#    yuv422p10, yuv444p10, yuv420p, nv12, yuyv422, gray
-# 
-# Examples
-# 
-# Print the list of AVFoundation supported devices and exit:
-# $ ffmpeg -f avfoundation -list_devices true -i ""
-# 
-# Record video from video device 0 and audio from audio device 0 into out.avi:
-# $ ffmpeg -f avfoundation -i "0:0" out.avi
-# 
-# Record video from video device 2 and audio from audio device 1 into out.avi:
-# $ ffmpeg -f avfoundation -video_device_index 2 -i ":1" out.avi
-# 
-# Record video from the system default video device using the pixel format bgr0
-# and do not record any audio into out.avi:
-# $ ffmpeg -f avfoundation -pixel_format bgr0 -i "default:none" out.avi
-# 
+## AVFoundation supports the following options:
+## 
+## -list_devices <TRUE|FALSE>
+##    If set to true, a list of all available input devices is given showing
+##    all device names and indices.
+## -video_device_index <INDEX>
+##    Specify the video device by its index. Overrides anything given in the
+##    input filename.
+## -audio_device_index <INDEX>
+##    Specify the audio device by its index. Overrides anything given in the
+##    input filename.
+## -pixel_format <FORMAT>
+##    Request the video device to use a specific pixel format. If the specified
+##    format is not supported a list of available formats is given and the first
+##    one in this list is used instead. Available pixel formats are: monob,
+##    rgb555be, rgb555le, rgb565be, rgb565le, rgb24, bgr24, 0rgb, bgr0, 0bgr,
+##    rgb0, bgr48be, uyvy422, yuva444p, yuva444p16le, yuv444p, yuv422p16,
+##    yuv422p10, yuv444p10, yuv420p, nv12, yuyv422, gray
+## 
+## Examples
+## 
+## Print the list of AVFoundation supported devices and exit:
+## $ ffmpeg -f avfoundation -list_devices true -i ""
+## 
+## Record video from video device 0 and audio from audio device 0 into out.avi:
+## $ ffmpeg -f avfoundation -i "0:0" out.avi
+## 
+## Record video from video device 2 and audio from audio device 1 into out.avi:
+## $ ffmpeg -f avfoundation -video_device_index 2 -i ":1" out.avi
+## 
+## Record video from the system default video device using the pixel format bgr0
+## and do not record any audio into out.avi:
+## $ ffmpeg -f avfoundation -pixel_format bgr0 -i "default:none" out.avi
+## 
 
+## @fn GetVideoNum()
+## @brief Lists devices and retrieves video device index
+## @param none
+##
+## Uses AppleScript, if available, to provide graphical user interface
 GetVideoNum() {
     video_devs=
     video_nums=
@@ -165,6 +171,11 @@ EOF)
     fi
 }
 
+## @fn GetAudeoNum()
+## @brief Lists devices and retrieves audio device index
+## @param none
+##
+## Uses AppleScript, if available, to provide graphical user interface
 GetAudioNum() {
     audio_devs=
     audio_nums=
@@ -273,6 +284,11 @@ APPLE_SCRIPT=
 THREAD=
 ITUNES=
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
   printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec] [-p preset]"
   printf "\n\t\t[-V screen device index] [-A audio device index]"

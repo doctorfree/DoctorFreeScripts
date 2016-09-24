@@ -1,12 +1,12 @@
 #!/bin/bash
 #
-# updsums - Create or update a SUMS file which contains chksums for all files
-#           in that directory or directory hierarchy
-#
-# Written 7-July-2013 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file updsums.sh
+## @brief Create/update SUMS file containing chksums for all files in directory
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 7-July-2013
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

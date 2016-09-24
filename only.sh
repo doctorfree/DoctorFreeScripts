@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-# only - report files or directories only in one directory hierarchy but not
-#        in a second directory hierarchy
+## @file only.sh
+## @brief Report files/dirs only in one directory hierarchy but not in a second
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 20-Feb-2014
+## @version 1.0.1
+##
 #
-# Written 20-Feb-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
-# 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -30,6 +30,11 @@
 FIRST="/Volumes/LaCie_4TB/iTunes/Music"
 SECOND="/Volumes/My_Book_Studio/Transcend"
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: only [-Fru] [-f 1st directory] [-l 2nd directory]\n"
     printf "Where:\n\t1st directory is location to locate only-ins\n"

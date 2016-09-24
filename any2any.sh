@@ -1,9 +1,10 @@
 #!/bin/bash
 #
 ## @file any2any.sh
-## @author Written 7-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
 ## @brief Convert from any audio/video format to any other
-## @copyright Copyright (c) 2014, Ronald Joe Record, All rights reserved.
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 7-Mar-2014
 ## @version 1.0.1
 ##
 ##   This program works by either linking or copying any2any to a file
@@ -75,7 +76,11 @@ VSAMPLE=
 THREAD=
 ITUNES=
 
-## @fn
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
   printf "\nUsage: $ME [-a audio codec] [-v video codec] [-c codec] [-p preset]"
   printf "\n\t\t[-i input format (lower case)] [-o output format (lower case)]"

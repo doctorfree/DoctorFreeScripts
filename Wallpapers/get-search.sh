@@ -1,6 +1,11 @@
 #!/bin/bash
 #
-## get-search - Download Wallhaven images matching the specified search terms.
+## @file get-search.sh
+## @brief Download Wallhaven images matching the specified search term(s)
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2016
+## @version 1.0.1
 ##
 ## Downloaded files are placed in a subdirectory based on the search terms
 ## or the subdirectory specified in the -l option. If no subdirectory is

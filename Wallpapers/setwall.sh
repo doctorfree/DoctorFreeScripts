@@ -1,8 +1,12 @@
 #!/bin/bash
 #
-# setwall - set the desktop wallpaper
-#
-# Written August 30, 2015 by Ronald Joe Record <rr at ronrecord dot com>
+## @file setwall.sh
+## @brief Set the desktop wallpaper
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2015, Ronald Joe Record, all rights reserved.
+## @date Written August 30, 2015
+## @version 1.0.1
+##
 #
 # Copyright (c) 2015, Ronald Joe Record
 # All rights reserved.
@@ -26,6 +30,11 @@
 # the Software.
 #
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
    printf "Usage: setwall [-au] [-d /path/to/imagedir] [-i image] [-n num]\n"
    printf "\nWhere:\n"
@@ -37,42 +46,42 @@ usage() {
    exit 1
 }
 
-# original
-# osascript -e 'tell application "Finder" to set desktop picture to POSIX file
-#               "/path/to/picture.jpg"'
-#
-# example
-# tell application "System Events"
-#     set desktopCount to count of desktops
-#     repeat with desktopNumber from 1 to desktopCount
-#         tell desktop desktopNumber
-#             set picture to "/Library/Desktop Pictures/Beach.jpg"
-#         end tell
-#     end repeat
-# end tell
-#
-# Select display
-#       selected_video_device=$(osascript <<EOF
-#           set video_devices to {$video_devs}
-#           set video_numbers to {$video_nums}
-#           set video_device to (choose from list video_devices with title "AVFoundation Video Devices" with prompt "Select a video device" default items {"$default_video_device"})
-#   
-#           set video_number to "$default_video_number"
-#           if video_device is false then
-#               set video_device to "$default_video_device"
-#           else
-#               set video_number to item (list_position((video_device as string), video_devices)) of video_numbers
-#           end if
-#           return video_number as string
-#   
-#           on list_position(this_item, this_list)
-#               repeat with i from 1 to count of this_list
-#                   if item i of this_list is this_item then return i
-#               end repeat
-#               return 0
-#           end list_position
-# EOF)
-#       VIDEO=`echo ${selected_video_device} | sed -e "s/\[//" -e "s/\]//"`
+## original:
+## osascript -e 'tell application "Finder" to set desktop picture to POSIX file
+##               "/path/to/picture.jpg"'
+##
+## example:
+## tell application "System Events"
+##     set desktopCount to count of desktops
+##     repeat with desktopNumber from 1 to desktopCount
+##         tell desktop desktopNumber
+##             set picture to "/Library/Desktop Pictures/Beach.jpg"
+##         end tell
+##     end repeat
+## end tell
+##
+## Select display:
+##       selected_video_device=$(osascript <<EOF
+##           set video_devices to {$video_devs}
+##           set video_numbers to {$video_nums}
+##           set video_device to (choose from list video_devices with title "AVFoundation Video Devices" with prompt "Select a video device" default items {"$default_video_device"})
+##   
+##           set video_number to "$default_video_number"
+##           if video_device is false then
+##               set video_device to "$default_video_device"
+##           else
+##               set video_number to item (list_position((video_device as string), video_devices)) of video_numbers
+##           end if
+##           return video_number as string
+##   
+##           on list_position(this_item, this_list)
+##               repeat with i from 1 to count of this_list
+##                   if item i of this_list is this_item then return i
+##               end repeat
+##               return 0
+##           end list_position
+## EOF)
+##       VIDEO=`echo ${selected_video_device} | sed -e "s/\[//" -e "s/\]//"`
 
 DIR="."
 DESKTOP=1

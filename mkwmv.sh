@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-# mkwmv - creates a Readme.html in all subdirectories. Assumes all files of
-#            interest are WMV, MOV, MP4, or AVI
-#
-# A quick way to populate my USB flash drive of movies with HTML documents
-# to provide an initial way to navigate around.
-#
-# Written 01-Sep-2012 by Ronnie Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file mkwmv.sh
+## @brief Creates a Readme.html in all subdirectories
+## @remark Assumes all files of interest are WMV, MOV, MP4, or AVI
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 01-Sep-2012
+## @version 1.0.1
+##
+## A quick way to populate my USB flash drive of movies with HTML documents
+## to provide an initial way to navigate around.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -56,6 +56,9 @@ Enjoy!<br>
 </font></body>
 </html>"
 
+## @fn Create_Readme()
+## @brief Concatenate the header, supplied HTML text, body, and tags
+## @param param1 Directory in which to create Readme
 Create_Readme() {
     echo $HEAD > $R
     echo "$1" >> $R
@@ -63,6 +66,9 @@ Create_Readme() {
     echo "<h1>$1</h1><br>" >> $R
 }
 
+## @fn Add_Movie()
+## @brief Add a movie to Readme in specified directory
+## @param param1 Directory in which to add album to Readme
 Add_Movie() {
     [ "$1" = "Readme.html" ] || {
       [ "$1" = "*" ] || {

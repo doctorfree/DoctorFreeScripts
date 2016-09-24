@@ -1,11 +1,12 @@
 #!/bin/bash
 #
-# latest - list the top N newest files in a directory or directory hierarchy
-#
-# Written November 1, 2013 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file latest.sh
+## @brief List the top N newest files in a directory or directory hierarchy
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written November 1, 2013
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +27,11 @@
 # the Software.
 #
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
    printf "Usage: latest [-a] [-n] [-d directory] [-u] [num]\n"
    printf "\nWhere:\n"

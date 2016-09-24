@@ -1,15 +1,17 @@
 #!/bin/bash
 #
-# clndl - Moves the most recently downloaded versions of files to their regular
-#    filename without the (#) in the name. By default, relies on the Mac OS X
-#    convention of inserting (#) in the name of newer version filenames.
-# So, if you had files in the $DL directory named:
-#     foo.txt, foo(1).txt, and foo(2).txt
-# running clndl would move foo(2).txt to foo.txt and remove foo(1).txt
+## @file clndl.sh
+## @brief Move and rename recently downloaded versions of files
+## @remark Use filename without the (#) in the name
+## @remark Relies on the Mac OS X convention of inserting (#) in the name of newer version filenames
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @version 1.0.1
+##
+## If you had files in the $DL directory named:
+##     foo.txt, foo(1).txt, and foo(2).txt
+## running clndl would move foo(2).txt to foo.txt and remove foo(1).txt
 #
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
-# 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -34,6 +36,11 @@ USE_CWD=
 TELL=
 VERB=
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "Usage: clndl [-c] [-d directory] [-n] [-u] [-v]\n"
     printf "Where:\n\t-c indicates use current working directory\n"

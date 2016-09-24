@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-# mvfem - Rename a downloaded Femjoy zip archive that contains two model
-#         names to use only one model's name so it will work with femzip
-#
-# Written 9-Aug-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file mvfem.sh
+## @brief Rename a downloaded Femjoy zip archive that contains two model names
+## @remark New filename uses only one model's name so it will work with femzip
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 9-Aug-2014
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +30,11 @@
 
 D=$HOME/Downloads
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
    printf "\nUsage: mvfem [-ridu] -m Model1 -p Model2"
    printf "\n\tRename Femjoy zip archive from:"

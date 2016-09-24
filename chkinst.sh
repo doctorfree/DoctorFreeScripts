@@ -1,14 +1,14 @@
 #!/bin/bash
 #
-# chkinst - Check if installed versions of files in current directory are
-#    different in order to determine if git repository is up-to-date.
-#
-# Written 8-Mar-2014 by Ronald Joe Record
-#
-# Note: this script assumes the files in your git repository are named the
-#       same as their installed counterparts
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file chkinst.sh
+## @brief Check if installed files differ from those in current directory
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 8-Mar-2014
+## @version 1.0.1
+##
+## Note: this script assumes the files in your git repository are named the
+##       same as their installed counterparts except for a '.sh' suffix
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,11 @@
 # the Software.
 #
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: chkinst [-u] [-a] [-d] [-f] [-i] [-n]"
     printf "\nWhere:"
@@ -41,11 +46,19 @@ usage() {
     exit 1
 }
 
+## @fn update()
+## @brief Update installed version of file with that in current directory
+## @param param1 first argument is file in current directory
+## @param param2 second argument is installed version of file
 update() {
     printf "\nCopying $1 to $2\n"
     [ "$TELL" ] || cp "$1" "$2"
 }
 
+## @fn differ()
+## @brief Display diff of specified files and update if needed
+## @param param1 first argument is file in current directory
+## @param param2 second argument is installed version of file
 differ() {
     echo "$1 differs from installed version $2"
     echo ""
@@ -89,6 +102,10 @@ differ() {
     }
 }
 
+## @fn check()
+## @brief Checks if two files differ by more than specified number of lines
+## @param param1 first argument is file in current directory
+## @param param2 second argument is installed version of file
 check() {
     dnum=`diff "$1" "$2" | wc -l`
     [ $dnum -ne $3 ] && differ "$1" "$2"

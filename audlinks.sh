@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-# audlinks - create symbolic links to song files where possible to reduce
-#    duplicate storage of audio. Link into my iTunes library.
-#
-# Written 01-Dec-2013 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
-#
+## @file audlinks.sh
+## @brief Create symbolic links to song files where possible
+## @remark Reduce duplicate storage of audio and link into my iTunes library
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 01-Dec-2013
+## @version 1.0.1
+##
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -39,6 +39,11 @@ BOOK=
 USE_SUM=
 TELL=
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: audlinks [-M Music Dir] [-W Work Dir]"
     printf "\n\t[-I iTunes Dir] [-a] [-b] [-d] [-c] [-m] [-u]\n"
@@ -55,6 +60,10 @@ usage() {
     exit 1
 }
 
+## @fn remlink()
+## @brief Remove file and replace with symbolic link
+## @param param1 first argument to function is source file for symbolic link
+## @param param2 second argument is file to remove and replace with symlink
 remlink() {
     printf "\nRemoving $2"
     [ "$TELL" ] || rm -f "$2"
@@ -62,6 +71,9 @@ remlink() {
     [ "$TELL" ] || ln -s "$1" "$2"
 }
 
+## @fn FindAndLink()
+## @brief Remove file and replace with symbolic link
+## @param param1 first argument is directory path in which to find files
 FindAndLink() {
     T="$1"
     abook=
@@ -140,6 +152,9 @@ FindAndLink() {
     done
 }
 
+## @fn FindAndRemove()
+## @brief Recursively remove broken symbolic links in specified directory
+## @param param1 first argument is directory path in which to find symlinks
 FindAndRemove() {
     find . -type l | while read i
     do

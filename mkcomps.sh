@@ -1,9 +1,11 @@
 #!/bin/bash
 #
-# Join 2 or 3 images then split the resulting composite in half
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file mkcomps.sh
+## @brief Join 2 or 3 images then split the resulting composite in half
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

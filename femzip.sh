@@ -1,11 +1,12 @@
 #!/bin/bash
 #
-# femzip - Convenience script to unzip Femjoy photo downloads
-#
-# Written 8-Aug-2013 by Ronald Joe Record
-#
-# Copyright (c) 2013-2014, Ronald Joe Record
-# All rights reserved.
+## @file femzip.sh
+## @brief Convenience script to unzip Femjoy photo downloads
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 8-Aug-2013
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -58,6 +59,11 @@ S=""
 
 ########### END CONFIGURATION SECTION ##################
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "Usage: femzip [-m model] [-p photographer] [-b basedir] [-o subdir] [-r]\n"
     printf "Where:\n\tmodel is the model's name\n"

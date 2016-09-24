@@ -1,7 +1,11 @@
 #!/bin/bash
 #
-# find2import - list photo albums and movies that can be imported into iTunes
-#
+## @file find2import.sh
+## @brief List photo albums and movies that can be imported into iTunes
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @version 1.0.1
+##
 
 FEMJOY="/Volumes/My_Book_Studio/Pictures/Work/Femjoy"
 KINDGIRLS="/Volumes/My_Book_Studio/Pictures/Work/KindGirls"

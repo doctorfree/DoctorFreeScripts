@@ -1,4 +1,12 @@
 #!/bin/bash
+#
+## @file counts.sh
+## @brief Prepare a table of number of pics & symbolic links in subdirectories
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2016
+## @version 1.0.1
+##
 
 H=`pwd`
 totalpics=0

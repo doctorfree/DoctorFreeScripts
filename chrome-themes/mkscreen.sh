@@ -1,7 +1,12 @@
 #!/bin/bash
 #
-# Written 29-Apr-2016 by Ronald Joe Record <themes at ronrecord dot com>
-#
+## @file chrome-themes/mkscreen.sh
+## @brief Create screenshots for Chrome themes
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 29-Apr-2016
+## @version 1.0.1
+##
 
 BASE="$HOME/Documents/My Documents/ronrecord.com/httpdocs/Themes/Chrome"
 INPD="${BASE}/html"

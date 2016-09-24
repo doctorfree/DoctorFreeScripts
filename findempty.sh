@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-# findempty - Find and report empty directories. Optionally, remove them.
+## @file findempty.sh
+## @brief Find and report empty directories. Optionally, remove them.
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 12-May-2014
+## @version 1.0.1
+##
 #
-# Written 12-May-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
-# 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -25,6 +26,11 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     echo "Usage: findempty [-n] [-r] [-u] [directory1 directory2 ...]"
     echo ""
