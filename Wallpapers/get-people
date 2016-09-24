@@ -1,32 +1,13 @@
 #!/bin/bash
 
-DDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven/People"
+[ -r ./utils ] && . ./utils
+[ "$WHDIR" ] || WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 
-query=
-numdown=480
-page=
-categories=001
-filters=001
+DDIR="${WHDIR}/People"
 
-while getopts n:c:f:p:q: flag; do
-    case $flag in
-        n)
-            numdown=$OPTARG
-            ;;
-        c)
-            categories=$OPTARG
-            ;;
-        f)
-            filters=$OPTARG
-            ;;
-        p)
-            page=$OPTARG
-            ;;
-        q)
-            query="$OPTARG"
-    esac
-done
-shift $(( OPTIND - 1 ))
+[ "$numdown" ] || numdown=480
+[ "$categories" ] || categories=001
+[ "$filters" ] || filters=001
 
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
 cd "${DDIR}"

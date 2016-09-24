@@ -1,55 +1,24 @@
 #!/bin/bash
 
-# Set this to your top-level Wallhaven download directory path
-WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
+[ -r ./utils ] && . ./utils
+[ "$WHDIR" ] || WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 
-query=
-numdown=480
-page=
-categories=111
-filters=001
+DDIR="${WHDIR}/Anime"
 
-usage() {
-    printf "\nUsage: get-search [-n num] [-c cat] [-f filter] [-p page]"
-    printf " [-q search] [-u]"
-    printf "\n\nWhere:\n\t-n num specifies the number of downloads"
-    printf "\n\t-c cat specifies the category mask (001 - 111)"
-    printf "\n\t-f filter specifies the filter mask (001 - 111)"
-    printf "\n\t-p page specifies the start page"
-    printf "\n\t-q search specifies the search terms ( + for AND, space for OR)"
-    printf "\n\t-u displays this usage message\n"
-    exit 1
-}
-
-while getopts n:c:f:p:q:u flag; do
-    case $flag in
-        n)
-            numdown=$OPTARG
-            ;;
-        c)
-            categories=$OPTARG
-            ;;
-        f)
-            filters=$OPTARG
-            ;;
-        p)
-            page=$OPTARG
-            ;;
-        q)
-            query="$OPTARG"
-            ;;
-        *)
-            usage
-            ;;
-    esac
-done
-shift $(( OPTIND - 1 ))
+[ "$numdown" ] || numdown=480
+[ "$categories" ] || categories=111
+[ "$filters" ] || filters=001
 
 [ "$query" ] || query="$*"
 
 # Replace spaces and plusses in search terms with underscores to construct
 # the subdirectory name to use
-QDIR=`echo ${query} | sed -e "s/ /_/g" -e "s/+/_/g"`
+if [ "$subdir" ]
+then
+    QDIR="${subdir}"
+else
+    QDIR=`echo ${query} | sed -e "s/ /_/g" -e "s/+/_/g"`
+fi
 DDIR="${WHDIR}/${QDIR}"
 
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"

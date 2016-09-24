@@ -1,9 +1,9 @@
 #!/bin/bash
 
-./get-anime
-./get-general
-./get-people
-#./get-favorites
+./get-anime $*
+./get-general $*
+./get-people $*
+#./get-favorites $*
 
 for dir in *
 do
@@ -12,9 +12,9 @@ do
     [ "${dir}" = "Favorites" ] && continue
     [ "${dir}" = "General" ] && continue
     [ "${dir}" = "People" ] && continue
-    QUERY=`echo ${dir} | sed -e "s/_/ /g"`
+    QUERY=`echo ${dir} | sed -e "s/_/+/g"`
     echo "Running ./get-search $QUERY"
-    ./get-search $QUERY
+    ./get-search -q "$QUERY" $*
 done
 
 ./findups -l

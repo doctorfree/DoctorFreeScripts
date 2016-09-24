@@ -1,0 +1,65 @@
+# Set this to your top-level Wallhaven download directory path
+WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
+
+query=
+numdown=
+page=
+categories=
+filters=
+subdir=
+
+# Displays a progress bar and percentage of tasks completed
+# Takes two arguments, total number of tasks and number of tasks completed
+progress() {
+    numd=$1
+    comp=$2
+    perdone=`echo "$comp/$numd" | bc -l`
+    statlen=`echo "($perdone*75)/1" | bc`
+    remain=`echo "74-$statlen" | bc`
+    percent=`echo "($perdone*100)/1" | bc`
+    printf '%0.s#' $(seq 1 $statlen)
+    [ $percent -lt 100 ] && printf '%0.s_' $(seq 1 $remain)
+    printf " $percent%%"
+    printf "\r"
+}
+
+usage() {
+    printf "\nUsage: %s [-n num] [-c cat] [-f filter] [-p page]" $0
+    printf " [-l subdir] [-q search] [-u]"
+    printf "\n\nWhere:\n\t-n num specifies the number of downloads"
+    printf "\n\t-c cat specifies the category mask (001 - 111)"
+    printf "\n\t-f filter specifies the filter mask (001 - 111)"
+    printf "\n\t-p page specifies the start page"
+    printf "\n\t-l subdir specifies the download subdirectory to use"
+    printf "\n\t-q search specifies the search terms ( + for AND, space for OR)"
+    printf "\n\t-u displays this usage message\n"
+    exit 1
+}
+
+while getopts l:n:c:f:p:q:u flag; do
+    case $flag in
+        l)
+            subdir=$OPTARG
+            ;;
+        n)
+            numdown=$OPTARG
+            ;;
+        c)
+            categories=$OPTARG
+            ;;
+        f)
+            filters=$OPTARG
+            ;;
+        p)
+            page=$OPTARG
+            ;;
+        q)
+            query="$OPTARG"
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+

@@ -1,8 +1,12 @@
 #!/bin/bash
 
+[ -r ./utils ] && . ./utils
+
 rm -f newbroken.txt
 touch newbroken.txt
 H=`pwd`
+numbroke=`cat broken.txt | wc -l`
+completed=0
 while read broken
 do
     lsl=`ls -l $broken`
@@ -10,6 +14,8 @@ do
         target=`basename $broken`
         [ -f Misc/$target ] || {
             echo $broken >> newbroken.txt
+            completed=`expr $completed + 1`
+            progress $numbroke $completed
             continue
         }
         rm -f $broken
@@ -17,5 +23,7 @@ do
         cd "$sdir"
         [ -f ../Misc/$target ] && ln -s ../Misc/$target .
         cd "$H"
+        completed=`expr $completed + 1`
+        progress $numbroke $completed
     }
 done < broken.txt
