@@ -129,7 +129,7 @@ Artist/Album/Tracks directory structure:
 
                  Year (Year file should just be year released in parens)
 
-[**mkseamless**](mkseamless) - Make a texture seamless. Uses ImageMagick and
+[**mkseamless**](mkseamless.sh) - Make a texture seamless. Uses ImageMagick and
 the [**Vertical.png**](Vertical.png) image located in this repository.
 
     Vertical.png should be placed in /usr/local/lib on the system where
@@ -148,6 +148,8 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
 [**packaud**](packaud.sh) - archive and compress my Audacity project files.
 
 [**piclinks**](piclinks.sh) - Create symbolic links to photo files where possible to reduce duplicate storage of photos. Link into my Aperture libraries.
+
+[**progress_bar**](progress_bar.sh) - Function to display a progress bar and percent complete
 
 [**stop_leapd**](stop_leapd.sh) - Stop the Leap Motion daemon and agent then backup and remove the plist files so they do not auto start. Includes Bash functions to replace auto start with manual start/stop
 
@@ -174,11 +176,42 @@ for all files in that directory hierarchy
 
 [**vimrc**](vimrc) - Vim startup configuration file. Install as $HOME/.vimrc
 
-[**wb**](wb.sh) - Automatically downloads my favorites from wallbase.cc
+[**wikivim**](wikivim.sh) - Use in conjunction with It's All Text Firefox Add-On to use Vim to edit wiki pages. On OS X use Applescript and iTerm 2, otherwise use Bash and xterm.
 
+[**counts**](Wallpapers/counts.sh) - Prepare a table of number of pics & symbolic links in subdirectories
+
+[**findbroken**](Wallpapers/findbroken.sh) - Find and save a list of broken symbolic links in current directory
+
+[**findups**](Wallpapers/findups.sh) - Find and symlink duplicate files
+
+[**fixlinks**](Wallpapers/fixlinks.sh) - Repair broken symbolic links listed in broken.txt
+
+[**get-all**](Wallpapers/get-all.sh) - Download wallpapers from Wallhaven in all current albums
+
+[**get-anime**](Wallpapers/get-anime.sh) - Download Wallhaven Anime wallpapers
+
+[**get-favorites**](Wallpapers/get-favorites.sh) - Download favorites from Wallhaven
+
+[**get-general**](Wallpapers/get-general.sh) - Download General wallpapers from Wallhaven
+
+[**get-number**](Wallpapers/get-number.sh) - Download Wallhaven wallpaper by number
+
+[**get-people**](Wallpapers/get-people.sh) - Download Wallhaven wallpapers in the People category
+
+[**get-search**](Wallpapers/get-search.sh) - Download Wallhaven images matching the specified search term(s)
+
+[**setwall**](Wallpapers/setwall.sh) - Set the desktop wallpaper
+
+[**wb**](Wallpapers/wb.sh) - Automatically downloads my favorites from wallbase.cc
+
+     [Note: Wallbase has been shutdown. Use Wallhaven, its successor. See wh.]
      You will need to configure your own Wallbase username/password as well as
      extensively modify the favorites by both name and number so this script
      may not be that useful to others. Get MacEarl's original and do to it
      what I have done to this.
 
-[**wikivim**](wikivim.sh) - Use in conjunction with It's All Text Firefox Add-On to use Vim to edit wiki pages. On OS X use Applescript and iTerm 2, otherwise use Bash and xterm.
+[**wh**](Wallpapers/wh.sh) - 
+
+     You will need to configure your own Wallhaven username/password in the
+     script. See the Wallhaven convenience scripts in the Wallpapers dir
+     for easy bulk downloading.

@@ -156,6 +156,8 @@
 ## 
 ## piclinks - Create symbolic links to photo files where possible to reduce duplicate storage of photos. Link into my Aperture libraries.
 ## 
+## progress_bar - Function to display a progress bar and percent complete
+##
 ## stop_leapd - Stop the Leap Motion daemon and agent then backup and remove the plist files so they do not auto start. Includes Bash functions to replace auto start with manual start/stop
 ## 
 ## upd - Sync specified libraries/directories to a USB flash drive
@@ -181,11 +183,42 @@
 ## 
 ## vimrc - Vim startup configuration file. Install as $HOME/.vimrc
 ## 
-## wb - Automatically downloads my favorites from wallbase.cc
-## 
-##      You will need to configure your own Wallbase username/password as well as
-##      extensively modify the favorites by both name and number so this script
-##      may not be that useful to others. Get MacEarl's original and do to it
-##      what I have done to this.
-## 
 ## wikivim - Use in conjunction with It's All Text Firefox Add-On to use Vim to edit wiki pages. On OS X use Applescript and iTerm 2, otherwise use Bash and xterm.
+##
+## Wallpapers/counts.sh) - Prepare a table of number of pics & symbolic links in subdirectories
+## 
+## Wallpapers/findbroken.sh) - Find and save a list of broken symbolic links in current directory
+## 
+## Wallpapers/findups.sh) - Find and symlink duplicate files
+## 
+## Wallpapers/fixlinks.sh) - Repair broken symbolic links listed in broken.txt
+## 
+## Wallpapers/get-all.sh) - Download wallpapers from Wallhaven in all current albums
+## 
+## Wallpapers/get-anime.sh) - Download Wallhaven Anime wallpapers
+## 
+## Wallpapers/get-favorites.sh) - Download favorites from Wallhaven
+## 
+## Wallpapers/get-general.sh) - Download General wallpapers from Wallhaven
+## 
+## Wallpapers/get-number.sh) - Download Wallhaven wallpaper by number
+## 
+## Wallpapers/get-people.sh) - Download Wallhaven wallpapers in the People category
+## 
+## Wallpapers/get-search.sh) - Download Wallhaven images matching the specified search term(s)
+## 
+## Wallpapers/setwall.sh) - Set the desktop wallpaper
+## 
+## Wallpapers/wb.sh) - Automatically downloads my favorites from wallbase.cc
+## 
+##   [Note: Wallbase has been shutdown. Use Wallhaven, its successor. See wh.]
+##   You will need to configure your own Wallbase username/password as well as
+##   extensively modify the favorites by both name and number so this script
+##   may not be that useful to others. Get MacEarl's original and do to it
+##   what I have done to this.
+##
+## Wallpapers/wh.sh) - 
+##
+##   You will need to configure your own Wallhaven username/password in the
+##   script. See the Wallhaven convenience scripts in the Wallpapers dir
+##   for easy bulk downloading.
