@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file get-favorites.sh
+## @file Wallpapers/get-favorites.sh
 ## @brief Download favorites from Wallhaven
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

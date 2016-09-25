@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file findbroken.sh
+## @file Wallpapers/findbroken.sh
 ## @brief Find and save a list of broken symbolic links in current directory
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

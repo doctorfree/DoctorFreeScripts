@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file fixlinks.sh
+## @file Wallpapers/fixlinks.sh
 ## @brief Repair broken symbolic links listed in broken.txt
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

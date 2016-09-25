@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file findups.sh
+## @file Wallpapers/findups.sh
 ## @brief Find and symlink duplicate files
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

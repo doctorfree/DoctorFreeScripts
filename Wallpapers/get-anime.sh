@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file get-anime.sh
+## @file Wallpapers/get-anime.sh
 ## @brief Download Wallhaven Anime wallpapers
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file counts.sh
+## @file Wallpapers/counts.sh
 ## @brief Prepare a table of number of pics & symbolic links in subdirectories
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

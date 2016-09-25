@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file setwall.sh
+## @file Wallpapers/setwall.sh
 ## @brief Set the desktop wallpaper
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2015, Ronald Joe Record, all rights reserved.

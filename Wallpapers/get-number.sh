@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file get-number.sh
+## @file Wallpapers/get-number.sh
 ## @brief Download Wallhaven wallpaper by number
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

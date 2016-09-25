@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file get-people.sh
+## @file Wallpapers/get-people.sh
 ## @brief Download Wallhaven wallpapers in the People category
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

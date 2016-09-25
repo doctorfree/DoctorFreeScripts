@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file get-general.sh
+## @file Wallpapers/get-general.sh
 ## @brief Download General wallpapers from Wallhaven
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.

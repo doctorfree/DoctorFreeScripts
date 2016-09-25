@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-## @file get-search.sh
+## @file Wallpapers/get-search.sh
 ## @brief Download Wallhaven images matching the specified search term(s)
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
