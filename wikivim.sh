@@ -1,13 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 #
-# wikivim - Used in conjunction with "It's All Text" Firefox Add-On
-#     to edit Wikipedia (or any text edited in the browser) with Vim.
-#     On OS X use AppleScript and iTerm 2, on other OS use shell and xterm.
-#
-# Written 04-Jul-2015 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Copyright (c) 2015, Ronald Joe Record
-# All rights reserved.
+## @file wikivim.sh
+## @brief Used with "It's All Text" Firefox Add-On to edit Wikipedia with Vim
+## @remark On OS X use AppleScript and iTerm 2, on other OS use shell and xterm
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 04-Jul-2015
+## @version 1.0.1
+##
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
