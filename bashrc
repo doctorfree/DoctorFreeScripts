@@ -1,3 +1,11 @@
+#
+## @file bashrc
+## @brief Bash .bashrc file with shell environment setup
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2012, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2012
+## @version 1.0.1
+##
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 

@@ -1,3 +1,11 @@
+#
+## @file utils
+## @brief Shell script utility functions
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2016
+## @version 1.0.1
+##
 # Set this to your top-level Wallhaven download directory path
 WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 
@@ -8,8 +16,10 @@ categories=
 filters=
 subdir=
 
-# Displays a progress bar and percentage of tasks completed
-# Takes two arguments, total number of tasks and number of tasks completed
+## @fn progress()
+## @brief Displays a progress bar and percentage of tasks completed
+## @param param1 Total number of tasks
+## @param param2 Number of tasks completed thus far
 progress() {
     numd=$1
     comp=$2
@@ -23,6 +33,11 @@ progress() {
     printf "\r"
 }
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: %s [-n num] [-c cat] [-f filter] [-p page]" $0
     printf " [-l subdir] [-q search] [-u]"

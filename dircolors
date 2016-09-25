@@ -1,11 +1,19 @@
-# Configuration file for dircolors, a utility to help you set the
-# LS_COLORS environment variable used by GNU ls with the --color option.
-# Copyright (C) 1996, 1999-2010 Free Software Foundation, Inc.
-# Copying and distribution of this file, with or without modification,
-# are permitted provided the copyright notice and this notice are preserved.
-# The keywords COLOR, OPTIONS, and EIGHTBIT (honored by the
-# slackware version of dircolors) are recognized but ignored.
-# Below, there should be one TERM entry for each termtype that is colorizable
+#
+## @file dircolors
+## @brief Bash .dircolors file with color terminal setup
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2012, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2012
+## @version 1.0.1
+##
+## Configuration file for dircolors, a utility to help you set the
+## LS_COLORS environment variable used by GNU ls with the --color option.
+## Copyright (C) 1996, 1999-2010 Free Software Foundation, Inc.
+## Copying and distribution of this file, with or without modification,
+## are permitted provided the copyright notice and this notice are preserved.
+## The keywords COLOR, OPTIONS, and EIGHTBIT (honored by the
+## slackware version of dircolors) are recognized but ignored.
+## Below, there should be one TERM entry for each termtype that is colorizable
 TERM Eterm
 TERM ansi
 TERM color-xterm
@@ -53,20 +61,20 @@ TERM xterm-256color
 TERM xterm-88color
 TERM xterm-color
 TERM xterm-debian
-# Below are the color init strings for the basic file types. A color init
-# string consists of one or more of the following numeric codes:
-# Attribute codes:
-# 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
-# Text color codes:
-# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
-# Background color codes:
-# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
-#NORMAL 00 # no color code at all
-#FILE 00 # regular file: use no color at all
-#RESET 0 # reset to "normal" color
+## Below are the color init strings for the basic file types. A color init
+## string consists of one or more of the following numeric codes:
+## Attribute codes:
+## 00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+## Text color codes:
+## 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+## Background color codes:
+## 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+##NORMAL 00 # no color code at all
+##FILE 00 # regular file: use no color at all
+##RESET 0 # reset to "normal" color
 DIR 01;33 # directory
 LINK 01;36 # symbolic link. (If you set this to 'target' instead of a
- # numerical value, the color is as for the file pointed to.)
+# numerical value, the color is as for the file pointed to.)
 #MULTIHARDLINK 00 # regular file with more than one link
 FIFO 40;33 # pipe
 SOCK 01;35 # socket
@@ -82,20 +90,20 @@ OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
 STICKY 37;44 # dir with the sticky bit set (+t) and not other-writable
 # This is for files with execute permission:
 EXEC 01;32
-# List any file extensions like '.gz' or '.tar' that you would like ls
-# to colorize below. Put the extension, a space, and the color init string.
-# (and any comments you want to add after a '#')
-# If you use DOS-style suffixes, you may want to uncomment the following:
-#.cmd 01;32 # executables (bright green)
-#.exe 01;32
-#.com 01;32
-#.btm 01;32
-#.bat 01;32
-# Or if you want to colorize scripts even if they do not have the
-# executable bit actually set.
-#.sh 01;32
-#.csh 01;32
- # archives or compressed (bright red)
+## List any file extensions like '.gz' or '.tar' that you would like ls
+## to colorize below. Put the extension, a space, and the color init string.
+## (and any comments you want to add after a '#')
+## If you use DOS-style suffixes, you may want to uncomment the following:
+##.cmd 01;32 # executables (bright green)
+##.exe 01;32
+##.com 01;32
+##.btm 01;32
+##.bat 01;32
+## Or if you want to colorize scripts even if they do not have the
+## executable bit actually set.
+##.sh 01;32
+##.csh 01;32
+# archives or compressed (bright red)
 .tar 01;31
 .tgz 01;31
 .arj 01;31

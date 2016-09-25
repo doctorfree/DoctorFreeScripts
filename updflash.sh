@@ -1,14 +1,14 @@
 #!/bin/bash
 #
-# updflash - update my flash drive that stores backups of my movies, pictures,
-#            documents, source, etc.
-#
-# Written 28-Mar-2014 by Ronald Joe Record <rr at ronrecord dot com>
-#
-# Note: This script is dependent on my "upd" and "chk" scripts
-#
-# Copyright (c) 2014, Ronald Joe Record
-# All rights reserved.
+## @file updflash.sh
+## @brief Update flash drive backup storage
+## @remark Archive of my movies, pictures, documents, source, etc.
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written 28-Mar-2014
+## @version 1.0.1
+##
+## Note: This script is dependent on my "upd" and "chk" scripts
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -61,6 +61,11 @@ MOV_SUB_DIRS="Artists Work"
 HOME_DIRS="Box* Dropbox Horizon Documents Movies Music Pictures bin src"
 ########### END DEFAULT LOCATIONS ######################
 
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "Usage: $0 [-n] [-a] [-c] [-e] [-i] [-APl] [-p] [-m] [-h] [-u]\n"
     printf "Where:\n\t-n indicates to tell me what you would do\n"

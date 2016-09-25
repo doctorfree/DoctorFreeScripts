@@ -1,3 +1,11 @@
+#
+## @file bash_profile
+## @brief Bash .bash_profile file with shell environment setup
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2012, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2012
+## @version 1.0.1
+##
 # source in the system bashrc if it exists (do this prior to setting PS1)
 if [ -r /etc/bash.bashrc ] ; then
     source /etc/bash.bashrc

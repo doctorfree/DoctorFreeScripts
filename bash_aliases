@@ -1,3 +1,11 @@
+#
+## @file bash_aliases
+## @brief Bash .bash_aliases file with convenience command aliases
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2012, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2012
+## @version 1.0.1
+##
 alias c='clear'
 alias ll='ls -alF'
 alias la='ls -A'
