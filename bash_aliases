@@ -15,8 +15,6 @@ alias df='df -h'
 alias du='du -h'
 alias dutop='du -h -d 0'
 alias whence='type -a'
-# My Fusion ESXi 5.5.0 VM
-alias fusesx='ssh -l root 192.168.103.130'
 # Convenience alias to log an entry to my Day One journal
 alias log="~/Scripts/logtodayone.rb"
 # Project working directories
@@ -30,3 +28,7 @@ alias transcend='cd /Volumes/Transcend'
 # Easily switch between JDK versions
 alias setjdk6='export JAVA_HOME=$(/usr/libexec/java_home -v 1.6)'
 alias setjdk7='export JAVA_HOME=$(/usr/libexec/java_home -v 1.7)'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+# alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'

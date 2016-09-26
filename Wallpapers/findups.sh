@@ -34,6 +34,7 @@ fi
     cat */downloaded.txt | sort | uniq -d > ${DUPFILE}
 }
 
+HERE=`pwd`
 if [ "$LINKEM" ]
 then
     numdups=`cat ${DUPFILE} | wc -l`
@@ -43,9 +44,11 @@ then
         numfiles=0
         completed=`expr $completed + 1`
         progress $numdups $completed
-        DUPS=`echo */wallhaven-${num}\.???`
+        DUPS=`echo */wallhaven-${num}\.??? People/*/wallhaven-${num}\.???`
         for dup in ${DUPS}
         do
+            [ "$dup" = "*/wallhaven-${num}\.???" ] && continue
+            [ "$dup" = "People/*/wallhaven-${num}\.???" ] && continue
             [ -L "$dup" ] || {
                 numfiles=`expr $numfiles + 1`
             }
@@ -56,6 +59,8 @@ then
         link=
         for dup in ${DUPS}
         do
+            [ "$dup" = "*/wallhaven-${num}\.???" ] && continue
+            [ "$dup" = "People/*/wallhaven-${num}\.???" ] && continue
             [ "$link" ] || {
                 [ -L "${dup}" ] || {
                     link="${dup}"
@@ -69,9 +74,17 @@ then
                 continue
             }
             cd "${picdir}"
+            H=`pwd`
             rm -f wallhaven-${num}\.???
-            ln -s ../"${link}" .
-            cd ..
+            peeps=
+            echo $H | grep /Wallhaven/People/ > /dev/null && peeps=1
+            if [ "$peeps" ]
+            then
+                ln -s ../../"${link}" .
+            else
+                ln -s ../"${link}" .
+            fi
+            cd ${HERE}
         done
     done < ${DUPFILE}
 else
@@ -80,16 +93,38 @@ else
         printf "\nCreating symbolic links in ${DUPDIR}\n"
         cd "${DUPDIR}"
         H=`pwd`
-        numdups=`ls -1 *.jpg *.png 2> /dev/null | wc -l`
+        B=`basename "$H"`
+        if [ "$B" = "People" ]
+        then
+            numdups=0
+            for d in 0 1 2 3 4 5 6 7 8 9
+            do
+                numdir=`ls -1 $d/*.jpg $d/*.png 2> /dev/null | wc -l`
+                numdups=`expr $numdups + $numdir`
+            done
+            pics="*/*.jpg */*.png"
+            peeps=1
+        else
+            numdups=`ls -1 *.jpg *.png 2> /dev/null | wc -l`
+            pics="*.jpg *.png"
+            peeps=
+        fi
         completed=0
-        for pic in *.jpg *.png
+        for pic in $pics
         do
-            [ "$pic" = "*.jpg" ] && continue
-            [ "$pic" = "*.png" ] && continue
-            numfiles=0
             completed=`expr $completed + 1`
             progress $numdups $completed
-            DUPS=`echo ../*/$pic`
+            [ "$pic" = "*.jpg" ] && continue
+            [ "$pic" = "*/*.jpg" ] && continue
+            [ "$pic" = "*.png" ] && continue
+            [ "$pic" = "*/*.png" ] && continue
+            numfiles=0
+            if [ "$peeps" ]
+            then
+                DUPS=`echo ../../*/$pic`
+            else
+                DUPS=`echo ../*/$pic`
+            fi
             for dup in ${DUPS}
             do
                 [ -L "$dup" ] || {

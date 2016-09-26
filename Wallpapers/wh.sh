@@ -22,14 +22,16 @@ PASS=""
 #####################################
 ###     Configuration Options     ###
 #####################################
+# Which sed should be used?
+SED=gsed
 # Where should the Wallpapers be stored?
-LOCATION=/path/to/download/directory
+LOCATION=/Volumes/My_Book_Studio/Pictures/Work/Wallhaven
 # How many Wallpapers should be downloaded, should be multiples of 24 (right now they only use a fixed number of thumbs per page)
 WPNUMBER=48
 # What page to start downloading at, default and minimum of 1.
 STARTPAGE=1
 # Type standard (newest, oldest, random, hits, mostfav), search, favorites (for now only the default collection), useruploads (if selected, only FILTER variable will change the outcome)
-TYPE=search
+TYPE=standard
 # From which Categories should Wallpapers be downloaded, first number is for General, second for Anime, third for People, 1 to enable category, 0 to disable it
 CATEGORIES=111
 # filter wallpapers before downloading, first number is for sfw content, second for sketchy content, third for nsfw content, 1 to enable, 0 to disable
@@ -70,7 +72,7 @@ function login {
 
     # everythings ok --> login
     WGET --referer=https://alpha.wallhaven.cc https://alpha.wallhaven.cc/auth/login
-    token="$(grep 'name="_token"' login | gsed 's:.*value="::' | gsed 's/.\{2\}$//')"
+    token="$(grep 'name="_token"' login | $SED 's:.*value="::' | $SED 's/.\{2\}$//')"
     WGET --referer=https://alpha.wallhaven.cc/auth/login --post-data="_token=$token&username=$USER&password=$PASS" https://alpha.wallhaven.cc/auth/login
 } # /login
 
@@ -106,8 +108,8 @@ function downloadWallpapers {
         # does not work for bash < 4.2
         #img="${imgURL: 25 : -1}"
         #number="${img##*/}"
-        img="$(echo $imgURL | gsed  's .\{25\}  ' | gsed 's/.\{1\}$//')"
-        number="$(echo $img | gsed  's .\{37\}  ')"
+        img="$(echo $imgURL | $SED  's .\{25\}  ' | $SED 's/.\{1\}$//')"
+        number="$(echo $img | $SED  's .\{37\}  ')"
 
         if grep -w "$number" downloaded.txt >/dev/null
             then
@@ -292,7 +294,7 @@ elif [ "$TYPE" == search ] ; then
 elif [ "$TYPE" == favorites ] ; then
     # FAVORITES
     # currently using sum of all collections
-    favnumber="$(WGET --referer=https://alpha.wallhaven.cc https://alpha.wallhaven.cc/favorites -O - | grep -A 25 "<ul class=\"blocklist collections-list\" data-target=\"https://alpha.wallhaven.cc/favorites/move\">" | grep -B 1 "<small>" | gsed -n '2{p;q}' | gsed 's/<[^>]\+>/ /g' | gsed  's .\{3\}  ' | gsed 's/.\{1\}$//')"
+    favnumber="$(WGET --referer=https://alpha.wallhaven.cc https://alpha.wallhaven.cc/favorites -O - | grep -A 25 "<ul class=\"blocklist collections-list\" data-target=\"https://alpha.wallhaven.cc/favorites/move\">" | grep -B 1 "<small>" | $SED -n '2{p;q}' | $SED 's/<[^>]\+>/ /g' | $SED  's .\{3\}  ' | $SED 's/.\{1\}$//')"
     for (( count=0, page="$STARTPAGE"; count< "$WPNUMBER" && count< "$favnumber"; count=count+24, page=page+1 ));
     do
         printf "Download Page %s" "$page"

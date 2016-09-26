@@ -186,13 +186,13 @@ do
     case "$i" in
         # I have heavily modified Bash startup files for work.
         bash_aliases)
-            check "$i" "$inst" 127
+            check "$i" "$inst" 121
             ;;
         bash_profile)
-            check "$i" "$inst" 16
+            check "$i" "$inst" 8
             ;;
         bashrc)
-            check "$i" "$inst" 72
+            check "$i" "$inst" 58
             ;;
         Wallpapers/wh.sh)
             check "$i" "$inst" 8

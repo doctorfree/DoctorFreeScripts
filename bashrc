@@ -26,7 +26,7 @@ export TMPDIR=/tmp
 # If you are running through a proxy service some external programs may need
 # to know the proxy setting (e.g. gem). If so, configure and uncomment:
 # export http_proxy=http://your.proxy.server.com:3128
-# export no_proxy=wallbase.cc
+# export no_proxy=alpha.wallhaven.cc
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace

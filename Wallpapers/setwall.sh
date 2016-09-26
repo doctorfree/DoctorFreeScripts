@@ -34,13 +34,14 @@
 ##
 ## Exit the program after displaying the usage message and example invocations
 usage() {
-   printf "Usage: setwall [-aru] [-d /path/to/imagedir] [-i image] [-n num]\n"
+   printf "Usage: setwall [-arsu] [-d /path/to/imagedir] [-i image] [-n num]\n"
    printf "\nWhere:\n"
    printf "\t-a specifies set wallpaper on all desktops/displays\n"
    printf "\t-d directory specifies the image directory to use\n"
    printf "\t-i image specifies the image file to use\n"
    printf "\t-n num specifies the desktop number to use\n"
-   printf "\t-r reverts to system preferences desktop wallpaper setting\n"
+   printf "\t-r rotate through multiple desktop wallpapers\n"
+   printf "\t-s single desktop wallpaper (stop rotation)\n"
    printf "\t-u prints this usage message and exits\n\n"
    exit 1
 }
@@ -82,12 +83,23 @@ usage() {
 ## EOF)
 ##       VIDEO=`echo ${selected_video_device} | sed -e "s/\[//" -e "s/\]//"`
 
-revert_setting() {
-    echo "Reverting desktop wallpaper setting"
+rotate_desktop() {
+    echo "Rotate desktop wallpapers"
     osascript <<EOF
         tell application "System Events"
             tell current desktop
                 set picture rotation to 1
+            end tell
+        end tell
+EOF
+}
+
+single_desktop() {
+    echo "Use a single desktop wallpaper"
+    osascript <<EOF
+        tell application "System Events"
+            tell current desktop
+                set picture rotation to 0
             end tell
         end tell
 EOF
@@ -134,7 +146,7 @@ DIR=
 IMG=
 ALL=
 
-while getopts ard:i:n:u flag; do
+while getopts arsd:i:n:u flag; do
    case $flag in
       a)
          ALL=1;
@@ -149,7 +161,11 @@ while getopts ard:i:n:u flag; do
          DESKTOP="$OPTARG";
          ;;
       r)
-         revert_setting
+         rotate_desktop
+         exit 0
+         ;;
+      s)
+         single_desktop
          exit 0
          ;;
       u)

@@ -62,8 +62,9 @@ xterm*|rxvt*)
 esac
 export PS1
 
-[ -d /opt/local/sbin ] && PATH=/opt/local/sbin:$PATH
-[ -d /opt/local/bin ] && PATH=/opt/local/bin:$PATH
+[ -d /opt/vmware/bin ] && PATH=$PATH:/opt/vmware/bin
+[ -d /opt/local/sbin ] && PATH=$PATH:/opt/local/sbin
+[ -d /opt/local/bin ] && PATH=$PATH:/opt/local/bin
 [ -d ~/bin ] && PATH=$PATH:~/bin
 export PATH
 

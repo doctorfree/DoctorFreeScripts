@@ -10,6 +10,22 @@
 
 WDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 
+create_diff() {
+    if [ "$1" = "wb.sh" ] || [ "$1" = "wh.sh" ]
+    then
+        dnum=`diff "$1" "$2" | wc -l`
+        [ $dnum -ne 8 ] && {
+            echo "Creating /tmp/$3.diff"
+            diff $1 $2 > /tmp/$3.diff
+        }
+    else
+        cmp -s $1 $2 || {
+            echo "Creating /tmp/$3.diff"
+            diff $1 $2 > /tmp/$3.diff
+        }
+    fi
+}
+
 diffit() {
     f="$1"
     if [ -f "$f" ]
@@ -17,13 +33,11 @@ diffit() {
         j=`echo $1 | sed -e "s/\.sh//"`
         if [ -f $WDIR/$j ]
         then
-            echo "Creating /tmp/$j.diff"
-            diff $1 $WDIR/$j > /tmp/$j.diff
+            create_diff $f $WDIR/$j $j
         else
             if [ -f /usr/local/bin/$j ]
             then
-                echo "Creating /tmp/$j.diff"
-                diff $1 /usr/local/bin/$j > /tmp/$j.diff
+                create_diff $f /usr/local/bin/$j $j
             else
                 echo "$WDIR/$j does not exist or is not a plain file. Skipping."
             fi
@@ -42,6 +56,7 @@ then
 else
     for i in *.sh utils
     do
+        [ "$i" = "wallhaven.sh" ] && continue
         diffit "$i"
     done
 fi
