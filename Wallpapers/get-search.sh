@@ -17,8 +17,6 @@
 [ -r ./utils ] && . ./utils
 [ "$WHDIR" ] || WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 
-DDIR="${WHDIR}/Anime"
-
 [ "$numdown" ] || numdown=480
 [ "$categories" ] || categories=111
 [ "$filters" ] || filters=001
@@ -60,4 +58,5 @@ wh -l "${DDIR}" -n $numdown -s $page -t search \
    -c $categories -f $filters -q "${query}" -p 0
 
 cd "${WHDIR}"
+echo "Finding duplicates in ${QDIR}"
 ./findups "${QDIR}"

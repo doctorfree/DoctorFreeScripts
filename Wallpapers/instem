@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+## @file Wallpapers/instem.sh
+## @brief Install current git repo versions
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 24-Sep-2016
+## @version 1.0.1
+##
+
+WDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
+
+instit() {
+    f="$1"
+    if [ -f "$f" ]
+    then
+        j=`echo $f | sed -e "s/\.sh//"`
+        if [ -f /usr/local/bin/$j ]
+        then
+            echo "$j must be installed with sudo in /usr/local/bin. Skipping."
+        else
+            echo "Installing $j"
+            cp "$f" "$WDIR"/"$j"
+        fi
+    else
+        echo "$f does not exist or is not a plain file. Skipping."
+    fi
+}
+
+if [ "$1" ]
+then
+    for i in $*
+    do
+        instit "$i"
+    done
+else
+    for i in *.sh utils
+    do
+        instit "$i"
+    done
+fi

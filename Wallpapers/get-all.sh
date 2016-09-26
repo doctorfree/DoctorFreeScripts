@@ -25,4 +25,4 @@ do
     ./get-search -q "$QUERY" $*
 done
 
-./findups -l
+./findups

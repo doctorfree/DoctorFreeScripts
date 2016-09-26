@@ -29,7 +29,7 @@ progress() {
     percent=`echo "($perdone*100)/1" | bc`
     printf '%0.s#' $(seq 1 $statlen)
     [ $percent -lt 100 ] && printf '%0.s_' $(seq 1 $remain)
-    printf " $percent%%"
+    printf " $percent%% "
     printf "\r"
 }
 

@@ -2,14 +2,12 @@
 #
 ## @file Wallpapers/setwall.sh
 ## @brief Set the desktop wallpaper
+## @remark Uses AppleScript, OS/X specific
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2015, Ronald Joe Record, all rights reserved.
 ## @date Written August 30, 2015
 ## @version 1.0.1
 ##
-#
-# Copyright (c) 2015, Ronald Joe Record
-# All rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -83,9 +81,45 @@ usage() {
 ## EOF)
 ##       VIDEO=`echo ${selected_video_device} | sed -e "s/\[//" -e "s/\]//"`
 
-DIR="."
+set_image() {
+    image="$1"
+    echo "Setting desktop wallpaper to ${image}"
+    osascript <<EOF
+        tell application "System Events"
+            tell current desktop
+                set picture rotation to 0
+            end tell
+        end tell
+        tell application "Finder"
+            set bgimg to POSIX file "$image" as string
+            set desktop picture to file bgimg
+        end tell
+EOF
+}
+
+set_imgdir() {
+    directory="$1"
+    echo "Setting desktop wallpaper directory to ${directory}"
+    osascript <<EOD
+        tell application "System Events"
+            tell current desktop
+                set picture rotation to 1
+                set random order to true
+            end tell
+        end tell
+        tell application "Finder"
+            set bgdir to POSIX file "$directory" as string
+            set picture folder to folder bgdir
+            set change interval to 5.0 seconds
+        end tell
+EOD
+}
+
+DEFAULT_DIR="${HOME}/Pictures"
+DEFAULT_IMG="slope_mountain_peak_rocks_snow_sky_sunset_sunrise_1920x1200.jpg"
 DESKTOP=1
-NUM=10
+DIR=
+IMG=
 ALL=
 
 while getopts ad:i:n:u flag; do
@@ -95,6 +129,9 @@ while getopts ad:i:n:u flag; do
          ;;
       d)
          DIR="$OPTARG";
+         ;;
+      i)
+         IMG="$OPTARG";
          ;;
       n)
          DESKTOP="$OPTARG";
@@ -106,28 +143,41 @@ while getopts ad:i:n:u flag; do
 done
 shift $(( OPTIND - 1 ));
 
-[ "$1" ] && {
-    #if expr "$1" : '[0-9]\+$' >/dev/null
-    test $1 -eq 0 2>/dev/null
-    if [ $? -eq 2 ]; then
-        echo "Unrecognized command line option $1"
-        usage
-    else
-        NUM=$1
-    fi
-}
-
-if [ "$RECURSE" ]
+if [ "${IMG}" ]
 then
-    find "$DIR" $TYPE -print0 | xargs -0 stat -f "%m %N" | sort -n | tail -$NUM | cut -f2- -d" "
-else
-    if [ "$TYPE" ]
+    if [ "${DIR}" ]
     then
-        ls -rt1 | while read foo
-        do
-            [ -f "$foo" ] && echo $foo
-        done | tail -n$NUM
+        # Specified both image and image directory
+        [ -r "${IMG}" ] || {
+            if [ -r "${DIR}"/"${IMG}" ]
+            then
+                IMG="${DIR}"/"${IMG}"
+            else
+                echo "Unable to locate image ${IMG} or ${DIR}/${IMG}. Exiting."
+                usage
+            fi
+        }
     else
-        ls -rt1 | tail -n$NUM
+        # Specified image but not image directory
+        [ -r "${IMG}" ] || {
+            if [ -r "${DEFAULT_DIR}"/"${IMG}" ]
+            then
+                IMG="${DEFAULT_DIR}"/"${IMG}"
+            else
+                echo "Unable to locate image ${IMG} or ${DEFAULT_DIR}/${IMG}."
+                echo "Exiting."
+                usage
+            fi
+        }
+    fi
+    set_image "${IMG}"
+else
+    # Specified image directory but not image
+    if [ "${DIR}" ]
+    then
+        set_imgdir "${DIR}"
+    else
+        set_image "${DEFAULT_DIR}"/"${DEFAULT_IMG}"
     fi
 fi
+

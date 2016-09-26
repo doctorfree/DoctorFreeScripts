@@ -812,7 +812,9 @@ FILE_PATTERNS          = *.sh \
                          bash_aliases \
                          bash_profile \
                          bashrc \
-                         dircolors
+                         dircolors \
+                         diffem \
+                         instem
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.

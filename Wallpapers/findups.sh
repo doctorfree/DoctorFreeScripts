@@ -14,17 +14,15 @@ DUPFILE="duplicates.txt"
 NEWDUPS="newduplicates.txt"
 LINKEM=
 DUPDIR=
-if [ "$1" = "-l" ]
+if [ "$1" ]
 then
-    LINKEM=1
-else
-    [ "$1" ] && {
-        DUPDIR="$1"
-        [ -d "${DUPDIR}" ] || {
-            echo "${DUPDIR} not a directory or does not exist. Exiting."
-            exit 1
-        }
+    DUPDIR="$1"
+    [ -d "${DUPDIR}" ] || {
+        echo "${DUPDIR} not a directory or does not exist. Exiting."
+        exit 1
     }
+else
+    LINKEM=1
 fi
 
 [ "$LINKEM" ] || {
@@ -43,6 +41,8 @@ then
     while read num
     do
         numfiles=0
+        completed=`expr $completed + 1`
+        progress $numdups $completed
         DUPS=`echo */wallhaven-${num}\.???`
         for dup in ${DUPS}
         do
@@ -51,8 +51,6 @@ then
             }
         done
         [ $numfiles -eq 1 ] && {
-            completed=`expr $completed + 1`
-            progress $numdups $completed
             continue
         }
         link=
@@ -75,8 +73,6 @@ then
             ln -s ../"${link}" .
             cd ..
         done
-        completed=`expr $completed + 1`
-        progress $numdups $completed
     done < ${DUPFILE}
 else
     if [ "${DUPDIR}" ]
@@ -91,6 +87,8 @@ else
             [ "$pic" = "*.jpg" ] && continue
             [ "$pic" = "*.png" ] && continue
             numfiles=0
+            completed=`expr $completed + 1`
+            progress $numdups $completed
             DUPS=`echo ../*/$pic`
             for dup in ${DUPS}
             do
@@ -99,8 +97,6 @@ else
                 }
             done
             [ $numfiles -eq 1 ] && {
-                completed=`expr $completed + 1`
-                progress $numdups $completed
                 continue
             }
             link=
@@ -123,8 +119,6 @@ else
                 ln -s ${link} .
                 cd $H
             done
-            completed=`expr $completed + 1`
-            progress $numdups $completed
         done
         printf "\nDONE\n"
     else
@@ -133,6 +127,8 @@ else
         while read num
         do
             numfiles=0
+            completed=`expr $completed + 1`
+            progress $numdups $completed
             DUPS=`echo */wallhaven-${num}\.???`
             for dup in ${DUPS}
             do
@@ -143,8 +139,6 @@ else
             [ $numfiles -eq 1 ] || {
                 echo $num >> ${NEWDUPS}
             }
-            completed=`expr $completed + 1`
-            progress $numdups $completed
         done < ${DUPFILE}
     fi
 fi
