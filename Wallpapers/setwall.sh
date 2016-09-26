@@ -34,12 +34,13 @@
 ##
 ## Exit the program after displaying the usage message and example invocations
 usage() {
-   printf "Usage: setwall [-au] [-d /path/to/imagedir] [-i image] [-n num]\n"
+   printf "Usage: setwall [-aru] [-d /path/to/imagedir] [-i image] [-n num]\n"
    printf "\nWhere:\n"
    printf "\t-a specifies set wallpaper on all desktops/displays\n"
    printf "\t-d directory specifies the image directory to use\n"
    printf "\t-i image specifies the image file to use\n"
    printf "\t-n num specifies the desktop number to use\n"
+   printf "\t-r reverts to system preferences desktop wallpaper setting\n"
    printf "\t-u prints this usage message and exits\n\n"
    exit 1
 }
@@ -81,6 +82,17 @@ usage() {
 ## EOF)
 ##       VIDEO=`echo ${selected_video_device} | sed -e "s/\[//" -e "s/\]//"`
 
+revert_setting() {
+    echo "Reverting desktop wallpaper setting"
+    osascript <<EOF
+        tell application "System Events"
+            tell current desktop
+                set picture rotation to 1
+            end tell
+        end tell
+EOF
+}
+
 set_image() {
     image="$1"
     echo "Setting desktop wallpaper to ${image}"
@@ -109,7 +121,7 @@ set_imgdir() {
         end tell
         tell application "Finder"
             set bgdir to POSIX file "$directory" as string
-            set picture folder to folder bgdir
+            set picture folder to file bgdir
             set change interval to 5.0 seconds
         end tell
 EOD
@@ -122,7 +134,7 @@ DIR=
 IMG=
 ALL=
 
-while getopts ad:i:n:u flag; do
+while getopts ard:i:n:u flag; do
    case $flag in
       a)
          ALL=1;
@@ -135,6 +147,10 @@ while getopts ad:i:n:u flag; do
          ;;
       n)
          DESKTOP="$OPTARG";
+         ;;
+      r)
+         revert_setting
+         exit 0
          ;;
       u)
          usage;
@@ -159,7 +175,11 @@ then
         }
     else
         # Specified image but not image directory
-        [ -r "${IMG}" ] || {
+        if [ -r "${IMG}" ]
+        then
+            H=`pwd`
+            [ -r "${H}"/"${IMG}" ] && IMG="${H}"/"${IMG}"
+        else
             if [ -r "${DEFAULT_DIR}"/"${IMG}" ]
             then
                 IMG="${DEFAULT_DIR}"/"${IMG}"
@@ -168,7 +188,7 @@ then
                 echo "Exiting."
                 usage
             fi
-        }
+        fi
     fi
     set_image "${IMG}"
 else
