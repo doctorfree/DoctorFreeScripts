@@ -47,6 +47,7 @@ diffit() {
     fi
 }
 
+rm -f /tmp/*.diff
 if [ "$1" ]
 then
     for i in $*
@@ -60,3 +61,23 @@ else
         diffit "$i"
     done
 fi
+
+H=`pwd`
+cd "$WDIR"
+ONLY=
+for i in c* f* g* m* u*
+do
+    j="$i".sh
+    [ -f "$H"/"$i" ] && continue
+    [ -f "$H"/"$j" ] && continue
+    ONLY="$i $ONLY"
+done
+[ "$ONLY" ] && {
+    echo ""
+    echo "Only in $WDIR :"
+    for i in $ONLY
+    do
+        printf "\n\t$i"
+    done
+    printf "\n"
+}

@@ -20,16 +20,17 @@ DDIR="${WHDIR}/People"
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
 cd "${DDIR}"
 [ $page ] || {
-    pics=`echo *.jpg`
-    numpics=0
-    pngs=`echo *.png`
-    numpngs=0
-    [ "$pics" = "*.jpg" ] || {
-        numpics=`ls -1 *.jpg | wc -l`
-    }
-    [ "$pngs" = "*.png" ] || {
-        numpngs=`ls -1 *.png | wc -l`
-    }
+    anumpics=`ls -1 *.jpg 2> /dev/null | wc -l`
+    anumpngs=`ls -1 *.png 2> /dev/null | wc -l`
+    numpics=$anumpics
+    numpngs=$anumpngs
+    for subdir in 0 1 2 3 4 5 6 7 8 9
+    do
+        bnumpics=`ls -1 $subdir/*.jpg 2> /dev/null | wc -l`
+        numpics=`expr $numpics + $bnumpics`
+        bnumpngs=`ls -1 $subdir/*.png 2> /dev/null | wc -l`
+        numpngs=`expr $numpngs + $bnumpngs`
+    done
     totpics=`expr $numpics + $numpngs`
     numpage=`expr $totpics / 24`
     page=`expr $numpage + 1`

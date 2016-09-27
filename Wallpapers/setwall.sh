@@ -34,16 +34,18 @@
 ##
 ## Exit the program after displaying the usage message and example invocations
 usage() {
-   printf "Usage: setwall [-arsu] [-d /path/to/imagedir] [-i image] [-n num]\n"
-   printf "\nWhere:\n"
-   printf "\t-a specifies set wallpaper on all desktops/displays\n"
-   printf "\t-d directory specifies the image directory to use\n"
-   printf "\t-i image specifies the image file to use\n"
-   printf "\t-n num specifies the desktop number to use\n"
-   printf "\t-r rotate through multiple desktop wallpapers\n"
-   printf "\t-s single desktop wallpaper (stop rotation)\n"
-   printf "\t-u prints this usage message and exits\n\n"
-   exit 1
+    printf "\n"
+    printf "Usage: setwall [-arsu] [-d /path/to/imagedir] [-p picture] [-n num]"
+    printf "\n\nWhere:\n"
+    printf "\t-a specifies set wallpaper on all desktops/displays\n"
+    printf "\t-d directory specifies the image directory to use\n"
+    printf "\t-i interval - seconds between desktop wallpaper changes\n"
+    printf "\t-p picture specifies the image file to use\n"
+    printf "\t-n num specifies the desktop number to use\n"
+    printf "\t-r rotate through multiple desktop wallpapers\n"
+    printf "\t-s single desktop wallpaper (stop rotation)\n"
+    printf "\t-u prints this usage message and exits\n\n"
+    exit 1
 }
 
 ## original:
@@ -134,7 +136,7 @@ set_imgdir() {
         tell application "Finder"
             set bgdir to POSIX file "$directory" as string
             set picture folder to file bgdir
-            set change interval to 5.0 seconds
+            set change interval to "$INTERVAL" seconds
         end tell
 EOD
 }
@@ -144,9 +146,10 @@ DEFAULT_IMG="slope_mountain_peak_rocks_snow_sky_sunset_sunrise_1920x1200.jpg"
 DESKTOP=1
 DIR=
 IMG=
+INTERVAL=600
 ALL=
 
-while getopts arsd:i:n:u flag; do
+while getopts arsd:i:n:p:u flag; do
    case $flag in
       a)
          ALL=1;
@@ -155,6 +158,9 @@ while getopts arsd:i:n:u flag; do
          DIR="$OPTARG";
          ;;
       i)
+         INTERVAL="$OPTARG";
+         ;;
+      p)
          IMG="$OPTARG";
          ;;
       n)
