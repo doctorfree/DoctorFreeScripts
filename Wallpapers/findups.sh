@@ -10,8 +10,11 @@
 
 [ -r ./utils ] && . ./utils
 
-DUPFILE="duplicates.txt"
-NEWDUPS="newduplicates.txt"
+HERE=`pwd`
+# Create a list of plain files and a sorted uniq's list of those files
+FILELIST="${HERE}/filelist.txt"
+SORTLIST="${HERE}/sortlist.txt"
+NEWDUPS="${HERE}/newfilelist.txt"
 LINKEM=
 DUPDIR=
 if [ "$1" ]
@@ -30,54 +33,65 @@ fi
     touch ${NEWDUPS}
 }
 
-[ -f ${DUPFILE} ] || {
-    cat */downloaded.txt | sort | uniq -d > ${DUPFILE}
+[ -f "${FILELIST}" ] || {
+    printf "\nCreating list of plain files ..."
+    find . -type f -name wallhaven-\* > ${FILELIST}
+    printf " done.\n"
+}
+numplan=`cat ${FILELIST} | wc -l`
+
+[ -f "${SORTLIST}" ] || {
+    printf "\nCreating sorted uniq list of plain files ...\n"
+    rm -f /tmp/files$$
+    touch /tmp/files$$
+    completed=0
+    cat ${FILELIST} | while read wallpath
+    do
+        filename=`basename "$wallpath"`
+        echo "$filename" >> /tmp/files$$
+        completed=`expr $completed + 1`
+        progress $numplan $completed
+    done
+    printf "\n"
+    prevperc=
+    cat /tmp/files$$ | sort | uniq > ${SORTLIST}
+    rm -f /tmp/files$$
+    printf " done.\n"
 }
 
-HERE=`pwd`
 if [ "$LINKEM" ]
 then
-    numdups=`cat ${DUPFILE} | wc -l`
+    numuniq=`cat ${SORTLIST} | wc -l`
+    [ $numplan -eq $numuniq ] && {
+        echo "No duplicates found. Exiting."
+        exit 0
+    }
     completed=0
     while read num
     do
-        numfiles=0
         completed=`expr $completed + 1`
-        progress $numdups $completed
-        DUPS=`echo */wallhaven-${num}\.??? People/*/wallhaven-${num}\.???`
-        for dup in ${DUPS}
-        do
-            [ "$dup" = "*/wallhaven-${num}\.???" ] && continue
-            [ "$dup" = "People/*/wallhaven-${num}\.???" ] && continue
-            [ -L "$dup" ] || {
-                numfiles=`expr $numfiles + 1`
-            }
-        done
+        progress $numuniq $completed
+        grep $num ${FILELIST} > /tmp/num$$
+        numfiles=`cat /tmp/num$$ | wc -l`
         [ $numfiles -eq 1 ] && {
             continue
         }
-        link=
-        for dup in ${DUPS}
+        link=`head -1 /tmp/num$$`
+        cat /tmp/num$$ | while read dup
         do
-            [ "$dup" = "*/wallhaven-${num}\.???" ] && continue
-            [ "$dup" = "People/*/wallhaven-${num}\.???" ] && continue
-            [ "$link" ] || {
-                [ -L "${dup}" ] || {
-                    link="${dup}"
-                }
-                continue
-            }
-            [ -L "${dup}" ] && continue
+            [ "$link" = "$dup" ] && continue
             picdir=`dirname "$dup"`
             [ -d "${picdir}" ] || {
                 echo "Unknown directory path ${picdir}. Skipping $dup"
                 continue
             }
+            fnam=`basename "$dup"`
+            # Remove leading ./ from $link filename path
+            link=`echo $link | sed -e "s/\.\///"`
+            rm -f "$dup"
             cd "${picdir}"
-            H=`pwd`
-            rm -f wallhaven-${num}\.???
             peeps=
-            echo $H | grep /Wallhaven/People/ > /dev/null && peeps=1
+            pwd | grep /Wallhaven/People/ > /dev/null && peeps=1
             if [ "$peeps" ]
             then
                 ln -s ../../"${link}" .
@@ -86,7 +100,11 @@ then
             fi
             cd ${HERE}
         done
-    done < ${DUPFILE}
+        rm -f /tmp/num$$
+    done < ${SORTLIST}
+    printf "\n"
+    prevperc=
+    rm -f /tmp/num$$
 else
     if [ "${DUPDIR}" ]
     then
@@ -94,76 +112,58 @@ else
         cd "${DUPDIR}"
         H=`pwd`
         B=`basename "$H"`
-        if [ "$B" = "People" ]
-        then
-            numdups=0
-            for d in 0 1 2 3 4 5 6 7 8 9
-            do
-                numdir=`ls -1 $d/*.jpg $d/*.png 2> /dev/null | wc -l`
-                numdups=`expr $numdups + $numdir`
-            done
-            pics="*/*.jpg */*.png"
-            peeps=1
-        else
-            numdups=`ls -1 *.jpg *.png 2> /dev/null | wc -l`
-            pics="*.jpg *.png"
-            peeps=
-        fi
+        DIRFLIST="filelist.txt"
+        UNIQLIST="uniqlist.txt"
+        find . -type f -name wallhaven-\* > ${DIRFLIST}
+        cat ${DIRFLIST} | sort | uniq > ${UNIQLIST}
+        peeps=
+        [ "$B" = "People" ] && peeps=1
+        numuniq=`grep "/$B/" "${UNIQLIST}" | wc -l`
         completed=0
-        for pic in $pics
+        cat "${UNIQLIST}" | while read pic
         do
             completed=`expr $completed + 1`
-            progress $numdups $completed
-            [ "$pic" = "*.jpg" ] && continue
-            [ "$pic" = "*/*.jpg" ] && continue
-            [ "$pic" = "*.png" ] && continue
-            [ "$pic" = "*/*.png" ] && continue
-            numfiles=0
-            if [ "$peeps" ]
-            then
-                DUPS=`echo ../../*/$pic`
-            else
-                DUPS=`echo ../*/$pic`
-            fi
-            for dup in ${DUPS}
+            progress $numuniq $completed
+            img="`basename $pic`"
+            grep "$img" ${FILELIST} > /tmp/num$$
+            numfiles=`cat /tmp/num$$ | wc -l`
+            [ $numfiles -eq 1 ] && continue
+            link=`head -1 /tmp/num$$`
+            # Remove leading ./ from $link filename path
+            link=`echo $link | sed -e "s/\.\///"`
+            cat /tmp/num$$ | while read dup
             do
-                [ -L "$dup" ] || {
-                    numfiles=`expr $numfiles + 1`
-                }
-            done
-            [ $numfiles -eq 1 ] && {
-                continue
-            }
-            link=
-            for dup in ${DUPS}
-            do
-                [ "$link" ] || {
-                    [ -L "${dup}" ] || {
-                        link="${dup}"
-                    }
-                    continue
-                }
-                [ -L "${dup}" ] && continue
-                picdir=`dirname "$dup"`
+                [ "$link" = "$dup" ] && continue
+                picdir="${HERE}"/`dirname "$dup"`
                 [ -d "${picdir}" ] || {
                     echo "Unknown directory path ${picdir}. Skipping $dup"
                     continue
                 }
                 cd "${picdir}"
-                rm -f $pic
-                ln -s ${link} .
-                cd $H
+                rm -f "$img"
+                pwd | grep /Wallhaven/People/ > /dev/null && people=1
+                if [ "$people" ]
+                then
+                    ln -s ../../"${link}" .
+                else
+                    ln -s ../"${link}" .
+                fi
             done
+            rm -f /tmp/num$$
         done
+        rm -f /tmp/num$$
         printf "\nDONE\n"
+        prevperc=
     else
-        numdups=`cat ${DUPFILE} | wc -l`
+        find . -type f -name wallhaven-\* > ${FILELIST}
+        cat ${FILELIST} | sort | uniq > ${SORTLIST}
+        numuniq=`cat ${SORTLIST} | wc -l`
         completed=0
         while read num
         do
             numfiles=0
             completed=`expr $completed + 1`
-            progress $numdups $completed
+            progress $numuniq $completed
             DUPS=`echo */wallhaven-${num}\.???`
             for dup in ${DUPS}
             do
@@ -174,12 +174,10 @@ else
             [ $numfiles -eq 1 ] || {
                 echo $num >> ${NEWDUPS}
             }
-        done < ${DUPFILE}
+        done < ${SORTLIST}
+        prevperc=
+        mv ${NEWDUPS} ${SORTLIST}
     fi
 fi
+printf "\n"
 
-[ "$LINKEM" ] || {
-    [ "${DUPDIR}" ] || {
-        mv ${NEWDUPS} ${DUPFILE}
-    }
-}
