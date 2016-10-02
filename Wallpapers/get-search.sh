@@ -31,6 +31,7 @@ then
 else
     QDIR=`echo ${query} | sed -e "s/ /_/g" -e "s/+/_/g"`
 fi
+[ "$model" ] && QDIR="Models/${QDIR}"
 DDIR="${WHDIR}/${QDIR}"
 
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
@@ -57,6 +58,6 @@ cd "${DDIR}"
 wh -l "${DDIR}" -n $numdown -s $page -t search \
    -c $categories -f $filters -q "${query}" -p 0
 
-cd "${WHDIR}"
-echo "Finding duplicates in ${QDIR}"
-./findups "${QDIR}"
+#cd "${WHDIR}"
+#echo "Finding duplicates in ${QDIR}"
+#./findups "${QDIR}"

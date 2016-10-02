@@ -65,8 +65,11 @@ fi
 H=`pwd`
 cd "$WDIR"
 ONLY=
-for i in c* f* g* m* u*
+for i in *
 do
+    [ -d "$i" ] && continue
+    suffix=`echo $i | awk -F '.' ' { print $2 } '`
+    [ "$suffix" = "txt" ] && continue
     j="$i".sh
     [ -f "$H"/"$i" ] && continue
     [ -f "$H"/"$j" ] && continue

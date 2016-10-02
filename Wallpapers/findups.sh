@@ -11,7 +11,7 @@
 [ -r ./utils ] && . ./utils
 
 HERE=`pwd`
-# Create a list of plain files and a sorted uniq's list of those files
+# Create a list of plain files and a sorted uniq'd list of those files
 FILELIST="${HERE}/filelist.txt"
 SORTLIST="${HERE}/sortlist.txt"
 NEWDUPS="${HERE}/newfilelist.txt"
@@ -40,7 +40,7 @@ fi
 }
 numplan=`cat ${FILELIST} | wc -l`
 
-[ -f "${SORTLIST}" ] || {
+mksortlist() {
     printf "\nCreating sorted uniq list of plain files ...\n"
     rm -f /tmp/files$$
     touch /tmp/files$$
@@ -56,8 +56,9 @@ numplan=`cat ${FILELIST} | wc -l`
     prevperc=
     cat /tmp/files$$ | sort | uniq > ${SORTLIST}
     rm -f /tmp/files$$
-    printf " done.\n"
 }
+
+[ -f "${SORTLIST}" ] || mksortlist
 
 if [ "$LINKEM" ]
 then
@@ -67,6 +68,7 @@ then
         exit 0
     }
     completed=0
+    printf "\nFinding and symlinking duplicate files ...\n"
     while read num
     do
         completed=`expr $completed + 1`
@@ -90,9 +92,10 @@ then
             link=`echo $link | sed -e "s/\.\///"`
             rm -f "$dup"
             cd "${picdir}"
-            peeps=
-            pwd | grep /Wallhaven/People/ > /dev/null && peeps=1
-            if [ "$peeps" ]
+            people=
+            models=
+            pwd | grep /Wallhaven/People/ > /dev/null && people=1
+            if [ "$people" ] || [ "$models" ]
             then
                 ln -s ../../"${link}" .
             else
@@ -102,23 +105,24 @@ then
         done
         rm -f /tmp/num$$
     done < ${SORTLIST}
-    printf "\n"
+    printf "\nDone\n"
     prevperc=
     rm -f /tmp/num$$
 else
     if [ "${DUPDIR}" ]
     then
+        printf "\nUpdating file list with entries from ${DUPDIR}\n"
+        find ./${DUPDIR} -type f -name wallhaven-\* >> ${FILELIST}
+        numplan=`cat ${FILELIST} | wc -l`
+        mksortlist
         printf "\nCreating symbolic links in ${DUPDIR}\n"
         cd "${DUPDIR}"
         H=`pwd`
-        B=`basename "$H"`
         DIRFLIST="filelist.txt"
         UNIQLIST="uniqlist.txt"
         find . -type f -name wallhaven-\* > ${DIRFLIST}
         cat ${DIRFLIST} | sort | uniq > ${UNIQLIST}
-        peeps=
-        [ "$B" = "People" ] && peeps=1
-        numuniq=`grep "/$B/" "${UNIQLIST}" | wc -l`
+        numuniq=`cat ${UNIQLIST} | wc -l`
         completed=0
         cat "${UNIQLIST}" | while read pic
         do
@@ -141,8 +145,11 @@ else
                 }
                 cd "${picdir}"
                 rm -f "$img"
+                people=
+                models=
                 pwd | grep /Wallhaven/People/ > /dev/null && people=1
-                if [ "$people" ]
+                pwd | grep /Wallhaven/Models/ > /dev/null && models=1
+                if [ "$people" ] || [ "$models" ]
                 then
                     ln -s ../../"${link}" .
                 else

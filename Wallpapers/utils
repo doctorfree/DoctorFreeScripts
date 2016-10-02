@@ -10,6 +10,7 @@
 WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 
 query=
+model=
 numdown=
 page=
 categories=
@@ -44,21 +45,25 @@ progress() {
 ## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: %s [-n num] [-c cat] [-f filter] [-p page]" $0
-    printf " [-l subdir] [-q search] [-u]"
+    printf " [-l subdir] [-q search] [-mu]"
     printf "\n\nWhere:\n\t-n num specifies the number of downloads"
     printf "\n\t-c cat specifies the category mask (001 - 111)"
     printf "\n\t-f filter specifies the filter mask (001 - 111)"
     printf "\n\t-p page specifies the start page"
     printf "\n\t-l subdir specifies the download subdirectory to use"
+    printf "\n\t-m indicates a Model search, use Models/<model_name> download dir"
     printf "\n\t-q search specifies the search terms ( + for AND, space for OR)"
     printf "\n\t-u displays this usage message\n"
     exit 1
 }
 
-while getopts l:n:c:f:p:q:u flag; do
+while getopts l:n:c:f:p:q:mu flag; do
     case $flag in
         l)
             subdir=$OPTARG
+            ;;
+        m)
+            model=1
             ;;
         n)
             numdown=$OPTARG
