@@ -8,7 +8,12 @@
 ## @version 1.0.1
 ##
 
-[ -r ./utils ] && . ./utils
+if [ -r /usr/local/share/bash/wallutils ]
+then
+    . /usr/local/share/bash/wallutils
+else
+    [ -r ./utils ] && . ./utils
+fi
 [ "$WHDIR" ] || WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 
 DDIR="${WHDIR}/Anime"

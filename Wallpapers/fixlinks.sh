@@ -8,7 +8,12 @@
 ## @version 1.0.1
 ##
 
-[ -r ./utils ] && . ./utils
+if [ -r /usr/local/share/bash/wallutils ]
+then
+    . /usr/local/share/bash/wallutils
+else
+    [ -r ./utils ] && . ./utils
+fi
 
 HERE=`pwd`
 WALL=`basename "$HERE"`

@@ -18,6 +18,14 @@ filters=
 subdir=
 prevperc=
 
+if [ -r /usr/local/share/bash/kv ]
+then
+    . /usr/local/share/bash/kv
+    have_kv=1
+else
+    have_kv=
+fi
+
 ## @fn progress()
 ## @brief Displays a progress bar and percentage of tasks completed
 ## @param param1 Total number of tasks

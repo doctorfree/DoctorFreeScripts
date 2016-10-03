@@ -12,7 +12,12 @@
     echo "$1 not a directory. Exiting."
     exit 1
 }
-[ -r ./utils ] && . ./utils
+if [ -r /usr/local/share/bash/wallutils ]
+then
+    . /usr/local/share/bash/wallutils
+else
+    [ -r ./utils ] && . ./utils
+fi
 cd "$1"
 for i in 0 1 2 3 4 5 6 7 8 9
 do

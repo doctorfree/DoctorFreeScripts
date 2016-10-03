@@ -8,26 +8,96 @@
 ## @version 1.0.1
 ##
 
-H=`pwd`
+HERE=`pwd`
+DAY=`date "+%d"`
+MONTH=`date "+%m"`
+YEAR=`date "+%Y"`
+COUNT="counts-$YEAR-$MONTH-$DAY.txt"
 totalpics=0
 totalinks=0
 numdir=0
 curdir=0
+peopledir="People"
+modelsdir="Models"
+
+if [ -r /usr/local/share/bash/wallutils ]
+then
+    . /usr/local/share/bash/wallutils
+else
+    [ -r ./utils ] && . ./utils
+fi
+
+[ "${subdir}" ] && {
+    [ -d "${subdir}" ] && {
+        cd "${subdir}"
+        HERE=`pwd`
+    }
+}
 
 for i in *
 do
     [ -d "$i" ] && numdir=`expr $numdir + 1`
 done
 
-peepdir="./People/"
-find . -type d | while read ddir
+count_subdirs() {
+    topdir="$1"
+    for sub in *
+    do
+        [ -d "$sub" ] && {
+            bnumpics=`ls -1 $sub/*.jpg 2> /dev/null | wc -l`
+            bnumpngs=`ls -1 $sub/*.png 2> /dev/null | wc -l`
+            bnumtot=`expr $bnumpics + $bnumpngs`
+            numpics=`expr $numpics + $bnumtot`
+            [ "${have_kv}" ] && kvset "${topdir}_${sub}_numpics" $bnumtot
+            bnumlinks=0
+            for i in $sub/*
+            do
+                [ -L $i ] && bnumlinks=`expr $bnumlinks + 1`
+            done
+            [ "${have_kv}" ] && kvset "${topdir}_${sub}_numlinks" $bnumlinks
+            numlinks=`expr $numlinks + $bnumlinks`
+        }
+    done
+}
+
+print_subdirs() {
+    topdir="$1"
+    for sub in *
+    do
+        [ -d "$sub" ] && {
+            bnumpics=$(kvget "${topdir}_${sub}_numpics")
+            [ $bnumpics -eq 0 ] && continue
+            bnumlinks=$(kvget "${topdir}_${sub}_numlinks")
+            bunlinked=`expr $bnumpics - $bnumlinks`
+            printf "\n\t${sub}:" | tee -a $COUNT
+            if [ ${#sub} -lt 7 ]
+            then
+                printf "\t\t" | tee -a $COUNT
+            else
+                [ ${#sub} -lt 15 ] && printf "\t" | tee -a $COUNT
+            fi
+            printf "\tPics=$bnumpics" | tee -a $COUNT
+            [ $bnumpics -lt 100 ] && printf "\t" | tee -a $COUNT
+            printf "\tFiles=$bunlinked" | tee -a $COUNT
+            printf "\tLinks=$bnumlinks" | tee -a $COUNT
+        }
+    done
+}
+
+rm -f $COUNT
+touch $COUNT
+
+for ddir in *
 do
-    [ "${ddir}" = "." ] && continue
-    # Skip over the subdirectories in ./People/
-    [ "${ddir:0:${#peepdir}}" = "${peepdir}" ] && continue
+    [ -d "${ddir}" ] || continue
     curdir=`expr $curdir + 1`
     cd "${ddir}"
-    ddir=`echo ${ddir} | sed -e "s/\.\///"`
+    if [ "${subdir}" ]
+    then
+        pdir="${subdir}/${ddir}"
+    else
+        pdir="${ddir}"
+    fi
     numpics=0
     numpngs=0
     numlinks=0
@@ -39,60 +109,51 @@ do
     [ "$pngs" = "*.png" ] || {
         numpngs=`ls -1 *.png | wc -l`
     }
-    [ "${ddir}" = "./People" ] && {
-        for subdir in 0 1 2 3 4 5 6 7 8 9
-        do
-            bnumpics=`ls -1 $subdir/*.jpg 2> /dev/null | wc -l`
-            numpics=`expr $numpics + $bnumpics`
-            bnumpngs=`ls -1 $subdir/*.png 2> /dev/null | wc -l`
-            numpngs=`expr $numpngs + $bnumpngs`
-        done
-    }
     numpics=`expr $numpics + $numpngs`
     for i in *
     do
         [ -L $i ] && numlinks=`expr $numlinks + 1`
     done
-    [ "${ddir}" = "./People" ] && {
-        bnumlinks=0
-        for subdir in 0 1 2 3 4 5 6 7 8 9
-        do
-            for i in $subdir/*
-            do
-                [ -L $i ] && bnumlinks=`expr $bnumlinks + 1`
-            done
-            numlinks=`expr $numlinks + $bnumlinks`
-        done
+    # Count the subdirectories in ./People/ and ./Models/
+    [ "${ddir}" = "${peopledir}" ] || [ "${ddir}" = "${modelsdir}" ] && {
+        count_subdirs "${ddir}"
     }
+    kvset "${ddir}_numpics" $numpics
+    kvset "${ddir}_numlinks" $numlinks
     if [ $numpics -eq 0 ] && [ $numlinks -eq 0 ]
     then
-        [ $curdir -eq $numdir ] && {
-            total=`expr $totalpics + $totalinks`
-            printf "\n\nTotals:\t\t\tPics=$total"
-            printf "\tFiles=$totalpics\tLinks=$totalinks\n"
-        }
-        cd "${H}"
+        cd "${HERE}"
         continue
     fi
     unlinked=`expr $numpics - $numlinks`
-    printf "\n${ddir}:"
-    if [ ${#ddir} -lt 7 ]
+    printf "\n${pdir}:" | tee -a $COUNT
+    if [ ${#pdir} -lt 7 ]
     then
-        printf "\t\t"
+        printf "\t\t\t" | tee -a $COUNT
     else
-        [ ${#ddir} -lt 15 ] && printf "\t"
+        if [ ${#pdir} -lt 15 ]
+        then
+            printf "\t\t" | tee -a $COUNT
+        else
+            if [ ${#pdir} -lt 23 ]
+            then
+                printf "\t" | tee -a $COUNT
+            fi
+        fi
     fi
-    printf "\tPics=$numpics"
-    [ $numpics -lt 100 ] && printf "\t"
-    printf "\tFiles=$unlinked"
-#   [ $unlinked -lt 100 ] && printf "\t"
-    printf "\tLinks=$numlinks"
+    printf "\tPics=$numpics" | tee -a $COUNT
+    [ $numpics -lt 100 ] && printf "\t" | tee -a $COUNT
+    printf "\tFiles=$unlinked" | tee -a $COUNT
+    printf "\tLinks=$numlinks" | tee -a $COUNT
     totalpics=`expr $totalpics + $unlinked`
     totalinks=`expr $totalinks + $numlinks`
-    [ $curdir -eq $numdir ] && {
-        total=`expr $totalpics + $totalinks`
-        printf "\n\nTotals:\t\t\tPics=$total"
-        printf "\tFiles=$totalpics\tLinks=$totalinks\n"
+    # Print the subdirectory totals for subdirs in ./People/ and ./Models/
+    [ "${ddir}" = "${peopledir}" ] || [ "${ddir}" = "${modelsdir}" ] && {
+        [ "${have_kv}" ] && print_subdirs "${ddir}"
     }
-    cd "${H}"
+    cd "${HERE}"
 done
+
+total=`expr $totalpics + $totalinks`
+printf "\n\nTotals:\t\t\t\tPics=$total" | tee -a $COUNT
+printf "\tFiles=$totalpics\tLinks=$totalinks\n" | tee -a $COUNT
