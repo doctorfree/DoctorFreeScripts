@@ -55,7 +55,7 @@ then
         diffit "$i"
     done
 else
-    for i in *.sh utils
+    for i in *.sh
     do
         [ "$i" = "wallhaven.sh" ] && continue
         diffit "$i"

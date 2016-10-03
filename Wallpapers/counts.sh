@@ -22,7 +22,7 @@ if [ -r /usr/local/share/bash/wallutils ]
 then
     . /usr/local/share/bash/wallutils
 else
-    [ -r ./utils ] && . ./utils
+    [ -r ./Utils/wallutils ] && . ./Utils/wallutils
 fi
 
 COUNT=

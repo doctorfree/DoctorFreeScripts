@@ -1,37 +1,48 @@
 #!/usr/bin/env bash
-# ABOUT kv-bash: 
-#    key/value dabatase
-#    database store in HOME directory
-#    each user has 1 database
-#    imports 5 bash functions via ```$ source kv-bash```
 #
-# Author: damphat
-# Version: 0.1
-# Requirements: unix-like environement, no dependencies
-#
-# USAGE:
-#    source ./kv-bash        # import kv-bash functions
-#    kvset <key> <value>     # assign value to key
-#    kvget <key>             # get value of key
-#    kvdel <key>             # kvdelete by key
-#    kvlist                  # list all current key/value pairs
-#    kvclear                 # clear database
-#
-# EXAMPLES: 
-#    $ source ./kv-bash
-#    $ kvset user mr.bob
-#    $ kvset pass abc@123
-#    $ kvlist
-#      user mr.bob
-#      pass abc@123
-#    $ kvget user
-#      mr.bob
-#    $ kvget pass
-#      abc@123
-#    $ kvdel pass
-#    $ kvget pass
-#
-#    $ kvclear
+## @file Utils/kv
+## @brief Utility functions to store and retrieve key/value pairs
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2015, Ronald Joe Record, all rights reserved.
+## @date Written 6-Jul-2015
+## @version 1.0.1
+##
+## Downloded from https://github.com/damphat/kv-bash
+## Provides persistent storage of key/value pairs during execution
+##
+## ABOUT kv-bash: 
+##    key/value dabatase
+##    database store in HOME directory
+##    each user has 1 database
+##    imports 5 bash functions via ```$ source kv-bash```
+##
+## Author: damphat
+## Version: 0.1
+## Requirements: unix-like environement, no dependencies
+##
+## USAGE:
+##    source ./kv-bash        # import kv-bash functions
+##    kvset <key> <value>     # assign value to key
+##    kvget <key>             # get value of key
+##    kvdel <key>             # kvdelete by key
+##    kvlist                  # list all current key/value pairs
+##    kvclear                 # clear database
+##
+## EXAMPLES: 
+##    $ source ./kv-bash
+##    $ kvset user mr.bob
+##    $ kvset pass abc@123
+##    $ kvlist
+##      user mr.bob
+##      pass abc@123
+##    $ kvget user
+##      mr.bob
+##    $ kvget pass
+##      abc@123
+##    $ kvdel pass
+##    $ kvget pass
+##
+##    $ kvclear
 
 ########################
 # CONSTANTS
@@ -94,7 +105,11 @@ kv_validate_key() {
 # PUBLIC FUNCTIONS
 ########################
 
-# Usage: kvget <key>
+## @fn kvget()
+## @brief Retrieves value corresponding to specified key
+## @param param1 key
+##
+## Usage: kvget <key>
 kvget() {
 	key="$1"
 	kv_validate_key "$key" || {
@@ -107,7 +122,12 @@ kvget() {
 	[ "$VALUE" != "" ]
 }
 
-# Usage: kvset <key> [value] 
+## @fn kvset()
+## @brief Creates or updates specified key/value pair
+## @param param1 key
+## @param param2 value
+##
+## Usage: kvset <key> [value] 
 kvset() {
 	key="$1"
 	value="$2"
@@ -119,7 +139,11 @@ kvset() {
 	echo "$value" > "$KV_USER_DIR/$key"
 }
 
-# Usage: kvdel <key>
+## @fn kvdel()
+## @brief Deletes key/value pair corresponding to specified key
+## @param param1 key
+##
+## Usage: kvdel <key>
 kvdel() {
 	key="$1"
 	kv_validate_key "$key" || {
@@ -129,8 +153,11 @@ kvdel() {
 	test -f "$KV_USER_DIR/$key" && rm -f "$KV_USER_DIR/$key"
 }
 
-# list all key/value pairs to stdout
-# Usage: kvlist
+## @fn kvlist()
+## @brief List all key/value pairs to stdout
+## @param none
+##
+## Usage: kvlist
 kvlist() {
 	for i in "$KV_USER_DIR/"*; do
 		if [ -f "$i" ]; then
@@ -140,8 +167,11 @@ kvlist() {
 	done 
 }
 
-# clear all key/value pairs in database
-# Usage: kvclear
+## @fn kvclear()
+## @brief Clear all key/value pairs in database
+## @param none
+##
+## Usage: kvclear
 kvclear() {
 	rm -rf "$KV_USER_DIR"
 }

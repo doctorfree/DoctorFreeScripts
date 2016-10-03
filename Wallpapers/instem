@@ -34,7 +34,7 @@ then
         instit "$i"
     done
 else
-    for i in *.sh utils
+    for i in *.sh
     do
         instit "$i"
     done

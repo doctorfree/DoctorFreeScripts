@@ -808,7 +808,8 @@ INPUT_ENCODING         = UTF-8
 # *.vhd, *.vhdl, *.ucf, *.qsf, *.as and *.js.
 
 FILE_PATTERNS          = *.sh \
-                         utils \
+                         kv \
+                         wallutils \
                          bash_aliases \
                          bash_profile \
                          bashrc \
