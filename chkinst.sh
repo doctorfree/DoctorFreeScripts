@@ -35,14 +35,15 @@
 ##
 ## Exit the program after displaying the usage message and example invocations
 usage() {
-    printf "\nUsage: chkinst [-u] [-a] [-d] [-f] [-i] [-n]"
+    printf "\nUsage: chkinst [-u] [-a] [-d] [-f] [-i] [-n] [-w wallpaper_dir]"
     printf "\nWhere:"
     printf "\n\t-u displays this usage message"
     printf "\n\t-a indicates report on all files, not just those installed"
     printf "\n\t-d indicates display output of a diff between files"
     printf "\n\t-f indicates force update of installed file(s)"
     printf "\n\t-i indicates prompt for update of installed file(s)"
-    printf "\n\t-n indicates tell me what you would copy without doing it\n"
+    printf "\n\t-n indicates tell me what you would copy without doing it"
+    printf "\n\t-w dir specifies the installation dir for wallpaper  utils\n"
     exit 1
 }
 
@@ -116,13 +117,15 @@ DIFF=
 TELL=
 UPD=
 FORCE=
+# Wallpapers utilities installation location
+WDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 # List of installed files which differ from those in my git repo due to
 # tailoring for my own use. These will not get force installed without first
 # prompting you if you really want to.
 DIFFER="bash_aliases bash_profile bashrc mkreadme.sh mkwmv.sh \
         Wallpapers/wb.sh Wallpapers/wh.sh"
 
-while getopts adfinu flag; do
+while getopts adfinuw: flag; do
     case $flag in
         a)
             ALL=1
@@ -140,6 +143,9 @@ while getopts adfinu flag; do
         n)
             TELL=1
             ;;
+        w)
+            WDIR="$OPTARG"
+            ;;
         u)
             usage
             ;;
@@ -147,12 +153,12 @@ while getopts adfinu flag; do
 done
 shift $(( OPTIND - 1 ))
 
-for i in *
+for i in * Wallpapers/*.sh
 do
     # Skip directories
     [ -d "$i" ] && continue
-    # Strip any .sh suffix
-    j=`echo $i | sed -e "s/\.sh$//"`
+    # Strip any .sh suffix and Wallpapers/ prefix
+    j=`echo $i | sed -e "s/\.sh$//" -e "s/Wallpapers\///"`
     # Scripts can be either commands or startup configuration files in $HOME 
     case "$i" in
         bash_aliases|bash_profile|bashrc|dircolors|vimrc)
@@ -162,6 +168,15 @@ do
             else
                 inst=
             fi
+            ;;
+        Wallpapers/*)
+            inst=`type -p "$j"`
+            [ "$inst" ] || {
+                [ -f "${WDIR}/$j" ] && inst="${WDIR}/$j"
+            }
+            ;;
+        INSTALL)
+            continue
             ;;
         *)
             inst=`type -p "$j"`
