@@ -40,6 +40,11 @@ do
     [ -d "$i" ] && numdir=`expr $numdir + 1`
 done
 
+## @fn count_subdirs()
+## @brief Count number of JPEG and PNG files and symbolic links in subdirs
+## @param param1 directory in which to count image files in subdirs
+##
+## Uses kv-bash functions, if available, to store key/value pairs
 count_subdirs() {
     topdir="$1"
     for sub in *
@@ -61,6 +66,11 @@ count_subdirs() {
     done
 }
 
+## @fn print_subdirs()
+## @brief Print previously calculated counts of image files in subdirs
+## @param param1 directory in which to display subdirectory image file counts
+##
+## Uses kv-bash functions, if available, to read key/value pairs
 print_subdirs() {
     topdir="$1"
     for sub in *
