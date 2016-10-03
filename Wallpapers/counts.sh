@@ -13,8 +13,6 @@ month=`date "+%m"`
 year=`date "+%Y"`
 totalpics=0
 totalinks=0
-numdir=0
-curdir=0
 peopledir="People"
 modelsdir="Models"
 
@@ -34,11 +32,6 @@ COUNT=
 }
 [ "$COUNT" ] || COUNT="counts-$year-$month-$day.txt"
 HERE=`pwd`
-
-for i in *
-do
-    [ -d "$i" ] && numdir=`expr $numdir + 1`
-done
 
 ## @fn count_subdirs()
 ## @brief Count number of JPEG and PNG files and symbolic links in subdirs
@@ -95,21 +88,8 @@ print_subdirs() {
     done
 }
 
-rm -f $COUNT
-touch $COUNT
-
-for ddir in *
-do
-    [ -d "${ddir}" ] || continue
-    curdir=`expr $curdir + 1`
-    cd "${ddir}"
-    if [ "${subdir}" ]
-    then
-        pdir="${subdir}/${ddir}"
-    else
-        pdir="${ddir}"
-    fi
-    pdir=`echo $pdir | sed -e "s/_/ /g"`
+count_pics() {
+    cdir="$1"
     numpics=0
     numpngs=0
     numlinks=0
@@ -127,16 +107,15 @@ do
         [ -L $i ] && numlinks=`expr $numlinks + 1`
     done
     # Count the subdirectories in ./People/ and ./Models/
-    [ "${ddir}" = "${peopledir}" ] || [ "${ddir}" = "${modelsdir}" ] && {
-        count_subdirs "${ddir}"
+    [ "${cdir}" = "${peopledir}" ] || [ "${cdir}" = "${modelsdir}" ] && {
+        count_subdirs "${cdir}"
     }
-    kvset "${ddir}_numpics" $numpics
-    kvset "${ddir}_numlinks" $numlinks
-    if [ $numpics -eq 0 ] && [ $numlinks -eq 0 ]
-    then
-        cd "${HERE}"
-        continue
-    fi
+    kvset "${cdir}_numpics" $numpics
+    kvset "${cdir}_numlinks" $numlinks
+}
+
+print_pics() {
+    cdir="$1"
     unlinked=`expr $numpics - $numlinks`
     printf "\n${pdir}:" | tee -a $COUNT
     if [ ${#pdir} -lt 7 ]
@@ -160,11 +139,38 @@ do
     totalpics=`expr $totalpics + $unlinked`
     totalinks=`expr $totalinks + $numlinks`
     # Print the subdirectory totals for subdirs in ./People/ and ./Models/
-    [ "${ddir}" = "${peopledir}" ] || [ "${ddir}" = "${modelsdir}" ] && {
-        [ "${have_kv}" ] && print_subdirs "${ddir}"
+    [ "${cdir}" = "${peopledir}" ] || [ "${cdir}" = "${modelsdir}" ] && {
+        [ "${have_kv}" ] && print_subdirs "${cdir}"
     }
-    cd "${HERE}"
-done
+}
+
+rm -f $COUNT
+touch $COUNT
+
+if [ "${subdir}" ]
+then
+    pdir=`echo "${subdir}" | sed -e "s/_/ /g"`
+    count_pics "${subdir}"
+    if [ $numpics -ne 0 ] || [ $numlinks -ne 0 ]
+    then
+        print_pics "${subdir}"
+    fi
+else
+    for ddir in *
+    do
+        [ -d "${ddir}" ] || continue
+        cd "${ddir}"
+        pdir=`echo $ddir | sed -e "s/_/ /g"`
+        count_pics "${ddir}"
+        if [ $numpics -eq 0 ] && [ $numlinks -eq 0 ]
+        then
+            cd "${HERE}"
+            continue
+        fi
+        print_pics "${ddir}"
+        cd "${HERE}"
+    done
+fi
 
 total=`expr $totalpics + $totalinks`
 printf "\n\nTotals:\t\t\t\tPics=$total" | tee -a $COUNT
