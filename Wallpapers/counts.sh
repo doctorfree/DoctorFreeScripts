@@ -8,11 +8,9 @@
 ## @version 1.0.1
 ##
 
-HERE=`pwd`
-DAY=`date "+%d"`
-MONTH=`date "+%m"`
-YEAR=`date "+%Y"`
-COUNT="counts-$YEAR-$MONTH-$DAY.txt"
+day=`date "+%d"`
+month=`date "+%m"`
+year=`date "+%Y"`
 totalpics=0
 totalinks=0
 numdir=0
@@ -27,12 +25,15 @@ else
     [ -r ./utils ] && . ./utils
 fi
 
+COUNT=
 [ "${subdir}" ] && {
     [ -d "${subdir}" ] && {
         cd "${subdir}"
-        HERE=`pwd`
+        COUNT="counts-${subdir}-${year}-${month}-${day}.txt"
     }
 }
+[ "$COUNT" ] || COUNT="counts-$year-$month-$day.txt"
+HERE=`pwd`
 
 for i in *
 do
@@ -98,6 +99,7 @@ do
     else
         pdir="${ddir}"
     fi
+    pdir=`echo $pdir | sed -e "s/_/ /g"`
     numpics=0
     numpngs=0
     numlinks=0
