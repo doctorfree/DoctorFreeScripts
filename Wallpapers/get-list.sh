@@ -7,7 +7,7 @@
 ## @date Written 1-Oct-2016
 ## @version 1.0.1
 ##
-## Usage: get-list /path/to/filename
+## Usage: get-list /path/to/filename subdir
 
 list="$1"
 [ -r "$list" ] || {
