@@ -16,7 +16,12 @@ else
 fi
 [ "$WHDIR" ] || WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 
-DDIR="${WHDIR}/Misc"
+if [ "${subdir}" ]
+then
+    DDIR="${WHDIR}/${subdir}"
+else
+    DDIR="${WHDIR}/Misc"
+fi
 
 [ "$numdown" ] || numdown=480
 [ "$categories" ] || categories=001
