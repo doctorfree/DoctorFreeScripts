@@ -12,17 +12,20 @@
     echo "$1 not a directory. Exiting."
     exit 1
 }
+
+cd $1
+
 missing="$1-missing.txt"
 rm -f ../$missing
 touch ../$missing
-cd $1
-if [ "$1" = "People" ]
+if [ "$1" = "People" ] || [ "$1" = "Models" ]
 then
     while read num
     do
         found=
-        for subdir in 0 1 2 3 4 5 6 7 8 9
+        for subdir in *
         do
+            [ -d "${subdir}" ] || continue
             if [ -r $subdir/wallhaven-$num.jpg ]
             then
                 found=1

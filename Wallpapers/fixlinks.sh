@@ -60,7 +60,6 @@ while read broken
 do
     completed=`expr $completed + 1`
     progress $numbroke $completed
-    lsl=`ls -l $broken`
     target=`basename $broken`
     found=
     for dir in *

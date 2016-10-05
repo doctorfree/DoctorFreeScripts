@@ -95,16 +95,31 @@ then
             fnam=`basename "$dup"`
             # Remove leading ./ from $link filename path
             link=`echo $link | sed -e "s/\.\///"`
-            rm -f "$dup"
+            if [ "$demo" ]
+            then
+                echo "rm -f $dup"
+            else
+                rm -f "$dup"
+            fi
             cd "${picdir}"
             people=
             models=
             pwd | grep /Wallhaven/People/ > /dev/null && people=1
             if [ "$people" ] || [ "$models" ]
             then
-                ln -s ../../"${link}" .
+                if [ "$demo" ]
+                then
+                    echo "In ${picdir}: ln -s ../../${link} ."
+                else
+                    ln -s ../../"${link}" .
+                fi
             else
-                ln -s ../"${link}" .
+                if [ "$demo" ]
+                then
+                    echo "In ${picdir}: ln -s ../${link} ."
+                else
+                    ln -s ../"${link}" .
+                fi
             fi
             cd ${HERE}
         done
@@ -149,16 +164,31 @@ else
                     continue
                 }
                 cd "${picdir}"
-                rm -f "$img"
+                if [ "$demo" ]
+                then
+                    echo "In ${picdir}: rm -f $img"
+                else
+                    rm -f "$img"
+                fi
                 people=
                 models=
                 pwd | grep /Wallhaven/People/ > /dev/null && people=1
                 pwd | grep /Wallhaven/Models/ > /dev/null && models=1
                 if [ "$people" ] || [ "$models" ]
                 then
-                    ln -s ../../"${link}" .
+                    if [ "$demo" ]
+                    then
+                        echo "In ${picdir}: ln -s ../../${link} ."
+                    else
+                        ln -s ../../"${link}" .
+                    fi
                 else
-                    ln -s ../"${link}" .
+                    if [ "$demo" ]
+                    then
+                        echo "In ${picdir}: ln -s ../${link} ."
+                    else
+                        ln -s ../"${link}" .
+                    fi
                 fi
             done
             rm -f /tmp/num$$

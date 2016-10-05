@@ -23,7 +23,7 @@ missing="$1-missing.txt"
     echo "$missing not a plain file or does not exist. Exiting."
     exit 1
 }
-numpics=`cat "$missing" | wc -l`
+totalpics=`cat "$missing" | wc -l`
 completed=0
 
 download() {
@@ -41,8 +41,9 @@ then
         found=
         completed=`expr $completed + 1`
         progress $totalpics $completed
-        for subdir in 0 1 2 3 4 5 6 7 8 9
+        for subdir in *
         do
+            [ -d "${subdir}" ] || continue
             if [ -r $subdir/wallhaven-$num.jpg ]
             then
                 found=1
