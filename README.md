@@ -98,6 +98,8 @@ Contents:
 
 [**find2import**](find2import.sh) - Find and report photo albums and movies that may not have already been imported to iTunes
 
+[**findbroken**](findbroken.sh) - Find and save a list of broken symbolic links in current directory
+
 [**findempty**](findempty.sh) - Find and report empty directories. Optionally, remove them.
 
 [**findgrep**](findgrep.sh) - Recursive grep in current directory.
@@ -179,8 +181,6 @@ for all files in that directory hierarchy
 [**wikivim**](wikivim.sh) - Use in conjunction with It's All Text Firefox Add-On to use Vim to edit wiki pages. On OS X use Applescript and iTerm 2, otherwise use Bash and xterm.
 
 [**counts**](Wallpapers/counts.sh) - Prepare a table of number of pics & symbolic links in subdirectories
-
-[**findbroken**](Wallpapers/findbroken.sh) - Find and save a list of broken symbolic links in current directory
 
 [**findups**](Wallpapers/findups.sh) - Find and symlink duplicate files
 
