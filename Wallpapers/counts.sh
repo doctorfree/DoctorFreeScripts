@@ -11,6 +11,7 @@
 day=`date "+%d"`
 month=`date "+%m"`
 year=`date "+%Y"`
+totaladds=0
 totalpics=0
 totalinks=0
 peopledir="People"
@@ -24,13 +25,16 @@ else
 fi
 
 COUNT=
+ADDED=
 [ "${subdir}" ] && {
     [ -d "${subdir}" ] && {
         cd "${subdir}"
-        COUNT="counts-${subdir}-${year}-${month}-${day}.txt"
+        COUNT="total-${subdir}-${year}-${month}-${day}.txt"
+        ADDED="added-${subdir}-${year}-${month}-${day}.txt"
     }
 }
-[ "$COUNT" ] || COUNT="counts-$year-$month-$day.txt"
+[ "$COUNT" ] || COUNT="total-$year-$month-$day.txt"
+[ "$ADDED" ] || ADDED="added-$year-$month-$day.txt"
 HERE=`pwd`
 
 ## @fn count_subdirs()
@@ -47,13 +51,33 @@ count_subdirs() {
             bnumpngs=`ls -1 $sub/*.png 2> /dev/null | wc -l`
             bnumtot=`expr $bnumpics + $bnumpngs`
             numpics=`expr $numpics + $bnumtot`
-            [ "${have_kv}" ] && kvset "${topdir}_${sub}_numpics" $bnumtot
+            [ "${have_kv}" ] && {
+                onumtot=$(kvget "${topdir}_${sub}_numpics")
+                [ "${onumtot}" ] && {
+                    numadded=`expr $bnumtot - $onumtot`
+                    kvset "${topdir}_${sub}_picsadded" $numadded
+#                   [ $numadded -gt 0 ] && {
+#                       printf "\nAdded $numadded pics in ${topdir}/${sub}" 2>> ${ADDED}
+#                   }
+                }
+                kvset "${topdir}_${sub}_numpics" $bnumtot
+            }
             bnumlinks=0
             for i in $sub/*
             do
                 [ -L $i ] && bnumlinks=`expr $bnumlinks + 1`
             done
-            [ "${have_kv}" ] && kvset "${topdir}_${sub}_numlinks" $bnumlinks
+            [ "${have_kv}" ] && {
+                onumtot=$(kvget "${topdir}_${sub}_numlinks")
+                [ "${onumtot}" ] && {
+                    numadded=`expr $bnumlinks - $onumtot`
+                    kvset "${topdir}_${sub}_linkadded" $numadded
+#                   [ $numadded -gt 0 ] && {
+#                      printf "\nAdded $numadded links in ${topdir}/${sub}" 2>> ${ADDED}
+#                   }
+                }
+                kvset "${topdir}_${sub}_numlinks" $bnumlinks
+            }
             numlinks=`expr $numlinks + $bnumlinks`
         }
     done
@@ -73,17 +97,29 @@ print_subdirs() {
             [ $bnumpics -eq 0 ] && continue
             bnumlinks=$(kvget "${topdir}_${sub}_numlinks")
             bunlinked=`expr $bnumpics - $bnumlinks`
-            printf "\n\t${sub}:" | tee -a $COUNT
-            if [ ${#sub} -lt 7 ]
+            addedpics=$(kvget "${topdir}_${sub}_picsadded")
+            addedlink=$(kvget "${topdir}_${sub}_linkadded")
+            [ "$addedpics" ] || addedpics=0
+            [ "$addedlink" ] || addedlink=0
+            numadded=`expr $addedpics + $addedlink`
+            if [ $numadded -gt 0 ]
             then
-                printf "\t\t" | tee -a $COUNT
+                substr="${sub} (added $numadded)"
             else
-                [ ${#sub} -lt 15 ] && printf "\t" | tee -a $COUNT
+                substr="${sub}"
             fi
-            printf "\tPics=$bnumpics" | tee -a $COUNT
-            [ $bnumpics -lt 100 ] && printf "\t" | tee -a $COUNT
-            printf "\tFiles=$bunlinked" | tee -a $COUNT
-            printf "\tLinks=$bnumlinks" | tee -a $COUNT
+            printf "\n\t${substr}:"
+            if [ ${#substr} -lt 7 ]
+            then
+                printf "\t\t"
+            else
+                [ ${#substr} -lt 15 ] && printf "\t"
+            fi
+            printf "\tPics=$bnumpics"
+            [ $bnumpics -lt 100 ] && printf "\t"
+            printf "\tFiles=$bunlinked"
+            [ $bunlinked -lt 10 ] && printf "\t"
+            printf "\tLinks=$bnumlinks"
         }
     done
 }
@@ -93,10 +129,7 @@ count_pics() {
     numpics=0
     numpngs=0
     numlinks=0
-    pics=`echo *.jpg`
-    [ "$pics" = "*.jpg" ] || {
-        numpics=`ls -1 *.jpg | wc -l`
-    }
+    numpics=`ls -1 | grep jpg | wc -l`
     pngs=`echo *.png`
     [ "$pngs" = "*.png" ] || {
         numpngs=`ls -1 *.png | wc -l`
@@ -110,32 +143,62 @@ count_pics() {
     [ "${cdir}" = "${peopledir}" ] || [ "${cdir}" = "${modelsdir}" ] && {
         count_subdirs "${cdir}"
     }
-    kvset "${cdir}_numpics" $numpics
-    kvset "${cdir}_numlinks" $numlinks
+    [ "${have_kv}" ] && {
+        onumtot=$(kvget "${cdir}_numpics")
+        [ "${onumtot}" ] && {
+            numadded=`expr $numpics - $onumtot`
+            kvset "${cdir}_picsadded" $numadded
+#           [ $numadded -gt 0 ] && {
+#               printf "\nAdded $numadded pics in ${cdir}" 2>> ${ADDED}
+#           }
+        }
+        onumtot=$(kvget "${cdir}_numlinks")
+        [ "${onumtot}" ] && {
+            numadded=`expr $numlinks - $onumtot`
+            kvset "${cdir}_linkadded" $numadded
+#           [ $numadded -gt 0 ] && {
+#               printf "\nAdded $numadded links in ${cdir}" 2>> ${ADDED}
+#           }
+        }
+        kvset "${cdir}_numpics" $numpics
+        kvset "${cdir}_numlinks" $numlinks
+    }
 }
 
 print_pics() {
     cdir="$1"
     unlinked=`expr $numpics - $numlinks`
-    printf "\n${pdir}:" | tee -a $COUNT
-    if [ ${#pdir} -lt 7 ]
+    addedpics=$(kvget "${cdir}_picsadded")
+    addedlink=$(kvget "${cdir}_linkadded")
+    [ "$addedpics" ] || addedpics=0
+    [ "$addedlink" ] || addedlink=0
+    numadded=`expr $addedpics + $addedlink`
+    if [ $numadded -gt 0 ]
     then
-        printf "\t\t\t" | tee -a $COUNT
+        substr="${pdir} (added $numadded)"
     else
-        if [ ${#pdir} -lt 15 ]
+        substr="${pdir}"
+    fi
+    printf "\n${substr}:"
+    if [ ${#substr} -lt 7 ]
+    then
+        printf "\t\t\t"
+    else
+        if [ ${#substr} -lt 15 ]
         then
-            printf "\t\t" | tee -a $COUNT
+            printf "\t\t"
         else
-            if [ ${#pdir} -lt 23 ]
+            if [ ${#substr} -lt 23 ]
             then
-                printf "\t" | tee -a $COUNT
+                printf "\t"
             fi
         fi
     fi
-    printf "\tPics=$numpics" | tee -a $COUNT
-    [ $numpics -lt 100 ] && printf "\t" | tee -a $COUNT
-    printf "\tFiles=$unlinked" | tee -a $COUNT
-    printf "\tLinks=$numlinks" | tee -a $COUNT
+    printf "\tPics=$numpics"
+    [ $numpics -lt 100 ] && printf "\t"
+    printf "\tFiles=$unlinked"
+    printf "\tLinks=$numlinks"
+    totaladds=`expr $totaladds + $numadded`
     totalpics=`expr $totalpics + $unlinked`
     totalinks=`expr $totalinks + $numlinks`
     # Print the subdirectory totals for subdirs in ./People/ and ./Models/
@@ -146,6 +209,9 @@ print_pics() {
 
 rm -f $COUNT
 touch $COUNT
+rm -f $ADDED
+touch $ADDED
+exec &> >(tee -a "$COUNT")
 
 if [ "${subdir}" ]
 then
@@ -173,5 +239,5 @@ else
 fi
 
 total=`expr $totalpics + $totalinks`
-printf "\n\nTotals:\t\t\t\tPics=$total" | tee -a $COUNT
-printf "\tFiles=$totalpics\tLinks=$totalinks\n" | tee -a $COUNT
+printf "\n\nTotals:\t\tAdded=$totaladds\tPics=$total"
+printf "\tFiles=$totalpics\tLinks=$totalinks\n"

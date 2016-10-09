@@ -105,6 +105,7 @@ then
             people=
             models=
             pwd | grep /Wallhaven/People/ > /dev/null && people=1
+            pwd | grep /Wallhaven/Models/ > /dev/null && models=1
             if [ "$people" ] || [ "$models" ]
             then
                 if [ "$demo" ]

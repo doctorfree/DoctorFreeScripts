@@ -10,7 +10,6 @@
 
 rm -f broken.txt
 touch broken.txt
-printf "\n"
 find . -type l | while read i
 do
     ls -lL "$i" > /dev/null 2>&1
@@ -19,3 +18,5 @@ do
         echo "$i" >> broken.txt
     }
 done
+numbroke=`cat broken.txt | wc -l`
+echo "Number of broken symbolic links found = $numbroke"
