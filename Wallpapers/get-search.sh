@@ -61,6 +61,7 @@ cd "${DDIR}"
 }
 
 wh -l "${DDIR}" -n $numdown -s $page -t search \
+    $quiet \
    -c $categories -f $filters -q "${query}" -p 0
 
 #cd "${WHDIR}"

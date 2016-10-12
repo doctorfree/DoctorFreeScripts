@@ -9,20 +9,24 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/+/g"`
-    echo "Running ./get-search -p 1 -l $1 -q $QUERY"
-    ./get-search -p 1 -l "$1" -q "$QUERY"
-    echo "Running ./get-search -l $1 -q $QUERY"
-    ./get-search -l "$1" -q "$QUERY"
+#   echo "Running ./get-search -p 1 -l $1 -s $QUERY"
+#   ./get-search -p 1 -l "$1" -s "$QUERY"
+    echo "Running ./get-search -l $1 -s $QUERY"
+    ./get-search -q -l "$1" -s "$QUERY"
 }
 
 HERE=`pwd`
 
-./get-anime -p 1 $*
-./get-anime $*
-./get-general -p 1 $*
-./get-general $*
-./get-people -p 1 $*
-./get-people $*
+# ./get-anime -p 1 $*
+echo "Running ./get-anime $*"
+./get-anime -q $*
+# ./get-general -p 1 $*
+echo "Running ./get-general $*"
+./get-general -q $*
+# ./get-people -p 1 $*
+echo "Running ./get-people $*"
+./get-people -q $*
+echo "Running ./mvem People"
 ./mvem People
 #./get-favorites $*
 
@@ -49,4 +53,6 @@ do
     fi
 done
 
+./clean
+echo "Running ./findups"
 ./findups

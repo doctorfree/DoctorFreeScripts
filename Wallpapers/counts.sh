@@ -56,9 +56,6 @@ count_subdirs() {
                 [ "${onumtot}" ] && {
                     numadded=`expr $bnumtot - $onumtot`
                     kvset "${topdir}_${sub}_picsadded" $numadded
-#                   [ $numadded -gt 0 ] && {
-#                       printf "\nAdded $numadded pics in ${topdir}/${sub}" 2>> ${ADDED}
-#                   }
                 }
                 kvset "${topdir}_${sub}_numpics" $bnumtot
             }
@@ -72,9 +69,6 @@ count_subdirs() {
                 [ "${onumtot}" ] && {
                     numadded=`expr $bnumlinks - $onumtot`
                     kvset "${topdir}_${sub}_linkadded" $numadded
-#                   [ $numadded -gt 0 ] && {
-#                      printf "\nAdded $numadded links in ${topdir}/${sub}" 2>> ${ADDED}
-#                   }
                 }
                 kvset "${topdir}_${sub}_numlinks" $bnumlinks
             }
@@ -93,6 +87,7 @@ print_subdirs() {
     for sub in *
     do
         [ -d "$sub" ] && {
+            nam=`echo "${sub}" | sed -e "s/_/ /g"`
             bnumpics=$(kvget "${topdir}_${sub}_numpics")
             [ $bnumpics -eq 0 ] && continue
             bnumlinks=$(kvget "${topdir}_${sub}_numlinks")
@@ -104,17 +99,15 @@ print_subdirs() {
             numadded=`expr $addedpics + $addedlink`
             if [ $numadded -gt 0 ]
             then
-                substr="${sub} (added $numadded)"
+                substr="${nam} ($numadded new)"
             else
-                substr="${sub}"
+                substr="${nam}"
             fi
-            printf "\n\t${substr}:"
-            if [ ${#substr} -lt 7 ]
-            then
-                printf "\t\t"
-            else
-                [ ${#substr} -lt 15 ] && printf "\t"
-            fi
+            printf "\n  ${substr}:"
+            [ ${#substr} -gt 30 ] && printf "\n\t\t\t"
+            [ ${#substr} -lt 21 ] && printf "\t"
+            [ ${#substr} -lt 13 ] && printf "\t"
+            [ ${#substr} -lt 5 ] && printf "\t"
             printf "\tPics=$bnumpics"
             [ $bnumpics -lt 100 ] && printf "\t"
             printf "\tFiles=$bunlinked"
@@ -148,17 +141,11 @@ count_pics() {
         [ "${onumtot}" ] && {
             numadded=`expr $numpics - $onumtot`
             kvset "${cdir}_picsadded" $numadded
-#           [ $numadded -gt 0 ] && {
-#               printf "\nAdded $numadded pics in ${cdir}" 2>> ${ADDED}
-#           }
         }
         onumtot=$(kvget "${cdir}_numlinks")
         [ "${onumtot}" ] && {
             numadded=`expr $numlinks - $onumtot`
             kvset "${cdir}_linkadded" $numadded
-#           [ $numadded -gt 0 ] && {
-#               printf "\nAdded $numadded links in ${cdir}" 2>> ${ADDED}
-#           }
         }
         kvset "${cdir}_numpics" $numpics
         kvset "${cdir}_numlinks" $numlinks
@@ -175,7 +162,7 @@ print_pics() {
     numadded=`expr $addedpics + $addedlink`
     if [ $numadded -gt 0 ]
     then
-        substr="${pdir} (added $numadded)"
+        substr="${pdir} ($numadded new)"
     else
         substr="${pdir}"
     fi
@@ -191,6 +178,11 @@ print_pics() {
             if [ ${#substr} -lt 23 ]
             then
                 printf "\t"
+            else
+                if [ ${#substr} -gt 30 ]
+                then
+                    printf "\n\t\t\t"
+                fi
             fi
         fi
     fi
@@ -239,5 +231,10 @@ else
 fi
 
 total=`expr $totalpics + $totalinks`
-printf "\n\nTotals:\t\tAdded=$totaladds\tPics=$total"
-printf "\tFiles=$totalpics\tLinks=$totalinks\n"
+printf "\n\nTotals:\t\tAdded=$totaladds"
+[ $totaladds -lt 10 ] && printf "\t"
+printf "\tPics=$total"
+[ $total -lt 100 ] && printf "\t"
+printf "\tFiles=$totalpics"
+[ $totalpics -lt 10 ] && printf "\t"
+printf "\tLinks=$totalinks\n"

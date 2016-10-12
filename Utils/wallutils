@@ -14,6 +14,7 @@ demo=
 model=
 numdown=
 page=
+quiet=
 categories=
 filters=
 subdir=
@@ -54,7 +55,7 @@ progress() {
 ## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: %s [-n num] [-c cat] [-f filter] [-p page]" $0
-    printf " [-l subdir] [-q search] [-dmu]"
+    printf " [-l subdir] [-s search] [-dmqu]"
     printf "\n\nWhere:\n\t-n num specifies the number of downloads"
     printf "\n\t-c cat specifies the category mask (001 - 111)"
     printf "\n\t-f filter specifies the filter mask (001 - 111)"
@@ -62,12 +63,13 @@ usage() {
     printf "\n\t-l subdir specifies the download subdirectory to use"
     printf "\n\t-d indicates demo mode, tell me what you would do but don't do it"
     printf "\n\t-m indicates Model search, use Models/<model_name> download dir"
-    printf "\n\t-q search specifies the search terms ( + for AND, space for OR)"
+    printf "\n\t-q indicates quiet mode, suppress messages"
+    printf "\n\t-s search specifies the search terms ( + for AND, space for OR)"
     printf "\n\t-u displays this usage message\n"
     exit 1
 }
 
-while getopts l:n:c:f:p:q:dmu flag; do
+while getopts l:n:c:f:p:s:dmqu flag; do
     case $flag in
         l)
             subdir=$OPTARG
@@ -91,6 +93,9 @@ while getopts l:n:c:f:p:q:dmu flag; do
             page=$OPTARG
             ;;
         q)
+            quiet="-Q"
+            ;;
+        s)
             query="$OPTARG"
             ;;
         *)

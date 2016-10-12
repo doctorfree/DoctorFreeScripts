@@ -29,5 +29,6 @@ wh -l ${DDIR} \
    -t favorites \
    -c $categories \
    -f $filters \
+   $quiet \
    -p 0
 

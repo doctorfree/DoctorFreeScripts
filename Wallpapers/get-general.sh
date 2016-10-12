@@ -46,5 +46,6 @@ wh -l "${DDIR}" \
    -t standard \
    -c $categories \
    -f $filters \
+   $quiet \
    -p 0
 

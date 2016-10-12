@@ -45,6 +45,7 @@ wh -l "${DDIR}" \
    -s $page \
    -c $categories \
    -f $filters \
+   $quiet \
    -t standard \
    -p 0
 

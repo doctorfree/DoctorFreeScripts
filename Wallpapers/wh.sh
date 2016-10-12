@@ -22,6 +22,8 @@ PASS=""
 #####################################
 ###     Configuration Options     ###
 #####################################
+# Should informative messages be suppressed?
+QUIET=
 # Which sed should be used?
 SED=gsed
 # Where should the Wallpapers be stored?
@@ -112,8 +114,10 @@ function downloadWallpapers {
         number="$(echo $img | $SED  's .\{37\}  ')"
 
         if grep -w "$number" downloaded.txt >/dev/null
-            then
+        then
+            [ "$QUIET" ] || {
                 printf "\n    Wallpaper %s already downloaded!" "$number"
+            }
         elif [ $PARALLEL == 1 ]
             then
                 echo "$number" >> downloaded.txt
@@ -179,6 +183,7 @@ function helpText {
     printf '%s -q, --query\t\t search query, eg. '\''mario'\'', single quotes needed,\n\t\t\t for searching exact phrases use double quotes \n\t\t\t inside single quotes, eg. '\''"super mario"'\'' \n'
     printf '%s -u, --user\t\t download wallpapers from given user\n'
     printf '%s -p, --parallel\t\t make use of gnu parallel (1 to enable, 0 to disable)\n'
+    printf '%s -Q, --quiet\t\t Quiet mode, suppress informative messages\n'
     printf '%s -v, --version\t\t show current version\n'
     printf '%s -h, --help\t\t show this help text and exit\n\n'
     printf 'Examples:\n'
@@ -201,6 +206,9 @@ while [[ $# -ge 1 ]]
         -n|--number)
             WPNUMBER="$2"
             shift;;
+        -Q|--quiet)
+            QUIET=1
+            ;;
         -s|--startpage)
             STARTPAGE="$2"
             shift;;
@@ -271,24 +279,36 @@ fi
 if [ "$TYPE" == standard ]; then
     for (( count=0, page="$STARTPAGE"; count< "$WPNUMBER"; count=count+24, page=page+1 ));
     do
-        printf "Download Page %s" "$page"
+        [ "$QUIET" ] || {
+            printf "Download Page %s" "$page"
+        }
         getPage "search?page=$page&categories=$CATEGORIES&purity=$FILTER&resolutions=$RESOLUTION&ratios=$ASPECTRATIO&sorting=$MODE&order=$ORDER"
-        printf "\n    - done!\n"
-        printf "Download Wallpapers from Page %s" "$page"
+        [ "$QUIET" ] || {
+            printf "\n    - done!\n"
+            printf "Download Wallpapers from Page %s" "$page"
+        }
         downloadWallpapers
-        printf "\n    - done!\n"
+        [ "$QUIET" ] || {
+            printf "\n    - done!\n"
+        }
     done
 
 elif [ "$TYPE" == search ] ; then
     # SEARCH
     for (( count=0, page="$STARTPAGE"; count< "$WPNUMBER"; count=count+24, page=page+1 ));
     do
-        printf "Download Page %s" "$page"
+        [ "$QUIET" ] || {
+            printf "Download Page %s" "$page"
+        }
         getPage "search?page=$page&categories=$CATEGORIES&purity=$FILTER&resolutions=$RESOLUTION&ratios=$ASPECTRATIO&sorting=$MODE&order=desc&q=$QUERY"
-        printf "\n    - done!\n"
-        printf "Download Wallpapers from Page %s" "$page"
+        [ "$QUIET" ] || {
+            printf "\n    - done!\n"
+            printf "Download Wallpapers from Page %s" "$page"
+        }
         downloadWallpapers
-        printf "\n    - done!\n"
+        [ "$QUIET" ] || {
+            printf "\n    - done!\n"
+        }
     done
 
 elif [ "$TYPE" == favorites ] ; then
@@ -297,24 +317,36 @@ elif [ "$TYPE" == favorites ] ; then
     favnumber="$(WGET --referer=https://alpha.wallhaven.cc https://alpha.wallhaven.cc/favorites -O - | grep -A 25 "<ul class=\"blocklist collections-list\" data-target=\"https://alpha.wallhaven.cc/favorites/move\">" | grep -B 1 "<small>" | $SED -n '2{p;q}' | $SED 's/<[^>]\+>/ /g' | $SED  's .\{3\}  ' | $SED 's/.\{1\}$//')"
     for (( count=0, page="$STARTPAGE"; count< "$WPNUMBER" && count< "$favnumber"; count=count+24, page=page+1 ));
     do
-        printf "Download Page %s" "$page"
+        [ "$QUIET" ] || {
+            printf "Download Page %s" "$page"
+        }
         getPage "favorites?page=$page"
-        printf "\n    - done!\n"
-        printf "Download Wallpapers from Page %s" "$page"
+        [ "$QUIET" ] || {
+            printf "\n    - done!\n"
+            printf "Download Wallpapers from Page %s" "$page"
+        }
         downloadWallpapers
-        printf "\n    - done!\n"
+        [ "$QUIET" ] || {
+            printf "\n    - done!\n"
+        }
     done
 
 elif [ "$TYPE" == useruploads ] ; then
     # UPLOADS FROM SPECIFIC USER
     for (( count=0, page="$STARTPAGE"; count< "$WPNUMBER"; count=count+24, page=page+1 ));
     do
-        printf "Download Page %s" "$page"
+        [ "$QUIET" ] || {
+            printf "Download Page %s" "$page"
+        }
         getPage "user/$USR/uploads?page=$page&purity=$FILTER"
-        printf "\n    - done!\n"
-        printf "Download Wallpapers from Page %s" "$page"
+        [ "$QUIET" ] || {
+            printf "\n    - done!\n"
+            printf "Download Wallpapers from Page %s" "$page"
+        }
         downloadWallpapers
-        printf "\n    - done!\n"
+        [ "$QUIET" ] || {
+            printf "\n    - done!\n"
+        }
     done
 
 else
