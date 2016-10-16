@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-## @file Wallpapers/fixlinks.sh
-## @brief Repair broken symbolic links listed in broken.txt
+## @file Wallpapers/fixabslinks.sh
+## @brief Repair absolute symbolic links listed in absolute.txt
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
 ## @date Written 17-Sep-2016
@@ -16,51 +16,39 @@ else
 fi
 
 HERE=`pwd`
-WALL=`basename "$HERE"`
 # Create a list of symbolic links and a sorted uniq'd list of those symlinks
-LINKLIST="${HERE}/linklist.txt"
-SORTLINK="${HERE}/sortlink.txt"
-NEWLINKS="${HERE}/newbroken.txt"
-rm -f "${NEWLINKS}"
-touch "${NEWLINKS}"
+LINKLIST="${HERE}/absolute.txt"
+
+download() {
+    url="https://wallpapers.wallhaven.cc/wallpapers/full"
+    client="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.99 Safari/537.36"
+    wget -q -U "$client" $url/$1
+}
 
 [ -f "${LINKLIST}" ] || {
     printf "\nCreating list of symbolic links ..."
-    find . -type l -name wallhaven-\* > ${LINKLIST}
-    printf " done.\n"
-}
-numlink=`cat ${LINKLIST} | wc -l`
-
-mksortlink() {
-    printf "\nCreating sorted uniq list of symbolic links ...\n"
-    rm -f /tmp/links$$
-    touch /tmp/links$$
-    completed=0
-    cat ${LINKLIST} | while read wallpath
+    rm -f "${LINKLIST}"
+    touch "${LINKLIST}"
+    find . -type l | while read symlink
     do
-        filename=`basename "$wallpath"`
-        echo "$filename" >> /tmp/links$$
-        completed=`expr $completed + 1`
-        progress $numlink $completed
+        ls -l $symlink | grep /Volumes/ > /dev/null && {
+            echo $symlink >> "${LINKLIST}"
+        }
     done
-    printf "\n"
-    prevperc=
-    cat /tmp/links$$ | sort | uniq > ${SORTLINK}
-    rm -f /tmp/links$$
     printf " done.\n"
 }
 
-[ -f "${SORTLINK}" ] || mksortlink
-
-numbroke=`cat broken.txt | wc -l`
+numlink=`cat ${LINKLIST} | wc -l`
 completed=0
 
-printf "\nRepairing broken symbolic links in $HERE\n"
-while read broken
+printf "\nRepairing Absolute symbolic links in $HERE\n"
+while read absolute
 do
     completed=`expr $completed + 1`
-    progress $numbroke $completed
-    target=`basename $broken`
+    progress $numlink $completed
+    target=`basename $absolute`
+    sdir=`dirname $absolute`
+    rm -f "$absolute"
     found=
     for dir in *
     do
@@ -83,14 +71,14 @@ do
             }
         done
     }
+    cd "$sdir"
     [ "$found" ] || {
-        echo $broken >> "${NEWLINKS}"
+        # Cannot find a plain file for this, download it again
+        download "$target"
+        cd "$HERE"
         continue
     }
-#   printf "Removing and relinking $broken to $found\n"
-    rm -f "$broken"
-    sdir=`dirname $broken`
-    cd "$sdir"
+#   printf "Removing and relinking $absolute to $found\n"
     relative=""
     numdots=0
     while [ $numdots -lt 4 ]
@@ -106,5 +94,5 @@ do
         }
     done
     cd "$HERE"
-done < broken.txt
+done < "${LINKLIST}"
 printf "\n"

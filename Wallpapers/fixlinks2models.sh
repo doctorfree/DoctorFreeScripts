@@ -31,9 +31,11 @@ do
         for sub in Models/*
         do
             [ -f $sub/$target ] && {
-                newtarget="$sub/$target"
-                found=1
-                break
+                [ ! -L $sub/$target ] && {
+                    newtarget="$sub/$target"
+                    found=1
+                    break
+                }
             }
         done
         [ "$found" ] || {

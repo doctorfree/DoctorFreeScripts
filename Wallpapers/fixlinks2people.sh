@@ -31,9 +31,11 @@ do
         for sub in 0 1 2 3 4 5 6 7 8 9
         do
             [ -f People/$sub/$target ] && {
-                newtarget="People/$sub/$target"
-                found=1
-                break
+                [ ! -L People/$sub/$target ] && {
+                    newtarget="People/$sub/$target"
+                    found=1
+                    break
+                }
             }
         done
         [ "$found" ] || {
