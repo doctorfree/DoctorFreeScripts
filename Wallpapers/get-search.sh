@@ -37,6 +37,7 @@ else
     QDIR=`echo ${query} | sed -e "s/ /_/g" -e "s/+/_/g"`
 fi
 [ "$model" ] && QDIR="Models/${QDIR}"
+[ "$photo" ] && QDIR="Photographers/${QDIR}"
 DDIR="${WHDIR}/${QDIR}"
 
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"

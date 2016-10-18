@@ -12,6 +12,7 @@ WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
 query=
 demo=
 model=
+photo=
 numdown=
 page=
 quiet=
@@ -63,19 +64,23 @@ usage() {
     printf "\n\t-l subdir specifies the download subdirectory to use"
     printf "\n\t-d indicates demo mode, tell me what you would do but don't do it"
     printf "\n\t-m indicates Model search, use Models/<model_name> download dir"
+    printf "\n\t-P indicates Photographer search, use Photographers/<name> download dir"
     printf "\n\t-q indicates quiet mode, suppress messages"
     printf "\n\t-s search specifies the search terms ( + for AND, space for OR)"
     printf "\n\t-u displays this usage message\n"
     exit 1
 }
 
-while getopts l:n:c:f:p:s:dmqu flag; do
+while getopts l:n:c:f:p:s:dmPqu flag; do
     case $flag in
         l)
             subdir=$OPTARG
             ;;
         d)
             demo=1
+            ;;
+        P)
+            photo=1
             ;;
         m)
             model=1

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm *.txt
+rm -f *.txt
 for i in */*.txt
 do
     basnam=`basename "$i"`

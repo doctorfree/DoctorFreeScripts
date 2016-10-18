@@ -16,6 +16,7 @@ totalpics=0
 totalinks=0
 peopledir="People"
 modelsdir="Models"
+photosdir="Photographers"
 
 if [ -r /usr/local/share/bash/wallutils ]
 then
@@ -132,8 +133,8 @@ count_pics() {
     do
         [ -L $i ] && numlinks=`expr $numlinks + 1`
     done
-    # Count the subdirectories in ./People/ and ./Models/
-    [ "${cdir}" = "${peopledir}" ] || [ "${cdir}" = "${modelsdir}" ] && {
+    # Count the subdirectories in ./People/ ./Photographers/ and ./Models/
+    [ "${cdir}" = "${peopledir}" ] || [ "${cdir}" = "${modelsdir}" ] || [ "${cdir}" = "${photosdir}" ] && {
         count_subdirs "${cdir}"
     }
     [ "${have_kv}" ] && {
@@ -193,8 +194,9 @@ print_pics() {
     totaladds=`expr $totaladds + $numadded`
     totalpics=`expr $totalpics + $unlinked`
     totalinks=`expr $totalinks + $numlinks`
-    # Print the subdirectory totals for subdirs in ./People/ and ./Models/
-    [ "${cdir}" = "${peopledir}" ] || [ "${cdir}" = "${modelsdir}" ] && {
+    # Print the subdirectory totals for subdirs in ./People/ ./Photographers/
+    # and ./Models/
+    [ "${cdir}" = "${peopledir}" ] || [ "${cdir}" = "${modelsdir}" ] || [ "${cdir}" = "${photosdir}" ] && {
         [ "${have_kv}" ] && print_subdirs "${cdir}"
     }
 }

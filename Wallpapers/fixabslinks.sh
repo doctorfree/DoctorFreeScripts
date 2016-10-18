@@ -60,8 +60,8 @@ do
         }
     done
     [ "$found" ] || {
-        # Check for a plain file in People and Models subdirectories
-        for dir in Models/* People/*
+        # Check for a plain file in People, Photographers, and Models subdirs
+        for dir in Models/* People/* Photographers/*
         do
             [ -f "$dir"/$target ] && {
                 [ ! -L "$dir"/$target ] && {

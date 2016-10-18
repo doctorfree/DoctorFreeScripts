@@ -104,9 +104,11 @@ then
             cd "${picdir}"
             people=
             models=
+            photos=
             pwd | grep /Wallhaven/People/ > /dev/null && people=1
             pwd | grep /Wallhaven/Models/ > /dev/null && models=1
-            if [ "$people" ] || [ "$models" ]
+            pwd | grep /Wallhaven/Photographers/ > /dev/null && photos=1
+            if [ "$people" ] || [ "$models" ] || [ "$photos" ]
             then
                 if [ "$demo" ]
                 then
@@ -173,9 +175,11 @@ else
                 fi
                 people=
                 models=
+                photos=
                 pwd | grep /Wallhaven/People/ > /dev/null && people=1
                 pwd | grep /Wallhaven/Models/ > /dev/null && models=1
-                if [ "$people" ] || [ "$models" ]
+                pwd | grep /Wallhaven/Photographers/ > /dev/null && photos=1
+                if [ "$people" ] || [ "$models" ] || [ "$photos" ]
                 then
                     if [ "$demo" ]
                     then

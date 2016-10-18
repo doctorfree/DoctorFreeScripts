@@ -69,7 +69,7 @@ remlink() {
 ## @brief Recursively find and symlink duplicate files in current directory
 ## @param none
 FindAndLink() {
-    find . -type f | while read i
+    find . -not \( -path ./Wallbase -prune \) -not \( -path ./Wallhaven -prune \) -type f | while read i
     do
         if [ -L "$i" ]
         then

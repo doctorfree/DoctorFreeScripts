@@ -37,15 +37,15 @@ do
     [ "${dir}" = "Favorites" ] && continue
     [ "${dir}" = "General" ] && continue
     [ "${dir}" = "People" ] && continue
-    if [ "${dir}" = "Models" ]
+    if [ "${dir}" = "Models" ] || [ "${dir}" = "Photographers" ]
     then
-        cd Models
+        cd ${dir}
         for model in *
         do
             [ -d "${model}" ] || continue
             cd "${HERE}"
-            get_search "Models/${model}" "${model}"
-            cd Models
+            get_search "${dir}/${model}" "${model}"
+            cd ${dir}
         done
         cd "${HERE}"
     else
@@ -53,6 +53,12 @@ do
     fi
 done
 
-./clean
-echo "Running ./findups"
-./findups
+[ -x ./clean ] && ./clean
+[ -x ./findups ] && {
+    echo "Running ./findups"
+    ./findups
+}
+[ -x ./counts ] && {
+    echo "Running ./counts"
+    ./counts
+}

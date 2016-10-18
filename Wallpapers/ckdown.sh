@@ -18,7 +18,7 @@ cd $1
 missing="$1-missing.txt"
 rm -f ../$missing
 touch ../$missing
-if [ "$1" = "People" ] || [ "$1" = "Models" ]
+if [ "$1" = "People" ] || [ "$1" = "Models" ] || [ "$1" = "Photographers" ]
 then
     while read num
     do
