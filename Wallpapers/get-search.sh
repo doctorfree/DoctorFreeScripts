@@ -34,7 +34,7 @@ if [ "$subdir" ]
 then
     QDIR="${subdir}"
 else
-    QDIR=`echo ${query} | sed -e "s/ /_/g" -e "s/+/_/g"`
+    QDIR=`echo ${query} | sed -e "s/ /_/g" -e "s/+/_/g" -e "s/\%2B/_/g"`
 fi
 [ "$model" ] && QDIR="Models/${QDIR}"
 [ "$photo" ] && QDIR="Photographers/${QDIR}"
@@ -51,10 +51,10 @@ cd "${DDIR}"
     pngs=`echo *.png`
     numpngs=0
     [ "$pics" = "*.jpg" ] || {
-        numpics=`ls -1 *.jpg | wc -l`
+        numpics=`ls -1 | grep jpg | wc -l`
     }
     [ "$pngs" = "*.png" ] || {
-        numpngs=`ls -1 *.png | wc -l`
+        numpngs=`ls -1 | grep png | wc -l`
     }
     totpics=`expr $numpics + $numpngs`
     numpage=`expr $totpics / 24`

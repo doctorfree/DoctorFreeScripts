@@ -153,6 +153,8 @@ the [**Vertical.png**](Vertical.png) image located in this repository.
 
 [**progress_bar**](progress_bar.sh) - Function to display a progress bar and percent complete
 
+[**revlink**](revlink.sh) - Reverse the direction of symbolic links
+
 [**stop_leapd**](stop_leapd.sh) - Stop the Leap Motion daemon and agent then backup and remove the plist files so they do not auto start. Includes Bash functions to replace auto start with manual start/stop
 
 [**upd**](upd.sh) - Sync specified libraries/directories to a USB flash drive

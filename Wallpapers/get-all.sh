@@ -8,7 +8,7 @@
 ## @version 1.0.1
 ##
 get_search() {
-    QUERY=`echo $2 | sed -e "s/_/+/g"`
+    QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
 #   echo "Running ./get-search -p 1 -l $1 -s $QUERY"
 #   ./get-search -p 1 -l "$1" -s "$QUERY"
     echo "Running ./get-search -l $1 -s $QUERY"
