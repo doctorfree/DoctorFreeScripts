@@ -118,7 +118,7 @@ TELL=
 UPD=
 FORCE=
 # Wallpapers utilities installation location
-WDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
+WDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
 # List of installed files which differ from those in my git repo due to
 # tailoring for my own use. These will not get force installed without first
 # prompting you if you really want to.

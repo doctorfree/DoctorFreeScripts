@@ -7,7 +7,7 @@
 ## @version 1.0.1
 ##
 # Set this to your top-level Wallhaven download directory path
-WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
+WHDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
 
 query=
 demo=
@@ -20,6 +20,7 @@ categories=
 filters=
 subdir=
 prevperc=
+LN="ln"
 
 if [ -r /usr/local/share/bash/kv ]
 then
@@ -56,13 +57,14 @@ progress() {
 ## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: %s [-n num] [-c cat] [-f filter] [-p page]" $0
-    printf " [-l subdir] [-s search] [-dmqu]"
+    printf " [-l subdir] [-s search] [-dLmPqu]"
     printf "\n\nWhere:\n\t-n num specifies the number of downloads"
     printf "\n\t-c cat specifies the category mask (001 - 111)"
     printf "\n\t-f filter specifies the filter mask (001 - 111)"
     printf "\n\t-p page specifies the start page"
     printf "\n\t-l subdir specifies the download subdirectory to use"
     printf "\n\t-d indicates demo mode, tell me what you would do but don't do it"
+    printf "\n\t-L indicates use symbolic links when finding duplicates"
     printf "\n\t-m indicates Model search, use Models/<model_name> download dir"
     printf "\n\t-P indicates Photographer search, use Photographers/<name> download dir"
     printf "\n\t-q indicates quiet mode, suppress messages"
@@ -71,13 +73,16 @@ usage() {
     exit 1
 }
 
-while getopts l:n:c:f:p:s:dmPqu flag; do
+while getopts l:n:c:f:p:s:dLmPqu flag; do
     case $flag in
         l)
             subdir=$OPTARG
             ;;
         d)
             demo=1
+            ;;
+        L)
+            LN="ln -s"
             ;;
         P)
             photo=1

@@ -8,7 +8,7 @@
 ## @version 1.0.1
 ##
 
-WDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
+WDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
 
 instit() {
     f="$1"

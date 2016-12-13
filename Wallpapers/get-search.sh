@@ -20,7 +20,7 @@ then
 else
     [ -r ./Utils/wallutils ] && . ./Utils/wallutils
 fi
-[ "$WHDIR" ] || WHDIR="/Volumes/My_Book_Studio/Pictures/Work/Wallhaven"
+[ "$WHDIR" ] || WHDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
 
 [ "$numdown" ] || numdown=480
 [ "$categories" ] || categories=111

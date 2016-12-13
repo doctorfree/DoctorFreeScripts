@@ -65,6 +65,8 @@ mksortlist() {
 
 [ -f "${SORTLIST}" ] || mksortlist
 
+[ "${LN}" ] || LN="ln"
+
 if [ "$LINKEM" ]
 then
     numuniq=`cat ${SORTLIST} | wc -l`
@@ -112,16 +114,16 @@ then
             then
                 if [ "$demo" ]
                 then
-                    echo "In ${picdir}: ln -s ../../${link} ."
+                    echo "In ${picdir}: ${LN} ../../${link} ."
                 else
-                    ln -s ../../"${link}" .
+                    ${LN} ../../"${link}" .
                 fi
             else
                 if [ "$demo" ]
                 then
-                    echo "In ${picdir}: ln -s ../${link} ."
+                    echo "In ${picdir}: ${LN} ../${link} ."
                 else
-                    ln -s ../"${link}" .
+                    ${LN} ../"${link}" .
                 fi
             fi
             cd ${HERE}
@@ -183,16 +185,16 @@ else
                 then
                     if [ "$demo" ]
                     then
-                        echo "In ${picdir}: ln -s ../../${link} ."
+                        echo "In ${picdir}: ${LN} ../../${link} ."
                     else
-                        ln -s ../../"${link}" .
+                        ${LN} ../../"${link}" .
                     fi
                 else
                     if [ "$demo" ]
                     then
-                        echo "In ${picdir}: ln -s ../${link} ."
+                        echo "In ${picdir}: ${LN} ../${link} ."
                     else
-                        ln -s ../"${link}" .
+                        ${LN} ../"${link}" .
                     fi
                 fi
             done
