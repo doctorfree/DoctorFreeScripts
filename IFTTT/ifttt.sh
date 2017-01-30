@@ -1,7 +1,12 @@
 #!/bin/bash
 #
-# ifttt -  Send a text message to my IFTTT phone channel with a tag that
-#          triggers a corresponding Harmony activity.
+## @file IFTTT/ifttt.sh
+## @brief Send a text message to my IFTTT phone channel with a trigger tag
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2017, Ronald Joe Record, all rights reserved.
+## @date Written 29-Jan-2017
+## @version 1.0.1
+##
 #
 # My IFTTT Phone Channel number
 # (Replace ########## with your IFTTT phone number)
