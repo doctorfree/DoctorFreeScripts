@@ -4,7 +4,8 @@
 #          triggers a corresponding Harmony activity.
 #
 # My IFTTT Phone Channel number
-IFT="4153401528"
+# (Replace ########## with your IFTTT phone number)
+IFT="##########"
 MSG=
 
 usage() {
