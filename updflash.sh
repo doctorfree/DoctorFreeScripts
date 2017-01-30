@@ -38,8 +38,9 @@ TRAN_DIR=/Volumes/Transcend
 # A directory that we know exists there
 TEST_DIR="$TRAN_DIR"
 # My iTunes library
-LACIE="/Volumes/LaCie_4TB"
-ITUNES="$LACIE/iTunes"
+LACIE4="/Volumes/LaCie_4TB"
+LACIE8="/Volumes/LaCie_8TB"
+ITUNES="$LACIE4/iTunes"
 # My Photos libraries
 APLIBS="/Volumes/My_Book_Studio/Pictures/Libraries"
 APLIBS_DEST="$TRAN_DIR/Pictures/Libraries"
@@ -55,6 +56,7 @@ AUD_DIR="$MBS/Audio"
 AUD_SUB_DIRS="Audacity"
 # Where I store my movies
 MOV_DIR="$MBS/Movies"
+HOM_MOV_DIR="$LACIE8/Movies"
 # Movies directories to sync
 MOV_SUB_DIRS="Artists Work"
 # Directories in my Home directory that I want to backup
@@ -67,7 +69,7 @@ HOME_DIRS="Box* Dropbox Horizon Documents Movies Music Pictures bin src"
 ##
 ## Exit the program after displaying the usage message and example invocations
 usage() {
-    printf "Usage: $0 [-n] [-a] [-c] [-e] [-i] [-APl] [-p] [-m] [-h] [-u]\n"
+    printf "Usage: $0 [-n] [-a] [-c] [-e] [-i] [-APl] [-p] [-mM] [-hH] [-u]\n"
     printf "Where:\n\t-n indicates to tell me what you would do\n"
     printf "\t-u indicates display this usage message and exit\n"
     printf "\t-a indicates rsync the Audio directory\n"
@@ -80,7 +82,9 @@ usage() {
     printf "\t-l indicates rsync both Aperture and Photos libraries\n"
     printf "\t-p indicates rsync the Pictures directory\n"
     printf "\t-m indicates rsync the Movies directory\n"
-    printf "\t-h indicates rsync the Home directory\n\n"
+    printf "\t-M indicates rsync the Home Movies directory\n"
+    printf "\t-h indicates rsync the Home directory\n"
+    printf "\t-H indicates rsync the entire Home directory\n\n"
     printf "When invoked with no arguments all directories will be sync'd.\n\n"
     exit 1
 }
@@ -116,6 +120,7 @@ then
     DO_ITUNES=1
     DO_PIC=1
     DO_MOV=1
+    DO_HOM_MOV=1
     DO_AUD=1
     DO_ALL_HOME=1
     DO_HOME=
@@ -125,11 +130,12 @@ else
     DO_ITUNES=
     DO_PIC=
     DO_MOV=
+    DO_HOM_MOV=
     DO_AUD=
     DO_ALL_HOME=
     DO_HOME=
 fi
-while getopts acE:eiAPlLpmhHnu flag; do
+while getopts acE:eiAPlLpmMhHnu flag; do
     case $flag in
         a)
             DO_AUD=1
@@ -161,6 +167,9 @@ while getopts acE:eiAPlLpmhHnu flag; do
             ;;
         p)
             DO_PIC=1
+            ;;
+        M)
+            DO_HOM_MOV=1
             ;;
         m)
             DO_MOV=1
@@ -231,10 +240,10 @@ IGN="$IGN $EXCLUDE"
     then
         if [ "$CHK" ]
         then
-            chk $IGN $DRY -r -a "$LACIE" -t "$TRAN_DIR" iTunes
+            chk $IGN $DRY -r -a "$LACIE4" -t "$TRAN_DIR" iTunes
         else
             # Equivalent of "upd -I ..."
-            upd $IGN $DRY $FLW -a "$LACIE" -t "$TRAN_DIR" iTunes
+            upd $IGN $DRY $FLW -a "$LACIE4" -t "$TRAN_DIR" iTunes
         fi
     else
         echo "$ITUNES does not exist or is not a directory. Skipping."
@@ -296,6 +305,22 @@ IGN="$IGN $EXCLUDE"
             echo "$MOV_DIR/$i does not exist or is not a directory. Skipping."
         fi
     done
+}
+
+[ "$DO_HOM_MOV" ] && {
+    # Sync the home movies directories
+    if [ -d "$HOM_MOV_DIR" ]
+    then
+        if [ "$CHK" ]
+        then
+            chk $IGN $DRY -r -a "$HOM_MOV_DIR" -t "$TRAN_DIR/Movies" .
+        else
+            # Equivalent of "upd -M ..."
+            upd $IGN $DRY $FLW -a "$HOM_MOV_DIR" -t "$TRAN_DIR/Movies" .
+        fi
+    else
+        echo "$HOM_MOV_DIR does not exist or is not a directory. Skipping."
+    fi
 }
 
 [ "$DO_HOME" ] && {

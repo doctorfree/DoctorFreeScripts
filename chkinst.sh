@@ -153,12 +153,13 @@ while getopts adfinuw: flag; do
 done
 shift $(( OPTIND - 1 ))
 
-for i in * Utils/* Wallpapers/*.sh
+for i in * Utils/* Wallpapers/*.sh IFTTT/*
 do
     # Skip directories
     [ -d "$i" ] && continue
-    # Strip any .sh suffix and Utils or Wallpapers/ prefix
-    j=`echo $i | sed -e "s/\.sh$//" -e "s/Wallpapers\///" -e "s/Utils\///"`
+    # Strip any .sh suffix and Utils, IFTTT, or Wallpapers/ prefix
+    k=`echo $i | sed -e "s/\.sh$//" -e "s/Wallpapers\///" -e "s/Utils\///"`
+    j=`echo $k | sed -e "s/IFTTT\///"`
     # Scripts can be either commands or startup configuration files in $HOME 
     case "$i" in
         bash_aliases|bash_profile|bashrc|dircolors|vimrc)
@@ -168,6 +169,10 @@ do
             else
                 inst=
             fi
+            ;;
+        IFTTT/*)
+            inst=`type -p "$j"`
+            [ "$inst" ] || inst="${HOME}/bin/$j"
             ;;
         Utils/*)
             [ -f "/usr/local/share/bash/$j" ] && inst="/usr/local/share/bash/$j"

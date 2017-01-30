@@ -27,7 +27,7 @@ QUIET=
 # Which sed should be used?
 SED=gsed
 # Where should the Wallpapers be stored?
-LOCATION=/Volumes/My_Book_Studio/Pictures/Work/Wallhaven
+LOCATION=/Volumes/LaCie_8TB/Pictures/Work/Wallhaven
 # How many Wallpapers should be downloaded, should be multiples of 24 (right now they only use a fixed number of thumbs per page)
 WPNUMBER=48
 # What page to start downloading at, default and minimum of 1.

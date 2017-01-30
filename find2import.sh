@@ -8,7 +8,8 @@
 ##
 
 FEMJOY="/Volumes/My_Book_Studio/Pictures/Work/Femjoy"
-KINDGIRLS="/Volumes/My_Book_Studio/Pictures/Work/KindGirls"
+#KINDGIRLS="/Volumes/My_Book_Studio/Pictures/Work/KindGirls"
+KINDGIRLS="/Volumes/LaCie_8TB/Pictures/Work/KindGirls"
 MOVS="/Volumes/My_Book_Studio/Movies/Work"
 prev_d="__notset__"
 
