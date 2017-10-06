@@ -190,6 +190,7 @@ print_pics() {
     printf "\tPics=$numpics"
     [ $numpics -lt 100 ] && printf "\t"
     printf "\tFiles=$unlinked"
+    [ $unlinked -lt 10 ] && printf "\t"
     printf "\tLinks=$numlinks"
     totaladds=`expr $totaladds + $numadded`
     totalpics=`expr $totalpics + $unlinked`

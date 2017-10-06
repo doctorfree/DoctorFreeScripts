@@ -214,6 +214,13 @@ shift $(( OPTIND - 1 ))
     ASAMPLE="-ab 128k"
     THREAD="-threads 0"
 }
+[ "$SUF" = "mp3" ] && {
+    ACODEC="-acodec libmp3lame"
+    PRESET=""
+    VCODEC="-vn -c:v copy"
+    QSCALE="-qscale:a 0"
+    THREAD="-threads 0"
+}
 # TODO: Add desired default settings for other format encodings here.
 #
 # Set any options specified on the command line - the sed part is just
