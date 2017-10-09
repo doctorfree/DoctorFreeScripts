@@ -54,11 +54,11 @@ HEAD="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://
 <title>"
 BODY="</title>
 <meta name=\"Generator\" content=\"Vim/7.2\">
-<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\">
+<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">
 </head>
 <body><font face=\"monospace\">
 <br>"
-TRACKS="Tracklist:<br><br>"
+TRACKS="<br>Tracklist:<br><br>"
 ALBUMS="Album:<br><br>"
 TAIL="<br>
 Enjoy!<br>
@@ -74,7 +74,7 @@ Create_Readme() {
     echo $HEAD > $R
     echo "$1" >> $R
     echo $BODY >> $R
-    echo "<h1>$1</h1><br>" >> $R
+    echo "<h1>$1</h1>" >> $R
 }
 
 ## @fn Add_Album()
@@ -109,7 +109,7 @@ Top=
 <head>
 <title>$FIRST's USB Drive</title>
 <meta name=\"Generator\" content=\"Vim/7.2\">
-<meta http-equiv=\"content-type\" content=\"text/html; charset=iso-8859-1\">
+<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">
 </head>
 <body><font face=\"monospace\">
 This USB drive belongs to $FIRST $LAST.<br>
@@ -189,19 +189,26 @@ do
                 }
                 FILES=
 	        cd "$j"
+		    year=
+		    [ -r Year ] && year=`cat Year`
 	        [ "$Top" ] && {
-		        y=
-		        [ -r Year ] && y=`cat Year`
 	            echo "<li><a href=\"$i/$j/$R\">
-$i - &quot;$j&quot; $y</a><br>" >> ../../$R
+$i - &quot;$j&quot; $year</a><br>" >> ../../$R
             }
             [ -f $R ] || {
-	            Create_Readme "$j"
-		        echo "<h2>$i</h2><br><br>" >> $R
+	            Create_Readme "$i"
+                echo "<h2>\"$j\"</h2>" >> $R
+		        [ -f Year ] && {
+                    echo "<h2>$year</h2>" >> $R
+                }
+		        [ -f cover.jpg ] && {
+			        echo "<br><img src=\"cover.jpg\" alt=\"cover.jpg\" border=0><br>" >> $R
+	            }
                 echo $TRACKS >> $R
 	            for k in *
 	            do
 			        [ "$k" = "Year" ] && continue
+			        [ "$k" = "cover.jpg" ] && continue
 			        [ -d "$k" ] && continue
 	                Add_Track "$k"
 	            done
@@ -209,7 +216,7 @@ $i - &quot;$j&quot; $y</a><br>" >> ../../$R
 		            for pic in Pics/*
 			        do
 			            [ "$pic" = "Pics/*" ] && continue
-			            echo "<br><a href=\"$pic\"><img src=\"$pic\" alt=\"$pic\" border=0><br>" >> $R
+			            echo "<br><a href=\"$pic\"><img src=\"$pic\" alt=\"$pic\" border=0></a><br>" >> $R
 			        done
 	            }
 		        echo $TAIL >> $R

@@ -217,6 +217,9 @@ do
         bashrc)
             check "$i" "$inst" 58
             ;;
+        IFTTT/ifttt.sh)
+            check "$i" "$inst" 4
+            ;;
         Wallpapers/wh.sh)
             check "$i" "$inst" 8
             ;;
