@@ -202,6 +202,8 @@ for all files in that directory hierarchy
 
 [**get-search**](Wallpapers/get-search.sh) - Download Wallhaven images matching the specified search term(s)
 
+[**get-sizes**](Wallpapers/get-sizes.sh) - List the size of all the wallpaper folders
+
 [**setwall**](Wallpapers/setwall.sh) - Set the desktop wallpaper
 
 [**wb**](Wallpapers/wb.sh) - Automatically downloads my favorites from wallbase.cc
