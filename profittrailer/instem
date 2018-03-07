@@ -1,0 +1,17 @@
+#!/bin/bash
+
+LOCAL=/usr/local
+
+for i in p*.sh bl*.sh
+do
+    j=`echo $i | sed -e "s/\.sh//"`
+    cp $i ${LOCAL}/bin/$j
+    chmod 755 ${LOCAL}/bin/$j
+done
+
+for i in *binance*.sh *bittrex*.sh
+do
+    j=`echo $i | sed -e "s/\.sh//"`
+    cp $i ${HOME}/bin/$j
+    chmod 755 ${HOME}/bin/$j
+done
