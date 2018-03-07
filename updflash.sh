@@ -33,30 +33,36 @@
 # the default locations in the upd script.
 #
 ########### DEFAULT LOCATIONS ######################
+[ "${MEDROOT}" ] || MEDROOT=/u
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${VIDROOT}" ] || VIDROOT=/u/movies
+[ "${AUDROOT}" ] || AUDROOT=/Audio
+[ "${PHOROOT}" ] || PHOROOT=/Photos
+[ "${ITUROOT}" ] || ITUROOT=/iTunes
+[ "${MNTROOT}" ] || {
+    USER=`id -u -n`
+    MNTROOT=/media/${USER}
+}
 # The mount point for the flash drive
-TRAN_DIR=/Volumes/Transcend
+TRAN_DIR=${MNTROOT}/Transcend
 # A directory that we know exists there
 TEST_DIR="$TRAN_DIR"
 # My iTunes library
-LACIE4="/Volumes/LaCie_4TB"
-LACIE8="/Volumes/LaCie_8TB"
-ITUNES="$LACIE4/iTunes"
+ITUNES="${ITUROOT}"
 # My Photos libraries
-APLIBS="/Volumes/My_Book_Studio/Pictures/Libraries"
+APLIBS="${PHOROOT}/Libraries"
 APLIBS_DEST="$TRAN_DIR/Pictures/Libraries"
-# The mount point for the My Book Studio drive that holds my pics and movies
-MBS="/Volumes/My_Book_Studio"
 # Where I store my photos
-PIC_DIR="$MBS/Pictures"
+PIC_DIR="$PICROOT"
 # Picture directories to sync
 PIC_SUB_DIRS="Art Dragonflies ScreenSavers Work"
 # Where I store my audio
-AUD_DIR="$MBS/Audio"
+AUD_DIR="$AUDROOT"
 # Audio directories to sync
 AUD_SUB_DIRS="Audacity"
 # Where I store my movies
-MOV_DIR="$MBS/Movies"
-HOM_MOV_DIR="$LACIE8/Movies"
+MOV_DIR="$VIDROOT"
+HOM_MOV_DIR="$HOME/Videos"
 # Movies directories to sync
 MOV_SUB_DIRS="Artists Work"
 # Directories in my Home directory that I want to backup
@@ -240,10 +246,10 @@ IGN="$IGN $EXCLUDE"
     then
         if [ "$CHK" ]
         then
-            chk $IGN $DRY -r -a "$LACIE4" -t "$TRAN_DIR" iTunes
+            chk $IGN $DRY -r -a "$MEDROOT" -t "$TRAN_DIR" iTunes
         else
             # Equivalent of "upd -I ..."
-            upd $IGN $DRY $FLW -a "$LACIE4" -t "$TRAN_DIR" iTunes
+            upd $IGN $DRY $FLW -a "$MEDROOT" -t "$TRAN_DIR" iTunes
         fi
     else
         echo "$ITUNES does not exist or is not a directory. Skipping."

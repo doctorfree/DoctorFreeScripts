@@ -28,12 +28,22 @@
 # the Software.
 #
 
-#A="$HOME/Pictures/Aperture Slideshows"
-A="/Volumes/My_Book_Studio/Movies/Work/SlideShows"
+[ "${MEDROOT}" ] || MEDROOT=/u
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${VIDROOT}" ] || VIDROOT=/u/movies
+[ "${AUDROOT}" ] || AUDROOT=/Audio
+[ "${PHOROOT}" ] || PHOROOT=/Photos
+[ "${ITUROOT}" ] || ITUROOT=/iTunes
+[ "${MNTROOT}" ] || {
+    USER=`id -u -n`
+    MNTROOT=/media/${USER}
+}
+
+A="${VIDROOT}/SlideShows"
 M="$HOME/Movies"
-I="/Volumes/LaCie_4TB/iTunes/Home Videos"
-W="/Volumes/My_Book_Studio/Movies"
-F="$W/Work/Femjoy"
+I="${ITUROOT}/Home Videos"
+W="${VIDROOT}"
+F="$W/Femjoy"
 USE_SUM=
 TELL=
 FEMJOY=

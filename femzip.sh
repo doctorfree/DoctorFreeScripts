@@ -26,6 +26,7 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
+[ "${PICROOT}" ] || PICROOT=/u/pictures
 
 D=$HOME/Downloads
 
@@ -52,7 +53,7 @@ M=CARISHA
 #M="VIC E."
 
 # Set the extraction base directory
-B="/Volumes/My_Book_Studio/Pictures/Work/Femjoy"
+B="${PICROOT}/Femjoy"
 
 # Set the extraction subdirectory
 S=""

@@ -34,6 +34,16 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
+[ "${MEDROOT}" ] || MEDROOT=/u
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${VIDROOT}" ] || VIDROOT=/u/movies
+[ "${AUDROOT}" ] || AUDROOT=/Audio
+[ "${PHOROOT}" ] || PHOROOT=/Photos
+[ "${ITUROOT}" ] || ITUROOT=/iTunes
+[ "${MNTROOT}" ] || {
+    USER=`id -u -n`
+    MNTROOT=/media/${USER}
+}
 SOURCEDIR=
 TRANSCEND=
 SUFFIX=
@@ -146,55 +156,55 @@ FOLLOW="$FOLLOW $EXCLUDE"
 
 NAME=`basename $0`
 [ "$APERT_DIR" ] || [ "$NAME" = "updphotoslibs" ] && {
-    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
-    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Pictures/Libraries"
+    [ "$SOURCEDIR" ] || SOURCEDIR="${PHOROOT}/Libraries"
+    [ "$TRANSCEND" ] || TRANSCEND="${MNTROOT}/Transcend/Pictures/Libraries"
     SUFFIX=".photoslibrary"
 }
 [ "$NAME" = "updaplibs" ] && {
-    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
-    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Pictures/Libraries"
+    [ "$SOURCEDIR" ] || SOURCEDIR="${PHOROOT}/Libraries"
+    [ "$TRANSCEND" ] || TRANSCEND="${MNTROOT}/Transcend/Pictures/Libraries"
     SUFFIX=".aplibrary"
 }
 [ "$ITUNES_DIR" ] || [ "$NAME" = "upditunes" ] && {
-    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/LaCie_4TB/iTunes"
-    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/iTunes"
+    [ "$SOURCEDIR" ] || SOURCEDIR="${ITUROOT}"
+    [ "$TRANSCEND" ] || TRANSCEND="${MNTROOT}/Transcend/iTunes"
 }
 [ "$PICDIR" ] || [ "$NAME" = "updpicdir" ] && {
     if [ "$MYHOME" ]
     then
         [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Pictures"
     else
-        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures"
+        [ "$SOURCEDIR" ] || SOURCEDIR="${PICROOT}"
     fi
-    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Pictures"
+    [ "$TRANSCEND" ] || TRANSCEND="${MNTROOT}/Transcend/Pictures"
 }
 [ "$AUDDIR" ] || [ "$NAME" = "updauddir" ] && {
     if [ "$MYHOME" ]
     then
         [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Audio"
     else
-        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Audio"
+        [ "$SOURCEDIR" ] || SOURCEDIR="${AUDROOT}"
     fi
-    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Audio"
+    [ "$TRANSCEND" ] || TRANSCEND="${MNTROOT}/Transcend/Audio"
 }
 [ "$MOVDIR" ] || [ "$NAME" = "updmovdir" ] && {
     if [ "$MYHOME" ]
     then
         [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Movies"
     else
-        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Movies"
+        [ "$SOURCEDIR" ] || SOURCEDIR="${VIDROOT}"
     fi
-    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Movies"
+    [ "$TRANSCEND" ] || TRANSCEND="${MNTROOT}/Transcend/Movies"
 }
 [ "$HOMEDIR" ] || [ "$NAME" = "updhome" ] && {
     [ "$SOURCEDIR" ] || SOURCEDIR="$HOME"
-    [ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/Home"
+    [ "$TRANSCEND" ] || TRANSCEND="${MNTROOT}/Transcend/Home"
 }
 
 # Where to sync from - defaults to current working directory
 [ "$SOURCEDIR" ] || SOURCEDIR=`pwd`
 # Where to sync to
-[ "$TRANSCEND" ] || TRANSCEND="/Volumes/Transcend/`basename $SOURCEDIR`"
+[ "$TRANSCEND" ] || TRANSCEND="${MNTROOT}/Transcend/`basename $SOURCEDIR`"
 
 [ "$USAGE" ] && usage
 

@@ -6,8 +6,11 @@
 ## @date Written 17-Sep-2016
 ## @version 1.0.1
 ##
+
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+
 # Set this to your top-level Wallhaven download directory path
-WHDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
+WHDIR="${PICROOT}/Wallhaven"
 
 query=
 demo=

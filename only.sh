@@ -26,9 +26,19 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 
-#FIRST="$HOME/Music/iTunes/iTunes Media/Music"
-FIRST="/Volumes/LaCie_4TB/iTunes/Music"
-SECOND="/Volumes/My_Book_Studio/Transcend"
+[ "${MEDROOT}" ] || MEDROOT=/u
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${VIDROOT}" ] || VIDROOT=/u/movies
+[ "${AUDROOT}" ] || AUDROOT=/Audio
+[ "${PHOROOT}" ] || PHOROOT=/Photos
+[ "${ITUROOT}" ] || ITUROOT=/iTunes
+[ "${MNTROOT}" ] || {
+    USER=`id -u -n`
+    MNTROOT=/media/${USER}
+}
+
+FIRST="${ITUROOT}/Music"
+SECOND="${MNTROOT}/Transcend"
 
 ## @fn usage()
 ## @brief Display command line usage options

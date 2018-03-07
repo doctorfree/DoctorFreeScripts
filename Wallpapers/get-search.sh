@@ -14,13 +14,15 @@
 ## search and download is completed, duplicate files in the download directory
 ## are symlinked.
 
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+
 if [ -r /usr/local/share/bash/wallutils ]
 then
     . /usr/local/share/bash/wallutils
 else
     [ -r ./Utils/wallutils ] && . ./Utils/wallutils
 fi
-[ "$WHDIR" ] || WHDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
+[ "$WHDIR" ] || WHDIR="${PICROOT}/Wallhaven"
 
 [ "$numdown" ] || numdown=480
 [ "$categories" ] || categories=111

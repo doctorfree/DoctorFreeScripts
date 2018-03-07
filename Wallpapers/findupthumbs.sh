@@ -8,6 +8,8 @@
 ## @version 1.0.1
 ##
 
+[ "${PHOROOT}" ] || PHOROOT=/Photos
+
 if [ -r /usr/local/share/bash/wallutils ]
 then
     . /usr/local/share/bash/wallutils
@@ -16,9 +18,7 @@ else
 fi
 
 # Set THMBS to the Thumbnail directory in which you want to create hard links
-#THMBS=`pwd`
-#THMBS="/Volumes/LaCie_8TB/Pictures/Libraries/Wallhaven.photoslibrary/Thumbnails"
-THMBS="$HOME/Pictures/Wallhaven.photoslibrary/Thumbnails"
+THMBS="$PHOROOT/Libraries/Wallhaven.photoslibrary/Thumbnails"
 
 [ -d "$THMBS" ] || {
     echo "$THMBS does not exist or is not a directory. Exiting."

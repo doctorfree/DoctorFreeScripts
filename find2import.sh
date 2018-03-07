@@ -7,10 +7,15 @@
 ## @version 1.0.1
 ##
 
-FEMJOY="/Volumes/My_Book_Studio/Pictures/Work/Femjoy"
-#KINDGIRLS="/Volumes/My_Book_Studio/Pictures/Work/KindGirls"
-KINDGIRLS="/Volumes/LaCie_8TB/Pictures/Work/KindGirls"
-MOVS="/Volumes/My_Book_Studio/Movies/Work"
+[ "${MEDROOT}" ] || MEDROOT=/u
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${VIDROOT}" ] || VIDROOT=/u/movies
+[ "${AUDROOT}" ] || AUDROOT=/Audio
+[ "${ITUROOT}" ] || ITUROOT=/iTunes
+
+FEMJOY="${PICROOT}/Femjoy"
+KINDGIRLS="${PICROOT}/KindGirls"
+MOVS="${VIDROOT}"
 prev_d="__notset__"
 
 for PICDIR in "${FEMJOY}" "${KINDGIRLS}"

@@ -29,9 +29,12 @@
 # the Software.
 #
 
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${PHOROOT}" ] || PHOROOT=/Photos
+
 P="$HOME/Pictures"
-W="/Volumes/My_Book_Studio/Pictures/Work"
-LIBS="/Volumes/My_Book_Studio/Pictures/Libraries"
+W="${PICROOT}"
+LIBS="${PHOROOT}/Libraries"
 TELL=
 PICS=
 QUICK=

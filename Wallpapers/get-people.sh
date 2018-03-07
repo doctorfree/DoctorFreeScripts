@@ -8,13 +8,15 @@
 ## @version 1.0.1
 ##
 
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+
 if [ -r /usr/local/share/bash/wallutils ]
 then
     . /usr/local/share/bash/wallutils
 else
     [ -r ./Utils/wallutils ] && . ./Utils/wallutils
 fi
-[ "$WHDIR" ] || WHDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
+[ "$WHDIR" ] || WHDIR="${PICROOT}/Wallhaven"
 
 DDIR="${WHDIR}/People"
 

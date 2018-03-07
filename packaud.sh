@@ -27,8 +27,10 @@
 # the Software.
 #
 
+[ "${AUDROOT}" ] || AUDROOT=/Audio
+
 # Set this to your Audacity project directory or specify with the -a option
-AUD_DIR="/Volumes/My_Book_Studio/Audio/Audacity"
+AUD_DIR="${AUDROOT}/Audacity"
 REPORT=
 DONE=1
 TELL=

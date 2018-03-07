@@ -35,6 +35,17 @@
 # the Software.
 #
 
+[ "${MEDROOT}" ] || MEDROOT=/u
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${VIDROOT}" ] || VIDROOT=/u/movies
+[ "${AUDROOT}" ] || AUDROOT=/Audio
+[ "${PHOROOT}" ] || PHOROOT=/Photos
+[ "${ITUROOT}" ] || ITUROOT=/iTunes
+[ "${MNTROOT}" ] || {
+    USER=`id -u -n`
+    MNTROOT=/media/${USER}
+}
+
 SOURCEDIR=
 USBLIBDIR=
 SUFFIX=
@@ -181,14 +192,14 @@ shift $(( OPTIND - 1 ))
 
 NAME=`basename $0`
 [ "$APERT_DIR" ] || [ "$NAME" = "chkphotoslibs" ] && {
-    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
-    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Pictures/Libraries"
+    [ "$SOURCEDIR" ] || SOURCEDIR="${PHOROOT}/Libraries"
+    [ "$USBLIBDIR" ] || USBLIBDIR="${MNTROOT}/Transcend/Pictures/Libraries"
     SUFFIX=".photoslibrary"
     UPSC="upd -L"
 }
 [ "$NAME" = "chkaplibs" ] && {
-    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures/Libraries"
-    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Pictures/Libraries"
+    [ "$SOURCEDIR" ] || SOURCEDIR="${PHOROOT}/Libraries"
+    [ "$USBLIBDIR" ] || USBLIBDIR="${MNTROOT}/Transcend/Pictures/Libraries"
     SUFFIX=".aplibrary"
     UPSC="upd -L"
 }
@@ -197,9 +208,9 @@ NAME=`basename $0`
     then
         [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Pictures"
     else
-        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Pictures"
+        [ "$SOURCEDIR" ] || SOURCEDIR="${PICROOT}"
     fi
-    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Pictures"
+    [ "$USBLIBDIR" ] || USBLIBDIR="${MNTROOT}/Transcend/Pictures"
     UPSC="upd -P"
 }
 [ "$AUDDIR" ] || [ "$NAME" = "chkauddir" ] && {
@@ -207,9 +218,9 @@ NAME=`basename $0`
     then
         [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Audio"
     else
-        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Audio"
+        [ "$SOURCEDIR" ] || SOURCEDIR="${AUDROOT}"
     fi
-    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Audio"
+    [ "$USBLIBDIR" ] || USBLIBDIR="${MNTROOT}/Transcend/Audio"
     UPSC="upd -A"
 }
 [ "$MOVDIR" ] || [ "$NAME" = "chkmovdir" ] && {
@@ -217,19 +228,19 @@ NAME=`basename $0`
     then
         [ "$SOURCEDIR" ] || SOURCEDIR="$HOME/Movies"
     else
-        [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/My_Book_Studio/Movies"
+        [ "$SOURCEDIR" ] || SOURCEDIR="${VIDROOT}"
     fi
-    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Movies"
+    [ "$USBLIBDIR" ] || USBLIBDIR="${MNTROOT}/Transcend/Movies"
     UPSC="upd -M"
 }
 [ "$HOMEDIR" ] || [ "$NAME" = "chkhome" ] && {
     [ "$SOURCEDIR" ] || SOURCEDIR="$HOME"
-    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/Home"
+    [ "$USBLIBDIR" ] || USBLIBDIR="${MNTROOT}/Transcend/Home"
     UPSC="upd -H"
 }
 [ "$ITUNES_DIR" ] || [ "$NAME" = "chkitunes" ] && {
-    [ "$SOURCEDIR" ] || SOURCEDIR="/Volumes/LaCie_4TB/iTunes"
-    [ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/iTunes"
+    [ "$SOURCEDIR" ] || SOURCEDIR="${ITUROOT}"
+    [ "$USBLIBDIR" ] || USBLIBDIR="${MNTROOT}/Transcend/iTunes"
     UPSC="upd -I"
 }
 
@@ -237,7 +248,7 @@ NAME=`basename $0`
 ## Defaults to checking current working directory
 [ "$SOURCEDIR" ] || SOURCEDIR=`pwd`
 # The mounted USB stick or backup directory
-[ "$USBLIBDIR" ] || USBLIBDIR="/Volumes/Transcend/`basename $SOURCEDIR`"
+[ "$USBLIBDIR" ] || USBLIBDIR="${MNTROOT}/Transcend/`basename $SOURCEDIR`"
 
 [ "$USAGE" ] && usage
 

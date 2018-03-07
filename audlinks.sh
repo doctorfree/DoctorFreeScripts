@@ -27,11 +27,14 @@
 # the Software.
 #
 
-ITUNES="/Volumes/LaCie_4TB/iTunes"
+[ "${AUDROOT}" ] || AUDROOT=/Audio
+[ "${ITUROOT}" ] || ITUROOT=/iTunes
+
+ITUNES="${ITUROOT}"
 A="${ITUNES}/Audiobooks"
 I="${ITUNES}/Music"
 M="$HOME/Music"
-W="/Volumes/My_Book_Studio/Audio/Imported"
+W="${AUDROOT}/Imported"
 B="${W}/Audiobooks"
 WORK=1
 MUSE=

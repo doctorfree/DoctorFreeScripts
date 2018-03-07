@@ -8,7 +8,9 @@
 ## @version 1.0.1
 ##
 
-WDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+
+WDIR="${PICROOT}/Wallhaven"
 
 create_diff() {
     if [ "$1" = "wb.sh" ] || [ "$1" = "wh.sh" ]

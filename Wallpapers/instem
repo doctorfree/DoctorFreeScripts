@@ -8,7 +8,9 @@
 ## @version 1.0.1
 ##
 
-WDIR="/Volumes/LaCie_8TB/Pictures/Work/Wallhaven"
+[ "${PICROOT}" ] || PICROOT=/u/pictures
+
+WDIR="${PICROOT}/Wallhaven"
 
 instit() {
     f="$1"

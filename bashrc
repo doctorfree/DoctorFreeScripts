@@ -39,6 +39,15 @@ shopt -s histappend
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+# MEDROOT is used by doctorfree's Scripts to identify the media root
+export MEDROOT=/u
+export PICROOT=/u/pictures
+export VIDROOT=/u/movies
+export AUDROOT=/Audio
+export ITUROOT=/iTunes
+export PHOROOT=/Photos
+export MNTROOT=/media/`id -u -n`
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
