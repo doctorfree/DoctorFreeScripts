@@ -3,7 +3,7 @@
 # ptswitch - Switch ProfitTrailer trading strategies
 # Usage: ptswitch <strategy> [market]
 #    Where "strategy" must be one of:
-#          conservative default emaspread lowbalance moderate pioneers yuval
+#          default emagain emaspread lowbb moderate pioneers yuval
 #    And "market" must be ETH or BTC. If no market is specified then the
 #    installed ProfitTrailer market setting is used.
 
@@ -12,7 +12,7 @@ DEST_BAS="${TOP}/binance"
 DEST_DIR="${DEST_BAS}/installed"
 INST_DIR=/usr/local/lib/ProfitTrailer
 TRAD_DIR=${INST_DIR}/trading
-STRG="conservative default emaspread lowbalance moderate pioneers yuval"
+STRG="default emagain emaspread lowbb moderate pioneers yuval"
 P="PAIRS.properties"
 MKTS="BTC ETH"
 SRC=
@@ -77,15 +77,16 @@ get_installed() {
     shift
 }
 
-use_installed=
 [ $# -eq 1 ] && get_market
 [ $# -eq 2 ] && MKT="$2"
 chk_market
 
+STRAT="unknown"
 for strat in $STRG
 do
     [ "${strat}" == "$1" ] && {
         SRC="${TOP}/binance/${strat}"
+        STRAT="${strat}"
         break
     }
 done
@@ -123,7 +124,7 @@ fi
         diff $i ${INST_DIR}/$i > /dev/null || echo "$i differs"
     done
 }
-echo "Installing updated trading strategy from $SRC"
+echo "Installing ${STRAT} trading strategy from $SRC using $MKT market"
 
 if [ "$DEM" ]
 then

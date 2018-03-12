@@ -5,15 +5,16 @@
 TOP="${HOME}/src/trading/profit-trailer"
 DEST_DIR="${TOP}/binance"
 INST_DIR=/usr/local/lib/ProfitTrailer/trading
-STRG="conservative default emaspread lowbalance moderate pioneers yuval"
+STRG="default emagain emaspread lowbb moderate pioneers yuval"
 P="PAIRS.properties"
 
 # Which market are we using?
 market=`grep ^MARKET ${INST_DIR}/$P | awk -F "=" ' { print $2 } '`
 market=`echo $market | sed -e "s/ //g"`
-echo "Using MARKET = $market"
-
-echo "Determining installed strategy ..."
+[ "$1" == "-q" ] || {
+    echo "Using MARKET = $market"
+    echo "Determining installed strategy ..."
+}
 found=
 for bdir in ${STRG}
 do
