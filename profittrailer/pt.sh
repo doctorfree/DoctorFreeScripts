@@ -3,7 +3,8 @@
 # ProfitTrailer install folder
 PT_DIR=/usr/local/lib/ProfitTrailer
 TRAD_DIR=${PT_DIR}/trading
-STRG="default emagain emaspread lowbb moderate pioneers yuval"
+STRG="default emacross smacross emagain emaspread lowbb moderate pioneers yuval"
+LOG=ProfitTrailer.log
 P="PAIRS.properties"
 MKTS="BTC ETH"
 MKT=
@@ -23,6 +24,16 @@ usage() {
   pt_disp
   echo ""
   exit 1
+}
+
+tailit() {
+    inst=`type -p grcat`
+    if [ "$inst" ]
+    then
+        tail -f ${PT_DIR}/logs/${LOG} | grcat conf.profittrailer
+    else
+        tail -f ${PT_DIR}/logs/${LOG}
+    fi
 }
 
 chk_market() {
@@ -84,7 +95,7 @@ case "$1" in
     help|usage)
         usage
         ;;
-    cryptognome|default|emagain|emaspread|lowbb|moderate|pioneers|yuval)
+    cryptognome|default|emacross|smacross|emagain|emaspread|lowbb|moderate|pioneers|yuval)
         chk_market
         pm2 stop ${PT_DIR}/pm2-ProfitTrailer.json
         pt_switch ${DEM} $1 ${MKT}
@@ -101,7 +112,7 @@ case "$1" in
         pm2 $1 profit-trailer-binance
         ;;
     tail)
-        tail -f ${PT_DIR}/logs/ProfitTrailer.log
+        tailit
         ;;
     *)
         pt_disp

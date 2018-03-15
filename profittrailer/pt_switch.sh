@@ -3,7 +3,7 @@
 # ptswitch - Switch ProfitTrailer trading strategies
 # Usage: ptswitch <strategy> [market]
 #    Where "strategy" must be one of:
-#          default emagain emaspread lowbb moderate pioneers yuval
+#      default emacross smacross emagain emaspread lowbb moderate pioneers yuval
 #    And "market" must be ETH or BTC. If no market is specified then the
 #    installed ProfitTrailer market setting is used.
 
@@ -12,7 +12,7 @@ DEST_BAS="${TOP}/binance"
 DEST_DIR="${DEST_BAS}/installed"
 INST_DIR=/usr/local/lib/ProfitTrailer
 TRAD_DIR=${INST_DIR}/trading
-STRG="default emagain emaspread lowbb moderate pioneers yuval"
+STRG="default emacross smacross emagain emaspread lowbb moderate pioneers yuval"
 P="PAIRS.properties"
 MKTS="BTC ETH"
 SRC=

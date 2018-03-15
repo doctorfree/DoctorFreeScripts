@@ -1,0 +1,6 @@
+#!/bin/bash
+
+PT=ProfitTrailer
+PTDIR=/usr/local/lib/${PT}/logs
+
+tail -n 100 ${PTDIR}/${PT}.log.1 | grcat conf.profittrailer

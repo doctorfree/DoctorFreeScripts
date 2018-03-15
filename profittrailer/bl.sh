@@ -1,10 +1,21 @@
 #!/bin/bash
 
 PT_DIR=/usr/local/lib/ProfitTrailer
+LOG=ProfitTrailer-blacklist.log
 
 [ -d ${PT_DIR} ] || {
     echo "${PT_DIR} does not exist or is not a directory. Exiting."
     exit 1
+}
+
+tailit() {
+    inst=`type -p grcat`
+    if [ "$inst" ]
+    then
+        tail -f ${PT_DIR}/logs/${LOG} | grcat conf.profittrailer
+    else
+        tail -f ${PT_DIR}/logs/${LOG}
+    fi
 }
 
 cd ${PT_DIR}
@@ -29,7 +40,7 @@ case "$1" in
         pm2 $1 blacklist
         ;;
     tail)
-        tail -f ${PT_DIR}/logs/ProfitTrailer-blacklist.log
+        tailit
         ;;
     *)
         bl help

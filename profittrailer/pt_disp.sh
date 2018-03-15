@@ -5,7 +5,7 @@
 TOP="${HOME}/src/trading/profit-trailer"
 DEST_DIR="${TOP}/binance"
 INST_DIR=/usr/local/lib/ProfitTrailer/trading
-STRG="default emagain emaspread lowbb moderate pioneers yuval"
+STRG="default emacross smacross emagain emaspread lowbb moderate pioneers yuval"
 P="PAIRS.properties"
 
 # Which market are we using?

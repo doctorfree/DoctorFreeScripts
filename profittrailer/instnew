@@ -1,6 +1,7 @@
 #!/bin/bash
 
 LOCAL=/usr/local
+CONFD=/usr/share/grc
 
 for i in p*.sh bl*.sh
 do
@@ -15,5 +16,12 @@ do
     j=`echo $i | sed -e "s/\.sh//"`
     diff $i ${HOME}/bin/$j > /dev/null || {
         sudo cp $i ${HOME}/bin/$j
+    }
+done
+
+for i in conf.*
+do
+    diff $i ${CONFD}/$i > /dev/null || {
+        sudo cp $i ${CONFD}/$i
     }
 done

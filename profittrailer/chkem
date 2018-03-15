@@ -1,6 +1,7 @@
 #!/bin/bash
 
 LOCAL=/usr/local
+CONFD=/usr/share/grc
 
 for i in p*.sh bl*.sh
 do
@@ -12,4 +13,9 @@ for i in *binance*.sh *bittrex*.sh
 do
     j=`echo $i | sed -e "s/\.sh//"`
     diff $i ${HOME}/bin/$j > /dev/null || echo "$i differs from installed $j"
+done
+
+for i in conf.*
+do
+    diff $i ${CONFD}/$i > /dev/null || echo "$i differs from installed $i"
 done
