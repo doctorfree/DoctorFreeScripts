@@ -1,5 +1,6 @@
 # GRC configuration file for displaying ProfitTrailer log files with grc/grcat
 #
+======
 # Uppercase
 regexp=[A-Z\s]+\b
 colours=bold cyan
@@ -12,7 +13,6 @@ count=more
 ======
 # Scientific notation
 regexp=[+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?
-#regexp=-?[\d.]+(?:E-?\d+)?
 colours=bold yellow
 count=more
 ======
@@ -102,8 +102,18 @@ colours=bold white
 count=more
 ======
 # clientOrderId
-regexp=\"clientOrderId\":\"\w*\b
+regexp=\"clientOrderId\":\"\w*\b\"
 colours=default
+count=more
+======
+# Buy strategy
+regexp=\"buyStrategy\":\"\w*\b\"
+colours=red
+count=more
+======
+# Sell strategy
+regexp=\"sellStrategy\":\"\w*\b\"
+colours=green
 count=more
 ======
 # Everything in parentheses

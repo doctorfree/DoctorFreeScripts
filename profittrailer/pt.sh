@@ -30,9 +30,9 @@ tailit() {
     inst=`type -p grcat`
     if [ "$inst" ]
     then
-        tail -f ${PT_DIR}/logs/${LOG} | grcat conf.profittrailer
+        tail -n 25 -f ${PT_DIR}/logs/${LOG} | grcat conf.profittrailer
     else
-        tail -f ${PT_DIR}/logs/${LOG}
+        tail -n 25 -f ${PT_DIR}/logs/${LOG}
     fi
 }
 
