@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# ptswitch - Switch ProfitTrailer trading strategies
+
+TOP="${HOME}/src/trading/profit-trailer"
+DEST_DIR="${TOP}/binance"
+INST_DIR=/usr/local/lib/ProfitTrailer
+STRG="conservative default emaspread lowbalance moderate"
+
+SRC=
+for strat in $STRG
+do
+    [ "${strat}" == "$1" ] && {
+        SRC="${TOP}/binance-${strat}"
+        break
+    }
+done
+
+[ "${SRC}" ] || {
+    echo "Usage: ptswitch <strategy> where <strategy> must be one of"
+    echo "    $STRG"
+    echo "No valid strategy given. Exiting."
+    exit 1
+}
+
+[ -d "${SRC}" ] || {
+    echo "$SRC does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+[ -d ${DEST_DIR}/trading ] || {
+    echo "${DEST_DIR}/trading does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+echo "Determining installed strategy ..."
+found=
+for bdir in ${STRG}
+do
+    cd ${DEST_DIR}-${bdir}/trading
+    # Both PAIRS and DCA must match
+    diff PAIRS.properties ${INST_DIR}/trading/PAIRS.properties > /dev/null && {
+      diff DCA.properties ${INST_DIR}/trading/DCA.properties > /dev/null && {
+        echo "Installed strategy is $bdir"
+        found=1
+        break
+      }
+    }
+done
+
+[ "$found" ] || echo "No known strategy is installed"
+
+cp ${SRC}/trading/* ${DEST_DIR}/trading
+
+echo "Checking differences in updated strategy and installed strategy ..."
+cd ${DEST_DIR}
+for i in *.properties *.json trading/*
+do
+    diff $i ${INST_DIR}/$i > /dev/null || echo "$i differs"
+done
+
+echo "Installing updated trading strategy from $SRC"
+
+cp ${DEST_DIR}/trading/* ${INST_DIR}/trading

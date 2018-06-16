@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# ptdisp - Display ProfitTrailer trading strategy
+
+TOP="${HOME}/src/trading/profit-trailer"
+DEST_DIR="${TOP}/binance"
+INST_DIR=/usr/local/lib/ProfitTrailer/trading
+STRG="conservative default emaspread lowbalance moderate"
+
+echo "Determining installed strategy ..."
+found=
+for bdir in ${STRG}
+do
+    cd ${DEST_DIR}-${bdir}/trading
+    # Both PAIRS and DCA must match
+    diff PAIRS.properties ${INST_DIR}/PAIRS.properties > /dev/null && {
+      diff DCA.properties ${INST_DIR}/DCA.properties > /dev/null && {
+        echo "Installed strategy is $bdir"
+        found=1
+        break
+      }
+    }
+done
+
+[ "$found" ] || echo "No known strategy is installed"

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+NAM=ProfitTrailer
+INST_DIR=/usr/local/lib/${NAM}
+VER=1.2.6.18
+TOP="${HOME}/src/trading/profit-trailer"
+BAK=${TOP}/Bak
+JAR=${TOP}/${NAM}-${VER}/${NAM}.jar
+
+[ -f ${JAR} ] || {
+    echo "$JAR does not exist. Exiting."
+    exit 1
+}
+
+[ -d ${TOP}/binance ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd ${TOP}/binance
+for i in *.properties *.json trading/*
+do
+    diff $i ${INST_DIR}/$i > /dev/null || sudo cp $i ${INST_DIR}/$i
+done
+
+cmp ${JAR} ${INST_DIR}/${NAM}.jar > /dev/null || sudo cp ${JAR} ${INST_DIR}
+diff ${TOP}/profittrailer.sh /usr/local/bin/profittrailer > /dev/null || {
+    sudo cp ${TOP}/profittrailer.sh /usr/local/bin/profittrailer
+    sudo chmod 755 /usr/local/bin/profittrailer
+}
