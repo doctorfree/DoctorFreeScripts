@@ -8,7 +8,7 @@
 ## @date Written 23-Mar-2014
 ## @version 1.0.1
 ##
-## Based on vidlinks https://github.com/doctorfree/Scripts/blob/master/vidlinks
+## Based on vidlinks https://gitlab.com/doctorfree/Scripts/blob/master/vidlinks
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

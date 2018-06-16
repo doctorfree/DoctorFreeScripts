@@ -6,11 +6,11 @@ Linux, OS X, and Cygwin. Includes some custom Bash and Vim startup scripts.
 
 To clone:
 
-    git clone https://github.com/doctorfree/Scripts.git
+    git clone https://gitlab.com/doctorfree/Scripts.git
 
     or
 
-    git clone git@github.com:doctorfree/Scripts.git
+    git clone git@gitlab.com:doctorfree/Scripts.git
 
 Contents:
 --------
@@ -83,6 +83,8 @@ Contents:
 [**clndl**](clndl.sh) - Moves the most recently downloaded versions of files to their regular filename without the (#) in the name. By default, relies on the Mac OS X convention of inserting (#) in the name of newer version filenames.
 
 [**cpBackups**](cpBackups.sh) - Copy, Move, or Remove Time Machine backups with bypass command. Depending on how this command is invoked (cpBackups, mvBackups, or rmBackups) or what arguments are supplied on the command-line, this will copy, move, or remove Time Machine backups using the bypass command
+
+[**cron.bash**](cron.bash.sh) - Set SHELL=/usr/local/bin/cron.bash in your crontab to use this script to execute commands via cron. Modify this script to set any additional environment variables cron jobs might need, the PATH to use, etc.
 
 [**dash2space**](dash2space.sh) - Convenience script to replace the first occurence of "-" in all MP3 filenames in this directory with " ". For example, this would rename "03-My Song.mp3" to "03 My Song.mp3".
 

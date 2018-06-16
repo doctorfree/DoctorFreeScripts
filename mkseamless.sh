@@ -8,7 +8,7 @@
 ## @version 1.0.1
 ##
 ## The Vertical.png image is available at
-## https://github.com/doctorfree/Scripts/blob/master/Vertical.png
+## https://gitlab.com/doctorfree/Scripts/blob/master/Vertical.png
 ##
 ## Usage: mkseamless filename [filename ...]
 ##
