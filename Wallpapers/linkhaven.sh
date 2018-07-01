@@ -10,12 +10,15 @@ SUB="$MOD"
 TELL=
 
 usage() {
-    echo "Usage: linkhaven [-n] [-p] [-d] [-u]"
+    echo "Usage: linkhaven [-n] [-p] [-P] [-d] [-u]"
     exit 1
 }
 
-while getopts nmpdu flag; do
+while getopts nmpPdu flag; do
     case $flag in
+        P)
+            DES="$PHO"
+            ;;
         d)
             DES="$DRO"
             ;;
@@ -39,16 +42,26 @@ do
     cd $model
     for i in wall*
     do
-        [ -f $DES/$i ] || {
+        [ -L $i ] && continue
+        SRC="$DES"
+        if [ "$DES" == "$PHO" ]
+        then
+            for wall in $PHO/*/$i
+            do
+                [ "$wall" == "$PHO/*/$i" ] && continue
+                SRC=`dirname $wall`
+                break
+            done
+        fi
+        [ -f $SRC/$i ] || {
             continue
         }
-        [ -L $i ] && continue
         [ "$TELL" ] && {
-            echo "ln -s $DES/$i $model"
+            echo "ln -s $SRC/$i $model"
             continue
         }
         rm -f $i
-        ln -s $DES/$i .
+        ln -s $SRC/$i .
     done
     cd ..
 done
