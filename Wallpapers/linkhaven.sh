@@ -5,25 +5,27 @@ MOD="$TOP/Models"
 PHO="$TOP/Photographers"
 PHD="../../Photographers"
 DIG="../../Digital_Desire"
+MET="../../Met-Art"
 DRO="../../Photodromm"
 PEO="../../People"
-DES="$DIG"
+DES="$PHD"
 SUB="$MOD"
 LN="ln -s"
 ALL=
 TELL=
 
 usage() {
-    printf "\nUsage: linkhaven [-a] [-h] [-m] [-n] [-p] [-P] [-d] [-u]"
+    printf "\nUsage: linkhaven [-a] [-d] [-h] [-m] [-n] [-p] [-P] [-r] [-u]"
     printf "\nWhere:"
     printf "\n\t-a indicates use all combinations of subdirs and destinations"
+    printf "\n\t-d indicates use Digital_Desire destination dir"
     printf "\n\t-h indicates use hard links for duplicates"
     printf "\n\t\t(default is symbolic links)"
-    printf "\n\t-m indicates use Models subdir and Photographers destination"
+    printf "\n\t-m indicates use Met-Art destination"
     printf "\n\t-n indicates tell me what you would do but don't do it"
     printf "\n\t-p indicates use Photographers subdir"
     printf "\n\t-P indicates use People destination dir"
-    printf "\n\t-d indicates use Photodromm destination dir"
+    printf "\n\t-r indicates use Photodromm destination dir"
     printf "\n\t\t(default destination dir is Digital_Desire)"
     printf "\n\t-u displays this usage message and exits"
     printf "\n\n"
@@ -78,13 +80,13 @@ while getopts anmpPdu flag; do
             ALL=1
             ;;
         d)
-            DES="$DRO"
+            DES="$DIG"
             ;;
         h)
             LN="ln"
             ;;
         m)
-            DES="$PHD"
+            DES="$MET"
             ;;
         n)
             TELL=1
@@ -94,6 +96,9 @@ while getopts anmpPdu flag; do
             ;;
         P)
             DES="$PEO"
+            ;;
+        r)
+            DES="$DRO"
             ;;
         u)
             usage
@@ -106,6 +111,8 @@ if [ "$ALL" ]
 then
     DES="$DIG"
     SUB="$MOD"
+    linkem
+    DES="$MET"
     linkem
     SUB="$PHO"
     linkem
