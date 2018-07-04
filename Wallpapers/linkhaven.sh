@@ -26,6 +26,7 @@ usage() {
     printf "\n\t-d indicates use Photodromm destination dir"
     printf "\n\t\t(default destination dir is Digital_Desire)"
     printf "\n\t-u displays this usage message and exits"
+    printf "\n\n"
     exit 1
 }
 
