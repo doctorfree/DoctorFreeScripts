@@ -35,6 +35,7 @@ usage() {
 }
 
 linkem() {
+    printf "Linking in $SUB to $DES ..."
     cd $SUB
     for model in *
     do
@@ -74,6 +75,7 @@ linkem() {
         done
         cd ..
     done
+    printf "\n"
 }
 
 while getopts anmpPdu flag; do
@@ -111,6 +113,7 @@ while getopts anmpPdu flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
+printf "\n"
 
 # The destinations
 # PHD="../../Photographers"
