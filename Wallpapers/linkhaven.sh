@@ -5,6 +5,7 @@ MOD="$TOP/Models"
 PHO="$TOP/Photographers"
 PHD="../../Photographers"
 DIG="../../Digital_Desire"
+FEM="../../Femjoy"
 MET="../../Met-Art"
 DRO="../../Photodromm"
 PEO="../../People"
@@ -15,24 +16,26 @@ ALL=
 TELL=
 
 usage() {
-    printf "\nUsage: linkhaven [-a] [-d] [-h] [-m] [-n] [-p] [-P] [-r] [-u]"
-    printf "\nWhere:"
-    printf "\n\t-a indicates use all combinations of subdirs and destinations"
-    printf "\n\t-d indicates use Digital_Desire destination dir"
-    printf "\n\t-h indicates use hard links for duplicates"
-    printf "\n\t\t(default is symbolic links)"
-    printf "\n\t-m indicates use Met-Art destination"
-    printf "\n\t-n indicates tell me what you would do but don't do it"
-    printf "\n\t-p indicates use Photographers subdir"
-    printf "\n\t-P indicates use People destination dir"
-    printf "\n\t-r indicates use Photodromm destination dir"
-    printf "\n\t\t(default destination dir is Digital_Desire)"
-    printf "\n\t-u displays this usage message and exits"
-    printf "\n\n"
-    exit 1
+  printf "\nUsage: linkhaven [-a] [-d] [-f] [-h] [-m] [-n] [-p] [-P] [-r] [-u]"
+  printf "\nWhere:"
+  printf "\n\t-a indicates use all combinations of subdirs and destinations"
+  printf "\n\t-d indicates use Digital_Desire destination dir"
+  printf "\n\t-f indicates use Femjoy destination dir"
+  printf "\n\t-h indicates use hard links for duplicates"
+  printf "\n\t\t(default is symbolic links)"
+  printf "\n\t-m indicates use Met-Art destination"
+  printf "\n\t-n indicates tell me what you would do but don't do it"
+  printf "\n\t-p indicates use Photographers subdir"
+  printf "\n\t-P indicates use People destination dir"
+  printf "\n\t-r indicates use Photodromm destination dir"
+  printf "\n\t\t(default destination dir is Digital_Desire)"
+  printf "\n\t-u displays this usage message and exits"
+  printf "\n\n"
+  exit 1
 }
 
 linkem() {
+    printf "Linking in $SUB to $DES ..."
     cd $SUB
     for model in *
     do
@@ -72,6 +75,7 @@ linkem() {
         done
         cd ..
     done
+    printf "\n"
 }
 
 while getopts anmpPdu flag; do
@@ -81,6 +85,9 @@ while getopts anmpPdu flag; do
             ;;
         d)
             DES="$DIG"
+            ;;
+        f)
+            DES="$FEM"
             ;;
         h)
             LN="ln"
@@ -106,27 +113,29 @@ while getopts anmpPdu flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
+printf "\n"
 
+# The destinations
+# PHD="../../Photographers"
+# DIG="../../Digital_Desire"
+# FEM="../../Femjoy"
+# MET="../../Met-Art"
+# DRO="../../Photodromm"
+# PEO="../../People"
 if [ "$ALL" ]
 then
-    DES="$DIG"
     SUB="$MOD"
-    linkem
-    DES="$MET"
-    linkem
+    for dest in "$PHD" "$DIG" "$FEM" "$MET" "$DRO" "$PEO"
+    do
+        DES="$dest"
+        linkem
+    done
     SUB="$PHO"
-    linkem
-    DES="$DRO"
-    linkem
-    DES="$PEO"
-    linkem
-    SUB="$MOD"
-    linkem
-    DES="$PHD"
-    linkem
-    DES="$PEO"
-    linkem
-
+    for dest in "$DIG" "$FEM" "$MET" "$DRO" "$PEO"
+    do
+        DES="$dest"
+        linkem
+    done
 else
     linkem
 fi
