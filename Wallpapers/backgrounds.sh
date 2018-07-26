@@ -18,7 +18,7 @@ while getopts n:s:alu flag; do
             add=1
             ;;
         l)
-            ls --color=auto -l $out
+            ls --color=auto -l $out | awk ' { print $11 } '
             exit 0
             ;;
         n)
