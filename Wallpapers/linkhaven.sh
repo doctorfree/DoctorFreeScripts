@@ -9,6 +9,7 @@ DOM="../../Domai"
 FEM="../../Femjoy"
 MET="../../Met-Art"
 DRO="../../Photodromm"
+W4B="../../Watch4Beauty"
 PEO="../../People"
 DES="$PHD"
 SUB="$MOD"
@@ -17,7 +18,7 @@ ALL=
 TELL=
 
 usage() {
-  printf "\nUsage: linkhaven [-a] [-dD] [-f] [-h] [-m] [-n] [-pP] [-r] [-u]"
+  printf "\nUsage: linkhaven [-a] [-dD] [-f] [-h] [-m] [-n] [-pP] [-r] [-u] [-w]"
   printf "\nWhere:"
   printf "\n\t-a indicates use all combinations of subdirs and destinations"
   printf "\n\t-D indicates use Digital_Desire destination dir"
@@ -31,6 +32,7 @@ usage() {
   printf "\n\t-P indicates use People destination dir"
   printf "\n\t-r indicates use Photodromm destination dir"
   printf "\n\t\t(default destination dir is Digital_Desire)"
+  printf "\n\t-w indicates use Watch4Beauty destination dir"
   printf "\n\t-u displays this usage message and exits"
   printf "\n\n"
   exit 1
@@ -80,7 +82,7 @@ linkem() {
     printf "\n"
 }
 
-while getopts anmpPdDu flag; do
+while getopts anmpPdDwu flag; do
     case $flag in
         a)
             ALL=1
@@ -112,6 +114,9 @@ while getopts anmpPdDu flag; do
         r)
             DES="$DRO"
             ;;
+        w)
+            DES="$W4B"
+            ;;
         u)
             usage
             ;;
@@ -128,16 +133,17 @@ printf "\n"
 # MET="../../Met-Art"
 # DRO="../../Photodromm"
 # PEO="../../People"
+# W4B="../../Watch4Beauty"
 if [ "$ALL" ]
 then
     SUB="$MOD"
-    for dest in "$PHD" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PEO"
+    for dest in "$PHD" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PEO" "$W4B"
     do
         DES="$dest"
         linkem
     done
     SUB="$PHO"
-    for dest in "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PEO"
+    for dest in "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PEO" "$W4B"
     do
         DES="$dest"
         linkem
