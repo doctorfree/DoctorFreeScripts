@@ -9,8 +9,8 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-#   echo "Running ./get-search -p 1 -l $1 -s $QUERY"
-#   ./get-search -p 1 -l "$1" -s "$QUERY"
+    echo "Running ./get-search -p 1 -l $1 -s $QUERY"
+    ./get-search -q -p 1 -l "$1" -s "$QUERY"
     echo "Running ./get-search -l $1 -s $QUERY"
     ./get-search -q -l "$1" -s "$QUERY"
 }
@@ -37,20 +37,44 @@ do
     [ "${dir}" = "Favorites" ] && continue
     [ "${dir}" = "General" ] && continue
     [ "${dir}" = "People" ] && continue
-    if [ "${dir}" = "Models" ] || [ "${dir}" = "Photographers" ]
-    then
-        cd ${dir}
-        for model in *
-        do
-            [ -d "${model}" ] || continue
-            cd "${HERE}"
-            get_search "${dir}/${model}" "${model}"
-            cd ${dir}
-        done
-        cd "${HERE}"
-    else
+    case "${dir}" in
+    Models)
+        ./get-models
+        ;;
+    Photographers)
+        ./get-photographers
+        ;;
+    Femjoy)
         get_search "${dir}" "${dir}"
-    fi
+        get_search "${dir}" "Femjoy_Magazine"
+        ;;
+    Domai)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "${dir}.com"
+        get_search "${dir}" "domai_magazine"
+        ;;
+    Met-Art)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "MetArt_Magazine"
+        ;;
+    Errotica_Archives)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Errotica_Archives_Magazine"
+        ;;
+    Weapon)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Gun"
+        get_search "${dir}" "Knife"
+        get_search "${dir}" "Sword"
+        ;;
+    Wet)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Wet_Body"
+        ;;
+    *)
+        get_search "${dir}" "${dir}"
+        ;;
+    esac
 done
 
 [ -x ./clean ] && ./clean

@@ -57,6 +57,11 @@ do
             get_search "Models/${model}" "Adel_O"
             get_search "Models/${model}" "Adel_C."
             ;;
+        Kristina_Uhrinova)
+            get_search "Models/${model}" "${model}"
+            get_search "Models/${model}" "Melisa_Mendiny"
+            get_search "Models/${model}" "Melisa_Mendini"
+            ;;
         Li_Moon)
             get_search "Models/${model}" "${model}"
             get_search "Models/${model}" "Annika_A"
