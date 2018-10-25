@@ -1,0 +1,29 @@
+# Set SHELL to run my custom cron startup script when running commands
+SHELL=/usr/local/bin/cron.bash
+#
+# minutes hours days-of-month months days-of-week  command
+#
+# Start miner during off-peak hours (Summer)
+# ------------------------------------------
+# Weekdays
+0,15,30,45 0-10,21-23 * 5-10 1-5 /usr/local/bin/start_miner
+# Weekends
+0,15,30,45 0-13,20-23 * 5-10 0,6 /usr/local/bin/start_miner
+#
+# Start miner during off-peak hours (Winter)
+# ------------------------------------------
+# Weekdays
+0,15,30,45 0-17,20-23 * 1-4,11,12 1-5 /usr/local/bin/start_miner
+# Weekends
+0,15,30,45 * * 1-4,11,12 0,6 /usr/local/bin/start_miner
+#
+# Stop miner during peak/near-peak hours (Summer)
+# -----------------------------------------------
+# Weekdays
+0,15,30,45 10-20 * 5-10 1-5 /usr/local/bin/stop_miner
+# Weekends
+0,15,30,45 13-19 * 5-10 0,6 /usr/local/bin/stop_miner
+#
+# Stop miner during peak/near-peak hours (Winter)
+# -----------------------------------------------
+0,15,30,45 17-19 * 1-4,11,12 1-5 /usr/local/bin/stop_miner
