@@ -1,3 +1,9 @@
+# Crontab entries to run a cryptocurrency miner only during 2018 PG&E Off-Peak hours
+# You may have to adjust the hours/days/months for your energy provider
+#
+# Written October 24, 2018 by Ron Record gitlab at ronrecord dot com
+# TODO: Figure out how to add Holidays to start times and remove them from stop times
+#
 # Set SHELL to run my custom cron startup script when running commands
 SHELL=/usr/local/bin/cron.bash
 #
