@@ -6,14 +6,14 @@ SHELL=/usr/local/bin/cron.bash
 # Start miner during off-peak hours (Summer)
 # ------------------------------------------
 # Weekdays
-0,15,30,45 0-10,21-23 * 5-10 1-5 /usr/local/bin/start_miner
+0,15,30,45 0-9,21-23 * 5-10 1-5 /usr/local/bin/start_miner
 # Weekends
-0,15,30,45 0-13,20-23 * 5-10 0,6 /usr/local/bin/start_miner
+0,15,30,45 0-12,20-23 * 5-10 0,6 /usr/local/bin/start_miner
 #
 # Start miner during off-peak hours (Winter)
 # ------------------------------------------
 # Weekdays
-0,15,30,45 0-17,20-23 * 1-4,11,12 1-5 /usr/local/bin/start_miner
+0,15,30,45 0-16,20-23 * 1-4,11,12 1-5 /usr/local/bin/start_miner
 # Weekends
 0,15,30,45 * * 1-4,11,12 0,6 /usr/local/bin/start_miner
 #
