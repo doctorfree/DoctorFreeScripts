@@ -1,7 +1,14 @@
 # Crontab entries to run a cryptocurrency miner only during 2018 PG&E Off-Peak hours
-# You may have to adjust the hours/days/months for your energy provider
 #
-# Written October 24, 2018 by Ron Record gitlab at ronrecord dot com
+# You may have to adjust the hours/days/months for your energy provider.
+#
+# By default these entries run every 15 minutes. This provides a keepalive function
+# and relies on the start_miner script checking to see if it is already running.
+# You may prefer to change the '0,15,30,45' entries to simply '0' or '15' to only
+# start/stop once and not every 15 minutes. Or, you may prefer to increase the
+# "keepalive" frequency from 15 to 5 minutes - '0,5,10,15,20,25,30,35,40,45,50,55'
+#
+# Written October 24, 2018 by Ron Record (gitlab at ronrecord dot com)
 # TODO: Figure out how to add Holidays to start times and remove them from stop times
 #
 # Set SHELL to run my custom cron startup script when running commands
