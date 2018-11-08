@@ -1,4 +1,13 @@
 #!/bin/bash
+#
+## @file Wallpapers/backgrounds.sh
+## @brief Set background desktop wallpapers
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2017, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2017
+## @version 1.0.1
+##
+
 
 top=/u/pictures
 out=/usr/local/share/backgrounds
