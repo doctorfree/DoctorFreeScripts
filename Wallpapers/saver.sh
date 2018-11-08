@@ -8,7 +8,6 @@
 ## @version 1.0.1
 ##
 
-
 PICDIR="$HOME/Pictures"
 BGNDS="Backgrounds"
 CONF="$HOME/.xscreensaver"
@@ -22,7 +21,7 @@ usage() {
     echo -e "\n\tPhotographers/Artists:"
     echo -e "\t[Nikolaev|Safin|Sakimichan|Soell]"
     echo -e "\n\tGeneral:"
-    echo -e "\t[All|Favs|Fractals|Models|Owls|Photographers|Waterfalls]"
+    echo -e "\t[All|Anime|Favs|Fractals|Hentai|Models|Owls|Photographers|Waterfalls]"
     echo ""
     echo "<command> can be one of:"
     echo "    [activate|deactivate|demo|exit|lock|restart|start]"
@@ -85,6 +84,8 @@ shift $(( OPTIND - 1 ))
                ;;
         all|All) BDIR="All"
                ;;
+        anime|Anime) BDIR="Anime"
+               ;;
         carisha|Carisha) BDIR="Carisha"
                ;;
         corinna|Corinna) BDIR="Corinna"
@@ -92,6 +93,8 @@ shift $(( OPTIND - 1 ))
         favs|Favs) BDIR="Favs"
                ;;
         fractals|Fractals) BDIR="Fractals"
+               ;;
+        hentai|Hentai) BDIR="Hentai"
                ;;
         mila_a|Mila_A|mila|Mila) BDIR="Mila_A"
                ;;
