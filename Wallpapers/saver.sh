@@ -10,14 +10,16 @@
 
 PICDIR="$HOME/Pictures"
 BGNDS="Backgrounds"
+BACK="$PICDIR/$BGNDS"
 CONF="$HOME/.xscreensaver"
 SHOW="glslideshow -root -duration"
+WHVN="/u/pictures/Wallhaven"
 
 usage() {
     echo "Usage: saver [-u] [-n] [-r] [-b backgrounds_dir] [-c command] [-d duration]"
-    echo "Where <backgrounds dir> can be one of"
+    echo "Where <backgrounds dir> can be any subdir in $WHVN or one of"
     echo -e "\n\tModels:"
-    echo -e "\t[Alisa|Carisha|Corinna|Mila|Russians|Natalia|Tuigirl]"
+    echo -e "\t[Alisa|Carisha|Corinna|Li_Moon|Mila|Russians|Natalia|Tuigirl]"
     echo -e "\n\tPhotographers/Artists:"
     echo -e "\t[Nikolaev|Safin|Sakimichan|Soell]"
     echo -e "\n\tGeneral:"
@@ -37,6 +39,56 @@ usage() {
     exit 1
 }
 
+linkem() {
+    ln -s "$1"/* .
+    rm -f *.txt
+
+    inst=`type -p identify`
+    [ "$inst" ] && {
+        for i in *.jpg *.png
+        do
+            [ "$i" == "*.jpg" ] && continue
+            [ "$i" == "*.png" ] && continue
+            GEO=`identify $i | awk ' { print $3 } '`
+            W=`echo $GEO | awk -F "x" ' { print $1 } '`
+            H=`echo $GEO | awk -F "x" ' { print $2 } '`
+            [ $H -gt $W ] && {
+                rm -f $i
+            }
+        done
+    }
+}
+
+mkbgdir() {
+    [ -d $BACK ] || {
+        echo "$BACK does not exist or is not a directory. Exiting."
+        exit 1
+    }
+    cd $BACK
+    sub="$1"
+    [ -d $sub ] || mkdir $sub
+    cd $sub
+    if [ -d $WHVN/$sub ]
+    then
+        linkem $WHVN/$sub
+    else
+        if [ -d $WHVN/Models/$sub ]
+        then
+            linkem $WHVN/Models/$sub
+        else
+            if [ -d $WHVN/Photographers/$sub ]
+            then
+                linkem $WHVN/Photographers/$sub
+            else
+                echo "No Wallhaven folder found for $sub. Exiting"
+                exit 1
+            fi
+        fi
+    fi
+    cd $HERE
+}
+
+HERE=`pwd`
 BGDIR=`grep imageDirectory $CONF | awk ' { print $2 } '`
 ODUR=`grep glslideshow $CONF | awk -F ":" ' { print $2 } ' | awk ' { print $4 } '`
 
@@ -96,6 +148,8 @@ shift $(( OPTIND - 1 ))
                ;;
         hentai|Hentai) BDIR="Hentai"
                ;;
+        li_moon|Li_Moon|li|Li) BDIR="Li_Moon"
+               ;;
         mila_a|Mila_A|mila|Mila) BDIR="Mila_A"
                ;;
         models|Models) BDIR="Models"
@@ -120,7 +174,8 @@ shift $(( OPTIND - 1 ))
                ;;
         waterfalls|Waterfalls) BDIR="Waterfalls"
                ;;
-        *) usage
+        *) mkbgdir $dir_arg
+               BDIR="$dir_arg"
                ;;
     esac
 }
