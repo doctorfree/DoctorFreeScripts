@@ -7,23 +7,36 @@
 ## @date Written 17-Oct-2018
 ## @version 1.0.4
 ##
-
+# Modify the following to reflect the location and names of image folders on your system
+# (Alternately, these settings can be specified on the command line)
+# --------------------------------------------------------------------------------------
+# These two define the location of pre-created folders of links to background images
 PICDIR="$HOME/Pictures"
 BGNDS="Backgrounds"
+
+# The xscreensaver configuration file to be edited and the command to look for in it
 CONF="$HOME/.xscreensaver"
 SHOW="glslideshow -root -duration"
-WHVN="/u/pictures/Wallhaven"
-FMJY="/u/pictures/Femjoy"
-XART="/u/pictures/X-Art"
+
+# The top of the directory hierarchy that contains the original image folders
+ITOP="/u/pictures"
+# The names of those original image folders
 FBACK="Femjoy"
 WBACK="Wallhaven"
 XBACK="X-Art"
+# ----------------------------
+# End of user-defined settings
+
+# Default paths and folder names for original images and pre-created folders of links
+WHVN="$ITOP/$WBACK"
+FMJY="$ITOP/$FBACK"
+XART="$ITOP/$XBACK"
 WDIR="$WHVN"
 WBCK="$WBACK"
 BACK="$PICDIR/$BGNDS/$WBCK"
 
 usage() {
-    echo "Usage: saver [-flnrxu] [-b backgrounds_dir] [-c command] [-d duration]"
+    echo "Usage: saver [-BFIPWX path] [-flnrxu] [-b backgrounds_dir] [-c command] [-d duration]"
     echo ""
     echo "Where <backgrounds dir> can be one of:"
     echo -e "\tAny subdir in $WHVN"
@@ -50,8 +63,25 @@ usage() {
     echo "-x indicates use $XART rather than $WHVN"
     echo "-u displays this usage message"
     echo ""
+    echo "The '-BFIPWX path' options control the filesystem paths to original image folders"
+    echo "and pre-created folders of links to selected image folders."
+    echo ""
+    echo "-I path indicates use path as the top-level pathname to folders of original images"
+    echo "-F name1, -W name2, and -X name3 are the names of subfolders in the top-level folder"
+    echo "-P path indicates use path as the full pathname to PICDIR where links will be created"
+    echo "-B name indicates use name as the subfolder in PICDIR where folders of links live"
+    echo ""
+    echo "Current settings for these user defined paths and folder names are:"
+    echo ""
+    echo "Top-level original image folder ITOP = $ITOP"
+    echo "-F name1 specified ITOP/name1 = $ITOP/$FBACK"
+    echo "-W name2 specified ITOP/name2 = $ITOP/$WBACK"
+    echo "-X name3 specified ITOP/name3 = $ITOP/$XBACK"
+    echo "-P path, -B name specified path/name/back = $PICDIR/$BGNDS/$WBCK"
+    echo ""
     echo "Current XScreenSaver image directory set to $BGDIR"
     echo "Current XScreenSaver glslideshow duration set to $ODUR"
+    [ "$LIST" ] && listem
     exit 1
 }
 
@@ -89,6 +119,11 @@ linkem() {
             [ $W -gt $H ] || rm -f $i
         done
     }
+}
+
+listem() {
+    echo -e "\nPre-Created Wallpaper folders available for $WBCK :\n"
+    ls --color=auto $BACK
 }
 
 mkbgdir() {
@@ -137,12 +172,33 @@ COMM=
 SECS=
 LIST=
 TELL=
-RESTART=
+REST=
+USAGE=
 dir_arg=
 com_arg=
+fem_arg=
+art_arg=
 
-while getopts b:c:d:flnrxu flag; do
+while getopts B:F:I:P:W:X:b:c:d:flnrxu flag; do
     case $flag in
+        B)
+            BGNDS="$OPTARG"
+            ;;
+        I)
+            ITOP="$OPTARG"
+            ;;
+        F)
+            FBACK="$OPTARG"
+            ;;
+        P)
+            PICDIR="$OPTARG"
+            ;;
+        W)
+            WBACK="$OPTARG"
+            ;;
+        X)
+            XBACK="$OPTARG"
+            ;;
         b)
             dir_arg="$OPTARG"
             ;;
@@ -156,6 +212,7 @@ while getopts b:c:d:flnrxu flag; do
             WDIR="$FMJY"
             WBCK="$FBACK"
             BACK="$PICDIR/$BGNDS/$WBCK"
+            fem_arg=1
             ;;
         l)
             LIST=1
@@ -164,24 +221,50 @@ while getopts b:c:d:flnrxu flag; do
             TELL=1
             ;;
         r)
-            RESTART=1
+            REST=1
             ;;
         x)
             WDIR="$XART"
             WBCK="$XBACK"
             BACK="$PICDIR/$BGNDS/$WBCK"
+            art_arg=1
             ;;
         u)
-            usage
+            USAGE=1
             ;;
     esac
 done
 shift $(( OPTIND - 1 ))
 
-[ "$LIST" ] && {
-    echo -e "\nPre-Created Wallpaper folders available for $WBCK :\n"
-    ls --color=auto $BACK
+# Only one of -f and -x can be specified
+[ "$fem_arg" ] && [ "$art_arg" ] && {
+    echo "Command line options -f and -x are mutually exclusive. Use only one or neither."
+    echo "Exiting."
+    exit 1
 }
+
+# Reset these just in case they were specified on the command line
+WHVN="$ITOP/$WBACK"
+FMJY="$ITOP/$FBACK"
+XART="$ITOP/$XBACK"
+if [ "$fem_arg" ]
+then
+    WDIR="$FMJY"
+    WBCK="$FBACK"
+else
+    if [ "$art_arg" ]
+    then
+        WDIR="$XART"
+        WBCK="$XBACK"
+    else
+        WDIR="$WHVN"
+        WBCK="$WBACK"
+    fi
+fi
+BACK="$PICDIR/$BGNDS/$WBCK"
+
+[ "$USAGE" ] && usage
+[ "$LIST" ] && listem
 
 [ "$dir_arg" ] && {
     case "$dir_arg" in
@@ -332,13 +415,13 @@ shift $(( OPTIND - 1 ))
 [ "$COMM" ] && {
     if [ "$TELL" ]
     then
-        [ "$RESTART" ] && {
+        [ "$REST" ] && {
           echo -e "\nxscreensaver-command -exit > /dev/null"
           echo "xscreensaver &"
         }
         echo -e "\nxscreensaver-command -$COMM > /dev/null"
     else
-        [ "$RESTART" ] && {
+        [ "$REST" ] && {
           xscreensaver-command -exit > /dev/null
           xscreensaver &
         }
