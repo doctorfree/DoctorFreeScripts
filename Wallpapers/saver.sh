@@ -23,7 +23,7 @@ WBCK="$WBACK"
 BACK="$PICDIR/$BGNDS/$WBCK"
 
 usage() {
-    echo "Usage: saver [-funrx] [-b backgrounds_dir] [-c command] [-d duration]"
+    echo "Usage: saver [-flnrxu] [-b backgrounds_dir] [-c command] [-d duration]"
     echo ""
     echo "Where <backgrounds dir> can be one of:"
     echo -e "\tAny subdir in $WHVN"
@@ -44,6 +44,7 @@ usage() {
     echo "<duration> is specified in seconds"
     echo ""
     echo "-f indicates use $FMJY rather than $WHVN"
+    echo "-l indicates list the pre-created wallpaper subdirs available for the selected type"
     echo "-n indicates tell me what you would do without doing anything"
     echo "-r indicates restart xscreensaver prior to running command"
     echo "-x indicates use $XART rather than $WHVN"
@@ -97,26 +98,28 @@ mkbgdir() {
     }
     cd $BACK
     sub="$1"
-    [ -d $sub ] || mkdir $sub
-    cd $sub
-    if [ -d $WDIR/$sub ]
-    then
-        linkem $WDIR/$sub
-    else
-        if [ -d $WDIR/Models/$sub ]
+    [ -d $sub ] || {
+        mkdir $sub
+        cd $sub
+        if [ -d $WDIR/$sub ]
         then
-            linkem $WDIR/Models/$sub
+            linkem $WDIR/$sub
         else
-            if [ -d $WDIR/Photographers/$sub ]
+            if [ -d $WDIR/Models/$sub ]
             then
-                linkem $WDIR/Photographers/$sub
+                linkem $WDIR/Models/$sub
             else
-                echo "No $WDIR subfolder found for $sub. Exiting"
-                exit 1
+                if [ -d $WDIR/Photographers/$sub ]
+                then
+                    linkem $WDIR/Photographers/$sub
+                else
+                    echo "No $WDIR subfolder found for $sub. Exiting"
+                    exit 1
+                fi
             fi
         fi
-    fi
-    cd $HERE
+        cd $HERE
+    }
 }
 
 HERE=`pwd`
@@ -132,12 +135,13 @@ ODUR=`grep glslideshow $CONF | awk -F ":" ' { print $2 } ' | awk ' { print $4 } 
 BDIR=
 COMM=
 SECS=
+LIST=
 TELL=
 RESTART=
 dir_arg=
 com_arg=
 
-while getopts b:c:d:fnrxu flag; do
+while getopts b:c:d:flnrxu flag; do
     case $flag in
         b)
             dir_arg="$OPTARG"
@@ -152,6 +156,9 @@ while getopts b:c:d:fnrxu flag; do
             WDIR="$FMJY"
             WBCK="$FBACK"
             BACK="$PICDIR/$BGNDS/$WBCK"
+            ;;
+        l)
+            LIST=1
             ;;
         n)
             TELL=1
@@ -170,6 +177,11 @@ while getopts b:c:d:fnrxu flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
+
+[ "$LIST" ] && {
+    echo -e "\nPre-Created Wallpaper folders available for $WBCK :\n"
+    ls --color=auto $BACK
+}
 
 [ "$dir_arg" ] && {
     case "$dir_arg" in
@@ -195,7 +207,19 @@ shift $(( OPTIND - 1 ))
                ;;
         li_moon|Li_Moon|li|Li) BDIR="Li_Moon"
                ;;
-        mila_a|Mila_A|mila|Mila) BDIR="Mila_A"
+        mila_a|Mila_A) BDIR="Mila_A"
+               ;;
+        mila_k|Mila_K) BDIR="Mila_K"
+               ;;
+        milla|Milla) BDIR="Milla"
+               ;;
+        mila|Mila)
+               if [ "$WBCK" == "$XBACK" ]
+               then
+                   BDIR="Mila_K"
+               else
+                   BDIR="Mila_A"
+               fi
                ;;
         natalia|Natalia|Natalia_Andreeva) BDIR="Natalia_Andreeva"
                ;;
@@ -208,6 +232,14 @@ shift $(( OPTIND - 1 ))
         saki|sakimichan|Sakimichan|Saki) BDIR="Sakimichan"
                ;;
         soell|Soell) BDIR="Stefan_Soell"
+               ;;
+        sybil*|Sybil*)
+               if [ "$WBCK" == "$XBACK" ]
+               then
+                   BDIR="Sybil"
+               else
+                   BDIR="Sybil_A"
+               fi
                ;;
         tui|tuigirl|Tui|Tuigirl) BDIR="Tuigirl"
                ;;
