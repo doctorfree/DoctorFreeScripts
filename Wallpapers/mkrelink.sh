@@ -3,18 +3,27 @@
 BDIR="$HOME/Pictures/Backgrounds"
 
 FMJY="Femjoy"
+SAFE="Safe"
 WHVN="Wallhaven"
 XART="X-Art"
 
 [ "$1" == "-f" ] && {
+    SAFE=
+    WHVN=
+    XART=
+}
+[ "$1" == "-s" ] && {
+    FMJY=
     WHVN=
     XART=
 }
 [ "$1" == "-w" ] && {
+    SAFE=
     FMJY=
     XART=
 }
 [ "$1" == "-x" ] && {
+    SAFE=
     WHVN=
     FMJY=
 }
@@ -25,7 +34,7 @@ XART="X-Art"
 }
 cd $BDIR
 
-DIRS="$FMJY $WHVN $XART"
+DIRS="$FMJY $SAFE $WHVN $XART"
 for dir in $DIRS
 do
     [ -d $dir ] || {

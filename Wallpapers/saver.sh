@@ -22,6 +22,7 @@ SHOW="glslideshow -root -duration"
 ITOP="/u/pictures"
 # The names of those original image folders
 FBACK="Femjoy"
+SBACK="Safe"
 WBACK="Wallhaven"
 XBACK="X-Art"
 # ----------------------------
@@ -29,6 +30,7 @@ XBACK="X-Art"
 
 # Default paths and folder names for original images and pre-created folders of links
 WHVN="$ITOP/$WBACK"
+SAFE="$ITOP/$SBACK"
 FMJY="$ITOP/$FBACK"
 XART="$ITOP/$XBACK"
 WDIR="$WHVN"
@@ -36,11 +38,12 @@ WBCK="$WBACK"
 BACK="$PICDIR/$BGNDS/$WBCK"
 
 usage() {
-    echo "Usage: saver [-BFIPWX path] [-flnrxu] [-b backgrounds_dir] [-c command] [-d duration]"
+    echo "Usage: saver [-BFIPWX path] [-flnrsxu] [-b backgrounds_dir] [-c command] [-d duration]"
     echo ""
     echo "Where <backgrounds dir> can be one of:"
     echo -e "\tAny subdir in $WHVN"
     echo -e "\tAny subdir in $FMJY if -f has been specified"
+    echo -e "\tAny subdir in $SAFE if -s has been specified"
     echo -e "\tAny subdir in $XART if -x has been specified"
     echo -e "\tOne of the pre-created dirs in $BACK"
     echo -e "\n\tCurrent pre-created dirs include"
@@ -50,6 +53,8 @@ usage() {
     echo -e "\t[Femjoy|Nikolaev|Russians|Safin|Sakimichan|Soell|Tuigirl]"
     echo -e "\n\tGeneral:"
     echo -e "\t[All|Anime|Favs|Fractals|Hentai|Owls|Waterfalls]"
+    echo -e "\n\tSafe:"
+    echo -e "\t[All|Favs|Dragonflies|Fractals|Owls|Space|Waterfalls]"
     echo ""
     echo "<command> can be one of:"
     echo "    [activate|deactivate|blank|demo|exit|lock|restart|slides|start]"
@@ -60,14 +65,15 @@ usage() {
     echo "-l indicates list the pre-created wallpaper subdirs available for the selected type"
     echo "-n indicates tell me what you would do without doing anything"
     echo "-r indicates restart xscreensaver prior to running command"
+    echo "-s indicates use $SAFE rather than $WHVN"
     echo "-x indicates use $XART rather than $WHVN"
     echo "-u displays this usage message"
     echo ""
-    echo "The '-BFIPWX path' options control the filesystem paths to original image folders"
+    echo "The '-BFIPSWX path' options control the filesystem paths to original image folders"
     echo "and pre-created folders of links to selected image folders."
     echo ""
     echo "-I path indicates use path as the top-level pathname to folders of original images"
-    echo "-F name1, -W name2, and -X name3 are the names of subfolders in the top-level folder"
+    echo "-F name1,-S name2,-W name3,and -X name4 are the names of subfolders in the top-level folder"
     echo "-P path indicates use path as the full pathname to PICDIR where links will be created"
     echo "-B name indicates use name as the subfolder in PICDIR where folders of links live"
     echo ""
@@ -75,8 +81,9 @@ usage() {
     echo ""
     echo "Top-level original image folder ITOP = $ITOP"
     echo "-F name1 specified ITOP/name1 = $ITOP/$FBACK"
-    echo "-W name2 specified ITOP/name2 = $ITOP/$WBACK"
-    echo "-X name3 specified ITOP/name3 = $ITOP/$XBACK"
+    echo "-S name2 specified ITOP/name2 = $ITOP/$SBACK"
+    echo "-W name3 specified ITOP/name3 = $ITOP/$WBACK"
+    echo "-X name4 specified ITOP/name4 = $ITOP/$XBACK"
     echo "-P path, -B name specified path/name/back = $PICDIR/$BGNDS/$WBCK"
     echo ""
     echo "Current XScreenSaver image directory set to $BGDIR"
@@ -86,7 +93,7 @@ usage() {
 }
 
 linkem() {
-    if [ "$WDIR" == "$WHVN" ]
+    if [ "$WDIR" == "$WHVN" ] || [ "$WDIR" == "$SAFE" ]
     then
         ln -s "$1"/* .
     else
@@ -178,8 +185,10 @@ dir_arg=
 com_arg=
 fem_arg=
 art_arg=
+saf_arg=
+switch=0
 
-while getopts B:F:I:P:W:X:b:c:d:flnrxu flag; do
+while getopts B:F:I:P:W:X:b:c:d:flnrsxu flag; do
     case $flag in
         B)
             BGNDS="$OPTARG"
@@ -192,6 +201,9 @@ while getopts B:F:I:P:W:X:b:c:d:flnrxu flag; do
             ;;
         P)
             PICDIR="$OPTARG"
+            ;;
+        S)
+            SBACK="$OPTARG"
             ;;
         W)
             WBACK="$OPTARG"
@@ -213,6 +225,7 @@ while getopts B:F:I:P:W:X:b:c:d:flnrxu flag; do
             WBCK="$FBACK"
             BACK="$PICDIR/$BGNDS/$WBCK"
             fem_arg=1
+            switch=`expr $switch + 1`
             ;;
         l)
             LIST=1
@@ -223,11 +236,19 @@ while getopts B:F:I:P:W:X:b:c:d:flnrxu flag; do
         r)
             REST=1
             ;;
+        s)
+            WDIR="$SAFE"
+            WBCK="$SBACK"
+            BACK="$PICDIR/$BGNDS/$WBCK"
+            saf_arg=1
+            switch=`expr $switch + 1`
+            ;;
         x)
             WDIR="$XART"
             WBCK="$XBACK"
             BACK="$PICDIR/$BGNDS/$WBCK"
             art_arg=1
+            switch=`expr $switch + 1`
             ;;
         u)
             USAGE=1
@@ -236,9 +257,9 @@ while getopts B:F:I:P:W:X:b:c:d:flnrxu flag; do
 done
 shift $(( OPTIND - 1 ))
 
-# Only one of -f and -x can be specified
-[ "$fem_arg" ] && [ "$art_arg" ] && {
-    echo "Command line options -f and -x are mutually exclusive. Use only one or neither."
+# Only one of -f, -s, and -x can be specified
+[ $switch -gt 1 ] && {
+    echo "Command line options -f, -s, and -x are mutually exclusive. Use only one or none."
     echo "Exiting."
     exit 1
 }
@@ -246,6 +267,7 @@ shift $(( OPTIND - 1 ))
 # Reset these just in case they were specified on the command line
 WHVN="$ITOP/$WBACK"
 FMJY="$ITOP/$FBACK"
+SAFE="$ITOP/$SBACK"
 XART="$ITOP/$XBACK"
 if [ "$fem_arg" ]
 then
@@ -257,8 +279,14 @@ else
         WDIR="$XART"
         WBCK="$XBACK"
     else
-        WDIR="$WHVN"
-        WBCK="$WBACK"
+        if [ "$saf_arg" ]
+        then
+            WDIR="$SAFE"
+            WBCK="$SBACK"
+        else
+            WDIR="$WHVN"
+            WBCK="$WBACK"
+        fi
     fi
 fi
 BACK="$PICDIR/$BGNDS/$WBCK"
@@ -309,6 +337,8 @@ BACK="$PICDIR/$BGNDS/$WBCK"
         owls|Owls) BDIR="Owls"
                ;;
         russian*|Russian*) BDIR="Russian_women"
+               ;;
+        safe|Safe) BDIR="Fractals"
                ;;
         safin|Safin|Marat*|marat*) BDIR="Marat_Safin"
                ;;

@@ -3,22 +3,32 @@
 BDIR="$HOME/Pictures/Backgrounds"
 
 FDIRS="Carisha Corinna Dasha_G Dasha_M Jasmine_A Kalinka Niemira"
+SDIRS="Fractals Space Dragonflies"
 WDIRS="Alisa_I Carisha Corinna Mila_A Sakimichan Sybil_A Tuigirl Natalia_Andreeva"
 XDIRS="Anneli Baby Leah_Gotti Sybil Tiffany"
 
 FMJY="Femjoy"
+SAFE="Safe"
 WHVN="Wallhaven"
 XART="X-Art"
 
 [ "$1" == "-f" ] && {
+    SAFE=
+    WHVN=
+    XART=
+}
+[ "$1" == "-s" ] && {
+    FMJY=
     WHVN=
     XART=
 }
 [ "$1" == "-w" ] && {
+    SAFE=
     FMJY=
     XART=
 }
 [ "$1" == "-x" ] && {
+    SAFE=
     WHVN=
     FMJY=
 }
@@ -29,7 +39,7 @@ XART="X-Art"
 }
 cd $BDIR
 
-DIRS="$FMJY $WHVN $XART"
+DIRS="$FMJY $SAFE $WHVN $XART"
 for dir in $DIRS
 do
     [ -d $dir ] || {
@@ -49,7 +59,12 @@ do
         then
             LDIRS="$WDIRS"
         else
-            LDIRS="$XDIRS"
+            if [ "$dir" == "$SAFE" ]
+            then
+                LDIRS="$SDIRS"
+            else
+                LDIRS="$XDIRS"
+            fi
         fi
     fi
     for d in $LDIRS 
