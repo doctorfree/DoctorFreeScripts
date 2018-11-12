@@ -1,8 +1,10 @@
 #!/bin/bash
 
-FDIRS="Carisha Corinna Dasha_G Dasha_M Jasmine_A"
-WDIRS="Alisa_I Carisha Corinna Mila_A Sakimichan Tuigirl Natalia_Andreeva"
-XDIRS="Baby Leah_Gotti Sybil"
+BDIR="$HOME/Pictures/Backgrounds"
+
+FDIRS="Carisha Corinna Dasha_G Dasha_M Jasmine_A Kalinka Niemira"
+WDIRS="Alisa_I Carisha Corinna Mila_A Sakimichan Sybil_A Tuigirl Natalia_Andreeva"
+XDIRS="Anneli Baby Leah_Gotti Sybil Tiffany"
 
 FMJY="Femjoy"
 WHVN="Wallhaven"
@@ -20,6 +22,13 @@ XART="X-Art"
     WHVN=
     FMJY=
 }
+
+[ -d $BDIR ] || {
+    echo "$BDIR does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $BDIR
+
 DIRS="$FMJY $WHVN $XART"
 for dir in $DIRS
 do

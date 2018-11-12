@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BDIR="$HOME/Pictures/Backgrounds"
+
 FMJY="Femjoy"
 WHVN="Wallhaven"
 XART="X-Art"
@@ -16,6 +18,13 @@ XART="X-Art"
     WHVN=
     FMJY=
 }
+
+[ -d $BDIR ] || {
+    echo "$BDIR does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $BDIR
+
 DIRS="$FMJY $WHVN $XART"
 for dir in $DIRS
 do
