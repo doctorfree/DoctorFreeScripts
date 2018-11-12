@@ -39,7 +39,7 @@ usage() {
     echo -e "\t[All|Anime|Favs|Fractals|Hentai|Owls|Waterfalls]"
     echo ""
     echo "<command> can be one of:"
-    echo "    [activate|deactivate|demo|exit|lock|restart|start]"
+    echo "    [activate|deactivate|blank|demo|exit|lock|restart|slides|start]"
     echo ""
     echo "<duration> is specified in seconds"
     echo ""
@@ -249,8 +249,7 @@ shift $(( OPTIND - 1 ))
                ;;
         xart|Xart|x-art|X-Art) BDIR="All"
                ;;
-        *) mkbgdir $dir_arg
-               BDIR="$dir_arg"
+        *) BDIR="$dir_arg"
                ;;
     esac
 }
@@ -259,13 +258,40 @@ shift $(( OPTIND - 1 ))
     case "$com_arg" in
         activate|deactivate|demo|exit|lock|restart) COMM="$com_arg"
             ;;
-        start) 
+        blank|noslides)
+            if [ "$TELL" ]
+            then
+                echo "cat $CONF | sed -e s/mode:\t\tone/mode:\t\tblank/ > /tmp/xscr$$"
+                echo "cp /tmp/xscr$$ $CONF"
+                echo "rm -f /tmp/xscr$$"
+            else
+                cat $CONF | sed -e "s/mode:\t\tone/mode:\t\tblank/" > /tmp/xscr$$
+                cp /tmp/xscr$$ $CONF
+                rm -f /tmp/xscr$$
+            fi
+            ;;
+        one|noblank|slides)
+            if [ "$TELL" ]
+            then
+                echo "cat $CONF | sed -e s/mode:\t\tblank/mode:\t\tone/ > /tmp/xscr$$"
+                echo "cp /tmp/xscr$$ $CONF"
+                echo "rm -f /tmp/xscr$$"
+            else
+                cat $CONF | sed -e "s/mode:\t\tblank/mode:\t\tone/" > /tmp/xscr$$
+                cp /tmp/xscr$$ $CONF
+                rm -f /tmp/xscr$$
+            fi
+            ;;
+        start)
             if [ "$TELL" ]
             then
                 echo "xscreensaver &"
             else
                 xscreensaver &
             fi
+            ;;
+        *)  echo "Unrecognized xscreensaver-command $com_arg - exiting"
+            exit 1
             ;;
     esac
 }
