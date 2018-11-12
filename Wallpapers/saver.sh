@@ -7,6 +7,7 @@
 ## @date Written 17-Oct-2018
 ## @version 1.0.4
 ##
+# --------------------------------------------------------------------------------------
 # Modify the following to reflect the location and names of image folders on your system
 # (Alternately, these settings can be specified on the command line)
 # --------------------------------------------------------------------------------------
@@ -27,6 +28,7 @@ WBACK="Wallhaven"
 XBACK="X-Art"
 # ----------------------------
 # End of user-defined settings
+# ----------------------------
 
 # Default paths and folder names for original images and pre-created folders of links
 WHVN="$ITOP/$WBACK"
