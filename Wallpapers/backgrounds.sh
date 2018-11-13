@@ -61,7 +61,7 @@ cd $out
     for i in *
     do
       [ "$i" == "*" ] && continue
-      mv $i $bak
+      mv "$i" $bak
     done
   }
 
@@ -131,7 +131,7 @@ cd $out
       }
       continue
     }
-    file -L $j | grep ASCII > /dev/null && rm -f $j
+    file -L "$j" | grep ASCII > /dev/null && rm -f "$j"
   done
   [ "$add" ] || rm -rf $bak
 }
