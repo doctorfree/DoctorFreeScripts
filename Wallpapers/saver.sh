@@ -5,7 +5,7 @@
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2018, Ronald Joe Record, all rights reserved.
 ## @date Written 17-Oct-2018
-## @version 1.0.4
+## @version 1.0.5
 ##
 # --------------------------------------------------------------------------------------
 # Modify the following to reflect the location and names of image folders on your system
@@ -39,8 +39,15 @@ WDIR="$WHVN"
 WBCK="$WBACK"
 BACK="$PICDIR/$BGNDS/$WBCK"
 
+current() {
+    echo ""
+    echo "Current XScreenSaver image directory set to $BGDIR"
+    echo "Current XScreenSaver glslideshow duration set to $ODUR"
+    echo "Current XScreenSaver mode set to $MODE"
+}
+
 usage() {
-    echo "Usage: saver [-BFIPWX path] [-flnrsxu] [-b backgrounds_dir] [-c command] [-d duration]"
+    echo "Usage: saver [-BFIPWX path] [-flnprsxu] [-b backgrounds_dir] [-c command] [-d duration]"
     echo ""
     echo "Where <backgrounds dir> can be one of:"
     echo -e "\tAny subdir in $WHVN"
@@ -66,6 +73,7 @@ usage() {
     echo "-f indicates use $FMJY rather than $WHVN"
     echo "-l indicates list the pre-created wallpaper subdirs available for the selected type"
     echo "-n indicates tell me what you would do without doing anything"
+    echo "-p indicates do not remove portrait format images"
     echo "-r indicates restart xscreensaver prior to running command"
     echo "-s indicates use $SAFE rather than $WHVN"
     echo "-x indicates use $XART rather than $WHVN"
@@ -82,15 +90,17 @@ usage() {
     echo "Current settings for these user defined paths and folder names are:"
     echo ""
     echo "Top-level original image folder ITOP = $ITOP"
-    echo "-F name1 specified ITOP/name1 = $ITOP/$FBACK"
-    echo "-S name2 specified ITOP/name2 = $ITOP/$SBACK"
-    echo "-W name3 specified ITOP/name3 = $ITOP/$WBACK"
-    echo "-X name4 specified ITOP/name4 = $ITOP/$XBACK"
+    echo "-F name1 specified \$ITOP/\$name1 = $ITOP/$FBACK"
+    echo "-S name2 specified \$ITOP/\$name2 = $ITOP/$SBACK"
+    echo "-W name3 specified \$ITOP/\$name3 = $ITOP/$WBACK"
+    echo "-X name4 specified \$ITOP/\$name4 = $ITOP/$XBACK"
     echo "-P path, -B name specified path/name/back = $PICDIR/$BGNDS/$WBCK"
-    echo ""
-    echo "Current XScreenSaver image directory set to $BGDIR"
-    echo "Current XScreenSaver glslideshow duration set to $ODUR"
-    [ "$LIST" ] && listem
+    if [ "$LIST" ]
+    then
+        listem
+    else
+        current
+    fi
     exit 1
 }
 
@@ -104,8 +114,9 @@ linkem() {
     rm -f *.txt
     rm -f *.gif
 
-    inst=`type -p identify`
-    [ "$inst" ] && {
+    [ "$rmportrait" ] && {
+      inst=`type -p identify`
+      [ "$inst" ] && {
         for i in *.jpg *.jpeg *.png
         do
             [ "$i" == "*.jpg" ] && continue
@@ -114,25 +125,27 @@ linkem() {
             GEO=`identify $i | awk ' { print $3 } '`
             W=`echo $GEO | awk -F "x" ' { print $1 } '`
             # Remove if width not greater than 1000
-            [ $W -gt 1000 ] || {
+            [ "$W" ] && [ $W -gt 1000 ] || {
               rm -f $i
               continue
             }
             H=`echo $GEO | awk -F "x" ' { print $2 } '`
             # Remove if height not greater than 750
-            [ $H -gt 750 ] || {
+            [ "$H" ] && [ $H -gt 750 ] || {
               rm -f $i
               continue
             }
             # Remove if width not greater than height
-            [ $W -gt $H ] || rm -f $i
+            [ "$W" ] && [ "$H" ] && [ $W -gt $H ] || rm -f $i
         done
+      }
     }
 }
 
 listem() {
     echo -e "\nPre-Created Wallpaper folders available for $WBCK :\n"
     ls --color=auto $BACK
+    current
 }
 
 mkbgdir() {
@@ -167,8 +180,9 @@ mkbgdir() {
 }
 
 HERE=`pwd`
-BGDIR=`grep imageDirectory $CONF | awk ' { print $2 } '`
+BGDIR=`grep imageDirectory: $CONF | awk ' { print $2 } '`
 ODUR=`grep glslideshow $CONF | awk -F ":" ' { print $2 } ' | awk ' { print $4 } '`
+MODE=`grep mode: $CONF | awk ' { print $2 } '`
 
 # No arguments we take to mean activate the screensaver
 [ "$1" ] || {
@@ -189,8 +203,9 @@ fem_arg=
 art_arg=
 saf_arg=
 switch=0
+rmportrait=1
 
-while getopts B:F:I:P:W:X:b:c:d:flnrsxu flag; do
+while getopts B:F:I:P:W:X:b:c:d:flnprsxu flag; do
     case $flag in
         B)
             BGNDS="$OPTARG"
@@ -234,6 +249,9 @@ while getopts B:F:I:P:W:X:b:c:d:flnrsxu flag; do
             ;;
         n)
             TELL=1
+            ;;
+        p)
+            rmportrait=
             ;;
         r)
             REST=1

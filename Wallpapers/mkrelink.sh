@@ -70,8 +70,13 @@ do
         [ "$d" == "../All" ] && continue
         [ "$d" == "../Favs" ] && continue
         [ "$d" == "../*" ] && continue
-        [ -d $d ] || continue
-        ln -s $d/* .
+        [ -d "$d" ] || continue
+        for pic in "$d"/*
+        do
+            link=`basename "$pic"`
+            [ -L "$link" ] && continue
+            ln -s "$pic" .
+        done
     done
     cd ../..
     ./mkfavs -$flag

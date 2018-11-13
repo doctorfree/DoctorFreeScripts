@@ -2,8 +2,8 @@
 
 BDIR="$HOME/Pictures/Backgrounds"
 
-FDIRS="Carisha Corinna Dasha_G Dasha_M Jasmine_A Kalinka Niemira"
-SDIRS="Fractals Space Dragonflies"
+FDIRS="Carisha Corinna Dasha_G Dasha_M Jasmine_A Kacie Kalinka Niemira"
+SDIRS="Album_Covers Fractals Space Dragonflies"
 WDIRS="Alisa_I Carisha Corinna Mila_A Sakimichan Sybil_A Tuigirl Natalia_Andreeva"
 XDIRS="Anneli Baby Leah_Gotti Sybil Tiffany"
 
@@ -72,8 +72,13 @@ do
         [ "../$d" == "../All" ] && continue
         [ "../$d" == "../Favs" ] && continue
         [ "../$d" == "../*" ] && continue
-        [ -d ../$d ] || continue
-        ln -s ../$d/* .
+        [ -d ../"$d" ] || continue
+        for pic in ../"$d"/*
+        do
+            link=`basename "$pic"`
+            [ -L "$link" ] && continue
+            ln -s "$pic" .
+        done
     done
     cd ../..
 done
