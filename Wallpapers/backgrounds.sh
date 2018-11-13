@@ -5,9 +5,8 @@
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2017, Ronald Joe Record, all rights reserved.
 ## @date Written 17-Sep-2017
-## @version 1.0.1
+## @version 1.0.3
 ##
-
 
 top=/u/pictures
 out=/usr/local/share/backgrounds
@@ -27,7 +26,11 @@ while getopts n:s:alu flag; do
             add=1
             ;;
         l)
-            ls --color=auto -l $out | awk ' { print $11 } '
+#           ls --color=auto -l $out | awk ' { print $NF } '
+            for sym in $out/*
+            do
+                readlink -e "$sym"
+            done
             exit 0
             ;;
         n)
@@ -77,7 +80,7 @@ cd $out
       top=$top/$subdir
     else
       [ -d $top/$bdir ] || {
-       for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Met-Art KindGirls Wallbase
+       for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Met-Art KindGirls Wallbase Safe
        do
          [ -d $top/$subdir/$bdir ] && {
            top=$top/$subdir
@@ -104,16 +107,16 @@ cd $out
         [ "$subpic" == "$pic/*" ] && continue
         [ "$subpic" == "$pic/downloaded.txt" ] && continue
         [ -d "$subpic" ] && continue
-        bnam=`basename $subpic`
-        [ -L $bnam ] && continue
-        ln -s $subpic .
+        bnam=`basename "$subpic"`
+        [ -L "$bnam" ] && continue
+        ln -s "$subpic" .
         numlinks=`expr $numlinks + 1`
         [ $numlinks -ge $maxlinks ] && break
       done
     else
-      bnam=`basename $pic`
-      [ -L $bnam ] && continue
-      ln -s $pic .
+      bnam=`basename "$pic"`
+      [ -L "$bnam" ] && continue
+      ln -s "$pic" .
       numlinks=`expr $numlinks + 1`
     fi
     [ $numlinks -ge $maxlinks ] && break
