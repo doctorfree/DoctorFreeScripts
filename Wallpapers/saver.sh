@@ -22,6 +22,7 @@ SHOW="glslideshow -root -duration"
 # The top of the directory hierarchy that contains the original image folders
 ITOP="/u/pictures"
 # The names of those original image folders
+DBACK="Domai"
 FBACK="Femjoy"
 SBACK="Safe"
 WBACK="Wallhaven"
@@ -33,6 +34,7 @@ XBACK="X-Art"
 # Default paths and folder names for original images and pre-created folders of links
 WHVN="$ITOP/$WBACK"
 SAFE="$ITOP/$SBACK"
+DMAI="$ITOP/$DBACK"
 FMJY="$ITOP/$FBACK"
 XART="$ITOP/$XBACK"
 WDIR="$WHVN"
@@ -47,17 +49,18 @@ current() {
 }
 
 usage() {
-    echo "Usage: saver [-BFIPWX path] [-flnprsxu] [-b backgrounds_dir] [-c command] [-d duration]"
+    echo "Usage: saver [-BDFIPWX path] [-dflnprsxu] [-b backgrounds_dir] [-c command] [-t duration]"
     echo ""
     echo "Where <backgrounds dir> can be one of:"
     echo -e "\tAny subdir in $WHVN"
+    echo -e "\tAny subdir in $DMAI if -d has been specified"
     echo -e "\tAny subdir in $FMJY if -f has been specified"
     echo -e "\tAny subdir in $SAFE if -s has been specified"
     echo -e "\tAny subdir in $XART if -x has been specified"
     echo -e "\tOne of the pre-created dirs in $BACK"
     echo -e "\n\tCurrent pre-created dirs include"
     echo -e "\n\tModels:"
-    echo -e "\t[Alisa|Carisha|Corinna|Jasmine_A|Li_Moon|Mila|Natalia]"
+    echo -e "\t[Alisa|Carisha|Corinna|Jasmine_A|Li_Moon|Mila]"
     echo -e "\n\tPhotographers/Artists/Sites:"
     echo -e "\t[Femjoy|Nikolaev|Russians|Safin|Sakimichan|Soell|Tuigirl]"
     echo -e "\n\tGeneral:"
@@ -70,6 +73,7 @@ usage() {
     echo ""
     echo "<duration> is specified in seconds"
     echo ""
+    echo "-d indicates use $DMAI rather than $WHVN"
     echo "-f indicates use $FMJY rather than $WHVN"
     echo "-l indicates list the pre-created wallpaper subdirs available for the selected type"
     echo "-n indicates tell me what you would do without doing anything"
@@ -83,17 +87,18 @@ usage() {
     echo "and pre-created folders of links to selected image folders."
     echo ""
     echo "-I path indicates use path as the top-level pathname to folders of original images"
-    echo "-F name1,-S name2,-W name3,and -X name4 are the names of subfolders in the top-level folder"
+    echo "-D n1,-F n2,-S n3,-W n4, and -X n5 are the names of subfolders in the top-level folder"
     echo "-P path indicates use path as the full pathname to PICDIR where links will be created"
     echo "-B name indicates use name as the subfolder in PICDIR where folders of links live"
     echo ""
     echo "Current settings for these user defined paths and folder names are:"
     echo ""
     echo "Top-level original image folder ITOP = $ITOP"
-    echo "-F name1 specified \$ITOP/\$name1 = $ITOP/$FBACK"
-    echo "-S name2 specified \$ITOP/\$name2 = $ITOP/$SBACK"
-    echo "-W name3 specified \$ITOP/\$name3 = $ITOP/$WBACK"
-    echo "-X name4 specified \$ITOP/\$name4 = $ITOP/$XBACK"
+    echo "-D n1 specified \$ITOP/\$n1 = $ITOP/$DBACK"
+    echo "-F n2 specified \$ITOP/\$n2 = $ITOP/$FBACK"
+    echo "-S n3 specified \$ITOP/\$n3 = $ITOP/$SBACK"
+    echo "-W n4 specified \$ITOP/\$n4 = $ITOP/$WBACK"
+    echo "-X n5 specified \$ITOP/\$n5 = $ITOP/$XBACK"
     echo "-P path, -B name specified path/name/back = $PICDIR/$BGNDS/$WBCK"
     if [ "$LIST" ]
     then
@@ -105,7 +110,7 @@ usage() {
 }
 
 linkem() {
-    if [ "$WDIR" == "$WHVN" ] || [ "$WDIR" == "$SAFE" ]
+    if [ "$WDIR" == "$WHVN" ] || [ "$WDIR" == "$SAFE" ] || [ "$WDIR" == "$DMAI" ]
     then
         ln -s "$1"/* .
     else
@@ -199,19 +204,23 @@ REST=
 USAGE=
 dir_arg=
 com_arg=
+dom_arg=
 fem_arg=
 art_arg=
 saf_arg=
 switch=0
 rmportrait=1
 
-while getopts B:F:I:P:W:X:b:c:d:flnprsxu flag; do
+while getopts B:D:F:I:P:W:X:b:c:t:dflnprsxu flag; do
     case $flag in
         B)
             BGNDS="$OPTARG"
             ;;
         I)
             ITOP="$OPTARG"
+            ;;
+        D)
+            DBACK="$OPTARG"
             ;;
         F)
             FBACK="$OPTARG"
@@ -235,7 +244,11 @@ while getopts B:F:I:P:W:X:b:c:d:flnprsxu flag; do
             com_arg="$OPTARG"
             ;;
         d)
-            SECS="$OPTARG"
+            WDIR="$DMAI"
+            WBCK="$DBACK"
+            BACK="$PICDIR/$BGNDS/$WBCK"
+            dom_arg=1
+            switch=`expr $switch + 1`
             ;;
         f)
             WDIR="$FMJY"
@@ -263,6 +276,9 @@ while getopts B:F:I:P:W:X:b:c:d:flnprsxu flag; do
             saf_arg=1
             switch=`expr $switch + 1`
             ;;
+        t)
+            SECS="$OPTARG"
+            ;;
         x)
             WDIR="$XART"
             WBCK="$XBACK"
@@ -279,13 +295,14 @@ shift $(( OPTIND - 1 ))
 
 # Only one of -f, -s, and -x can be specified
 [ $switch -gt 1 ] && {
-    echo "Command line options -f, -s, and -x are mutually exclusive. Use only one or none."
+    echo "Command line options -d,-f,-s, and -x are mutually exclusive. Use only one or none."
     echo "Exiting."
     exit 1
 }
 
 # Reset these just in case they were specified on the command line
 WHVN="$ITOP/$WBACK"
+DMAI="$ITOP/$DBACK"
 FMJY="$ITOP/$FBACK"
 SAFE="$ITOP/$SBACK"
 XART="$ITOP/$XBACK"
@@ -304,8 +321,14 @@ else
             WDIR="$SAFE"
             WBCK="$SBACK"
         else
-            WDIR="$WHVN"
-            WBCK="$WBACK"
+            if [ "$dom_arg" ]
+            then
+                WDIR="$DMAI"
+                WBCK="$DBACK"
+            else
+                WDIR="$WHVN"
+                WBCK="$WBACK"
+            fi
         fi
     fi
 fi
@@ -352,7 +375,7 @@ BACK="$PICDIR/$BGNDS/$WBCK"
                    BDIR="Mila_A"
                fi
                ;;
-        natalia|Natalia|Natalia_Andreeva) BDIR="Natalia_Andreeva"
+        natalia_andreeva|Natalia_Andreeva) BDIR="Natalia_Andreeva"
                ;;
         owls|Owls) BDIR="Owls"
                ;;
