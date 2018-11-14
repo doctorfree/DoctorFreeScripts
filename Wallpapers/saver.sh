@@ -24,6 +24,7 @@ ITOP="/u/pictures"
 # The names of those original image folders
 DBACK="Domai"
 FBACK="Femjoy"
+PBACK="Playboy"
 SBACK="Safe"
 WBACK="Wallhaven"
 XBACK="X-Art"
@@ -36,6 +37,7 @@ WHVN="$ITOP/$WBACK"
 SAFE="$ITOP/$SBACK"
 DMAI="$ITOP/$DBACK"
 FMJY="$ITOP/$FBACK"
+PLBY="$ITOP/$PBACK"
 XART="$ITOP/$XBACK"
 WDIR="$WHVN"
 WBCK="$WBACK"
@@ -49,12 +51,13 @@ current() {
 }
 
 usage() {
-    echo "Usage: saver [-BDFIPWX path] [-dflnprsxu] [-b backgrounds_dir] [-c command] [-t duration]"
+    echo "Usage: saver [-BDFHIPWX path] [-adflnprsxu] [-b backgrounds_dir] [-c command] [-t duration]"
     echo ""
     echo "Where <backgrounds dir> can be one of:"
     echo -e "\tAny subdir in $WHVN"
     echo -e "\tAny subdir in $DMAI if -d has been specified"
     echo -e "\tAny subdir in $FMJY if -f has been specified"
+    echo -e "\tAny subdir in $PLBY if -p has been specified"
     echo -e "\tAny subdir in $SAFE if -s has been specified"
     echo -e "\tAny subdir in $XART if -x has been specified"
     echo -e "\tOne of the pre-created dirs in $BACK"
@@ -73,11 +76,12 @@ usage() {
     echo ""
     echo "<duration> is specified in seconds"
     echo ""
+    echo "-a indicates do not remove portrait format images"
     echo "-d indicates use $DMAI rather than $WHVN"
     echo "-f indicates use $FMJY rather than $WHVN"
     echo "-l indicates list the pre-created wallpaper subdirs available for the selected type"
     echo "-n indicates tell me what you would do without doing anything"
-    echo "-p indicates do not remove portrait format images"
+    echo "-p indicates use $PLBY rather than $WHVN"
     echo "-r indicates restart xscreensaver prior to running command"
     echo "-s indicates use $SAFE rather than $WHVN"
     echo "-x indicates use $XART rather than $WHVN"
@@ -88,7 +92,7 @@ usage() {
     echo ""
     echo "-I path indicates use path as the top-level pathname to folders of original images"
     echo "-D n1,-F n2,-S n3,-W n4, and -X n5 are the names of subfolders in the top-level folder"
-    echo "-P path indicates use path as the full pathname to PICDIR where links will be created"
+    echo "-H path indicates use path as the full pathname to PICDIR where links will be created"
     echo "-B name indicates use name as the subfolder in PICDIR where folders of links live"
     echo ""
     echo "Current settings for these user defined paths and folder names are:"
@@ -96,10 +100,11 @@ usage() {
     echo "Top-level original image folder ITOP = $ITOP"
     echo "-D n1 specified \$ITOP/\$n1 = $ITOP/$DBACK"
     echo "-F n2 specified \$ITOP/\$n2 = $ITOP/$FBACK"
-    echo "-S n3 specified \$ITOP/\$n3 = $ITOP/$SBACK"
-    echo "-W n4 specified \$ITOP/\$n4 = $ITOP/$WBACK"
-    echo "-X n5 specified \$ITOP/\$n5 = $ITOP/$XBACK"
-    echo "-P path, -B name specified path/name/back = $PICDIR/$BGNDS/$WBCK"
+    echo "-P n3 specified \$ITOP/\$n3 = $ITOP/$PBACK"
+    echo "-S n4 specified \$ITOP/\$n4 = $ITOP/$SBACK"
+    echo "-W n5 specified \$ITOP/\$n5 = $ITOP/$WBACK"
+    echo "-X n6 specified \$ITOP/\$n6 = $ITOP/$XBACK"
+    echo "-H path, -B name specified path/name/back = $PICDIR/$BGNDS/$WBCK"
     if [ "$LIST" ]
     then
         listem
@@ -206,12 +211,13 @@ dir_arg=
 com_arg=
 dom_arg=
 fem_arg=
+pby_arg=
 art_arg=
 saf_arg=
 switch=0
 rmportrait=1
 
-while getopts B:D:F:I:P:W:X:b:c:t:dflnprsxu flag; do
+while getopts B:D:F:H:I:P:W:X:b:c:t:adflnprsxu flag; do
     case $flag in
         B)
             BGNDS="$OPTARG"
@@ -225,8 +231,11 @@ while getopts B:D:F:I:P:W:X:b:c:t:dflnprsxu flag; do
         F)
             FBACK="$OPTARG"
             ;;
-        P)
+        H)
             PICDIR="$OPTARG"
+            ;;
+        P)
+            PBACK="$OPTARG"
             ;;
         S)
             SBACK="$OPTARG"
@@ -236,6 +245,9 @@ while getopts B:D:F:I:P:W:X:b:c:t:dflnprsxu flag; do
             ;;
         X)
             XBACK="$OPTARG"
+            ;;
+        a)
+            rmportrait=
             ;;
         b)
             dir_arg="$OPTARG"
@@ -264,7 +276,11 @@ while getopts B:D:F:I:P:W:X:b:c:t:dflnprsxu flag; do
             TELL=1
             ;;
         p)
-            rmportrait=
+            WDIR="$PLBY"
+            WBCK="$PBACK"
+            BACK="$PICDIR/$BGNDS/$WBCK"
+            pby_arg=1
+            switch=`expr $switch + 1`
             ;;
         r)
             REST=1
@@ -295,7 +311,7 @@ shift $(( OPTIND - 1 ))
 
 # Only one of -f, -s, and -x can be specified
 [ $switch -gt 1 ] && {
-    echo "Command line options -d,-f,-s, and -x are mutually exclusive. Use only one or none."
+    echo "Command line options -d,-f,-p,-s, and -x are mutually exclusive. Use only one or none."
     echo "Exiting."
     exit 1
 }
@@ -304,6 +320,7 @@ shift $(( OPTIND - 1 ))
 WHVN="$ITOP/$WBACK"
 DMAI="$ITOP/$DBACK"
 FMJY="$ITOP/$FBACK"
+PLBY="$ITOP/$PBACK"
 SAFE="$ITOP/$SBACK"
 XART="$ITOP/$XBACK"
 if [ "$fem_arg" ]
@@ -326,8 +343,14 @@ else
                 WDIR="$DMAI"
                 WBCK="$DBACK"
             else
-                WDIR="$WHVN"
-                WBCK="$WBACK"
+                if [ "$pby_arg" ]
+                then
+                    WDIR="$PLBY"
+                    WBCK="$PBACK"
+                else
+                    WDIR="$WHVN"
+                    WBCK="$WBACK"
+                fi
             fi
         fi
     fi
