@@ -115,40 +115,42 @@ usage() {
 }
 
 linkem() {
-    if [ "$WDIR" == "$WHVN" ] || [ "$WDIR" == "$SAFE" ] || [ "$WDIR" == "$DMAI" ]
-    then
-        ln -s "$1"/* .
-    else
-        ln -s "$1"/*/* .
-    fi
+    case $WDIR in
+        $WHVN|$SAFE|$DMAI|$PLBY)
+            ln -s "$1"/* .
+            ;;
+        *)
+            ln -s "$1"/*/* .
+            ;;
+    esac
     rm -f *.txt
     rm -f *.gif
 
     [ "$rmportrait" ] && {
-      inst=`type -p identify`
-      [ "$inst" ] && {
-        for i in *.jpg *.jpeg *.png
-        do
-            [ "$i" == "*.jpg" ] && continue
-            [ "$i" == "*.jpeg" ] && continue
-            [ "$i" == "*.png" ] && continue
-            GEO=`identify $i | awk ' { print $3 } '`
-            W=`echo $GEO | awk -F "x" ' { print $1 } '`
-            # Remove if width not greater than 1000
-            [ "$W" ] && [ $W -gt 1000 ] || {
-              rm -f $i
-              continue
-            }
-            H=`echo $GEO | awk -F "x" ' { print $2 } '`
-            # Remove if height not greater than 750
-            [ "$H" ] && [ $H -gt 750 ] || {
-              rm -f $i
-              continue
-            }
-            # Remove if width not greater than height
-            [ "$W" ] && [ "$H" ] && [ $W -gt $H ] || rm -f $i
-        done
-      }
+        inst=`type -p identify`
+        [ "$inst" ] && {
+            for i in *.jpg *.jpeg *.png
+            do
+                [ "$i" == "*.jpg" ] && continue
+                [ "$i" == "*.jpeg" ] && continue
+                [ "$i" == "*.png" ] && continue
+                GEO=`identify "$i" | awk ' { print $(NF-6) } '`
+                W=`echo $GEO | awk -F "x" ' { print $1 } '`
+                # Remove if width not greater than 1000
+                [ "$W" ] && [ $W -gt 1000 ] || {
+                    rm -f "$i"
+                    continue
+                }
+                H=`echo $GEO | awk -F "x" ' { print $2 } '`
+                # Remove if height not greater than 750
+                [ "$H" ] && [ $H -gt 750 ] || {
+                    rm -f "$i"
+                    continue
+                }
+                # Remove if width not greater than height
+                [ "$W" ] && [ "$H" ] && [ $W -gt $H ] || rm -f "$i"
+            done
+        }
     }
 }
 
