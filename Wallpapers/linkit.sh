@@ -6,7 +6,7 @@ TOP=/u/pictures
 WHVN="$TOP/Wallhaven"
 FMJY="$TOP/Femjoy
 XART="$TOP/X-Art"
-FAVS="$HOME/Pictures/Backgrounds/Favs"
+FAVS="$HOME/Pictures/Backgrounds/Misc/Favs"
 
 [ -d "${FAVS}" ] || {
     echo "${FAVS} does not exist or is not a directory. Exiting."

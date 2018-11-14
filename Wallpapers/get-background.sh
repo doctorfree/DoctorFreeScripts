@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BDIR="$HOME/.config/pcmanfm/lubuntu"
-FAVS="$HOME/Pictures/Backgrounds/Favs"
+FAVS="$HOME/Pictures/Backgrounds/Misc/Favs"
 
 [ -d "$BDIR" ] || {
     echo "$BDIR does not exist or is not a directory. Exiting."

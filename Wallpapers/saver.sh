@@ -117,10 +117,24 @@ usage() {
 linkem() {
     case $WDIR in
         $WHVN|$SAFE|$DMAI|$PLBY)
-            ln -s "$1"/* .
+            for pic in "$1"/*
+            do
+                [ "$pic" == "$1/*" ] && {
+                    echo "No images found for $1 in $WDIR"
+                    continue
+                }
+                ln -s "$pic" .
+            done
             ;;
         *)
-            ln -s "$1"/*/* .
+            for pic in "$1"/*/*
+            do
+                [ "$pic" == "$1/*/*" ] && {
+                    echo "No images found for $1 in $WDIR"
+                    continue
+                }
+                ln -s "$pic" .
+            done
             ;;
     esac
     rm -f *.txt

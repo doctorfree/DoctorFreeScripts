@@ -4,7 +4,7 @@ TOP="/u/pictures"
 WHVN="$TOP/Wallhaven"
 FMJY="$TOP/Femjoy"
 XART="$TOP/X-Art"
-BACK="$HOME/Pictures/Backgrounds/Favs"
+BACK="$HOME/Pictures/Backgrounds/Misc/Favs"
 
 [ -d $BACK ] || {
     echo "$BACK does not exist or is not a directory. Exiting."
