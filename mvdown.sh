@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+
+[ "$1" ] || {
+    echo "Usage: ./mvdown model_name [-l] [-e]"
+    exit
+}
+
+#TOP="/Volumes/My_Book_Studio/Pictures/Work/KindGirls"
+TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/KindGirls"
+MODEL="$1"
+[ "$2" = "-l" ] && TOP="${HOME}/Pictures/Work.local/KindGirls"
+[ "$2" = "-e" ] && TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Elite_Babes"
+DEST="${TOP}/${MODEL}"
+DOWN="${HOME}/Pictures/DownThemAll"
+
+[ -d ${DOWN} ] || {
+    echo "$DOWN does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+[ -d ${DEST} ] || {
+    printf "\nModel directory $DEST does not exist or is not a directory.\n"
+    while true
+    do
+        read -p "Do you want to create the model directory $MODEL ? (y/n) " yn
+        case $yn in
+            [Yy]* ) mkdir -p "${DEST}"; break;;
+            [Nn]* ) printf "\nExiting.\n"; exit 1;;
+                * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
+cd "${DOWN}"
+rm -f extlink.png watch
+moved=0
+for i in *.jpg
+do
+    [ "$i" = "*.jpg" ] && {
+        echo "No pics. Exiting."
+        MOVNUM=`ls -1 "${DEST}" | wc -l`
+        [ ${MOVNUM} -gt 0 ] || rmdir "${DEST}"
+        exit 1
+    }
+    [ -r "${DEST}/$i" ] && {
+        echo "${DEST}/$i already exists. Skipping."
+        [ -d __Skipped__ ] || mkdir __Skipped__
+        mv "$i" __Skipped__
+        continue
+    }
+    # mv "$i" "${DEST}"
+    cp "$i" "${DEST}" && rm -f "$i"
+    moved=`expr $moved + 1`
+done
+echo "Moved $moved pics to ${DEST}"
+
+NUM=`ls -1 | grep -v __Skipped__ | wc -l`
+
+[ ${NUM} -gt 1 ] && {
+    echo ""
+    echo "Additional pics: "
+    ls -1 | grep -v mvall | grep -v __Skipped__
+}
