@@ -23,10 +23,13 @@
 ##
 
 # Root directory of your subfolders of image files to use as backgrounds/slideshows
-TOP=/u/pictures/Work
+MAC_TOP=/u/pictures/Work
+LIN_TOP=/u/pictures
+SEA_TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
 #
 # Location of folder to copy selected images to
-OUT=$HOME/Pictures/Backgrounds
+MAC_OUT=$HOME/Pictures/Backgrounds
+LIN_OUT=/usr/local/share/backgrounds
 #
 # Folders to search for model name or other subfolder of images to use
 # These are located under $TOP, defined below
@@ -45,9 +48,15 @@ show=
 subdir=
 foundirs=
 name=`basename $0`
+plat=`uname -s`
 
 usage() {
-  echo "Usage: $name [-u] [-a] [-l] [-S] [-n numpics] [-s subdir] directory"
+  printf "\nUsage: $name [-u] [-a] [-l] [-S] [-n numpics] [-s subdir] directory"
+  printf "\nWhere\t-a indicates add to existing background/slide pics"
+  printf "\n\t-l lists currently installed background/slide pics"
+  printf "\n\t-n <numpics> sets maximum number of pics to be copied (default ${maxlinks})"
+  printf "\n\t-s <subdir> searches in $TOP/<subdir> for specified folder"
+  printf "\n\t-S indicates run a slideshow of pics\n\n"
   exit 1
 }
 
@@ -56,8 +65,24 @@ usage() {
 [ "$name" == "slideshow" ] && show=1
 
 # Try to figure out which system we are on
+if [ "$plat" == "Linux" ]
+then
+    TOP="$LIN_TOP"
+    OUT="$LIN_OUT"
+    SLIDE_APP="Variety Slideshow"
+else
+    if [ "$plat" == "Darwin" ]
+    then
+        TOP="$MAC_TOP"
+        OUT="$MAC_OUT"
+        SLIDE_APP="AppleScript"
+    else
+        echo "Unable to detect a supported platform: ${plat}. Exiting."
+        exit 1
+    fi
+fi
 [ -d "$TOP" ] || {
-    TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
+    TOP="$SEA_TOP"
     [ -d "$TOP" ] || {
         echo "Cannot locate Work directory for pics. Exiting."
         exit 1
@@ -70,8 +95,8 @@ while getopts n:s:alSu flag; do
             add=1
             ;;
         l)
-#           ls --color=auto -l $OUT | awk ' { print $11 } '
-            ls -l $OUT | awk ' { print $9 } '
+#           ls --color=auto -l $OUT | awk ' { print $NF } '
+            ls -l $OUT | awk ' { print $NF } '
             exit 0
             ;;
         n)
@@ -104,14 +129,18 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$show" ] && {
-    inst=`type -p osascript`
-    if [ "$inst" ]
+    if [ "$plat" == "Darwin" ]
     then
-        osa=1
+        inst=`type -p osascript`
+        [ "$inst" ] && osa=1
     else
-        echo "AppleScript is not supported on this platform."
-        echo "Unable to automate the slideshow feature."
+        inst=`type -p variety-slideshow`
+        [ "$inst" ] && var=1
     fi
+    [ "$inst" ] || {
+        echo "$SLIDE_APP is not supported on this platform."
+        echo "Unable to automate the slideshow feature."
+    }
 }
 
 [ -d $OUT ] || {
@@ -223,16 +252,22 @@ cd $OUT
 }
 
 [ "$show" ] && {
-    open -a Preview "$OUT"/*
-    # ----------------------
-    # Applescript below here
-    # ----------------------
-    [ "$osa" ] && {
-        osascript <<EOF
-        delay 5
-        tell application "System Events"
-            keystroke "F" using {shift down, command down}
-        end tell
+    if [ "$plat" == "Darwin" ]
+    then
+        open -a Preview "$OUT"/*
+        # ----------------------
+        # Applescript below here
+        # ----------------------
+        [ "$osa" ] && {
+            osascript <<EOF
+            delay 5
+            tell application "System Events"
+                keystroke "F" using {shift down, command down}
+            end tell
 EOF
-    }
+        }
+    else
+#           variety-slideshow $HOME/.config/variety/Favorites 2> /dev/null
+            variety-slideshow "$OUT" 2> /dev/null
+    fi
 }
