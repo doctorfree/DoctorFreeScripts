@@ -36,7 +36,7 @@ LIN_OUT=/usr/local/share/backgrounds
 # Order is important, first in list coming first in search
 # If you want to combine images from several folders use the "-s all" option
 #
-SUBS="Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes \
+SUBS="Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica \
       Met-Art KindGirls Wallbase"
 
 bak=/tmp/pic$$
@@ -107,6 +107,8 @@ while getopts n:s:alSu flag; do
               all) all=1
                 ;;
               elite) subdir="Elite_Babes"
+                ;;
+              jp) subdir="JP_Erotica"
                 ;;
               kind) subdir="KindGirls"
                 ;;
@@ -179,7 +181,7 @@ cd $OUT
       foundirs=$TOP
     else
       [ -d $TOP/$bdir ] || {
-       for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes Met-Art KindGirls Wallbase
+       for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
        do
          [ -d $TOP/$subdir/$bdir ] && {
            sub=$TOP/$subdir
