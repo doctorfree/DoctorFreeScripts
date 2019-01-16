@@ -8,15 +8,13 @@
 ## @version 1.0.1
 ##
 
-[ "${PICROOT}" ] || PICROOT=/u/pictures
-
 if [ -r /usr/local/share/bash/wallutils ]
 then
     . /usr/local/share/bash/wallutils
 else
     [ -r ./Utils/wallutils ] && . ./Utils/wallutils
 fi
-[ "$WHDIR" ] || WHDIR="${PICROOT}/Wallhaven"
+[ "$WHDIR" ] || WHDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
 
 DDIR="${WHDIR}/Anime"
 
@@ -25,7 +23,7 @@ DDIR="${WHDIR}/Anime"
 [ "$filters" ] || filters=001
 
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
-cd "${DDIR}"
+cd "${WHDIR}"
 [ "$page" ] || {
     pics=`echo *.jpg`
     numpics=0
@@ -42,12 +40,20 @@ cd "${DDIR}"
     page=`expr $numpage + 1`
 }
 
-wh -l "${DDIR}" \
-   -n $numdown \
-   -s $page \
-   -c $categories \
-   -f $filters \
-   $quiet \
-   -t standard \
-   -p 0
+#wh -l "${DDIR}" \
+#   -n $numdown \
+#   -s $page \
+#   -c $categories \
+#   -f $filters \
+#   $quiet \
+#   -t standard \
+#   -p 0
 
+./get-search -q -l "Anime" -s "Anime%2BGirls" -n $numdown -p $page
+./get-search -q -l "Anime" -s "Aroma%2BSensei" -n $numdown -p $page
+./get-search -q -l "Anime" -s "Blake%2BBelladonna" -n $numdown -p $page
+./get-search -q -l "Anime" -s "Dandon%2BFuga" -n $numdown -p $page
+./get-search -q -l "Anime" -s "Nekomimi" -n $numdown -p $page
+./get-search -q -l "Anime" -s "Yang%2BXiao%2BLong" -n $numdown -p $page
+./get-search -q -l "Anime" -s "Yuri" -n $numdown -p $page
+./get-search -q -s "Anime" -n $numdown -p $page

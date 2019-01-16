@@ -21,13 +21,13 @@ HERE=`pwd`
 echo "Running ./get-anime $*"
 ./get-anime -q $*
 # ./get-general -p 1 $*
-echo "Running ./get-general $*"
-./get-general -q $*
+#echo "Running ./get-general $*"
+#./get-general -q $*
 # ./get-people -p 1 $*
-echo "Running ./get-people $*"
-./get-people -q $*
-echo "Running ./mvem People"
-./mvem People
+#echo "Running ./get-people $*"
+#./get-people -q $*
+#echo "Running ./mvem People"
+#./mvem People
 #./get-favorites $*
 
 for dir in *
@@ -44,22 +44,47 @@ do
     Photographers)
         ./get-photographers
         ;;
-    Femjoy)
+    Art)
         get_search "${dir}" "${dir}"
-        get_search "${dir}" "Femjoy_Magazine"
+        get_search "${dir}" "artwork"
+        ;;
+    Celebrity)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Fake_Nudes"
         ;;
     Domai)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "${dir}.com"
         get_search "${dir}" "domai_magazine"
         ;;
+    Errotica_Archives)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Errotica_Archives_Magazine"
+        ;;
+    Femjoy)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Femjoy_Magazine"
+        ;;
+    Hegre-Art)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "hegre.com"
+        ;;
     Met-Art)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "MetArt_Magazine"
         ;;
-    Errotica_Archives)
+    Nubiles)
         get_search "${dir}" "${dir}"
-        get_search "${dir}" "Errotica_Archives_Magazine"
+        get_search "${dir}" "Nubiles.net"
+        ;;
+    Playboy)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Playboy_Plus"
+        get_search "${dir}" "Playmate"
+        ;;
+    The_Life_Erotic)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "TheLifeErotic"
         ;;
     Weapon)
         get_search "${dir}" "${dir}"
@@ -70,6 +95,7 @@ do
     Wet)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Wet_Body"
+        get_search "${dir}" "Wet_Clothing"
         ;;
     *)
         get_search "${dir}" "${dir}"

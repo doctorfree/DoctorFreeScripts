@@ -14,15 +14,42 @@
 ## search and download is completed, duplicate files in the download directory
 ## are symlinked.
 
-[ "${PICROOT}" ] || PICROOT=/u/pictures
-
 if [ -r /usr/local/share/bash/wallutils ]
 then
     . /usr/local/share/bash/wallutils
 else
     [ -r ./Utils/wallutils ] && . ./Utils/wallutils
 fi
-[ "$WHDIR" ] || WHDIR="${PICROOT}/Wallhaven"
+
+# Root directory of your subfolders of Wallhaven image files
+MAC_TOP=/u/pictures/Work/Wallhaven
+LIN_TOP=/u/pictures/Wallhaven
+SEA_TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
+
+[ "$WHDIR" ] || WHDIR="SEA_TOP"
+[ -d "$WHDIR" ] || {
+    plat=`uname -s`
+    # Try to figure out which system we are on
+    if [ "$plat" == "Linux" ]
+    then
+        WHDIR="$LIN_TOP"
+    else
+        if [ "$plat" == "Darwin" ]
+        then
+            WHDIR="$MAC_TOP"
+        else
+            echo "Unable to detect a supported platform: ${plat}. Exiting."
+            exit 1
+        fi
+    fi
+    [ -d "$WHDIR" ] || {
+        WHDIR="$SEA_TOP"
+        [ -d "$WHDIR" ] || {
+            echo "Cannot locate Work directory for pics. Exiting."
+            exit 1
+        }
+    }
+}
 
 [ "$numdown" ] || numdown=480
 [ "$categories" ] || categories=111

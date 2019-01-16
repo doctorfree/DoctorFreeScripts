@@ -18,11 +18,23 @@ get_search() {
 HERE=`pwd`
 
 cd Photographers
-for model in *
+for photographer in *
 do
-    [ -d "${model}" ] || continue
+    [ -d "${photographer}" ] || continue
     cd "${HERE}"
-    get_search "Photographers/${model}" "${model}"
+    case "${photographer}" in
+        Murbo_Dagldian)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Murbo"
+            ;;
+        Vladimir_Nikolaev)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Vavaca"
+            ;;
+        *)
+            get_search "Photographers/${photographer}" "${photographer}"
+            ;;
+    esac
     cd Photographers
 done
 cd "${HERE}"

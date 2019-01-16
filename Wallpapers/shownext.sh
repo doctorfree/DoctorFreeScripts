@@ -13,15 +13,46 @@ NEXT=
 OPEN="Opening"
 TELL=
 ALL=
+LIST="${EB} ${JP}"
 
-[ "$1" == "-n" ] && TELL=1
-[ "$1" == "-a" ] && {
-    TELL=1
-    ALL=1
+usage() {
+    echo "Usage: shownext [-a] [-e] [-j] [-n] [-u]"
+    exit 1
 }
+
+EFLAG=
+JFLAG=
+while getopts aejnu flag; do
+    case $flag in
+        a)
+            TELL=1
+            ALL=1
+            ;;
+        e)
+            LIST="${EB}"
+            EFLAG=1
+            ;;
+        j)
+            LIST="${JP}"
+            JFLAG=1
+            ;;
+        n)
+            TELL=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+
+[ "${JFLAG}" ] && [ "${EFLAG}" ] && {
+    echo "Incompatible arguments: only one of -e or -j can be provided."
+    usage
+}
+
 [ "${TELL}" ] && OPEN="Would open"
 
-for TODO in ${EB} ${JP}
+for TODO in ${LIST}
 do
     BASE_URL="$TODO"
     [ "$ALL" ] && echo "`basename ${TODO}`:"
@@ -37,7 +68,7 @@ done
 
 if [ "$NEXT" ]
 then
-    MODEL=`echo "${NEXT}" | tr '[:upper:]' '[:lower:]' | sed -e "s/_/-/g"`
+    MODEL=`echo "${NEXT}" | tr '[:upper:]' '[:lower:]' | sed -e "s/_/-/g" -e "s/ /-/g"`
     if [ "${BASE_URL}" == "${EB}" ]
     then
         URL="${EB_URL}/${MODEL}"
@@ -47,5 +78,5 @@ then
     [ "${ALL}" ] || echo "${OPEN} model URL: ${URL}"
     [ "${TELL}" ] || open -a WaterFox ${URL}
 else
-    echo "No new model name found"
+    printf "\nNo new model name found in:\n\t${LIST}\n"
 fi
