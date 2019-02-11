@@ -16,6 +16,9 @@ get_search() {
 }
 
 HERE=`pwd`
+FIND=
+
+[ "$1" == "-a" ] && FIND=1
 
 # ./get-anime -p 1 $*
 echo "Running ./get-anime $*"
@@ -39,10 +42,13 @@ do
     [ "${dir}" = "People" ] && continue
     case "${dir}" in
     Models)
-        ./get-models
+        ./get-models -m
         ;;
     Photographers)
         ./get-photographers
+        ;;
+    Suicide_Girls)
+        ./get-models -s
         ;;
     Art)
         get_search "${dir}" "${dir}"
@@ -65,6 +71,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Femjoy_Magazine"
         ;;
+    Glasses)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Women_With_Glasses"
+        ;;
     Hegre-Art)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "hegre.com"
@@ -81,6 +91,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Playboy_Plus"
         get_search "${dir}" "Playmate"
+        ;;
+    Sunglasses)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Women_With_Shades"
         ;;
     The_Life_Erotic)
         get_search "${dir}" "${dir}"
@@ -104,9 +118,11 @@ do
 done
 
 [ -x ./clean ] && ./clean
-[ -x ./findups ] && {
+[ "$FIND" ] && {
+  [ -x ./findups ] && {
     echo "Running ./findups"
     ./findups
+  }
 }
 [ -x ./counts ] && {
     echo "Running ./counts"

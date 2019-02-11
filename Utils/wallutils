@@ -6,15 +6,27 @@
 ## @date Written 17-Sep-2016
 ## @version 1.0.1
 ##
+# Set these to your top-level pictures directory paths
+SEA_DIR="/Volumes/Seagate_BPH_8TB/Pictures"
+LIN_DIR="/u/pictures"
 
-[ "${PICROOT}" ] || PICROOT=/u/pictures
-
-# Set this to your top-level Wallhaven download directory path
-WHDIR="${PICROOT}/Wallhaven"
+# Set PICROOT in your environment to override what is set here
+if [ "${PICROOT}" ]
+then
+    WHDIR="${PICROOT}/Work/Wallhaven"
+else
+    if [ -d "${SEA_DIR}" ]
+    then
+        WHDIR="${SEA_DIR}/Work/Wallhaven"
+    else
+        WHDIR="${LIN_DIR}/Work/Wallhaven"
+    fi
+fi
 
 query=
 demo=
 model=
+suicide=
 photo=
 numdown=
 page=
@@ -70,13 +82,14 @@ usage() {
     printf "\n\t-L indicates use symbolic links when finding duplicates"
     printf "\n\t-m indicates Model search, use Models/<model_name> download dir"
     printf "\n\t-P indicates Photographer search, use Photographers/<name> download dir"
+    printf "\n\t-S indicates Suicide Girl search, use Suicide_Girls/<model_name> download dir"
     printf "\n\t-q indicates quiet mode, suppress messages"
     printf "\n\t-s search specifies the search terms ( + for AND, space for OR)"
     printf "\n\t-u displays this usage message\n"
     exit 1
 }
 
-while getopts l:n:c:f:p:s:dLmPqu flag; do
+while getopts l:n:c:f:p:s:dLmPSqu flag; do
     case $flag in
         l)
             subdir=$OPTARG
@@ -89,6 +102,9 @@ while getopts l:n:c:f:p:s:dLmPqu flag; do
             ;;
         P)
             photo=1
+            ;;
+        S)
+            suicide=1
             ;;
         m)
             model=1

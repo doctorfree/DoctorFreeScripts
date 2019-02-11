@@ -26,7 +26,7 @@ MAC_TOP=/u/pictures/Work/Wallhaven
 LIN_TOP=/u/pictures/Wallhaven
 SEA_TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
 
-[ "$WHDIR" ] || WHDIR="SEA_TOP"
+[ "$WHDIR" ] || WHDIR="$SEA_TOP"
 [ -d "$WHDIR" ] || {
     plat=`uname -s`
     # Try to figure out which system we are on
@@ -67,6 +67,12 @@ else
 fi
 [ "$model" ] && QDIR="Models/${QDIR}"
 [ "$photo" ] && QDIR="Photographers/${QDIR}"
+if [ "$suicide" ]
+then
+    QDIR="Suicide_Girls/${QDIR}"
+else
+    [ "${QDIR}" == "Suicide_Girls" ] && QDIR="Suicide_Girls/Misc"
+fi
 DDIR="${WHDIR}/${QDIR}"
 
 [ -d "${DDIR}" ] || mkdir -p "${DDIR}"
