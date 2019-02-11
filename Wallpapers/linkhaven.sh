@@ -3,6 +3,8 @@
 TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
 MOD="$TOP/Models"
 PHO="$TOP/Photographers"
+SUG="$TOP/Suicide_Girls"
+SGD="../Misc"
 PHD="../../Photographers"
 DIG="../../Digital_Desire"
 DOM="../../Domai"
@@ -18,7 +20,7 @@ ALL=
 TELL=
 
 usage() {
-  printf "\nUsage: linkhaven [-a] [-dD] [-f] [-h] [-m] [-n] [-pP] [-r] [-u] [-w]"
+  printf "\nUsage: linkhaven [-a] [-dD] [-f] [-h] [-m] [-n] [-psP] [-r] [-u] [-w]"
   printf "\nWhere:"
   printf "\n\t-a indicates use all combinations of subdirs and destinations"
   printf "\n\t-D indicates use Digital_Desire destination dir"
@@ -32,6 +34,7 @@ usage() {
   printf "\n\t-P indicates use People destination dir"
   printf "\n\t-r indicates use Photodromm destination dir"
   printf "\n\t\t(default destination dir is Digital_Desire)"
+  printf "\n\t-s indicates use Suicide Girls subdir"
   printf "\n\t-w indicates use Watch4Beauty destination dir"
   printf "\n\t-u displays this usage message and exits"
   printf "\n\n"
@@ -44,6 +47,7 @@ linkem() {
     for model in *
     do
         [ -d $model ] || continue
+        [ "$SUB" == "$SUG" ] && [ "$model" == "Misc" ] && continue
         cd $model
         for i in wall*
         do
@@ -55,6 +59,10 @@ linkem() {
                 do
                     [ "$wall" == "$PHD/*/$i" ] && continue
                     SRC=`dirname $wall`
+                    [ -L "$SRC" ] && {
+                        SRC="$DES"
+                        continue
+                    }
                     break
                 done
             fi
@@ -67,7 +75,7 @@ linkem() {
                     break
                 done
             fi
-            [ -f $SRC/$i ] || {
+            [ -f "$SRC/$i" ] || {
                 continue
             }
             [ "$TELL" ] && {
@@ -82,7 +90,7 @@ linkem() {
     printf "\n"
 }
 
-while getopts anmpPdDwu flag; do
+while getopts anmpPdDswu flag; do
     case $flag in
         a)
             ALL=1
@@ -113,6 +121,10 @@ while getopts anmpPdDwu flag; do
             ;;
         r)
             DES="$DRO"
+            ;;
+        s)
+            SUB="$SUG"
+            DES="$SGD"
             ;;
         w)
             DES="$W4B"
@@ -148,6 +160,9 @@ then
         DES="$dest"
         linkem
     done
+    SUB="$SUG"
+    DES="$SGD"
+    linkem
 else
     linkem
 fi
