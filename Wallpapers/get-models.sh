@@ -9,8 +9,8 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-    echo "Running ./get-search -p 1 -l $1 -s $QUERY"
-    ./get-search -q -p 1 -l "$1" -s "$QUERY"
+    echo "Running ./get-search -n 2048 -p 1 -l $1 -s $QUERY"
+    ./get-search -q -n 2048 -p 1 -l "$1" -s "$QUERY"
     echo "Running ./get-search -l $1 -s $QUERY"
     ./get-search -q -l "$1" -s "$QUERY"
 }
@@ -56,6 +56,10 @@ SUGD="Suicide_Girls"
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anneli"
             get_search "${MODD}/${model}" "Pinky_June"
+            ;;
+        Cara_Mell)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Rena_FemJoy"
             ;;
         Caramel)
             get_search "${MODD}/${model}" "${model}_(Met-Art_Model)"
