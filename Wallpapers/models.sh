@@ -27,30 +27,36 @@ ListModels() {
     printf "\n"
 }
 
-[ "$1" == "-a" ] && {
-    ALL=1
-    shift
-}
-[ "$1" == "-c" ] && {
-    COUNT=1
-    shift
-}
-[ "$1" == "-p" ] && {
-    MDIR="${PDIR}"
-    TYPE="photographers"
-    shift
-}
-[ "$1" == "-s" ] && {
-    MDIR="${SDIR}"
-    TYPE="suicide_girls"
-    shift
-}
-
-[ $# -lt 1 ] && {
-    echo "Usage: models [-aps] model1 [model2] ..."
+usage() {
+    echo "Usage: models [-acpsu] model1 [model2] ..."
     echo "Exiting."
     exit 1
 }
+
+[ $# -lt 1 ] && usage
+
+while getopts acpsu flag; do
+    case $flag in
+        a)
+            ALL=1
+            ;;
+        c)
+            COUNT=1
+            ;;
+        p)
+            MDIR="${PDIR}"
+            TYPE="photographers"
+            ;;
+        s)
+            MDIR="${SDIR}"
+            TYPE="suicide_girls"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
 
 for models in $*
 do
