@@ -54,6 +54,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "artwork"
         ;;
+    Body_Oil)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "oiled_body"
+        ;;
     Celebrity)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Fake_Nudes"
@@ -67,6 +71,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Errotica_Archives_Magazine"
         ;;
+    Fantasy_Art)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "fantasy_girl"
+        ;;
     Femjoy)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Femjoy_Magazine"
@@ -79,6 +87,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "hegre.com"
         ;;
+    Japanese)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Japanese_women"
+        ;;
     Met-Art)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "MetArt_Magazine"
@@ -86,6 +98,10 @@ do
     Nubiles)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Nubiles.net"
+        ;;
+    Overwatch)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Personalami"
         ;;
     Playboy)
         get_search "${dir}" "${dir}"
@@ -99,6 +115,10 @@ do
     The_Life_Erotic)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "TheLifeErotic"
+        ;;
+    Waterfall)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Waterfalls"
         ;;
     Weapon)
         get_search "${dir}" "${dir}"

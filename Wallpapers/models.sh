@@ -5,6 +5,7 @@ PDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/Photographers"
 SDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/Suicide_Girls"
 TYPE="models"
 ALL=
+COUNT=
 
 ListModels() {
     UTYPE=`echo $2 | tr '[:lower:]' '[:upper:]'`
@@ -17,6 +18,10 @@ ListModels() {
         else
             name=`basename ${model}`
             printf "\n\t${name}"
+            [ "$COUNT" ] && {
+                cnt=`ls -1 "${model}" | wc -l`
+                printf "\t\t${cnt}"
+            }
         fi
     done
     printf "\n"
@@ -24,6 +29,10 @@ ListModels() {
 
 [ "$1" == "-a" ] && {
     ALL=1
+    shift
+}
+[ "$1" == "-c" ] && {
+    COUNT=1
     shift
 }
 [ "$1" == "-p" ] && {

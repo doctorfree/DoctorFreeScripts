@@ -36,11 +36,21 @@ SUGD="Suicide_Girls"
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Aleksandra_Smelova"
             ;;
+        Alina_Panevskaya)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Alina_Panewskaja"
+            get_search "${MODD}/${model}" "Alinka_Rainer"
+            ;;
         Alisa_I)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alisa_Amore"
             get_search "${MODD}/${model}" "Alisa_A"
             get_search "${MODD}/${model}" "Jessica_Albanka"
+            ;;
+        Anita_Silver)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Anita_C"
+            get_search "${MODD}/${model}" "Vasilisa_Mudraja"
             ;;
         Annele_Grace)
             get_search "${MODD}/${model}" "${model}"
@@ -56,6 +66,10 @@ SUGD="Suicide_Girls"
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anneli"
             get_search "${MODD}/${model}" "Pinky_June"
+            ;;
+        Blake_Bartelli)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Blake_Eden"
             ;;
         Cara_Mell)
             get_search "${MODD}/${model}" "${model}"
@@ -88,6 +102,10 @@ SUGD="Suicide_Girls"
             get_search "${MODD}/${model}" "Nensi"
             get_search "${MODD}/${model}" "Medina_U"
             get_search "${MODD}/${model}" "Nensi_B"
+            ;;
+        Genevieve_Gandi)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Xana_D"
             ;;
         Georgia)
             get_search "${MODD}/${model}" "${model}_(model)"
@@ -122,6 +140,10 @@ SUGD="Suicide_Girls"
             get_search "${MODD}/${model}" "Eugenia_Diordiychuk"
             get_search "${MODD}/${model}" "Yevgeniya_Diordiychuk"
             ;;
+        Julia_Boin)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Julia_Kyoka"
+            ;;
         Justyna_Photodromm)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Justyna"
@@ -133,6 +155,10 @@ SUGD="Suicide_Girls"
         Kateryna_Marchenko)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kate_Chromia"
+            ;;
+        Katya_Clover)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Ekaterina_Skaredina"
             ;;
         Kristina_Shcherbinina)
             get_search "${MODD}/${model}" "${model}"
@@ -155,13 +181,24 @@ SUGD="Suicide_Girls"
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Annika_A"
             ;;
+        Lucia_Javorcekova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Lucia_Javorčeková"
+            ;;
         Malena_Fendi)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Malena_F"
+            get_search "${MODD}/${model}" "Malena"
+            get_search "${MODD}/${model}" "Lada_Brik"
+            get_search "${MODD}/${model}" "Black_Cherry"
             ;;
         Maria_Antsiborenko)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sofi_A"
+            ;;
+        Mariko_A)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Mariko"
             ;;
         Marketa_Pechova)
             get_search "${MODD}/${model}" "${model}"
@@ -202,6 +239,10 @@ SUGD="Suicide_Girls"
             get_search "${MODD}/${model}" "Monica_M"
             get_search "${MODD}/${model}" "Monika_Mohrova"
             ;;
+        Monika_V)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Tempe"
+            ;;
         Nancy_A)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Nancy_Photodromm"
@@ -211,6 +252,15 @@ SUGD="Suicide_Girls"
             get_search "${MODD}/${model}" "Annabell"
             get_search "${MODD}/${model}" "Danica_A"
             get_search "${MODD}/${model}" "Danica_Jewels"
+            ;;
+        Natalia_Tihomirova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Natasha_Tijomirova"
+            get_search "${MODD}/${model}" "Natali_Tihomirova"
+            ;;
+        Paula_Shy)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Paula_De_Sousa"
             ;;
         Sapphira_A)
             get_search "${MODD}/${model}" "${model}"
@@ -237,6 +287,7 @@ SUGD="Suicide_Girls"
         Sybil_A)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kailena"
+            get_search "${MODD}/${model}" "Sybille_Y"
             ;;
         Victoria_Sokolova)
             get_search "${MODD}/${model}" "${model}"
@@ -277,6 +328,14 @@ cd "${HERE}"
         Ellie_Suicide)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Elise_Laurenne"
+            ;;
+        Ivory_Suicide)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Ivory"
+            ;;
+        Milenci)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Milenci_Suicide"
             ;;
         Misc)
             cd "${HERE}/${SUGD}"

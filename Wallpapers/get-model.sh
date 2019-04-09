@@ -13,5 +13,5 @@ DARG="-m"
 }
 
 model=`echo $* | sed -e "s/ /\%2B/g"`
-echo "./get-search ${DARG} -s ${model}"
-./get-search ${DARG} -s "${model}"
+echo "./get-search ${DARG} -p 1 -n 2048 -s ${model}"
+./get-search ${DARG} -p 1 -n 2048 -s "${model}"
