@@ -15,19 +15,10 @@ get_search() {
     ./get-search -q -l "$1" -s "$QUERY"
 }
 
-HERE=`pwd`
-MODD="Models"
-SUGD="Suicide_Girls"
-
-# First argument -m indicates only do Models subdir. First argument -s, only Suicide_Girls.
-[ "$1" == "-s" ] || {
-  # The Models subdirectory
-  cd ${MODD}
-  for model in *
-  do
-    [ -d "${model}" ] || continue
+get_model() {
+    model="$1"
     cd "${HERE}"
-    case "${model}" in
+    case "$1" in
         Aleksa_Slusarchi)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Valeria_A"
@@ -303,17 +294,10 @@ SUGD="Suicide_Girls"
             ;;
     esac
     cd "${HERE}/${MODD}"
-  done
 }
 
-cd "${HERE}"
-
-[ "$1" == "-m" ] || {
-  # The Suicide_Girls subdirectory
-  cd ${SUGD}
-  for model in *
-  do
-    [ -d "${model}" ] || continue
+get_suicide() {
+    model="$1"
     cd "${HERE}"
     case "${model}" in
         Alyona_German)
@@ -339,7 +323,6 @@ cd "${HERE}"
             ;;
         Misc)
             cd "${HERE}/${SUGD}"
-            continue
             ;;
         Octavia_Suicide)
             get_search "${SUGD}/${model}" "${model}"
@@ -360,5 +343,88 @@ cd "${HERE}"
             ;;
     esac
     cd "${HERE}/${SUGD}"
-  done
+}
+
+HERE=`pwd`
+MODD="Models"
+SUGD="Suicide_Girls"
+MODS=1
+SUIC=1
+debug=
+
+# Argument -n indicates debug mode.
+# Argument -m indicates only do Models subdir.
+# Argument -s, only Suicide_Girls.
+# Following arguments can indicate specific model folders/names
+# Default is all models in specified subdir(s)
+
+while getopts mns flag; do
+    case $flag in
+        m)
+            SUIC=
+            ;;
+        n)
+            debug=1
+            ;;
+        s)
+            MODS=
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+MODELS="$*"
+[ "$MODS" ] && {
+  # The Models subdirectory
+  [ "$debug" ] || cd ${MODD}
+  if [ "$MODELS" ]
+  then
+    for name in $*
+    do
+      [ "$debug" ] && {
+        echo "Calling get_model() for $name"
+        continue
+      }
+      [ -d "${name}" ] || continue
+      get_model "$name"
+    done
+  else
+    for name in *
+    do
+      [ "$debug" ] && {
+        echo "Calling get_model() for $name"
+        continue
+      }
+      [ -d "${name}" ] || continue
+      get_model "$name"
+    done
+  fi
+}
+
+cd "${HERE}"
+
+[ "$SUIC" ] && {
+  # The Suicide_Girls subdirectory
+  [ "$debug" ] || cd ${SUGD}
+  if [ "$MODELS" ]
+  then
+    for name in $*
+    do
+      [ "$debug" ] && {
+        echo "Calling get_suicide() for $name"
+        continue
+      }
+      [ -d "${name}" ] || continue
+      get_suicide "$name"
+    done
+  else
+    for name in *
+    do
+      [ "$debug" ] && {
+        echo "Calling get_suicide() for $name"
+        continue
+      }
+      [ -d "${name}" ] || continue
+      get_suicide "$name"
+    done
+  fi
 }
