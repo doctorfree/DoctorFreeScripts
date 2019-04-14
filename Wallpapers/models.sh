@@ -1,5 +1,6 @@
 #!/bin/bash
 
+JDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/JAV_Idol"
 MDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/Models"
 PDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/Photographers"
 SDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/Suicide_Girls"
@@ -27,42 +28,42 @@ ListModels() {
     printf "\n"
 }
 
-usage() {
-    echo "Usage: models [-acpsu] model1 [model2] ..."
+[ "$1" == "-a" ] && {
+    ALL=1
+    shift
+}
+[ "$1" == "-c" ] && {
+    COUNT=1
+    shift
+}
+[ "$1" == "-j" ] && {
+    MDIR="${JDIR}"
+    TYPE="jav_idols"
+    shift
+}
+[ "$1" == "-p" ] && {
+    MDIR="${PDIR}"
+    TYPE="photographers"
+    shift
+}
+[ "$1" == "-s" ] && {
+    MDIR="${SDIR}"
+    TYPE="suicide_girls"
+    shift
+}
+
+[ $# -lt 1 ] && {
+    echo "Usage: models [-ajps] model1 [model2] ..."
     echo "Exiting."
     exit 1
 }
-
-[ $# -lt 1 ] && usage
-
-while getopts acpsu flag; do
-    case $flag in
-        a)
-            ALL=1
-            ;;
-        c)
-            COUNT=1
-            ;;
-        p)
-            MDIR="${PDIR}"
-            TYPE="photographers"
-            ;;
-        s)
-            MDIR="${SDIR}"
-            TYPE="suicide_girls"
-            ;;
-        u)
-            usage
-            ;;
-    esac
-done
-shift $(( OPTIND - 1 ))
 
 for models in $*
 do
   if [ "$ALL" ]
   then
       ListModels $MDIR models
+      ListModels $MDIR jav_idols
       ListModels $SDIR suicide_girls
       ListModels $PDIR photographers
   else

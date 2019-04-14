@@ -71,7 +71,12 @@ if [ "$suicide" ]
 then
     QDIR="Suicide_Girls/${QDIR}"
 else
-    [ "${QDIR}" == "Suicide_Girls" ] && QDIR="Suicide_Girls/Misc"
+    if [ "$japanese" ]
+    then
+        QDIR="JAV_Idol/${QDIR}"
+    else
+        [ "${QDIR}" == "Suicide_Girls" ] && QDIR="Suicide_Girls/Misc"
+    fi
 fi
 DDIR="${WHDIR}/${QDIR}"
 

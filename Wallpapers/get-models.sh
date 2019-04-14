@@ -95,8 +95,8 @@ get_model() {
             get_search "${MODD}/${model}" "Nensi_B"
             ;;
         Genevieve_Gandi)
-            get_search "${SUGD}/${model}" "${model}"
-            get_search "${SUGD}/${model}" "Xana_D"
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Xana_D"
             ;;
         Georgia)
             get_search "${MODD}/${model}" "${model}_(model)"
@@ -130,10 +130,6 @@ get_model() {
             get_search "${MODD}/${model}" "Eugenia"
             get_search "${MODD}/${model}" "Eugenia_Diordiychuk"
             get_search "${MODD}/${model}" "Yevgeniya_Diordiychuk"
-            ;;
-        Julia_Boin)
-            get_search "${MODD}/${model}" "${model}"
-            get_search "${MODD}/${model}" "Julia_Kyoka"
             ;;
         Justyna_Photodromm)
             get_search "${MODD}/${model}" "${model}"
@@ -296,6 +292,26 @@ get_model() {
     cd "${HERE}/${MODD}"
 }
 
+get_jav() {
+    model="$1"
+    cd "${HERE}"
+    case "${model}" in
+        Julia_Kyoka)
+            get_search "${JAVD}/${model}" "${model}"
+            get_search "${JAVD}/${model}" "Julia_Boin"
+            ;;
+        Utsunomiya_Shion)
+            get_search "${JAVD}/${model}" "${model}"
+            get_search "${JAVD}/${model}" "Shion_Utsunomiya"
+            get_search "${JAVD}/${model}" "Rara_Anzai"
+            ;;
+        *)
+            get_search "${JAVD}/${model}" "${model}"
+            ;;
+    esac
+    cd "${HERE}/${JAVD}"
+}
+
 get_suicide() {
     model="$1"
     cd "${HERE}"
@@ -347,27 +363,36 @@ get_suicide() {
 
 HERE=`pwd`
 MODD="Models"
+JAVD="JAV_Idol"
 SUGD="Suicide_Girls"
 MODS=1
+JAVC=1
 SUIC=1
 debug=
 
 # Argument -n indicates debug mode.
 # Argument -m indicates only do Models subdir.
+# Argument -j, only JAV_Idol.
 # Argument -s, only Suicide_Girls.
 # Following arguments can indicate specific model folders/names
 # Default is all models in specified subdir(s)
 
-while getopts mns flag; do
+while getopts jmns flag; do
     case $flag in
+        j)
+            MODS=
+            SUIC=
+            ;;
         m)
             SUIC=
+            JAVC=
             ;;
         n)
             debug=1
             ;;
         s)
             MODS=
+            JAVC=
             ;;
     esac
 done
@@ -425,6 +450,35 @@ cd "${HERE}"
       }
       [ -d "${name}" ] || continue
       get_suicide "$name"
+    done
+  fi
+}
+
+cd "${HERE}"
+
+[ "$JAVC" ] && {
+  # The JAV_Idol subdirectory
+  [ "$debug" ] || cd ${JAVD}
+  if [ "$MODELS" ]
+  then
+    for name in $*
+    do
+      [ "$debug" ] && {
+        echo "Calling get_jav() for $name"
+        continue
+      }
+      [ -d "${name}" ] || continue
+      get_jav "$name"
+    done
+  else
+    for name in *
+    do
+      [ "$debug" ] && {
+        echo "Calling get_jav() for $name"
+        continue
+      }
+      [ -d "${name}" ] || continue
+      get_jav "$name"
     done
   fi
 }

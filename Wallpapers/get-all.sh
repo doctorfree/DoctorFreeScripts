@@ -41,6 +41,9 @@ do
     [ "${dir}" = "General" ] && continue
     [ "${dir}" = "People" ] && continue
     case "${dir}" in
+    JAV_Idol)
+        ./get-models -j
+        ;;
     Models)
         ./get-models -m
         ;;
