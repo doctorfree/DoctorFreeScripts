@@ -1,0 +1,45 @@
+#!/bin/bash
+
+DOMAIN="https://pro-api.coinmarketcap.com"
+ENDPT="v1/cryptocurrency/quotes/latest"
+COINS="BTC,ETH,XLM,AGI"
+CMCF="${HOME}/.coinmarketcap"
+
+KEY=
+[ -f ${CMCF} ] || {
+    echo "Missing ${CMCF}. Place you Coinmarketcap API Key there and retry."
+    exit 1
+}
+. ${CMCF}
+[ "${KEY}" ] || {
+    echo "Place you Coinmarketcap API Key in ${CMCF} and retry."
+    exit 1
+}
+
+[ "$1" ] && {
+    COINS=
+    for coin in $*
+    do
+        if [ "${COINS}" ]
+        then
+            COINS="${COINS},${coin}"
+        else
+            COINS="${coin}"
+        fi
+    done
+}
+
+usejq=`type -p jq`
+if [ "$usejq" ]
+then
+    curl -H "X-CMC_PRO_API_KEY: ${KEY}" \
+         -H "Accept: application/json" \
+         -d "symbol=${COINS}&convert=USD" \
+         -G ${DOMAIN}/${ENDPT} 2> /dev/null | jq '.'
+else
+    curl -H "X-CMC_PRO_API_KEY: ${KEY}" \
+         -H "Accept: application/json" \
+         -d "symbol=${COINS}&convert=USD" \
+         -G ${DOMAIN}/${ENDPT} 2> /dev/null
+fi
+
