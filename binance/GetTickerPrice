@@ -1,0 +1,58 @@
+#!/bin/bash
+
+DOMAIN="https://api.binance.com"
+ENDPT="api/v1/ticker/price"
+PAIR="ETHBTC"
+
+usage() {
+    printf "\nUsage: GetAvgPrice [-P pair] [-n] [-u]"
+    printf "\n\nWhere:"
+    printf "\n\tpair specifies a trading pair in the format ETHBTC (the default pair)"
+    printf "\n\t-n indicates to tell me what you would do but do nothing"
+    printf "\n\t-u indicates display this usage message\n"
+}
+
+display_trade() {
+    echo ""
+    echo "The following curl command would be used to retrieve the average price"
+    echo ""
+    printf "%s" "curl -X GET -H Accept: */* ${DOMAIN}/${ENDPT}?symbol=${PAIR}"
+    echo ""
+    echo ""
+}
+
+# Process the command line arguments
+tellme=
+dispus=
+while getopts P:nu flag; do
+    case $flag in
+        P)
+            PAIR=$OPTARG
+            ;;
+        n)
+            tellme=1
+            ;;
+        u)
+            dispus=1
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "$dispus" ] && {
+    usage
+    [ "$tellme" ] || exit 1
+}
+
+[ "$tellme" ] && {
+    display_trade
+    exit 0
+}
+
+usejq=`type -p jq`
+if [ "$usejq" ]
+then
+    curl -X GET -H "Accept: */*" "${DOMAIN}/${ENDPT}?symbol=${PAIR}" 2> /dev/null | jq '.'
+else
+    curl -X GET -H "Accept: */*" "${DOMAIN}/${ENDPT}?symbol=${PAIR}" 2> /dev/null
+fi

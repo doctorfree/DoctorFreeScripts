@@ -1,0 +1,6 @@
+#!/bin/bash
+
+DOMAIN="https://api.binance.com"
+ENDPT="api/v1/time"
+
+curl -X GET -H "Accept: */*" "${DOMAIN}/${ENDPT}" 2> /dev/null | jq '.'
