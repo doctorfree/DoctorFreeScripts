@@ -1,0 +1,133 @@
+#!/bin/bash
+
+DOMAIN="https://api.binance.com"
+ENDPT="api/v3/order"
+PAIR="BTCETH"
+BINF="${HOME}/.binance"
+
+usage() {
+    printf "\nUsage: BinanceOrder [-b|-s] [-P pair] [-p price] [-q quantity] [-t type]"
+    printf "\n\t[-f timeInForce] [-r recvWindow] [-n] [-u]"
+    printf "\n\nWhere:"
+    printf "\n\t-b indicates BUY"
+    printf "\n\t-s indicates SELL"
+    printf "\n\t\tOne of -b or -s must be specified, there is no default"
+    printf "\n\tpair specifies a trading pair in the format BTCETH (the default pair)"
+    printf "\n\tprice specifies the price per coin/token"
+    printf "\n\tquantity specifies the number of tokens/coins to buy"
+    printf "\n\ttype specifies the type of trade. Valid type values are:"
+    printf "\n\t\tLIMIT MARKET STOP_LOSS STOP_LOSS_LIMIT"
+    printf "\n\t\tTAKE_PROFIT TAKE_PROFIT_LIMIT LIMIT_MAKER"
+    printf "\n\t\tTrade type defaults to LIMIT"
+    printf "\n\ttimeInForce specifies the length of time the order will stay in force."
+    printf "\n\tValid timeInForce values are:"
+    printf "\n\t\tGTC IOC FOK"
+    printf "\n\t\ttimeInForce defaults to GTC"
+    printf "\n\trecvWindow specifies the time in milliseconds the API request is valid"
+    printf "\n\t-n indicates to tell me what you would do but do nothing"
+    printf "\n\t-u indicates display this usage message\n"
+}
+
+# Get the Binance trading key and secret
+KEY=
+SEC=
+[ -f ${BINF} ] || {
+    echo "Missing ${BINF}. Place you Binance API Key and Secret there and retry."
+    exit 1
+}
+. ${BINF}
+[ "${KEY}" ] || {
+    echo "Place you Binance API Key and Secret in ${BINF} and retry."
+    exit 1
+}
+[ "${SEC}" ] || {
+    echo "Place you Binance API Key and Secret in ${BINF} and retry."
+    exit 1
+}
+
+# Process the command line arguments
+tellme=
+dispus=
+SIDE=
+TYPE="LIMIT"
+TINF="GTC"
+RECV=5000
+while getopts bsf:P:p:q:r:t:nu flag; do
+    case $flag in
+        b)
+            SIDE="BUY"
+            ;;
+        s)
+            SIDE="SELL"
+            ;;
+        f)
+            TINF=$OPTARG
+            ;;
+        p)
+            PRICE=$OPTARG
+            ;;
+        q)
+            QUANTITY=$OPTARG
+            ;;
+        r)
+            RECV=$OPTARG
+            ;;
+        P)
+            PAIR=$OPTARG
+            ;;
+        t)
+            TYPE=$OPTARG
+            ;;
+        n)
+            tellme=1
+            ;;
+        u)
+            dispus=1
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "$SIDE" ] || {
+    echo "Trade side must be specified with either -b (BUY) or -s (SELL). Exiting."
+    usage
+    exit 1
+}
+
+[ "$dispus" ] && {
+    usage
+    [ "$tellme" ] || exit 1
+}
+
+TIM=$(date +%s)
+SIG=`echo -n "symbol=${PAIR}&side=${SIDE}&type=${TYPE}&timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}&recvWindow=${RECV}&timestamp=${TIM}" | openssl dgst -sha256 -hmac "${SEC}"`
+
+[ "$tellme" ] && {
+    echo ""
+    printf "%s" "curl -H X-MBX-APIKEY: <trading key> "
+    echo -n "-X POST -H Accept: application/json "
+    echo -n "-G ${DOMAIN}/${ENDPT}?"
+    echo -n "symbol=${PAIR}&side=${SIDE}&type=${TYPE}&"
+    echo -n "timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}&"
+    echo -n "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}"
+    echo ""
+    exit 0
+}
+
+usejq=`type -p jq`
+if [ "$usejq" ]
+then
+    curl -H "X-MBX-APIKEY: ${KEY}" -X POST \
+         -H "Accept: application/json" \
+         -d "symbol=${PAIR}&side=${SIDE}&type=${TYPE}" \
+         -d "timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}" \
+         -d "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}" \
+         -G ${DOMAIN}/${ENDPT} 2> /dev/null | jq '.'
+else
+    curl -H "X-MBX-APIKEY: ${KEY}" -X POST \
+         -H "Accept: application/json" \
+         -d "symbol=${PAIR}&side=${SIDE}&type=${TYPE}" \
+         -d "timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}" \
+         -d "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}" \
+         -G ${DOMAIN}/${ENDPT} 2> /dev/null
+fi
