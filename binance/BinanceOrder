@@ -6,9 +6,11 @@ PAIR="ETHBTC"
 BINF="${HOME}/.binance"
 
 usage() {
-    printf "\nUsage: BinanceOrder [-b|-s] [-P pair] [-p price] [-q quantity] [-t type]"
-    printf "\n\t[-f timeInForce] [-r recvWindow] [-n] [-v] [-u]"
+    printf "\nUsage: BinanceOrder [-a] [-b|-s] [-P pair] [-p price] [-q quantity] [-t type]"
+    printf "\n\t[-f timeInForce] [-r recvWindow] [-d price_percent_offset]"
+    printf "\n\t[-n] [-v] [-u]"
     printf "\n\nWhere:"
+    printf "\n\t-a indicates use the retrieved average price of the specified pair"
     printf "\n\t-b indicates BUY"
     printf "\n\t-s indicates SELL"
     printf "\n\t\tOne of -b or -s must be specified, there is no default"
@@ -24,10 +26,23 @@ usage() {
     printf "\n\t\tGTC IOC FOK"
     printf "\n\t\ttimeInForce defaults to GTC"
     printf "\n\trecvWindow specifies the time in milliseconds the API request is valid"
+    printf "\n\tprice_percent_offset indicates calculate the price based on the"
+    printf "\n\t\taverage or specified price, buying at lower value and selling at higher"
     printf "\n\t-n indicates to tell me what you would do but do nothing"
     printf "\n\t-v indicates to verify the specified trade before sending the request."
     printf "\n\t\tIf indicated, you will be prompted to approve the trade before it is sent"
     printf "\n\t-u indicates display this usage message\n"
+}
+
+side_offset() {
+    if [ "${SIDE}" == "BUY" ]
+    then
+        percent=`echo "scale=10; (100 - ${OFFSET}) / 100" | bc`
+    else
+        percent=`echo "scale=10; (100 + ${OFFSET}) / 100" | bc`
+    fi
+    PRICE=`echo "scale=50; $1 * ${percent}" | bc`
+    echo "Revised price from $1 to ${PRICE}"
 }
 
 display_trade() {
@@ -62,20 +77,29 @@ SEC=
 }
 
 # Process the command line arguments
+useavg=
 tellme=
 dispus=
 verify=
+OFFSET=
+PRICE=
 SIDE=
 TYPE="LIMIT"
 TINF="GTC"
 RECV=5000
-while getopts bsf:P:p:q:r:t:nuv flag; do
+while getopts absd:f:P:p:q:r:t:nuv flag; do
     case $flag in
+        a)
+            useavg=1
+            ;;
         b)
             SIDE="BUY"
             ;;
         s)
             SIDE="SELL"
+            ;;
+        d)
+            OFFSET=$OPTARG
             ;;
         f)
             TINF=$OPTARG
@@ -109,14 +133,44 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$SIDE" ] || {
-    echo "Trade side must be specified with either -b (BUY) or -s (SELL). Exiting."
     usage
+    echo "Trade side must be specified with either -b (BUY) or -s (SELL). Exiting."
     exit 1
+}
+
+[ "$PRICE" ] && {
+    [ "$useavg" ] && {
+        usage
+        echo "Incompatible arguments <-a> and <-p price>. Use only one or neither."
+        echo "You can specify the price with -p or use the average price with -a. Exiting."
+        exit 1
+    }
+}
+
+[ "$PRICE" ] || {
+    if [ "$useavg" ]
+    then
+        PRICE=`curl -X GET -H "Accept: */*" \
+             "${DOMAIN}/api/v3/avgPrice?symbol=${PAIR}" 2> /dev/null | \
+             jq '.price' | sed -e "s/\"//g"`
+        echo "Using retrieved average price of ${PRICE} for ${PAIR} as base price"
+    else
+        echo "Price not specified with <-a> or <-p value>"
+        PRICE=`curl -X GET -H "Accept: */*" \
+             "${DOMAIN}/api/v1/ticker/price?symbol=${PAIR}" 2> /dev/null | \
+             jq '.price' | sed -e "s/\"//g"`
+        echo "Set price to current ticker for ${PAIR}: ${PRICE}"
+    fi
 }
 
 [ "$dispus" ] && {
     usage
     [ "$tellme" ] || exit 1
+}
+
+[ "$OFFSET" ] && {
+    echo "Calculating price from specified price of ${PRICE} and offset of ${OFFSET}%"
+    side_offset "$PRICE"
 }
 
 TIM=$(date +%s)

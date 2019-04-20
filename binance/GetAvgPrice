@@ -53,7 +53,7 @@ echo "Retrieving average price for ${PAIR}:"
 usejq=`type -p jq`
 if [ "$usejq" ]
 then
-    curl -X GET -H "Accept: */*" "${DOMAIN}/${ENDPT}?symbol=${PAIR}" 2> /dev/null | jq '.'
+    curl -X GET -H "Accept: */*" "${DOMAIN}/${ENDPT}?symbol=${PAIR}" 2> /dev/null | jq '.price'
 else
     curl -X GET -H "Accept: */*" "${DOMAIN}/${ENDPT}?symbol=${PAIR}" 2> /dev/null
 fi
