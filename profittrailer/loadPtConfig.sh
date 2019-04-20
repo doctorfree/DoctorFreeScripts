@@ -2,11 +2,14 @@
 
 DOM="https://ronrecord.ddns.net"
 PORT=8443
-LIC="c106dd53f98c396ce9d891cff5672924"
 SAPI="settingsapi/settings"
 INVALID="Invalid selection. Please enter one of the displayed numeric values."
 filetypes="APPLICATION DCA PAIRS INDICATORS HOTCONFIG"
 usejq=
+
+PT_DIR="/usr/local/lib/ProfitTrailer"
+LIC=`grep license ${PT_DIR}/application.properties | \
+       awk -F "=" ' { print $2 } ' | sed -e "s/ //g" | tr -dc '[:print:]'`
 
 loadconf() {
     if [ "$tellme" ]

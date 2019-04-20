@@ -43,3 +43,74 @@ Contents:
      You will need to configure your own Wallhaven username/password in the
      script. See the Wallhaven convenience scripts in the Wallpapers dir
      for easy bulk downloading.
+
+[**backgrounds**](Wallpapers/backgrounds.sh) - TBD
+
+[**ckdown**](Wallpapers/ckdown.sh) - TBD
+
+[**clean**](Wallpapers/clean.sh) - TBD
+
+[**diffem**](Wallpapers/diffem) - TBD
+
+[**findupthumbs**](Wallpapers/findupthumbs.sh) - TBD
+
+[**fixabslinks**](Wallpapers/fixabslinks.sh) - TBD
+
+[**fixlinks2models**](Wallpapers/fixlinks2models.sh) - TBD
+
+[**fixlinks2people**](Wallpapers/fixlinks2people.sh) - TBD
+
+[**fixmodelslinks**](Wallpapers/fixmodelslinks.sh) - TBD
+
+[**fixpeoplelinks**](Wallpapers/fixpeoplelinks.sh) - TBD
+
+[**get-background**](Wallpapers/get-background.sh) - TBD
+
+[**get-list**](Wallpapers/get-list.sh) - TBD
+
+[**get-missing**](Wallpapers/get-missing.sh) - TBD
+
+[**get-model**](Wallpapers/get-model.sh) - TBD
+
+[**get-models**](Wallpapers/get-models.sh) - TBD
+
+[**get-photographers**](Wallpapers/get-photographers.sh) - TBD
+
+[**instem**](Wallpapers/instem) - TBD
+
+[**linkhaven**](Wallpapers/linkhaven.sh) - TBD
+
+[**linkit**](Wallpapers/linkit.sh) - TBD
+
+[**links2files**](Wallpapers/links2files.sh) - TBD
+
+[**mkall**](Wallpapers/mkall.sh) - TBD
+
+[**mkbgdir**](Wallpapers/mkbgdir.sh) - TBD
+
+[**mkbgfav**](Wallpapers/mkbgfav.sh) - TBD
+
+[**mkbglinks**](Wallpapers/mkbglinks.sh) - TBD
+
+[**mkdesc**](Wallpapers/mkdesc.sh) - TBD
+
+[**mkfavs**](Wallpapers/mkfavs.sh) - TBD
+
+[**mkrelink**](Wallpapers/mkrelink.sh) - TBD
+
+[**models**](Wallpapers/models.sh) - TBD
+
+[**mvem**](Wallpapers/mvem.sh) - TBD
+
+[**randmodel**](Wallpapers/randmodel.sh) - TBD
+
+[**reget**](Wallpapers/reget.sh) - TBD
+
+[**rmportrait**](Wallpapers/rmportrait.sh) - TBD
+
+[**saver**](Wallpapers/saver.sh) - TBD
+
+[**showdesc**](Wallpapers/showdesc.sh) - TBD
+
+[**shownext**](Wallpapers/shownext.sh) - TBD
+

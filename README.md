@@ -18,6 +18,20 @@ Contents:
 [**LICENSE**](LICENSE) - Copyright and licensing, roughly the MIT license but without the heavy handed use of the caps lock key.
      for easy bulk downloading.
 
+[**Scripts/IFTTT**](IFTTT/README.md) - Scripts to invoke IFTTT applets I've configured. These include scripts to manage my lights and devices like my AppleTV, Bluray player, and TV.
+
+[**Scripts/Utils**](Utils/README.md) - A few utility scripts
+
+[**Scripts/Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper
+
+[**Scripts/binance**](binance/README.md) - Scripts to access the Binance API providing command line support for placing buy/sell trade orders and retrieving ticker or average prices for trading pairs
+
+[**Scripts/chrome-themes**](chrome-themes/README.md) - Scripts to create and manage themes for the Chrome browser including themes I have created
+
+[**Scripts/coinmarketcap**](coinmarketcap/README.md) - Scripts to access the Coinmarketcap API providing command line support for retrieving market info on specified cryptocurrency coins and tokens
+
+[**Scripts/profittrailer**](profittrailer/README.md) - Scripts to access the ProfitTrailer API providing command line support for listing, loading, managing, switching ProfitTrailer configurations including trading strategies
+
 [**add2itunes**](add2itunes.sh) - Add the media files provided as arguments to the iTunes library. Uses OS X osascript to execute AppleScript.
 
 [**any2any**](any2any.sh) - Uses ffmpeg to convert from any audio/video format to any other
@@ -76,10 +90,6 @@ Contents:
     When invoked as chkhome it checks directories in $HOME
 
 [**chkinst**](chkinst.sh) - Check if installed versions of files in current directory are different in order to determine if git repository is up-to-date.
-
-[**chrome-themes/mktheme**](chrome-themes/mktheme.sh) - Create a Google Chrome theme using a specified background image and corresponding manifest, theme images, private key, etc.
-
-[**chrome-themes/Icons/mkicon**](chrome-themes/Icons/mkicon.sh) - Create Google Chrome theme icons using ImageMagick and a freely licensed background image from Wikimedia Commons
 
 [**clndl**](clndl.sh) - Moves the most recently downloaded versions of files to their regular filename without the (#) in the name. By default, relies on the Mac OS X convention of inserting (#) in the name of newer version filenames.
 
@@ -184,6 +194,4 @@ for all files in that directory hierarchy
 [**vimrc**](vimrc) - Vim startup configuration file. Install as $HOME/.vimrc
 
 [**wikivim**](wikivim.sh) - Use in conjunction with It's All Text Firefox Add-On to use Vim to edit wiki pages. On OS X use Applescript and iTerm 2, otherwise use Bash and xterm.
-
-[**Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper
 

@@ -2,7 +2,9 @@
 
 DOMAIN="https://ronrecord.ddns.net"
 PORT=8443
-LICENSE="c106dd53f98c396ce9d891cff5672924"
+PT_DIR="/usr/local/lib/ProfitTrailer"
+LIC=`grep license ${PT_DIR}/application.properties | \
+       awk -F "=" ' { print $2 } ' | sed -e "s/ //g" | tr -dc '[:print:]'`
 
 curl -X POST --header 'Content-Type: application/json' \
              --header 'Accept: text/plain' \

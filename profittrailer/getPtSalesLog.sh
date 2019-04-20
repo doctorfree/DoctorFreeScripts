@@ -2,7 +2,9 @@
 
 DOMAIN="https://ronrecord.ddns.net"
 PORT=8443
-TOKEN="rrsleig205ujc04tj0x9cugr04slt"
+PT_DIR="/usr/local/lib/ProfitTrailer"
+TOKEN=`grep server.api_token ${PT_DIR}/application.properties | \
+       awk -F "=" ' { print $2 } ' | sed -e "s/ //g" | tr -dc '[:print:]'`
 
 usejq=`type -p jq`
 if [ "$usejq" ]
