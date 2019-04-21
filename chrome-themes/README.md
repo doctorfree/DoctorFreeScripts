@@ -10,21 +10,21 @@ Contents
 
 [**chrome-themes/Icons/mkicon**](chrome-themes/Icons/mkicon.sh) - Create Google Chrome theme icons using ImageMagick and a freely licensed background image from Wikimedia Commons
 
-[**Backgrounds**](chrome-themes/Backgrounds) - TBD
+[**Backgrounds**](chrome-themes/Backgrounds) - Images used to create theme backgrounds
 
-[**Icons**](chrome-themes/Icons) - TBD
+[**Icons**](chrome-themes/Icons) - Scripts to create icons and promos
 
-[**Images**](chrome-themes/Images) - TBD
+[**Images**](chrome-themes/Images) - Frame, tab, toolbar, and other images used in themes
 
-[**Manifests**](chrome-themes/Manifests) - TBD
+[**Manifests**](chrome-themes/Manifests) - Json files providing specifications for theme creation
 
-[**clean**](chrome-themes/clean.sh) - TBD
+[**clean**](chrome-themes/clean.sh) - Move created themes to Dist and invoke mktheme the cleanup
 
-[**html**](chrome-themes/html) - TBD
+[**html**](chrome-themes/html) - HTML documents providing brief descriptions, display, and download of my themes
 
-[**index**](chrome-themes/index.html) - TBD
+[**index**](chrome-themes/index.html) - top level HTML document serving as gateway to the documents in the html subdir
 
-[**mkscreen**](chrome-themes/mkscreen.sh) - TBD
+[**mkscreen**](chrome-themes/mkscreen.sh) - Create screenshots for Chrome themes
 
-[**redo**](chrome-themes/redo.sh) - TBD
+[**redo**](chrome-themes/redo.sh) - Recreate a Chrome theme
 
