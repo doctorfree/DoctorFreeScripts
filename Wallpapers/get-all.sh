@@ -94,6 +94,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Japanese_women"
         ;;
+    Lesbian)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Lesbians"
+        ;;
     Met-Art)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "MetArt_Magazine"
@@ -110,6 +114,14 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Playboy_Plus"
         get_search "${dir}" "Playmate"
+        ;;
+    Redheads)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "redhead"
+        ;;
+    Renders)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "render"
         ;;
     Sunglasses)
         get_search "${dir}" "${dir}"

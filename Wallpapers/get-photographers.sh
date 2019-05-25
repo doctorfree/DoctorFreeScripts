@@ -23,6 +23,14 @@ do
     [ -d "${photographer}" ] || continue
     cd "${HERE}"
     case "${photographer}" in
+        Alex_Lynn)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Alex-Lynn.com"
+            ;;
+        Maksim_Chuprin)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Maxim_Chuprin"
+            ;;
         Murbo_Dagldian)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Murbo"

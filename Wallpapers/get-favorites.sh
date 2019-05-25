@@ -16,7 +16,7 @@ then
 else
     [ -r ./Utils/wallutils ] && . ./Utils/wallutils
 fi
-[ "$WHDIR" ] || WHDIR="${PICDIR}/Wallhaven"
+[ "$WHDIR" ] || WHDIR="${PICROOT}/Wallhaven"
 
 DDIR="${WHDIR}/Favorites"
 
