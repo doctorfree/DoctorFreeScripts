@@ -1,6 +1,7 @@
 # Crontab entries to run a cryptocurrency miner only during 2018 PG&E Off-Peak hours
 #
 # You may have to adjust the hours/days/months for your energy provider.
+# The schedule set here is for my rate plan, PG&E Time-of-Use Rate Plan E-6
 #
 # By default these entries run every 15 minutes. This provides a keepalive function
 # and relies on the start_miner script checking to see if it is already running.

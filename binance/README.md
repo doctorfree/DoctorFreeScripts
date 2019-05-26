@@ -1,7 +1,16 @@
 Scripts/binance
 ===============
 
-Scripts to access the Binance API providing command line support for placing buy/sell trade orders and retrieving ticker or average prices for trading pairs
+Scripts to access the Binance API providing command line support for placing buy/sell trade orders, retrieving ticker or average prices for trading pairs, and retrieving open orders for a trading pair.
+
+Setup
+-----
+
+    - Create an API Key on binance.com
+    - Copy the newly created key and secret
+    - Create the file $HOME/.binance with entries in the form:
+        KEY="your-newly-created-key"
+        SEC="your-newly-generated-secret"
 
 Contents
 --------

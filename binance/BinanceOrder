@@ -2,19 +2,22 @@
 
 DOMAIN="https://api.binance.com"
 ENDPT="api/v3/order"
-PAIR="ETHBTC"
+OPNPT="api/v3/openOrders"
 BINF="${HOME}/.binance"
 
 usage() {
-    printf "\nUsage: BinanceOrder [-a] [-b|-s] [-P pair] [-p price] [-q quantity] [-t type]"
-    printf "\n\t[-f timeInForce] [-r recvWindow] [-d price_percent_offset]"
-    printf "\n\t[-n] [-v] [-u]"
+    printf "\nUsage: BinanceOrder [-a] [-b|-s] [-c orderId] [-o] [-P pair] [-p price]"
+    printf "\n\t[-q quantity] [-t type] [-f timeInForce] [-r recvWindow]"
+    printf "\n\t[-d price_percent_offset] [-n] [-v] [-V] [-u]"
     printf "\n\nWhere:"
     printf "\n\t-a indicates use the retrieved average price of the specified pair"
     printf "\n\t-b indicates BUY"
     printf "\n\t-s indicates SELL"
     printf "\n\t\tOne of -b or -s must be specified, there is no default"
-    printf "\n\tpair specifies a trading pair in the format ETHBTC (the default pair)"
+    printf "\n\t-o indicates get open orders for specified pair"
+    printf "\n\t\t-o must be accompanied by <-P pair>"
+    printf "\n\t-c orderId indicates cancel orderId order"
+    printf "\n\tpair specifies a trading pair in the format 'ETHBTC'"
     printf "\n\tprice specifies the price per coin/token"
     printf "\n\tquantity specifies the number of tokens/coins to buy"
     printf "\n\ttype specifies the type of trade. Valid type values are:"
@@ -29,8 +32,9 @@ usage() {
     printf "\n\tprice_percent_offset indicates calculate the price based on the"
     printf "\n\t\taverage or specified price, buying at lower value and selling at higher"
     printf "\n\t-n indicates to tell me what you would do but do nothing"
-    printf "\n\t-v indicates to verify the specified trade before sending the request."
-    printf "\n\t\tIf indicated, you will be prompted to approve the trade before it is sent"
+    printf "\n\t-v indicates curl verbose mode (disables use of jq to process return)"
+    printf "\n\t-V indicates to verify the specified trade before sending the request."
+    printf "\n\t\tYou will be prompted to approve the trade before it is sent"
     printf "\n\t-u indicates display this usage message\n"
 }
 
@@ -45,11 +49,35 @@ side_offset() {
     echo "Revised price from $1 to ${PRICE}"
 }
 
+display_orders() {
+    echo ""
+    echo "The following curl command would be used to retrieve your open orders"
+    echo ""
+    printf "%s" "curl ${VERBOSE} -H X-MBX-APIKEY: <trading key> "
+    echo -n "-X GET -H Accept: application/json "
+    echo -n "${DOMAIN}/${OPNPT}?symbol=${PAIR}&timestamp=${TIM}&signature=${SIG}"
+    echo ""
+    echo ""
+}
+
+display_cancel() {
+    echo ""
+    echo "The following curl command would be used to submit your order cancellation"
+    echo ""
+    printf "%s" "curl ${VERBOSE} -H X-MBX-APIKEY: <trading key> "
+    echo -n "-X DELETE -H Accept: application/json "
+    echo -n "-G ${DOMAIN}/${ENDPT}?"
+    echo -n "symbol=${PAIR}&orderId=${orderId}"
+    echo -n "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}"
+    echo ""
+    echo ""
+}
+
 display_trade() {
     echo ""
     echo "The following curl command would be used to submit your order"
     echo ""
-    printf "%s" "curl -H X-MBX-APIKEY: <trading key> "
+    printf "%s" "curl ${VERBOSE} -H X-MBX-APIKEY: <trading key> "
     echo -n "-X POST -H Accept: application/json "
     echo -n "-G ${DOMAIN}/${ENDPT}?"
     echo -n "symbol=${PAIR}&side=${SIDE}&type=${TYPE}&"
@@ -57,6 +85,20 @@ display_trade() {
     echo -n "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}"
     echo ""
     echo ""
+}
+
+display() {
+    if [ "${GETOPEN}" ]
+    then
+        display_orders
+    else
+        if [ "${orderId}" ]
+        then
+            display_cancel
+        else
+            display_trade
+        fi
+    fi
 }
 
 # Get the Binance trading key and secret
@@ -77,17 +119,22 @@ SEC=
 }
 
 # Process the command line arguments
+GETOPEN=
 useavg=
 tellme=
 dispus=
+orderId=
 verify=
+verbose=
 OFFSET=
+PAIR=
 PRICE=
 SIDE=
 TYPE="LIMIT"
 TINF="GTC"
 RECV=5000
-while getopts absd:f:P:p:q:r:t:nuv flag; do
+VERBOSE=
+while getopts abosc:d:f:P:p:q:r:t:nuvV flag; do
     case $flag in
         a)
             useavg=1
@@ -98,11 +145,17 @@ while getopts absd:f:P:p:q:r:t:nuv flag; do
         s)
             SIDE="SELL"
             ;;
+        c)
+            orderId=$OPTARG
+            ;;
         d)
             OFFSET=$OPTARG
             ;;
         f)
             TINF=$OPTARG
+            ;;
+        o)
+            GETOPEN=1
             ;;
         p)
             PRICE=$OPTARG
@@ -126,6 +179,9 @@ while getopts absd:f:P:p:q:r:t:nuv flag; do
             dispus=1
             ;;
         v)
+            VERBOSE="-v"
+            ;;
+        V)
             verify=1
             ;;
     esac
@@ -133,9 +189,13 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$SIDE" ] || {
+  [ "$GETOPEN" ] || {
     usage
-    echo "Trade side must be specified with either -b (BUY) or -s (SELL). Exiting."
+    echo "Trade side must be specified with either -b (BUY) or -s (SELL)."
+    echo "Alternatively, open orders can be retrieved or cancelled with -o or -c."
+    echo "Exiting."
     exit 1
+  }
 }
 
 [ "$PRICE" ] && {
@@ -147,20 +207,38 @@ shift $(( OPTIND - 1 ))
     }
 }
 
+[ "$PAIR" ] || {
+    usage
+    echo "A trading pair must be specified. Do so with <-P pair>."
+    exit 1
+}
+
+if [ "${VERBOSE}" ]
+then
+    usejq=
+else
+    usejq=`type -p jq`
+fi
+
+# Check to see if PRICE is needed for this request
 [ "$PRICE" ] || {
-    if [ "$useavg" ]
-    then
-        PRICE=`curl -X GET -H "Accept: */*" \
-             "${DOMAIN}/api/v3/avgPrice?symbol=${PAIR}" 2> /dev/null | \
-             jq '.price' | sed -e "s/\"//g"`
-        echo "Using retrieved average price of ${PRICE} for ${PAIR} as base price"
-    else
-        echo "Price not specified with <-a> or <-p value>"
-        PRICE=`curl -X GET -H "Accept: */*" \
-             "${DOMAIN}/api/v1/ticker/price?symbol=${PAIR}" 2> /dev/null | \
-             jq '.price' | sed -e "s/\"//g"`
-        echo "Set price to current ticker for ${PAIR}: ${PRICE}"
-    fi
+    [ "${GETOPEN}" ] || {
+      [ "${orderId}" ] || {
+        if [ "$useavg" ]
+        then
+            PRICE=`curl ${VERBOSE} -X GET -H "Accept: */*" \
+                 "${DOMAIN}/api/v3/avgPrice?symbol=${PAIR}" 2> /dev/null | \
+                 jq '.price' | sed -e "s/\"//g"`
+            echo "Using retrieved average price of ${PRICE} for ${PAIR} as base price"
+        else
+            echo "Price not specified with <-a> or <-p value>"
+            PRICE=`curl ${VERBOSE} -X GET -H "Accept: */*" \
+                 "${DOMAIN}/api/v1/ticker/price?symbol=${PAIR}" 2> /dev/null | \
+                 jq '.price' | sed -e "s/\"//g"`
+            echo "Set price to current ticker for ${PAIR}: ${PRICE}"
+        fi
+    }
+  }
 }
 
 [ "$dispus" ] && {
@@ -173,19 +251,38 @@ shift $(( OPTIND - 1 ))
     side_offset "$PRICE"
 }
 
-TIM=$(date +%s)
-SIG=`echo -n "symbol=${PAIR}&side=${SIDE}&type=${TYPE}&timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}&recvWindow=${RECV}&timestamp=${TIM}" | openssl dgst -sha256 -hmac "${SEC}"`
+#TIM=$(date +%s)
+if [ "${usejq}" ]
+then
+    TIM=`curl -X GET -H "Accept: */*" "${DOMAIN}/api/v1/time" 2> /dev/null | jq '.serverTime'`
+else
+    TIM=`curl -X GET -H "Accept: */*" "${DOMAIN}/api/v1/time" 2> /dev/null | grep serverTime | awk -F ":" ' { print $3 } ' | sed -e "s/\"//g" -e "s/\}//"`
+fi
+echo "Set TIM=${TIM}"
+
+if [ "${GETOPEN}" ]
+then
+    echo "Setting SIG with: echo -n symbol=${PAIR}&timestamp=${TIM} | openssl dgst -sha256 -hmac ${SEC}"
+    SIG=`echo -n "symbol=${PAIR}&timestamp=${TIM}" | openssl dgst -sha256 -hmac "${SEC}"`
+else
+    if [ "${orderId}" ]
+    then
+        SIG=`echo -n "symbol=${PAIR}&orderId=${orderId}&recvWindow=${RECV}&timestamp=${TIM}" | openssl dgst -sha256 -hmac "${SEC}"`
+    else
+        SIG=`echo -n "symbol=${PAIR}&side=${SIDE}&type=${TYPE}&timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}&recvWindow=${RECV}&timestamp=${TIM}" | openssl dgst -sha256 -hmac "${SEC}"`
+    fi
+fi
 
 [ "$tellme" ] && {
-    display_trade
+    display
     exit 0
 }
 
 [ "$verify" ] && {
-    display_trade
+    display
     while true
     do
-        read -p "Do you want to submit this order ? (y/n) " yn
+        read -p "Do you want to submit this request ? (y/n) " yn
         case $yn in
             [Yy]* ) break;;
             [Nn]* ) printf "\nExiting.\n"; exit 1;;
@@ -194,20 +291,50 @@ SIG=`echo -n "symbol=${PAIR}&side=${SIDE}&type=${TYPE}&timeInForce=${TINF}&quant
     done
 }
 
-usejq=`type -p jq`
 if [ "$usejq" ]
 then
-    curl -H "X-MBX-APIKEY: ${KEY}" -X POST \
-         -H "Accept: application/json" \
-         -d "symbol=${PAIR}&side=${SIDE}&type=${TYPE}" \
-         -d "timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}" \
-         -d "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}" \
-         -G ${DOMAIN}/${ENDPT} 2> /dev/null | jq '.'
+    if [ "${GETOPEN}" ]
+    then
+        echo "Retrieving open orders for pair ${PAIR}"
+        echo "Executing: curl ${VERBOSE} -H X-MBX-APIKEY: <trading key> ${DOMAIN}/${OPNPT}?symbol=${PAIR}&timestamp=${TIM}&signature=${SIG}"
+        curl ${VERBOSE} -H "X-MBX-APIKEY: ${KEY}" "${DOMAIN}/${OPNPT}?symbol=${PAIR}&timestamp=${TIM}&signature=${SIG}" 2> /dev/null | jq '.'
+    else
+        if [ "${orderId}" ]
+        then
+            curl ${VERBOSE} -H "X-MBX-APIKEY: ${KEY}" -X DELETE \
+                 -H "Accept: application/json" \
+                 -d "symbol=${PAIR}&orderId=${orderId}" \
+                 -d "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}" \
+                 -G ${DOMAIN}/${ENDPT} 2> /dev/null | jq '.'
+        else
+            curl ${VERBOSE} -H "X-MBX-APIKEY: ${KEY}" -X POST \
+                 -H "Accept: application/json" \
+                 -d "symbol=${PAIR}&side=${SIDE}&type=${TYPE}" \
+                 -d "timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}" \
+                 -d "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}" \
+                 -G ${DOMAIN}/${ENDPT} 2> /dev/null | jq '.'
+        fi
+    fi
 else
-    curl -H "X-MBX-APIKEY: ${KEY}" -X POST \
-         -H "Accept: application/json" \
-         -d "symbol=${PAIR}&side=${SIDE}&type=${TYPE}" \
-         -d "timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}" \
-         -d "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}" \
-         -G ${DOMAIN}/${ENDPT} 2> /dev/null
+    if [ "${GETOPEN}" ]
+    then
+        echo "Executing: curl ${VERBOSE} -H X-MBX-APIKEY: <trading key> ${DOMAIN}/${OPNPT}?symbol=${PAIR}&timestamp=${TIM}&signature=${SIG}"
+        curl ${VERBOSE} -H "X-MBX-APIKEY: ${KEY}" "${DOMAIN}/${OPNPT}?symbol=${PAIR}&timestamp=${TIM}&signature=${SIG}" 2> /dev/null
+    else
+        if [ "${orderId}" ]
+        then
+            curl ${VERBOSE} -H "X-MBX-APIKEY: ${KEY}" -X DELETE \
+                 -H "Accept: application/json" \
+                 -d "symbol=${PAIR}&orderId=${orderId}" \
+                 -d "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}" \
+                 -G ${DOMAIN}/${ENDPT} 2> /dev/null
+        else
+            curl ${VERBOSE} -H "X-MBX-APIKEY: ${KEY}" -X POST \
+                 -H "Accept: application/json" \
+                 -d "symbol=${PAIR}&side=${SIDE}&type=${TYPE}" \
+                 -d "timeInForce=${TINF}&quantity=${QUANTITY}&price=${PRICE}" \
+                 -d "recvWindow=${RECV}&timestamp=${TIM}&signature=${SIG}" \
+                 -G ${DOMAIN}/${ENDPT} 2> /dev/null
+        fi
+    fi
 fi
