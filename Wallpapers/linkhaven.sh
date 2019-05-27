@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
+JAP="$TOP/Japanese"
 MOD="$TOP/Models"
 PHO="$TOP/Photographers"
 SUG="$TOP/Suicide_Girls"
@@ -9,6 +10,7 @@ PHD="../../Photographers"
 DIG="../../Digital_Desire"
 DOM="../../Domai"
 FEM="../../Femjoy"
+JAV="../JAV_Idol"
 MET="../../Met-Art"
 DRO="../../Photodromm"
 W4B="../../Watch4Beauty"
@@ -20,7 +22,7 @@ ALL=
 TELL=
 
 usage() {
-  printf "\nUsage: linkhaven [-a] [-dD] [-f] [-h] [-m] [-n] [-psP] [-r] [-u] [-w]"
+  printf "\nUsage: linkhaven [-a] [-dD] [-f] [-h] [-j] [-m] [-n] [-psP] [-r] [-u] [-w]"
   printf "\nWhere:"
   printf "\n\t-a indicates use all combinations of subdirs and destinations"
   printf "\n\t-D indicates use Digital_Desire destination dir"
@@ -28,6 +30,7 @@ usage() {
   printf "\n\t-f indicates use Femjoy destination dir"
   printf "\n\t-h indicates use hard links for duplicates"
   printf "\n\t\t(default is symbolic links)"
+  printf "\n\t-j indicates use Japanese destination dir"
   printf "\n\t-m indicates use Met-Art destination"
   printf "\n\t-n indicates tell me what you would do but don't do it"
   printf "\n\t-p indicates use Photographers subdir"
@@ -90,7 +93,7 @@ linkem() {
     printf "\n"
 }
 
-while getopts anmpPdDswu flag; do
+while getopts adfhjnmprPDswu flag; do
     case $flag in
         a)
             ALL=1
@@ -106,6 +109,10 @@ while getopts anmpPdDswu flag; do
             ;;
         h)
             LN="ln"
+            ;;
+        j)
+            DES="$JAV"
+            SUB="$JAP"
             ;;
         m)
             DES="$MET"
@@ -162,6 +169,9 @@ then
     done
     SUB="$SUG"
     DES="$SGD"
+    linkem
+    DES="$JAV"
+    SUB="$JAP"
     linkem
 else
     linkem
