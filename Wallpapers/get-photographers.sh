@@ -10,9 +10,9 @@
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
     echo "Running ./get-search -p 1 -l $1 -s $QUERY"
-    ./get-search -q -n 2048 -p 1 -l "$1" -s "$QUERY"
-    echo "Running ./get-search -l $1 -s $QUERY"
-    ./get-search -q -l "$1" -s "$QUERY"
+    ./get-search -q -n 1536 -p 1 -l "$1" -s "$QUERY"
+#   echo "Running ./get-search -l $1 -s $QUERY"
+#   ./get-search -q -l "$1" -s "$QUERY"
 }
 
 HERE=`pwd`
@@ -46,3 +46,9 @@ do
     cd Photographers
 done
 cd "${HERE}"
+[ "$1" == "-S" ] || {
+  [ -x ../updsumhaven ] && {
+    echo "Running ../updsumhaven -p"
+    ../updsumhaven -p > /dev/null
+  }
+}

@@ -9,8 +9,8 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-    echo "Running ./get-search -p 1 -l $1 -s $QUERY"
-    ./get-search -q -p 1 -l "$1" -s "$QUERY"
+#   echo "Running ./get-search -p 1 -l $1 -s $QUERY"
+#   ./get-search -q -p 1 -l "$1" -s "$QUERY"
     echo "Running ./get-search -l $1 -s $QUERY"
     ./get-search -q -l "$1" -s "$QUERY"
 }
@@ -23,6 +23,8 @@ FIND=
 # ./get-anime -p 1 $*
 echo "Running ./get-anime $*"
 ./get-anime -q $*
+echo "Running ./get-top $*"
+./get-top -q $*
 # ./get-general -p 1 $*
 #echo "Running ./get-general $*"
 #./get-general -q $*
@@ -40,18 +42,19 @@ do
     [ "${dir}" = "Favorites" ] && continue
     [ "${dir}" = "General" ] && continue
     [ "${dir}" = "People" ] && continue
+    [ "${dir}" = "Top" ] && continue
     case "${dir}" in
     JAV_Idol)
-        ./get-models -j
+        ./get-models -j -S
         ;;
     Models)
-        ./get-models -m
+        ./get-models -m -S
         ;;
     Photographers)
-        ./get-photographers
+        ./get-photographers -S
         ;;
     Suicide_Girls)
-        ./get-models -s
+        ./get-models -s -S
         ;;
     Art)
         get_search "${dir}" "${dir}"
@@ -85,6 +88,10 @@ do
     Glasses)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Women_With_Glasses"
+        ;;
+    Hard_Nipples)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Perky_Nipples"
         ;;
     Hegre-Art)
         get_search "${dir}" "${dir}"
@@ -162,4 +169,8 @@ done
 [ -x ./counts ] && {
     echo "Running ./counts"
     ./counts
+}
+[ -x ../updsumhaven ] && {
+    echo "Running ../updsumhaven"
+    ../updsumhaven > /dev/null
 }
