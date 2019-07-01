@@ -9,13 +9,25 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-    echo "Running ./get-search -p 1 -l $1 -s $QUERY"
-    ./get-search -q -n 1536 -p 1 -l "$1" -s "$QUERY"
-#   echo "Running ./get-search -l $1 -s $QUERY"
-#   ./get-search -q -l "$1" -s "$QUERY"
+    echo "Running ./get-search ${LAT} -p 1 -l $1 -s $QUERY"
+    ./get-search -q ${LAT} -n 1536 -p 1 -l "$1" -s "$QUERY"
+#   echo "Running ./get-search ${LAT} -l $1 -s $QUERY"
+#   ./get-search -q ${LAT} -l "$1" -s "$QUERY"
 }
 
 HERE=`pwd`
+LAT=
+UPD=1
+
+[ "$1" == "-R" ] && {
+  LAT="-R"
+  shift
+}
+
+[ "$1" == "-S" ] && {
+  UPD=
+  [ "$2" == "-R" ] && LAT="-R"
+}
 
 cd Photographers
 for photographer in *
@@ -26,6 +38,10 @@ do
         Alex_Lynn)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Alex-Lynn.com"
+            ;;
+        Holly_Randall)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "HollyRandall"
             ;;
         Maksim_Chuprin)
             get_search "Photographers/${photographer}" "${photographer}"
@@ -46,7 +62,7 @@ do
     cd Photographers
 done
 cd "${HERE}"
-[ "$1" == "-S" ] || {
+[ "${UPD}" ] && {
   [ -x ../updsumhaven ] && {
     echo "Running ../updsumhaven -p"
     ../updsumhaven -p > /dev/null

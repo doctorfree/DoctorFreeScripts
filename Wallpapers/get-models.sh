@@ -23,6 +23,13 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Valeria_A"
             ;;
+        Alena_Ushkova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Aliona_Aganova"
+            get_search "${MODD}/${model}" "Alena_Aganova"
+            get_search "${MODD}/${model}" "Alyona_Ushkova"
+            get_search "${MODD}/${model}" "Alena_Night"
+            ;;
         Alexandra_Smelova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Aleksandra_Smelova"
@@ -31,6 +38,7 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alina_Panewskaja"
             get_search "${MODD}/${model}" "Alinka_Rainer"
+            get_search "${MODD}/${model}" "Alina_Maier"
             ;;
         Alisa_I)
             get_search "${MODD}/${model}" "${model}"
@@ -133,6 +141,7 @@ get_model() {
             ;;
         Jenya)
             get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Jenya_D"
             get_search "${MODD}/${model}" "Katie_Fey"
             get_search "${MODD}/${model}" "Eugenia"
             get_search "${MODD}/${model}" "Eugenia_Diordiychuk"
@@ -172,6 +181,19 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Ekaterina_Skaredina"
             get_search "${MODD}/${model}" "Clover_\(Femjoy\)"
+            ;;
+        Keeley_Hazell)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "keeley_hazel"
+            get_search "${MODD}/${model}" "Keely_Hazel"
+            get_search "${MODD}/${model}" "Kelley_Hazell"
+            ;;
+        Kiara_Diletto)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Alina_N"
+            get_search "${MODD}/${model}" "Beverly_A"
+            get_search "${MODD}/${model}" "Nastasy"
+            get_search "${MODD}/${model}" "Pelageya"
             ;;
         Kristina_Shcherbinina)
             get_search "${MODD}/${model}" "${model}"
@@ -359,6 +381,14 @@ get_jav() {
         Julia_Kyoka)
             get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Julia_Boin"
+            ;;
+        Madoka_Hitomi)
+            get_search "${JAVD}/${model}" "${model}"
+            get_search "${JAVD}/${model}" "Hitomi_Madoka"
+            ;;
+        Meisa_Chibana)
+            get_search "${JAVD}/${model}" "${model}"
+            get_search "${JAVD}/${model}" "Chibana_Meisa"
             ;;
         Utsunomiya_Shion)
             get_search "${JAVD}/${model}" "${model}"

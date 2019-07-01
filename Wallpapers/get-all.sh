@@ -11,18 +11,36 @@ get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
 #   echo "Running ./get-search -p 1 -l $1 -s $QUERY"
 #   ./get-search -q -p 1 -l "$1" -s "$QUERY"
-    echo "Running ./get-search -l $1 -s $QUERY"
-    ./get-search -q -l "$1" -s "$QUERY"
+    echo "Running ./get-search ${LAT} -l $1 -s $QUERY"
+    ./get-search -q ${LAT} -l "$1" -s "$QUERY"
 }
 
 HERE=`pwd`
 FIND=
+LAT=
+MLAT=
+UPD=1
+
+# TODO: use getopts to process arguments
+[ "$1" == "-R" ] && {
+  LAT="-R"
+  MLAT="-l"
+  shift
+}
+
+[ "$1" == "-S" ] && {
+  UPD=
+  [ "$2" == "-R" ] && {
+    LAT="-R"
+    MLAT="-l"
+  }
+}
 
 [ "$1" == "-a" ] && FIND=1
 
-# ./get-anime -p 1 $*
-echo "Running ./get-anime $*"
-./get-anime -q $*
+# ./get-anime ${LAT} -p 1 $*
+echo "Running ./get-anime ${LAT} $*"
+./get-anime ${LAT} -q $*
 echo "Running ./get-top $*"
 ./get-top -q $*
 # ./get-general -p 1 $*
@@ -45,16 +63,21 @@ do
     [ "${dir}" = "Top" ] && continue
     case "${dir}" in
     JAV_Idol)
-        ./get-models -j -S
+        ./get-models ${MLAT} -j -S
         ;;
     Models)
-        ./get-models -m -S
+        ./get-models ${MLAT} -m -S
         ;;
     Photographers)
-        ./get-photographers -S
+        ./get-photographers ${LAT} -S
         ;;
     Suicide_Girls)
-        ./get-models -s -S
+        ./get-models ${MLAT} -s -S
+        ;;
+    Amateur)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "amateurs"
+        get_search "${dir}" "nonprofessionals"
         ;;
     Art)
         get_search "${dir}" "${dir}"
@@ -64,9 +87,23 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "oiled_body"
         ;;
+    Body_Paint)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "bodypaint"
+        get_search "${dir}" "body_painting"
+        ;;
     Celebrity)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Fake_Nudes"
+        get_search "${dir}" "celebrities"
+        get_search "${dir}" "famous_people"
+        ;;
+    Czech)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Czech_women"
+        get_search "${dir}" "Czech_Republic"
+        get_search "${dir}" "Karin_Spolnikova"
+        get_search "${dir}" "Michaela_Isizzu"
         ;;
     Domai)
         get_search "${dir}" "${dir}"
@@ -76,6 +113,10 @@ do
     Errotica_Archives)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Errotica_Archives_Magazine"
+        ;;
+    FameGirls)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "famegirls.net"
         ;;
     Fantasy_Art)
         get_search "${dir}" "${dir}"
@@ -130,6 +171,11 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "render"
         ;;
+    Russian)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Russian_women"
+        get_search "${dir}" "Russian_Model"
+        ;;
     Sunglasses)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Women_With_Shades"
@@ -170,7 +216,9 @@ done
     echo "Running ./counts"
     ./counts
 }
-[ -x ../updsumhaven ] && {
+[ "${UPD}" ] && {
+  [ -x ../updsumhaven ] && {
     echo "Running ../updsumhaven"
     ../updsumhaven > /dev/null
+  }
 }
