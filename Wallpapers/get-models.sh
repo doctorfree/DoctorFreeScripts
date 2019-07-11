@@ -159,6 +159,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Cute_Bunny"
             ;;
+        Katerina_Hartlova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Katarina_Dubrova"
+            ;;
         Kateryna_Marchenko)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kate_Chromia"
@@ -294,6 +298,10 @@ get_model() {
         Nancy_A)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Nancy_Photodromm"
+            ;;
+        Nadya_Nabakova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Bunny_Colby"
             ;;
         Nata_Lee)
             get_search "${MODD}/${model}" "${model}"
