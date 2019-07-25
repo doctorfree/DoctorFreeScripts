@@ -170,6 +170,9 @@ do
     Renders)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "render"
+        get_search "${dir}" "3D"
+        get_search "${dir}" "CGI"
+        get_search "${dir}" "digital_art"
         ;;
     Russian)
         get_search "${dir}" "${dir}"
@@ -198,6 +201,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Wet_Body"
         get_search "${dir}" "Wet_Clothing"
+        ;;
+    WowGirls)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Wow_Girls"
         ;;
     *)
         get_search "${dir}" "${dir}"

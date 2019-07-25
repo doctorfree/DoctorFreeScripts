@@ -17,7 +17,7 @@ get_search() {
 
 get_model() {
     model="$1"
-    cd "${HERE}"
+    cd "${WHVN}"
     case "$1" in
         Aleksa_Slusarchi)
             get_search "${MODD}/${model}" "${model}"
@@ -87,6 +87,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Candice_B"
             ;;
+        Divina_A)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Davina_A"
+            ;;
         Elin_Eneji)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Elin"
@@ -134,6 +138,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Viktoriia_Aliko"
             get_search "${MODD}/${model}" "Paula_U"
+            ;;
+        Isabella_D)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Ella_C"
             ;;
         Jasmine_A)
             get_search "${MODD}/${model}" "${model}"
@@ -199,9 +207,14 @@ get_model() {
             get_search "${MODD}/${model}" "Nastasy"
             get_search "${MODD}/${model}" "Pelageya"
             ;;
+        Kristina_Makarova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Kris_Strange"
+            ;;
         Kristina_Shcherbinina)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Liya_Silver"
+            get_search "${MODD}/${model}" "Alisa_Verner"
             ;;
         Kristina_Uhrinova)
             get_search "${MODD}/${model}" "${model}"
@@ -282,6 +295,10 @@ get_model() {
             get_search "${MODD}/${model}" "Mila_E"
             get_search "${MODD}/${model}" "Milana"
             ;;
+        Mila_Azul)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Ekaterina_Volkova"
+            ;;
         Milena_D)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Taya_Karpenko"
@@ -312,6 +329,10 @@ get_model() {
             get_search "${MODD}/${model}" "Annabell"
             get_search "${MODD}/${model}" "Danica_A"
             get_search "${MODD}/${model}" "Danica_Jewels"
+            get_search "${MODD}/${model}" "Natali_Nemtchinova"
+            get_search "${MODD}/${model}" "Natalya_Andreeva"
+            get_search "${MODD}/${model}" "Delilah_G"
+            get_search "${MODD}/${model}" "MonroQ"
             ;;
         Natalia_Tihomirova)
             get_search "${MODD}/${model}" "${model}"
@@ -358,11 +379,17 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kailena"
             get_search "${MODD}/${model}" "Sybille_Y"
+            get_search "${MODD}/${model}" "Davina_E"
             ;;
         Victoria_Sokolova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Viktoria_Sokolova"
             get_search "${MODD}/${model}" "Cali"
+            ;;
+        Whitney_Sarka)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Tabitha"
+            get_search "${MODD}/${model}" "Lynne_\(Hegre\)"
             ;;
         Yana_West)
             get_search "${MODD}/${model}" "${model}"
@@ -379,12 +406,12 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             ;;
     esac
-    cd "${HERE}/${MODD}"
+    cd "${WHVN}/${MODD}"
 }
 
 get_jav() {
     model="$1"
-    cd "${HERE}"
+    cd "${WHVN}"
     case "${model}" in
         Julia_Kyoka)
             get_search "${JAVD}/${model}" "${model}"
@@ -407,12 +434,12 @@ get_jav() {
             get_search "${JAVD}/${model}" "${model}"
             ;;
     esac
-    cd "${HERE}/${JAVD}"
+    cd "${WHVN}/${JAVD}"
 }
 
 get_suicide() {
     model="$1"
-    cd "${HERE}"
+    cd "${WHVN}"
     case "${model}" in
         Alyona_German)
             get_search "${SUGD}/${model}" "${model}"
@@ -437,12 +464,20 @@ get_suicide() {
             get_search "${SUGD}/${model}" "Killer_Katrin"
             get_search "${SUGD}/${model}" "Natalia_M"
             ;;
+        Keshia_Hamlani)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Keshia_Suicide"
+            ;;
+        Lure_Suicide)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Lurelady"
+            ;;
         Milenci)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Milenci_Suicide"
             ;;
         Misc)
-            cd "${HERE}/${SUGD}"
+            cd "${WHVN}/${SUGD}"
             ;;
         Octavia_Suicide)
             get_search "${SUGD}/${model}" "${model}"
@@ -462,10 +497,11 @@ get_suicide() {
             get_search "${SUGD}/${model}" "${model}"
             ;;
     esac
-    cd "${HERE}/${SUGD}"
+    cd "${WHVN}/${SUGD}"
 }
 
-HERE=`pwd`
+TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
+WHVN="${TOP}/Wallhaven"
 MODD="Models"
 JAVD="JAV_Idol"
 SUGD="Suicide_Girls"
@@ -526,6 +562,9 @@ while getopts jlmnsSu flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
+
+cd "${WHVN}"
+
 MODELS="$*"
 [ "$MODS" ] && {
   # The Models subdirectory
@@ -553,14 +592,14 @@ MODELS="$*"
     done
   fi
   [ "$sums" ] && {
-    [ -x ../updsumhaven ] && {
-      echo "Running ../updsumhaven -m"
-      ../updsumhaven -m > /dev/null
+    [ -x ${TOP}/updsumhaven ] && {
+      echo "Running ${TOP}/updsumhaven -m"
+      ${TOP}/updsumhaven -m > /dev/null
     }
   }
 }
 
-cd "${HERE}"
+cd "${WHVN}"
 
 [ "$SUIC" ] && {
   # The Suicide_Girls subdirectory
@@ -588,14 +627,14 @@ cd "${HERE}"
     done
   fi
   [ "$sums" ] && {
-    [ -x ../updsumhaven ] && {
-      echo "Running ../updsumhaven -s"
-      ../updsumhaven -s > /dev/null
+    [ -x ${TOP}/updsumhaven ] && {
+      echo "Running ${TOP}/updsumhaven -s"
+      ${TOP}/updsumhaven -s > /dev/null
     }
   }
 }
 
-cd "${HERE}"
+cd "${WHVN}"
 
 [ "$JAVC" ] && {
   # The JAV_Idol subdirectory
@@ -623,9 +662,9 @@ cd "${HERE}"
     done
   fi
   [ "$sums" ] && {
-    [ -x ../updsumhaven ] && {
-      echo "Running ../updsumhaven -j"
-      ../updsumhaven -j > /dev/null
+    [ -x ${TOP}/updsumhaven ] && {
+      echo "Running ${TOP}/updsumhaven -j"
+      ${TOP}/updsumhaven -j > /dev/null
     }
   }
 }

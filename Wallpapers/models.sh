@@ -1,12 +1,14 @@
 #!/bin/bash
 
-JDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/JAV_Idol"
-MDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/Models"
-PDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/Photographers"
-SDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven/Suicide_Girls"
+WTOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
+JDIR="${WTOP}/JAV_Idol"
+MDIR="${WTOP}/Models"
+PDIR="${WTOP}/Photographers"
+SDIR="${WTOP}/Suicide_Girls"
 TYPE="models"
 ALL=
 COUNT=
+NUM=
 
 ListModels() {
     UTYPE=`echo $2 | tr '[:lower:]' '[:upper:]'`
@@ -36,6 +38,10 @@ ListModels() {
     COUNT=1
     shift
 }
+[ "$1" == "-n" ] && {
+    NUM="$2"
+    shift 2
+}
 [ "$1" == "-j" ] && {
     MDIR="${JDIR}"
     TYPE="jav_idols"
@@ -52,10 +58,37 @@ ListModels() {
     shift
 }
 
-[ $# -lt 1 ] && {
-    echo "Usage: models [-ajps] model1 [model2] ..."
+[ "$NUM" ] || {
+  [ $# -lt 1 ] && {
+    echo "Usage: models [-ajps] [-n model_id] model1 [model2] ..."
     echo "Exiting."
     exit 1
+  }
+}
+
+[ "$NUM" ] && {
+    found=
+    for model_dir in $MDIR $JDIR $SDIR $PDIR
+    do
+        for model in $model_dir/*
+        do
+              [ -f $model/wallhaven-$NUM.jpg ] && {
+                  echo "Found $model/wallhaven-$NUM.jpg"
+                  found=1
+              }
+        done
+    done
+    [ "$found" ] || {
+        for topic in ${WTOP}/*
+        do
+            [ -d $topic ] || continue
+            [ -f $topic/wallhaven-$NUM.jpg ] && {
+                echo "Found $topic/wallhaven-$NUM.jpg"
+                found=1
+            }
+        done
+        [ "$found" ] || echo "No image found for ID=$NUM"
+    }
 }
 
 for models in $*
@@ -63,7 +96,7 @@ do
   if [ "$ALL" ]
   then
       ListModels $MDIR models
-      ListModels $MDIR jav_idols
+      ListModels $JDIR jav_idols
       ListModels $SDIR suicide_girls
       ListModels $PDIR photographers
   else
