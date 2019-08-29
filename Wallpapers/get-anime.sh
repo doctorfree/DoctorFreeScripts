@@ -14,7 +14,7 @@ then
 else
     [ -r ./Utils/wallutils ] && . ./Utils/wallutils
 fi
-[ "$WHDIR" ] || WHDIR="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
+[ "$WHDIR" ] || WHDIR="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
 
 DDIR="${WHDIR}/Anime"
 LAT=

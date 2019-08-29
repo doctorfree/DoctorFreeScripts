@@ -2,14 +2,15 @@
 #
 
 usage() {
-    printf "\nUsage: mvdown [-e] [-l] [-n] [-t top_dir] [-w working_dir] model_name"
+    printf "\nUsage: mvdown [-e] [-j] [-n] [-y] [-t top_dir] [-w working_dir] model_name"
     printf "\nWhere:"
     printf "\n\t-e indicates use Elite Babes folder"
-    printf "\n\t-l indicates use local work folder in Home directory"
+    printf "\n\t-j indicates use JP Erotica folder"
     printf "\n\t-n indicates tell me what you would do without doing it"
     printf "\n\t-t top_dir sets the top-level directory to use"
     printf "\n\t-w working_dir sets the work directory under top_dir to use"
     printf "\n\tmodel_name specifies a subdirectory containing the model photos to use"
+    printf "\n\tNo arguments indicates use the current working directory as destination"
     printf "\n\nSettings with the given command-line options are as follows:"
     printf "\n\ttop_dir=${TOP}"
     printf "\n\tworking_dir=${WDIR}\n"
@@ -17,9 +18,9 @@ usage() {
 }
 
 # Which system are we on?
-if [ -d /Volumes/Seagate_BPH_8TB/Pictures ]
+if [ -d /Volumes/Seagate_8TB/Pictures ]
 then
-    TOP="/Volumes/Seagate_BPH_8TB/Pictures"
+    TOP="/Volumes/Seagate_8TB/Pictures"
 else
     if [ -d /u/pictures ]
     then
@@ -33,16 +34,20 @@ fi
 # Subfolder under $TOP where model folders are located
 WDIR="Work/KindGirls"
 
+EFLAG=
+JFLAG=
+YFLAG=
 TELL=
 USAGE=
-while getopts elnt:w:u flag; do
+while getopts ejnt:w:yu flag; do
     case $flag in
         e)
             WDIR="Work/Elite_Babes"
+            EFLAG=1
             ;;
-        l)
-            TOP="${HOME}/Pictures"
-            WDIR="Work.local/KindGirls"
+        j)
+            WDIR="Work/JP_Erotica"
+            JFLAG=1
             ;;
         n)
             TELL=1
@@ -53,6 +58,9 @@ while getopts elnt:w:u flag; do
         w)
             WDIR="$OPTARG"
             ;;
+        y)
+            YFLAG=1
+            ;;
         u)
             USAGE=1
             ;;
@@ -61,16 +69,23 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$USAGE" ] && usage
+[ "$EFLAG" ] && [ "$JFLAG" ] && {
+    echo "The -e and -j options are mutually exclusive, use only one."
+    usage
+}
 
 [ -d ${TOP}/${WDIR} ] || {
     echo "$TOP/$WDIR does not exist or is not a directory. Exiting."
     usage
 }
 
-[ "$1" ] || usage
-
-MODEL="$1"
-DEST="${TOP}/${WDIR}/${MODEL}"
+if [ "$1" ]
+then
+    MODEL=`echo $* | sed -e "s/ /_/g"`
+    DEST="${TOP}/${WDIR}/${MODEL}"
+else
+    DEST=`pwd`
+fi
 DOWN="${HOME}/Pictures/DownThemAll"
 
 [ -d ${DOWN} ] || {
@@ -79,9 +94,18 @@ DOWN="${HOME}/Pictures/DownThemAll"
 }
 
 [ -d ${DEST} ] || {
-    printf "\nModel directory $DEST does not exist or is not a directory.\n"
-    while true
-    do
+    if [ "${YFLAG}" ]
+    then
+        if [ "$TELL" ]
+        then
+            echo "mkdir -p ${DEST}"
+        else
+            mkdir -p "${DEST}"
+        fi
+    else
+      printf "\nModel directory $DEST does not exist or is not a directory.\n"
+      while true
+      do
         read -p "Do you want to create the model directory $MODEL ? (y/n) " yn
         case $yn in
             [Yy]* ) if [ "$TELL" ]
@@ -94,7 +118,8 @@ DOWN="${HOME}/Pictures/DownThemAll"
             [Nn]* ) printf "\nExiting.\n"; exit 1;;
                 * ) echo "Please answer yes or no.";;
         esac
-    done
+      done
+    fi
 }
 
 cd "${DOWN}"
@@ -148,10 +173,12 @@ do
 done
 echo "Moved $moved pics to ${DEST}"
 
-NUM=`ls -1 | grep -v __Skipped__ | wc -l`
+[ "$TELL" ] || {
+    NUM=`ls -1 | grep -v __Skipped__ | wc -l`
 
-[ ${NUM} -gt 1 ] && {
-    echo ""
-    echo "Additional pics: "
-    ls -1 | grep -v mvall | grep -v __Skipped__
+    [ ${NUM} -gt 1 ] && {
+        echo ""
+        echo "Additional pics: "
+        ls -1 | grep -v mvall | grep -v __Skipped__
+    }
 }

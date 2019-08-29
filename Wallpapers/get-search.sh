@@ -24,7 +24,7 @@ fi
 # Root directory of your subfolders of Wallhaven image files
 MAC_TOP=/u/pictures/Work/Wallhaven
 LIN_TOP=/u/pictures/Wallhaven
-SEA_TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
+SEA_TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
 
 [ "$WHDIR" ] || WHDIR="$SEA_TOP"
 [ -d "$WHDIR" ] || {
@@ -103,6 +103,7 @@ cd "${DDIR}"
 
 wh -l "${DDIR}" -n $numdown -s $page -t search $quiet \
    -c $categories -f $filters -q "${query}" -p 0 ${latest}
+#echo "wh -l ${DDIR} -n $numdown -s $page -t search $quiet -c $categories -f $filters -q ${query} -p 0 ${latest}"
 
 #cd "${WHDIR}"
 #echo "Finding duplicates in ${QDIR}"

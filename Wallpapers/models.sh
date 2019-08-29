@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WTOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Wallhaven"
+WTOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
 JDIR="${WTOP}/JAV_Idol"
 MDIR="${WTOP}/Models"
 PDIR="${WTOP}/Photographers"
@@ -13,11 +13,11 @@ NUM=
 ListModels() {
     UTYPE=`echo $2 | tr '[:lower:]' '[:upper:]'`
     printf "\n${UTYPE} in $1:"
-    for model in "$1/${models}"*
+    for model in "$1/${model_prefix}"*
     do
-        if [ "${model}" == "$1/${models}*" ]
+        if [ "${model}" == "$1/${model_prefix}*" ]
         then
-            printf "\n\tNo $2 matching \"${models}\""
+            printf "\n\tNo $2 matching \"${model_prefix}\""
         else
             name=`basename ${model}`
             printf "\n\t${name}"
@@ -91,7 +91,7 @@ ListModels() {
     }
 }
 
-for models in $*
+for model_prefix in $*
 do
   if [ "$ALL" ]
   then
@@ -102,6 +102,8 @@ do
   else
       ListModels $MDIR $TYPE
   fi
+  printf "\nModel prefix alternate names in get-models:\n"
+  grep ${model_prefix} ${WTOP}/get-models | grep get_search
 done
 printf "\n"
 exit 0

@@ -29,7 +29,7 @@
 # the Software.
 #
 
-[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${PICROOT}" ] || PICROOT=/Volumes/Seagate_8TB/Pictures/Work
 
 ## @fn usage()
 ## @brief Display command line usage options

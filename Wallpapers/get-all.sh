@@ -15,28 +15,40 @@ get_search() {
     ./get-search -q ${LAT} -l "$1" -s "$QUERY"
 }
 
+usage() {
+    printf "\nUsage: get-all [-au] [-R] [-S]"
+    printf "\nWhere:"
+    printf "\n\t-a indicates find duplicates after downloading"
+    printf "\n\t-R indicates retrieve latest wallpapers first"
+    printf "\n\t-S indicates do not update SUMS after downloading"
+    printf "\n\t-u displays this usage message and exits\n"
+    exit 1
+}
+
 HERE=`pwd`
 FIND=
 LAT=
 MLAT=
 UPD=1
 
-# TODO: use getopts to process arguments
-[ "$1" == "-R" ] && {
-  LAT="-R"
-  MLAT="-l"
-  shift
-}
-
-[ "$1" == "-S" ] && {
-  UPD=
-  [ "$2" == "-R" ] && {
-    LAT="-R"
-    MLAT="-l"
-  }
-}
-
-[ "$1" == "-a" ] && FIND=1
+while getopts RSau flag; do
+    case $flag in
+        R)
+            LAT="-R"
+            MLAT="-l"
+            ;;
+        S)
+            UPD=
+            ;;
+        a)
+            FIND=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
 
 # ./get-anime ${LAT} -p 1 $*
 echo "Running ./get-anime ${LAT} $*"
@@ -186,6 +198,10 @@ do
     The_Life_Erotic)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "TheLifeErotic"
+        ;;
+    Ukrainian)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Ukraine"
         ;;
     Waterfall)
         get_search "${dir}" "${dir}"

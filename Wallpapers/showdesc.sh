@@ -1,6 +1,5 @@
 #!/bin/bash
 
-TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work/Elite_Babes"
 DES="Description.txt"
 model=`echo "$*" | sed -e "s/ /_/g"`
 matchnum=0
@@ -18,6 +17,21 @@ showdesc() {
     cat "${TOP}"/"$1"/"$DES"
     echo ""
 }
+
+# Which system are we on?
+WORK="Work/Elite_Babes"
+if [ -d /Volumes/Seagate_8TB/Pictures/$WORK ]
+then
+    TOP="/Volumes/Seagate_8TB/Pictures/$WORK"
+else
+    if [ -d /u/pictures ]
+    then
+        TOP="/u/pictures/$WORK"
+    else
+        echo "Cannot determine top-level photo dir. Exiting."
+        exit 1
+    fi
+fi
 
 [ "$model" ] || {
     echo "Usage: showdesc model_name"

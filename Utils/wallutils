@@ -7,7 +7,7 @@
 ## @version 1.0.1
 ##
 # Set these to your top-level pictures directory paths
-SEA_DIR="/Volumes/Seagate_BPH_8TB/Pictures"
+SEA_DIR="/Volumes/Seagate_8TB/Pictures"
 LIN_DIR="/u/pictures"
 
 # Set PICROOT in your environment to override what is set here
@@ -27,7 +27,9 @@ query=
 demo=
 model=
 suicide=
+japanese=
 photo=
+latest=
 numdown=
 page=
 quiet=
@@ -82,6 +84,7 @@ usage() {
     printf "\n\t-L indicates use symbolic links when finding duplicates"
     printf "\n\t-m indicates Model search, use Models/<model_name> download dir"
     printf "\n\t-P indicates Photographer search, use Photographers/<name> download dir"
+    printf "\n\t-R indicates retrieve most recent wallpapers for search term"
     printf "\n\t-S indicates Suicide Girl search, use Suicide_Girls/<model_name> download dir"
     printf "\n\t-q indicates quiet mode, suppress messages"
     printf "\n\t-s search specifies the search terms ( + for AND, space for OR)"
@@ -89,7 +92,7 @@ usage() {
     exit 1
 }
 
-while getopts l:n:c:f:p:s:dLmPSqu flag; do
+while getopts l:n:c:f:p:s:dJLmPRSqu flag; do
     case $flag in
         l)
             subdir=$OPTARG
@@ -97,11 +100,17 @@ while getopts l:n:c:f:p:s:dLmPSqu flag; do
         d)
             demo=1
             ;;
+        J)
+            japanese=1
+            ;;
         L)
             LN="ln -s"
             ;;
         P)
             photo=1
+            ;;
+        R)
+            latest="-m date_added"
             ;;
         S)
             suicide=1

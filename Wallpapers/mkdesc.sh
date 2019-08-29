@@ -1,9 +1,22 @@
 #!/bin/bash
 
-TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
+TOP="/Volumes/Seagate_8TB/Pictures/Work"
+OTOP="/u/pictures/Work"
+DES="Description.txt"
+
+# Which system are we on?
+[ -d "${TOP}" ] || {
+    if [ -d "${OTOP}" ]
+    then
+        TOP="${OTOP}"
+    else
+        echo "Cannot determine top-level photo dir. Exiting."
+        exit 1
+    fi
+}
+
 EB_TOP="${TOP}/Elite_Babes"
 JP_TOP="${TOP}/JP_Erotica"
-DES="Description.txt"
 
 for model in "${EB_TOP}"/* "${JP_TOP}"/*
 do

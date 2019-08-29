@@ -23,9 +23,9 @@
 ##
 
 # Root directory of your subfolders of image files to use as backgrounds/slideshows
-MAC_TOP=/u/pictures/Work
 LIN_TOP=/u/pictures
-SEA_TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
+MAC_TOP="/Volumes/Seagate_8TB/Pictures/Work"
+NFS_TOP=/u/pictures/Work
 #
 # Location of folder to copy selected images to
 MAC_OUT=$HOME/Pictures/Backgrounds
@@ -82,7 +82,7 @@ else
     fi
 fi
 [ -d "$TOP" ] || {
-    TOP="$SEA_TOP"
+    TOP="$NFS_TOP"
     [ -d "$TOP" ] || {
         echo "Cannot locate Work directory for pics. Exiting."
         exit 1

@@ -9,8 +9,12 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-    echo "Running ./get-search ${latest} -n 1024 -p 1 -l $1 -s $QUERY"
-    ./get-search ${latest} -q -n 2048 -p 1 -l "$1" -s "$QUERY"
+    numdown=1024
+#   [ -x ~/bin/models ] && {
+#     cnt=`~/bin/models -c -q $1`
+#   }
+    echo "Running ./get-search ${latest} -n ${numdown} -p 1 -l $1 -s $QUERY"
+    ./get-search ${latest} -q -n ${numdown} -p 1 -l "$1" -s "$QUERY"
 #   echo "Running ./get-search ${latest} -l $1 -s $QUERY"
 #   ./get-search ${latest} -q -l "$1" -s "$QUERY"
 }
@@ -71,6 +75,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Blake_Eden"
             ;;
+        Brook_Amelia_Wright)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Brook_Wright"
+            ;;
         Cara_Mell)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Rena_FemJoy"
@@ -83,6 +91,10 @@ get_model() {
             get_search "${MODD}/${model}" "Libby_White"
             get_search "${MODD}/${model}" "Libby"
             ;;
+        Charlize)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "${model}_\(Met-art\)"
+            ;;
         Darina_Litvinova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Candice_B"
@@ -91,9 +103,17 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Davina_A"
             ;;
+        Ela_Savanas)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Ela"
+            ;;
         Elin_Eneji)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Elin"
+            ;;
+        Elizabeth_Marxs)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Elizabeth_Marx"
             ;;
         Ellina_Myuller)
             get_search "${MODD}/${model}" "${model}"
@@ -114,10 +134,16 @@ get_model() {
             ;;
         Georgia)
             get_search "${MODD}/${model}" "${model}_\(model\)"
+            get_search "${MODD}/${model}" "Polina_Kadynskaya"
+            get_search "${MODD}/${model}" "Susza_K."
             ;;
         Hailee_Rain)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Krysten_Pyle"
+            ;;
+        Hanna_Hilton)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Hannah_Hilton"
             ;;
         Heather_Vandeven)
             get_search "${MODD}/${model}" "${model}"
@@ -180,7 +206,6 @@ get_model() {
             get_search "${MODD}/${model}" "Elina_Sweet"
             get_search "${MODD}/${model}" "Kata"
             get_search "${MODD}/${model}" "Kate_Jones"
-            get_search "${MODD}/${model}" "Katerina"
             get_search "${MODD}/${model}" "Katerina_C"
             get_search "${MODD}/${model}" "Katka"
             get_search "${MODD}/${model}" "Margherita"
@@ -232,6 +257,12 @@ get_model() {
         Li_Moon)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Annika_A"
+            ;;
+        Lily_C)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Raisa"
+            get_search "${MODD}/${model}" "Guerlain"
+            get_search "${MODD}/${model}" "Natalia_E"
             ;;
         Lucia_Javorcekova)
             get_search "${MODD}/${model}" "${model}"
@@ -339,6 +370,16 @@ get_model() {
             get_search "${MODD}/${model}" "Natasha_Tijomirova"
             get_search "${MODD}/${model}" "Natali_Tihomirova"
             ;;
+#       Pammie_Lee)
+#           get_search "${MODD}/${model}" "${model}"
+#           get_search "${MODD}/${model}" "Anastasiya Platonova"
+#           get_search "${MODD}/${model}" "Lubachka"
+#           get_search "${MODD}/${model}" "Lubashka"
+#           get_search "${MODD}/${model}" "Paula T"
+#           get_search "${MODD}/${model}" "ShpitsyQ"
+#           get_search "${MODD}/${model}" "Stacy Bloom"
+#           get_search "${MODD}/${model}" "Winona"
+#           ;;
         Paula_Shy)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Paula_De_Sousa"
@@ -479,6 +520,10 @@ get_suicide() {
         Misc)
             cd "${WHVN}/${SUGD}"
             ;;
+        Nefka)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Micaela_Nefka"
+            ;;
         Octavia_Suicide)
             get_search "${SUGD}/${model}" "${model}"
             mname=`echo ${model} | sed -e "s/_Suicide/may_\(Suicide_Girls\)/"`
@@ -500,7 +545,7 @@ get_suicide() {
     cd "${WHVN}/${SUGD}"
 }
 
-TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
+TOP="/Volumes/Seagate_8TB/Pictures/Work"
 WHVN="${TOP}/Wallhaven"
 MODD="Models"
 JAVD="JAV_Idol"
@@ -594,7 +639,7 @@ MODELS="$*"
   [ "$sums" ] && {
     [ -x ${TOP}/updsumhaven ] && {
       echo "Running ${TOP}/updsumhaven -m"
-      ${TOP}/updsumhaven -m > /dev/null
+      [ "$debug" ] || ${TOP}/updsumhaven -m > /dev/null
     }
   }
 }
@@ -629,7 +674,7 @@ cd "${WHVN}"
   [ "$sums" ] && {
     [ -x ${TOP}/updsumhaven ] && {
       echo "Running ${TOP}/updsumhaven -s"
-      ${TOP}/updsumhaven -s > /dev/null
+      [ "$debug" ] || ${TOP}/updsumhaven -s > /dev/null
     }
   }
 }
@@ -664,7 +709,7 @@ cd "${WHVN}"
   [ "$sums" ] && {
     [ -x ${TOP}/updsumhaven ] && {
       echo "Running ${TOP}/updsumhaven -j"
-      ${TOP}/updsumhaven -j > /dev/null
+      [ "$debug" ] || ${TOP}/updsumhaven -j > /dev/null
     }
   }
 }

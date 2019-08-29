@@ -104,13 +104,15 @@ then
                 rm -f "$dup"
             fi
             cd "${picdir}"
-            people=
+            javido=
             models=
             photos=
-            pwd | grep /Wallhaven/People/ > /dev/null && people=1
+            suicid=
+            pwd | grep /Wallhaven/JAV_Idol/ > /dev/null && javido=1
             pwd | grep /Wallhaven/Models/ > /dev/null && models=1
             pwd | grep /Wallhaven/Photographers/ > /dev/null && photos=1
-            if [ "$people" ] || [ "$models" ] || [ "$photos" ]
+            pwd | grep /Wallhaven/Suicide_Girls/ > /dev/null && suicid=1
+            if [ "$javido" ] || [ "$models" ] || [ "$photos" ] || [ "$suicid" ]
             then
                 if [ "$demo" ]
                 then
@@ -175,13 +177,15 @@ else
                 else
                     rm -f "$img"
                 fi
-                people=
+                javido=
                 models=
                 photos=
-                pwd | grep /Wallhaven/People/ > /dev/null && people=1
+                suicid=
+                pwd | grep /Wallhaven/JAV_Idol/ > /dev/null && javido=1
                 pwd | grep /Wallhaven/Models/ > /dev/null && models=1
                 pwd | grep /Wallhaven/Photographers/ > /dev/null && photos=1
-                if [ "$people" ] || [ "$models" ] || [ "$photos" ]
+                pwd | grep /Wallhaven/Suicide_Girls/ > /dev/null && suicid=1
+                if [ "$javido" ] || [ "$models" ] || [ "$photos" ] || [ "$suicid" ]
                 then
                     if [ "$demo" ]
                     then

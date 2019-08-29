@@ -1,8 +1,8 @@
 #!/bin/bash
 
-MODEL_DIR=/u/pictures/Wallhaven/Models
+MODEL_DIR=/Volumes/Seagate_8TB/Pictures/Work/Wallhaven/Models
 
-[ "$1" == "-p" ] && MODEL_DIR=/u/pictures/Wallhaven/Photographers
+[ "$1" == "-p" ] && MODEL_DIR=/Volumes/Seagate_8TB/Pictures/Work/Wallhaven/Photographers
 
 [ -d $MODEL_DIR ] || {
     echo "$MODEL_DIR does not exist or is not a directory. Exiting."

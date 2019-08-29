@@ -14,7 +14,7 @@ IFT="##########"
 MSG=
 
 usage() {
-    printf "\nUsage: ifttt [lights | appletv | bluray | tv | off] [on | off]"
+    printf "\nUsage: ifttt [lights | airport | appletv | bluray | tv | off] [on | off]"
     printf "\n\tFirst argument required. Second argument optional, default on"
     printf "\n\nExample invocations:"
     printf "\n\tTurn all lights on"
@@ -73,6 +73,10 @@ action=`echo "$2" | tr '[:upper:]' '[:lower:]'`
     [ "$action" = "on" ] && MSG="#WatchTV"
     [ "$action" = "off" ] && MSG="#Off"
     [ "$action" ] || MSG="#WatchTV"
+}
+
+[ "$activity" = "airport" ] && {
+    MSG="#Airport"
 }
 
 [ "$activity" = "off" ] && {

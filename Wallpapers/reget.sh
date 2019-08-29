@@ -12,7 +12,7 @@
 ## directories created with multiple search terms and recreates them using
 ## logical AND of search terms.
 
-[ "${PICROOT}" ] || PICROOT=/u/pictures
+[ "${PICROOT}" ] || PICROOT=/Volumes/Seagate_8TB/Pictures/Work
 
 TDIR="${PICROOT}/Wallhaven"
 MDIR="$TDIR/Models"
