@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for i in ????-01.jpg
+for i in ????-01*.jpg
 do
-    [ "$i" == "????-01.jpg" ] && {
+    [ "$i" == "????-01*.jpg" ] && {
         echo "No new images to check."
         continue
     }
@@ -17,8 +17,18 @@ do
         old=`cksum $j | awk ' { print $1 } '`
         [ "$new" == "$old" ] && {
             echo "OLD: $i already downloaded. Removing."
-            num=`echo $i | awk -F "-" ' { print $1 } '`
-            rm -f ${num}-??.jpg
+            # Check for filename of type ####-##_###.jpg
+            under=
+            echo $i | grep _ > /dev/null && under=1
+            if [ "$under" ]
+            then
+                num=`echo $i | awk -F "-" ' { print $1 } '`
+                suf=`echo $i | awk -F "_" ' { print $2 } ' | sed -e "s/.jpg//"`
+                rm -f ${num}-??_${suf}.jpg
+            else
+                num=`echo $i | awk -F "-" ' { print $1 } '`
+                rm -f ${num}-??.jpg
+            fi
             break
         }
         echo "$j"

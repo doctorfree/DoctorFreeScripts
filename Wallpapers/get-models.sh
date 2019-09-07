@@ -37,6 +37,7 @@ get_model() {
         Alexandra_Smelova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Aleksandra_Smelova"
+            get_search "${MODD}/${model}" "Sasha_Smelova"
             ;;
         Alina_Panevskaya)
             get_search "${MODD}/${model}" "${model}"
@@ -264,6 +265,10 @@ get_model() {
             get_search "${MODD}/${model}" "Guerlain"
             get_search "${MODD}/${model}" "Natalia_E"
             ;;
+        Liza_Voronina)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Liza_B"
+            ;;
         Lucia_Javorcekova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Lucia_Javorčeková"
@@ -486,6 +491,10 @@ get_suicide() {
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Aliona_German"
             get_search "${SUGD}/${model}" "Alenagerman_Suicide"
+            ;;
+        Avrora)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Avrora_Suicide"
             ;;
         Coralinne_Suicide)
             get_search "${SUGD}/${model}" "${model}"
