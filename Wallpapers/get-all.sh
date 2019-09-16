@@ -175,6 +175,10 @@ do
         get_search "${dir}" "Playboy_Plus"
         get_search "${dir}" "Playmate"
         ;;
+    Pubic_Hair)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Natural_Pubic_Hair"
+        ;;
     Redheads)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "redhead"

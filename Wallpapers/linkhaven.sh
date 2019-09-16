@@ -14,6 +14,7 @@ MET="../../Met-Art"
 DRO="../../Photodromm"
 PLA="../../Playboy"
 RUS="../../Russian"
+STQ="../../Stasy_Q"
 UKR="../../Ukrainian"
 W4B="../../Watch4Beauty"
 DES="$PHD"
@@ -23,7 +24,7 @@ ALL=
 TELL=
 
 usage() {
-  printf "\nUsage: linkhaven [-a] [-c] [-bdD] [-f] [-h] [-j] [-m] [-n] [-pP] [-r] [-uU] [-w]"
+  printf "\nUsage: linkhaven [-a] [-c] [-bdD] [-f] [-h] [-j] [-m] [-n] [-pP] [-rs] [-uU] [-w]"
   printf "\nWhere:"
   printf "\n\t-a indicates use all combinations of subdirs and destinations"
   printf "\n\t-b indicates use Playboy destination dir"
@@ -39,6 +40,7 @@ usage() {
   printf "\n\t-p indicates use Photographers subdir"
   printf "\n\t-P indicates use Photodromm destination dir"
   printf "\n\t-r indicates use Russian destination dir"
+  printf "\n\t-s indicates use Stasy Q destination dir"
   printf "\n\t-U indicates use Ukrainian destination dir"
   printf "\n\t\t(default destination dir is Digital_Desire)"
   printf "\n\t-w indicates use Watch4Beauty destination dir"
@@ -86,7 +88,7 @@ linkem() {
     printf "\n"
 }
 
-while getopts abcdfhjnmprDPwUu flag; do
+while getopts abcdfhjnmprsDPwUu flag; do
     case $flag in
         a)
             ALL=1
@@ -125,6 +127,9 @@ while getopts abcdfhjnmprDPwUu flag; do
         r)
             DES="$RUS"
             ;;
+        s)
+            DES="$STQ"
+            ;;
         U)
             DES="$UKR"
             ;;
@@ -149,18 +154,19 @@ printf "\n"
 # DRO="../../Photodromm"
 # PLA="../../Playboy"
 # RUS="../../Russian"
+# STQ="../../Stasy_Q"
 # UKR="../../Ukrainian"
 # W4B="../../Watch4Beauty"
 if [ "$ALL" ]
 then
     SUB="$MOD"
-    for dest in "$PHD" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$UKR" "$W4B"
+    for dest in "$PHD" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
     do
         DES="$dest"
         linkem
     done
     SUB="$PHO"
-    for dest in "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$UKR" "$W4B"
+    for dest in "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
     do
         DES="$dest"
         linkem
