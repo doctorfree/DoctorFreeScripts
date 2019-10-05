@@ -16,9 +16,11 @@ get_search() {
 }
 
 usage() {
-    printf "\nUsage: get-all [-au] [-R] [-S]"
+    printf "\nUsage: get-all [-au] [-M] [-P] [-R] [-S]"
     printf "\nWhere:"
     printf "\n\t-a indicates find duplicates after downloading"
+    printf "\n\t-M indicates do not retrieve Models wallpapers"
+    printf "\n\t-P indicates do not retrieve Photographers wallpapers"
     printf "\n\t-R indicates retrieve latest wallpapers first"
     printf "\n\t-S indicates do not update SUMS after downloading"
     printf "\n\t-u displays this usage message and exits\n"
@@ -29,10 +31,18 @@ HERE=`pwd`
 FIND=
 LAT=
 MLAT=
+MODS=1
+PHOT=1
 UPD=1
 
-while getopts RSau flag; do
+while getopts MPRSau flag; do
     case $flag in
+        M)
+            MODS=
+            ;;
+        P)
+            PHOT=
+            ;;
         R)
             LAT="-R"
             MLAT="-l"
@@ -75,16 +85,16 @@ do
     [ "${dir}" = "Top" ] && continue
     case "${dir}" in
     JAV_Idol)
-        ./get-models ${MLAT} -j -S
+        [ "$MODS" ] && ./get-models ${MLAT} -j -S
         ;;
     Models)
-        ./get-models ${MLAT} -m -S
+        [ "$MODS" ] && ./get-models ${MLAT} -m -S
         ;;
     Photographers)
-        ./get-photographers ${LAT} -S
+        [ "$PHOT" ] && ./get-photographers ${LAT} -S
         ;;
     Suicide_Girls)
-        ./get-models ${MLAT} -s -S
+        [ "$MODS" ] && ./get-models ${MLAT} -s -S
         ;;
     Amateur)
         get_search "${dir}" "${dir}"
@@ -95,6 +105,9 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "artwork"
         ;;
+    Bella_da_Semana)
+        get_search "${dir}" "BelladaSemana"
+        ;;
     Body_Oil)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "oiled_body"
@@ -103,6 +116,11 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "bodypaint"
         get_search "${dir}" "body_painting"
+        ;;
+    Camel_Toe)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "cameltoe"
+        get_search "${dir}" "camel_toes"
         ;;
     Celebrity)
         get_search "${dir}" "${dir}"
@@ -195,6 +213,18 @@ do
         get_search "${dir}" "Russian_women"
         get_search "${dir}" "Russian_Model"
         ;;
+    Smoking)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Smoke"
+        get_search "${dir}" "cigarette"
+        ;;
+    Sucking_Nipples)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "boob_sucking"
+        get_search "${dir}" "biting_nipples"
+        get_search "${dir}" "licking_nipples"
+        get_search "${dir}" "tit_sucking"
+        ;;
     Sunglasses)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Women_With_Shades"
@@ -232,6 +262,8 @@ do
     esac
 done
 
+inst=`type -p linkhaven`
+[ "$inst" ] && linkhaven -a
 [ -x ./clean ] && ./clean
 [ "$FIND" ] && {
   [ -x ./findups ] && {
