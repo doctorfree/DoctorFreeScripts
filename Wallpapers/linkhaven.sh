@@ -1,11 +1,21 @@
 #!/bin/bash
 
 TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
+
+# Subdirs with model name subdirs
 JAP="$TOP/Japanese"
 MOD="$TOP/Models"
 PHO="$TOP/Photographers"
+SUI="$TOP/Suicide_Grils"
+
+# Largest top-level subdirs
+LTL="Ass Breasts Fantasy_Art Group_of_Women Legs Long_Hair \
+     Nature Panties Pubic_Hair Shaved Women_Outdoors"
+
 PHD="../../Photographers"
 DIG="../../Digital_Desire"
+BDS="../../Bella_da_Semana"
+BAB="../../Babes.com"
 CHK="../../Czech"
 DOM="../../Domai"
 FEM="../../Femjoy"
@@ -21,16 +31,18 @@ DES="$PHD"
 SUB="$MOD"
 LN="ln -s"
 ALL=
+BIG=
 TELL=
 
 usage() {
-  printf "\nUsage: linkhaven [-a] [-c] [-bdD] [-f] [-h] [-j] [-m] [-n] [-pP] [-rs] [-uU] [-w]"
+  printf "\nUsage: linkhaven [-a] [-bBcCdD] [-f] [-h] [-j] [-m] [-n] [-pP] [-rsS] [-uU] [-wz]"
   printf "\nWhere:"
   printf "\n\t-a indicates use all combinations of subdirs and destinations"
   printf "\n\t-b indicates use Playboy destination dir"
-  printf "\n\t-D indicates use Digital_Desire destination dir"
+  printf "\n\t-B indicates use Bella_da_Semana destination dir"
   printf "\n\t-c indicates use Czech destination dir"
   printf "\n\t-d indicates use Domai destination dir"
+  printf "\n\t-D indicates use Digital_Desire destination dir"
   printf "\n\t-f indicates use Femjoy destination dir"
   printf "\n\t-h indicates use hard links for duplicates"
   printf "\n\t\t(default is symbolic links)"
@@ -41,9 +53,11 @@ usage() {
   printf "\n\t-P indicates use Photodromm destination dir"
   printf "\n\t-r indicates use Russian destination dir"
   printf "\n\t-s indicates use Stasy Q destination dir"
+  printf "\n\t-S indicates use Suicide Girls subdir"
   printf "\n\t-U indicates use Ukrainian destination dir"
   printf "\n\t\t(default destination dir is Digital_Desire)"
   printf "\n\t-w indicates use Watch4Beauty destination dir"
+  printf "\n\t-z indicates do largest subdirs"
   printf "\n\t-u displays this usage message and exits"
   printf "\n\n"
   exit 1
@@ -73,9 +87,8 @@ linkem() {
                     break
                 done
             fi
-            [ -f "$SRC/$i" ] || {
-                continue
-            }
+            [ -f "$SRC/$i" ] || continue
+            [ -L "$SRC/$i" ] && continue
             [ "$TELL" ] && {
                 echo "$LN $SRC/$i $model"
                 continue
@@ -88,13 +101,44 @@ linkem() {
     printf "\n"
 }
 
-while getopts abcdfhjnmprsDPwUu flag; do
+do_big() {
+    echo "Linking in largest top-level subdirs:"
+    for ltl in $LTL
+    do
+        echo "Linking in $ltl"
+        cd $TOP/$ltl
+        for pic in wall*
+        do
+            [ -L $pic ] && continue
+            for dir in $LTL
+            do
+                [ "$dir" == "$ltl" ] && continue
+                [ -f "../$dir/$pic" ] || continue
+                [ -L "../$dir/$pic" ] && continue
+                [ "$TELL" ] && {
+                    echo "$LN ../$dir/$pic $ltl"
+                }
+                rm -f $pic
+                $LN ../$dir/$pic .
+                break
+            done
+        done
+    done
+}
+
+while getopts abcdfhjnmprsBDPSwzUu flag; do
     case $flag in
         a)
             ALL=1
             ;;
         b)
             DES="$PLA"
+            ;;
+        B)
+            DES="$BDS"
+            ;;
+        c)
+            DES="$CHK"
             ;;
         d)
             DES="$DOM"
@@ -130,11 +174,18 @@ while getopts abcdfhjnmprsDPwUu flag; do
         s)
             DES="$STQ"
             ;;
+        S)
+            DES="$PHD"
+            SUB="$SUI"
+            ;;
         U)
             DES="$UKR"
             ;;
         w)
             DES="$W4B"
+            ;;
+        z)
+            BIG=1
             ;;
         u)
             usage
@@ -147,6 +198,8 @@ printf "\n"
 # The destinations
 # PHD="../../Photographers"
 # DIG="../../Digital_Desire"
+# BDS="../../Bella_da_Semana"
+# BAB="../../Babes.com"
 # CHK="../../Czech"
 # DOM="../../Domai"
 # FEM="../../Femjoy"
@@ -160,13 +213,19 @@ printf "\n"
 if [ "$ALL" ]
 then
     SUB="$MOD"
-    for dest in "$PHD" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    for dest in "$PHD" "$BDS" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
     do
         DES="$dest"
         linkem
     done
     SUB="$PHO"
-    for dest in "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    for dest in "$BDS" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    do
+        DES="$dest"
+        linkem
+    done
+    SUB="$SUI"
+    for dest in "$BDS" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
     do
         DES="$dest"
         linkem
@@ -174,6 +233,8 @@ then
     DES="$JAV"
     SUB="$JAP"
     linkem
+    do_big
 else
+    [ "$BIG" ] && do_big
     linkem
 fi

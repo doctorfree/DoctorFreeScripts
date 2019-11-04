@@ -156,6 +156,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Femjoy_Magazine"
         ;;
+    FTV_Girls)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "FTV_Girls_Magazine"
+        ;;
     Glasses)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Women_With_Glasses"
@@ -211,6 +215,7 @@ do
     Russian)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Russian_women"
+        get_search "${dir}" "Russian_girls"
         get_search "${dir}" "Russian_Model"
         ;;
     Smoking)
@@ -236,6 +241,7 @@ do
     Ukrainian)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Ukraine"
+        get_search "${dir}" "Jula"
         ;;
     Waterfall)
         get_search "${dir}" "${dir}"
