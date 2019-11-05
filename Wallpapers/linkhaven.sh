@@ -6,7 +6,7 @@ TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
 JAP="$TOP/Japanese"
 MOD="$TOP/Models"
 PHO="$TOP/Photographers"
-SUI="$TOP/Suicide_Grils"
+SUI="$TOP/Suicide_Girls"
 
 # Largest top-level subdirs
 LTL="Ass Breasts Fantasy_Art Group_of_Women Legs Long_Hair \
