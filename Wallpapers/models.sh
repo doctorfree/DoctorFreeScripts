@@ -72,23 +72,31 @@ ListModels() {
     do
         for model in $model_dir/*
         do
-              [ -f $model/wallhaven-$NUM.jpg ] && {
-                  echo "Found $model/wallhaven-$NUM.jpg"
+              [ -L $model/wallhaven-$NUM.jpg ] && {
+                  echo "Found symbolic link $model/wallhaven-$NUM.jpg"
                   found=1
+                  continue
+              }
+              [ -f $model/wallhaven-$NUM.jpg ] && {
+                  found=1
+                  echo "Found regular file $model/wallhaven-$NUM.jpg"
               }
         done
     done
-    [ "$found" ] || {
-        for topic in ${WTOP}/*
-        do
-            [ -d $topic ] || continue
-            [ -f $topic/wallhaven-$NUM.jpg ] && {
-                echo "Found $topic/wallhaven-$NUM.jpg"
-                found=1
-            }
-        done
-        [ "$found" ] || echo "No image found for ID=$NUM"
-    }
+    for topic in ${WTOP}/*
+    do
+        [ -d $topic ] || continue
+        [ -L $topic/wallhaven-$NUM.jpg ] && {
+            echo "Found symbolic link $topic/wallhaven-$NUM.jpg"
+            found=1
+            continue
+        }
+        [ -f $topic/wallhaven-$NUM.jpg ] && {
+            echo "Found regular file $topic/wallhaven-$NUM.jpg"
+            found=1
+        }
+    done
+    [ "$found" ] || echo "No image found for ID=$NUM"
 }
 
 for model_prefix in $*
