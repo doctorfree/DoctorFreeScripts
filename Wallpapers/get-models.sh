@@ -5,7 +5,7 @@
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
 ## @date Written 17-Sep-2016
-## @version 1.0.1
+## @version 2.0.1
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
@@ -136,6 +136,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Davina_A"
             ;;
+        Eden_Arya)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Eden_Hegre"
+            ;;
         Ela_Savanas)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Ela"
@@ -151,6 +155,10 @@ get_model() {
         Ellina_Myuller)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Ellina Muller"
+            ;;
+        Emmy)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Arina_F"
             ;;
         Foxy_Di)
             get_search "${MODD}/${model}" "${model}"
@@ -214,6 +222,10 @@ get_model() {
         Isabelle_Photodromm)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Isabelle"
+            ;;
+        Janelle_B)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Janelle_B."
             ;;
         Jasmine_A)
             get_search "${MODD}/${model}" "${model}"
@@ -326,6 +338,10 @@ get_model() {
         Liza_Voronina)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Liza_B"
+            ;;
+        Lizzie_Ryan)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Lizzy_Ryan"
             ;;
         Lucia_Javorcekova)
             get_search "${MODD}/${model}" "${model}"
@@ -452,6 +468,10 @@ get_model() {
             get_search "${MODD}/${model}" "FTV_Nina"
             get_search "${MODD}/${model}" "Nina_X."
             ;;
+        Olga_Kaminska)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Olga_Maria_Kaminska"
+            ;;
 #       Pammie_Lee)
 #           get_search "${MODD}/${model}" "${model}"
 #           get_search "${MODD}/${model}" "Anastasiya Platonova"
@@ -465,6 +485,10 @@ get_model() {
         Paula_Shy)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Paula_De_Sousa"
+            ;;
+        Polina_Pszenicznaia)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Polina_Pshenichnaya"
             ;;
         Penelope_G)
             get_search "${MODD}/${model}" "${model}"
@@ -523,6 +547,10 @@ get_model() {
             get_search "${MODD}/${model}" "Belicia_Segura"
             get_search "${MODD}/${model}" "Madeline_Clark"
             ;;
+        Verona_J)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Briana"
+            ;;
         Victoria_Sokolova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Viktoria_Sokolova"
@@ -547,6 +575,10 @@ get_model() {
             get_search "${MODD}/${model}" "Innes_A"
             get_search "${MODD}/${model}" "Yana_Wellis"
             get_search "${MODD}/${model}" "Jane_G"
+            ;;
+        Yasmin_Photodromm)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Yasmin"
             ;;
         Yulia_Liepa)
             get_search "${MODD}/${model}" "${model}"
@@ -605,9 +637,17 @@ get_suicide() {
             get_search "${SUGD}/${model}" "Alenagerman_Suicide"
             get_search "${SUGD}/${model}" "Алёна"
             ;;
+        Anette_Dawn)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Anette_Down"
+            ;;
         Avrora)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Avrora_Suicide"
+            ;;
+        Brea_Suicide)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Brea"
             ;;
         Coralinne_Suicide)
             get_search "${SUGD}/${model}" "${model}"
@@ -620,6 +660,10 @@ get_suicide() {
         Ivory_Suicide)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Ivory"
+            ;;
+        Jessicalou_Suicide)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "JessicaLou"
             ;;
         Katrina_Novikova)
             get_search "${SUGD}/${model}" "${model}"
@@ -662,6 +706,10 @@ get_suicide() {
         Scribbles_Suicide)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Jo_Evans"
+            ;;
+        Sierhaus)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Sierhaus_Suicide"
             ;;
         *Suicide_Girls*)
             get_search "${SUGD}/${model}" "${model}"

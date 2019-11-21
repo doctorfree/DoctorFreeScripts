@@ -16,13 +16,17 @@ get_search() {
 }
 
 usage() {
-    printf "\nUsage: get-all [-au] [-M] [-P] [-R] [-S]"
+    printf "\nUsage: get-all [-asu] [-A] [-J] [-M] [-P] [-R] [-S]"
     printf "\nWhere:"
     printf "\n\t-a indicates find duplicates after downloading"
+    printf "\n\t-A indicates do not retrieve any Models or Photographers wallpapers"
+    printf "\n\t\t(equivalent to '-J -M -P -S')"
+    printf "\n\t-J indicates do not retrieve JAV Idols wallpapers"
     printf "\n\t-M indicates do not retrieve Models wallpapers"
     printf "\n\t-P indicates do not retrieve Photographers wallpapers"
     printf "\n\t-R indicates retrieve latest wallpapers first"
-    printf "\n\t-S indicates do not update SUMS after downloading"
+    printf "\n\t-S indicates do not retrieve Suicide Girls wallpapers"
+    printf "\n\t-s indicates do not update SUMS after downloading"
     printf "\n\t-u displays this usage message and exits\n"
     exit 1
 }
@@ -31,12 +35,23 @@ HERE=`pwd`
 FIND=
 LAT=
 MLAT=
+JAVS=1
 MODS=1
 PHOT=1
+SUIC=1
 UPD=1
 
-while getopts MPRSau flag; do
+while getopts AJMPRSasu flag; do
     case $flag in
+        A)
+            JAVS=
+            MODS=
+            PHOT=
+            SUIC=
+            ;;
+        J)
+            JAVS=
+            ;;
         M)
             MODS=
             ;;
@@ -48,10 +63,13 @@ while getopts MPRSau flag; do
             MLAT="-l"
             ;;
         S)
-            UPD=
+            SUIC=
             ;;
         a)
             FIND=1
+            ;;
+        s)
+            UPD=
             ;;
         u)
             usage
@@ -85,7 +103,7 @@ do
     [ "${dir}" = "Top" ] && continue
     case "${dir}" in
     JAV_Idol)
-        [ "$MODS" ] && ./get-models ${MLAT} -j -S
+        [ "$JAVS" ] && ./get-models ${MLAT} -j -S
         ;;
     Models)
         [ "$MODS" ] && ./get-models ${MLAT} -m -S
@@ -94,7 +112,7 @@ do
         [ "$PHOT" ] && ./get-photographers ${LAT} -S
         ;;
     Suicide_Girls)
-        [ "$MODS" ] && ./get-models ${MLAT} -s -S
+        [ "$SUIC" ] && ./get-models ${MLAT} -s -S
         ;;
     Amateur)
         get_search "${dir}" "${dir}"
@@ -217,6 +235,11 @@ do
         get_search "${dir}" "Russian_women"
         get_search "${dir}" "Russian_girls"
         get_search "${dir}" "Russian_Model"
+        get_search "${dir}" "Disha_Shemetova"
+        ;;
+    SexArt)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "SexArt_Magazine"
         ;;
     Smoking)
         get_search "${dir}" "${dir}"
