@@ -9,7 +9,7 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-    numdown=1024
+#   numdown=1024
 #   [ -x ~/bin/models ] && {
 #     cnt=`~/bin/models -c -q $1`
 #   }
@@ -44,6 +44,7 @@ get_model() {
             get_search "${MODD}/${model}" "Alina_Panewskaja"
             get_search "${MODD}/${model}" "Alinka_Rainer"
             get_search "${MODD}/${model}" "Alina_Maier"
+            get_search "${MODD}/${model}" "Alina_Mayer"
             ;;
         Alisa_I)
             get_search "${MODD}/${model}" "${model}"
@@ -51,6 +52,10 @@ get_model() {
             get_search "${MODD}/${model}" "Alisa_A"
             get_search "${MODD}/${model}" "Alisa_Femjoy"
             get_search "${MODD}/${model}" "Jessica_Albanka"
+            ;;
+        Amelie_B)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Amelie_Belain"
             ;;
         Anita_Silver)
             get_search "${MODD}/${model}" "${model}"
@@ -77,9 +82,17 @@ get_model() {
             get_search "${MODD}/${model}" "Anneli"
             get_search "${MODD}/${model}" "Pinky_June"
             ;;
+        Apolonia_Lapiedra)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Apolonia"
+            ;;
         Aria_Salazar)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Bambi_Wolfe"
+            ;;
+        Ariel_Piper_Fawn)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Piper_Fawn"
             ;;
         Blake_Bartelli)
             get_search "${MODD}/${model}" "${model}"
@@ -100,10 +113,16 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Libby_White"
             get_search "${MODD}/${model}" "Libby"
+            get_search "${MODD}/${model}" "Carolina_K"
             ;;
         Charlize)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "${model}_\(Met-art\)"
+            ;;
+        Clarice_A)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Elvira_U"
+            get_search "${MODD}/${model}" "Clarice"
             ;;
         Claudia_Photodromm)
             get_search "${MODD}/${model}" "${model}"
@@ -169,18 +188,29 @@ get_model() {
             get_search "${MODD}/${model}" "Nensi"
             get_search "${MODD}/${model}" "Nensi_B"
             ;;
+        Gabbie_Carter)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Gabbie_\(FTV\)"
+            ;;
         Genevieve_Gandi)
             get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Marianna_Merkulova"
             get_search "${MODD}/${model}" "Xana_D"
+            get_search "${MODD}/${model}" "Erika_A."
             ;;
         Georgia)
             get_search "${MODD}/${model}" "${model}_\(model\)"
+            get_search "${MODD}/${model}" "${model}_\(MetArt\)"
             get_search "${MODD}/${model}" "Polina_Kadynskaya"
             get_search "${MODD}/${model}" "Susza_K."
             ;;
         Hailee_Rain)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Krysten_Pyle"
+            ;;
+        Hailey_Lynzz)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Sofi_Ryan"
             ;;
         Hanna_Hilton)
             get_search "${MODD}/${model}" "${model}"
@@ -215,9 +245,17 @@ get_model() {
             get_search "${MODD}/${model}" "Irin"
             get_search "${MODD}/${model}" "Ira"
             ;;
+        Isabella)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Isabella_\(famegirls\)"
+            ;;
         Isabella_D)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Ella_C"
+            ;;
+        Isabella_Star)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Emily_Cutie"
             ;;
         Isabelle_Photodromm)
             get_search "${MODD}/${model}" "${model}"
@@ -250,6 +288,11 @@ get_model() {
         Karina_Avakian)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Karina_Avakyan"
+            ;;
+        Kate_Fresh)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Lulya_D"
+            get_search "${MODD}/${model}" "Lulya"
             ;;
         Katerina_Bolinger)
             get_search "${MODD}/${model}" "${model}"
@@ -311,6 +354,7 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anjelica"
             get_search "${MODD}/${model}" "Katherine_A."
+            get_search "${MODD}/${model}" "Ksenia_Kondratyeva"
             ;;
         Lera_Kovalenko)
             get_search "${MODD}/${model}" "${model}"
@@ -381,6 +425,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Mariko"
             ;;
+        Marit)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Marit_Silalatu"
+            ;;
         Marketa_Pechova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Cikita"
@@ -421,6 +469,7 @@ get_model() {
             ;;
         Milena_D)
             get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Sunna"
             get_search "${MODD}/${model}" "Taya_Karpenko"
             ;;
         Monika_C)
@@ -463,6 +512,10 @@ get_model() {
             get_search "${MODD}/${model}" "Natasha_Tijomirova"
             get_search "${MODD}/${model}" "Natali_Tihomirova"
             ;;
+        Nikia_Dolceza)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Nikia"
+            ;;
         Nina_North)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "FTV_Nina"
@@ -485,6 +538,7 @@ get_model() {
         Paula_Shy)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Paula_De_Sousa"
+            get_search "${MODD}/${model}" "Christy_Charming"
             ;;
         Polina_Pszenicznaia)
             get_search "${MODD}/${model}" "${model}"
@@ -513,6 +567,11 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Selena_Verner"
             ;;
+        Serena_Wood)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Doria_A."
+            get_search "${MODD}/${model}" "Serena_J."
+            ;;
         Sofi_Shane)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sofie_S"
@@ -522,6 +581,10 @@ get_model() {
             get_search "${MODD}/${model}" "Sofie_Lilith_\(iStripper.com\)"
             get_search "${MODD}/${model}" "Sofie_\(MetArt.com\)"
             get_search "${MODD}/${model}" "Nadine_\(PhotoDromm.com\)"
+            ;;
+        Sonya_D)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Sonya_D_\(Met-Art\)"
             ;;
         Stefani_Kovalyova)
             get_search "${MODD}/${model}" "${model}"
@@ -540,6 +603,7 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kailena"
             get_search "${MODD}/${model}" "Sybille_Y"
+            get_search "${MODD}/${model}" "Sybil"
             get_search "${MODD}/${model}" "Davina_E"
             ;;
         Uma_Jolie)
@@ -564,6 +628,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Vos_Met-art"
             ;;
+        Wilma_Togoony)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Wilma"
+            ;;
         Whitney_Sarka)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Tabitha"
@@ -583,6 +651,11 @@ get_model() {
         Yulia_Liepa)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Julia_Liepa"
+            ;;
+        Yulia_Zubova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Julia_Zubova"
+            get_search "${MODD}/${model}" "Julia_Zu"
             ;;
         Zuzana_Drabinova)
             get_search "${MODD}/${model}" "${model}"
@@ -619,6 +692,7 @@ get_jav() {
             get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Shion_Utsunomiya"
             get_search "${JAVD}/${model}" "Rara_Anzai"
+            get_search "${JAVD}/${model}" "Rion"
             ;;
         *)
             get_search "${JAVD}/${model}" "${model}"
@@ -716,6 +790,14 @@ get_suicide() {
             mname=`echo ${model} | sed -e "s/Suicide_Girls/\(Suicide_Girls\)/"`
             get_search "${SUGD}/${model}" "${mname}"
             ;;
+        Sunnie_Jones)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Sunniejones"
+            ;;
+        Valeriya)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Valeriya_Suicide"
+            ;;
         *)
             get_search "${SUGD}/${model}" "${model}"
             ;;
@@ -733,21 +815,24 @@ JAVC=1
 SUIC=1
 debug=
 latest=
+numdown=480
 sums=1
 
 # Argument -l indicates retrieve latest wallpapers.
-# Argument -n indicates debug mode.
+# Argument -d indicates debug mode.
 # Argument -m indicates only do Models subdir.
+# Argument -n numdown specifies number of downloads per search
 # Argument -j, only JAV_Idol.
 # Argument -s, only Suicide_Girls.
 # Following arguments can indicate specific model folders/names
 # Default is all models in specified subdir(s)
 
 usage() {
-    echo "Usage: get-models [-l] [-n] [-m] [-j] [-s] [-u] [model names]"
+    echo "Usage: get-models [-l] [-d] [-m] [-j] [-n numdown] [-s] [-u] [model names]"
     echo "Argument -l indicates retrieve latest wallpapers"
-    echo "Argument -n indicates debug mode"
+    echo "Argument -d indicates debug mode"
     echo "Argument -m indicates only do Models subdir"
+    echo "Argument -n numdown specifies number of downloads per search"
     echo "Argument -j, only JAV_Idol"
     echo "Argument -s, only Suicide_Girls"
     echo "Argument -S, do not update SUMS file"
@@ -756,7 +841,7 @@ usage() {
     exit 1
 }
 
-while getopts jlmnsSu flag; do
+while getopts jlmdn:sSu flag; do
     case $flag in
         j)
             MODS=
@@ -770,6 +855,9 @@ while getopts jlmnsSu flag; do
             latest="-R"
             ;;
         n)
+            numdown=$OPTARG
+            ;;
+        d)
             debug=1
             ;;
         S)

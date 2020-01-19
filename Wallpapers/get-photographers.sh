@@ -9,8 +9,8 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-    echo "Running ./get-search ${LAT} -p 1 -l $1 -s $QUERY"
-    ./get-search -q ${LAT} -n 1536 -p 1 -l "$1" -s "$QUERY"
+    echo "Running ./get-search ${LAT} -n 256 -p 1 -l $1 -s $QUERY"
+    ./get-search -q ${LAT} -n 256 -p 1 -l "$1" -s "$QUERY"
 #   echo "Running ./get-search ${LAT} -l $1 -s $QUERY"
 #   ./get-search -q ${LAT} -l "$1" -s "$QUERY"
 }
@@ -39,6 +39,10 @@ do
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Alex-Lynn.com"
             ;;
+        Alexeander_Grinn)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Alexander_Grinn"
+            ;;
         Anton_Harisov)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Fotoshi_Toshi"
@@ -46,6 +50,10 @@ do
         Holly_Randall)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "HollyRandall"
+            ;;
+        Konstantin_Makarchikov)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Constantin_Makarchikov"
             ;;
         Maksim_Chuprin)
             get_search "Photographers/${photographer}" "${photographer}"
@@ -58,6 +66,10 @@ do
         Vladimir_Nikolaev)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Vavaca"
+            ;;
+        Zumi)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "zumidraws"
             ;;
         *)
             get_search "Photographers/${photographer}" "${photographer}"
