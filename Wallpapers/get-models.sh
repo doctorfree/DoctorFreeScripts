@@ -521,6 +521,14 @@ get_model() {
             get_search "${MODD}/${model}" "FTV_Nina"
             get_search "${MODD}/${model}" "Nina_X."
             ;;
+        Olesia_Levina)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Olesya_Levina"
+            ;;
+        Olesya_Bukhtoyarova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Olesia_Bujtoyarova"
+            ;;
         Olga_Kaminska)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Olga_Maria_Kaminska"
