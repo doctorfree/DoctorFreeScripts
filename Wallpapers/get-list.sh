@@ -22,5 +22,5 @@ subdir="$2"
 
 cat "$list" | while read query
 do
-    ./get-search -l "$subdir" -p 1 -s "$query"
+    get-search -l "$subdir" -p 1 -s "$query"
 done

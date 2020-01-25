@@ -13,10 +13,10 @@ get_search() {
 #   [ -x ~/bin/models ] && {
 #     cnt=`~/bin/models -c -q $1`
 #   }
-    echo "Running ./get-search ${latest} -n ${numdown} -p 1 -l $1 -s $QUERY"
-    ./get-search ${latest} -q -n ${numdown} -p 1 -l "$1" -s "$QUERY"
-#   echo "Running ./get-search ${latest} -l $1 -s $QUERY"
-#   ./get-search ${latest} -q -l "$1" -s "$QUERY"
+    echo "Running get-search ${latest} -n ${numdown} -p 1 -l $1 -s $QUERY"
+    get-search ${latest} -q -n ${numdown} -p 1 -l "$1" -s "$QUERY"
+#   echo "Running get-search ${latest} -l $1 -s $QUERY"
+#   get-search ${latest} -q -l "$1" -s "$QUERY"
 }
 
 get_model() {
@@ -890,7 +890,7 @@ MODELS="$*"
   [ "$debug" ] || cd ${MODD}
   if [ "$MODELS" ]
   then
-    for name in $*
+    for name in $MODELS
     do
       [ "$debug" ] && {
         echo "Calling get_model() for $name"
@@ -909,13 +909,13 @@ MODELS="$*"
       [ -d "${name}" ] || continue
       get_model "$name"
     done
-  fi
-  [ "$sums" ] && {
-    [ -x ${TOP}/updsumhaven ] && {
-      echo "Running ${TOP}/updsumhaven -m"
-      [ "$debug" ] || ${TOP}/updsumhaven -m > /dev/null
+    [ "$sums" ] && {
+      [ -x ${TOP}/updsumhaven ] && {
+        echo "Running ${TOP}/updsumhaven -m"
+        [ "$debug" ] || ${TOP}/updsumhaven -m > /dev/null
+      }
     }
-  }
+  fi
 }
 
 cd "${WHVN}"
@@ -925,7 +925,7 @@ cd "${WHVN}"
   [ "$debug" ] || cd ${SUGD}
   if [ "$MODELS" ]
   then
-    for name in $*
+    for name in $MODELS
     do
       [ "$debug" ] && {
         echo "Calling get_suicide() for $name"
@@ -944,13 +944,13 @@ cd "${WHVN}"
       [ -d "${name}" ] || continue
       get_suicide "$name"
     done
-  fi
-  [ "$sums" ] && {
-    [ -x ${TOP}/updsumhaven ] && {
-      echo "Running ${TOP}/updsumhaven -s"
-      [ "$debug" ] || ${TOP}/updsumhaven -s > /dev/null
+    [ "$sums" ] && {
+      [ -x ${TOP}/updsumhaven ] && {
+        echo "Running ${TOP}/updsumhaven -s"
+        [ "$debug" ] || ${TOP}/updsumhaven -s > /dev/null
+      }
     }
-  }
+  fi
 }
 
 cd "${WHVN}"
@@ -960,7 +960,7 @@ cd "${WHVN}"
   [ "$debug" ] || cd ${JAVD}
   if [ "$MODELS" ]
   then
-    for name in $*
+    for name in $MODELS
     do
       [ "$debug" ] && {
         echo "Calling get_jav() for $name"
@@ -979,11 +979,11 @@ cd "${WHVN}"
       [ -d "${name}" ] || continue
       get_jav "$name"
     done
-  fi
-  [ "$sums" ] && {
-    [ -x ${TOP}/updsumhaven ] && {
-      echo "Running ${TOP}/updsumhaven -j"
-      [ "$debug" ] || ${TOP}/updsumhaven -j > /dev/null
+    [ "$sums" ] && {
+      [ -x ${TOP}/updsumhaven ] && {
+        echo "Running ${TOP}/updsumhaven -j"
+        [ "$debug" ] || ${TOP}/updsumhaven -j > /dev/null
+      }
     }
-  }
+  fi
 }

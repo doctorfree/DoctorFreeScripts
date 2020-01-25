@@ -30,11 +30,11 @@ ALL=
 
 if [ "$ALL" ]
 then
-    ./get-models -l -m
-    ./get-models -l -j
-    ./get-models -l -s
+    get-models -l -m
+    get-models -l -j
+    get-models -l -s
 else
     model=`echo $* | sed -e "s/ /\%2B/g"`
-    echo "./get-search -R ${DARG} -p 1 -n 2048 -s ${model}"
-    ./get-search -R ${DARG} -p 1 -n 256 -s "${model}"
+    echo "get-search -R ${DARG} -p 1 -n 2048 -s ${model}"
+    get-search -R ${DARG} -p 1 -n 256 -s "${model}"
 fi

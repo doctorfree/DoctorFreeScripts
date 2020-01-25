@@ -9,10 +9,10 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-#   echo "Running ./get-search -p 1 -l $1 -s $QUERY"
-#   ./get-search -q -p 1 -l "$1" -s "$QUERY"
-    echo "Running ./get-search ${LAT} -l $1 -n $numdown -s $QUERY"
-    ./get-search -q ${LAT} -l "$1" -n $numdown -s "$QUERY"
+#   echo "Running get-search -p 1 -l $1 -s $QUERY"
+#   get-search -q -p 1 -l "$1" -s "$QUERY"
+    echo "Running get-search ${LAT} -l $1 -n $numdown -s $QUERY"
+    get-search -q ${LAT} -l "$1" -n $numdown -s "$QUERY"
 }
 
 usage() {
@@ -32,7 +32,6 @@ usage() {
     exit 1
 }
 
-HERE=`pwd`
 FIND=
 LAT=
 MLAT=
@@ -83,20 +82,20 @@ while getopts AJMPRSan:su flag; do
 done
 shift $(( OPTIND - 1 ))
 
-# ./get-anime ${LAT} -p 1 $*
-echo "Running ./get-anime ${LAT} -n $numdown $*"
-./get-anime ${LAT} -n $numdown -q $*
-echo "Running ./get-top -n $numdown $*"
-./get-top -n $numdown -q $*
-# ./get-general -p 1 $*
-#echo "Running ./get-general $*"
-#./get-general -q $*
-# ./get-people -p 1 $*
-#echo "Running ./get-people $*"
-#./get-people -q $*
-#echo "Running ./mvem People"
-#./mvem People
-#./get-favorites $*
+# get-anime ${LAT} -p 1 $*
+echo "Running get-anime ${LAT} -n $numdown $*"
+get-anime ${LAT} -n $numdown -q $*
+echo "Running get-top -n $numdown $*"
+get-top -n $numdown -q $*
+# get-general -p 1 $*
+#echo "Running get-general $*"
+#get-general -q $*
+# get-people -p 1 $*
+#echo "Running get-people $*"
+#get-people -q $*
+#echo "Running mvem People"
+#mvem People
+#get-favorites $*
 
 for dir in *
 do
@@ -108,16 +107,16 @@ do
     [ "${dir}" = "Top" ] && continue
     case "${dir}" in
     JAV_Idol)
-        [ "$JAVS" ] && ./get-models ${MLAT} -n $numdown -j -S
+        [ "$JAVS" ] && get-models ${MLAT} -n $numdown -j -S
         ;;
     Models)
-        [ "$MODS" ] && ./get-models ${MLAT} -n $numdown -m -S
+        [ "$MODS" ] && get-models ${MLAT} -n $numdown -m -S
         ;;
     Photographers)
-        [ "$PHOT" ] && ./get-photographers ${LAT} -S
+        [ "$PHOT" ] && get-photographers ${LAT} -S
         ;;
     Suicide_Girls)
-        [ "$SUIC" ] && ./get-models ${MLAT} -n $numdown -s -S
+        [ "$SUIC" ] && get-models ${MLAT} -n $numdown -s -S
         ;;
     Amateur)
         get_search "${dir}" "${dir}"

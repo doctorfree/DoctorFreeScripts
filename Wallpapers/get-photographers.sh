@@ -9,10 +9,10 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-    echo "Running ./get-search ${LAT} -n 256 -p 1 -l $1 -s $QUERY"
-    ./get-search -q ${LAT} -n 256 -p 1 -l "$1" -s "$QUERY"
-#   echo "Running ./get-search ${LAT} -l $1 -s $QUERY"
-#   ./get-search -q ${LAT} -l "$1" -s "$QUERY"
+    echo "Running get-search ${LAT} -n 256 -p 1 -l $1 -s $QUERY"
+    get-search -q ${LAT} -n 256 -p 1 -l "$1" -s "$QUERY"
+#   echo "Running get-search ${LAT} -l $1 -s $QUERY"
+#   get-search -q ${LAT} -l "$1" -s "$QUERY"
 }
 
 HERE=`pwd`

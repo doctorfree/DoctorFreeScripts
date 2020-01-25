@@ -55,11 +55,11 @@ cd "${WHDIR}"
 #   -t standard \
 #   -p 0
 
-./get-search -q ${LAT} -l "Anime" -s "Anime%2BGirls" -n $numdown -p $page
-./get-search -q ${LAT} -l "Anime" -s "Aroma%2BSensei" -n $numdown -p $page
-./get-search -q ${LAT} -l "Anime" -s "Blake%2BBelladonna" -n $numdown -p $page
-./get-search -q ${LAT} -l "Anime" -s "Dandon%2BFuga" -n $numdown -p $page
-./get-search -q ${LAT} -l "Anime" -s "Nekomimi" -n $numdown -p $page
-./get-search -q ${LAT} -l "Anime" -s "Yang%2BXiao%2BLong" -n $numdown -p $page
-./get-search -q ${LAT} -l "Anime" -s "Yuri" -n $numdown -p $page
-./get-search -q ${LAT} -s "Anime" -n $numdown -p $page
+get-search -q ${LAT} -l "Anime" -s "Anime%2BGirls" -n $numdown -p $page
+get-search -q ${LAT} -l "Anime" -s "Aroma%2BSensei" -n $numdown -p $page
+get-search -q ${LAT} -l "Anime" -s "Blake%2BBelladonna" -n $numdown -p $page
+get-search -q ${LAT} -l "Anime" -s "Dandon%2BFuga" -n $numdown -p $page
+get-search -q ${LAT} -l "Anime" -s "Nekomimi" -n $numdown -p $page
+get-search -q ${LAT} -l "Anime" -s "Yang%2BXiao%2BLong" -n $numdown -p $page
+get-search -q ${LAT} -l "Anime" -s "Yuri" -n $numdown -p $page
+get-search -q ${LAT} -s "Anime" -n $numdown -p $page
