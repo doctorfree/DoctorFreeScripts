@@ -40,7 +40,7 @@ cd "${CONFDIR}"
 usage() {
     echo "Usage: mirror <command> [args]"
     echo "Where <command> can be one of the following:"
-    echo "    restart, start, stop, getb, setb <num>"
+    echo "    restart, start, stop, status, getb, setb <num>"
     echo "or specify a config file to use with one of:"
     echo "    normal, blank, fractals, waterfalls, photographers, models, tuigirls"
     echo "or any other config file you have created in ${CONFDIR} of the form:"
@@ -84,6 +84,15 @@ setb_usage() {
     exit 0
 }
 
+[ "$1" == "status" ] && {
+    echo "MagicMirror Status:"
+    pm2 status mm
+    CONF=`readlink -f ${CONFDIR}/config.js`
+    echo "Using config file `basename ${CONF}`"
+    echo "Done"
+    exit 0
+}
+
 [ "$1" == "getb" ] && {
     echo "Getting MagicMirror Brightness Level"
     curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
@@ -118,8 +127,18 @@ fi
 
 if [ -f config-${mode}.js ]
 then
-    rm -f config.js
+    mv config.js config-$$.js
     ln -s config-${mode}.js config.js
+    npm run --silent config:check > /dev/null
+    [ $? -eq 0 ] || {
+        echo "MagicMirror configuration config-${mode}.js needs work."
+        echo "Try again after you have addressed these issues:"
+        npm run --silent config:check
+        rm -f config.js
+        mv config-$$.js config.js
+        exit 1
+    }
+    [ -L config-$$.js ] && rm -f config-$$.js
     pm2 restart mm
     sleep 10
     if [ "${mode}" == "blank" ]

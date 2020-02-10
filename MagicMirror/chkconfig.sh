@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd ~/MagicMirror
-npm run config:check
+npm run --silent config:check
