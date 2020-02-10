@@ -28,6 +28,8 @@
 
 MM="${HOME}/MagicMirror"
 CONFDIR="${MM}/config"
+IP="10.0.1.67"
+PORT="8080"
 
 [ -d "${CONFDIR}" ] || {
     echo "$CONFDIR does not exist or is not a directory. Exiting."
@@ -38,7 +40,7 @@ cd "${CONFDIR}"
 usage() {
     echo "Usage: mirror <command> [args]"
     echo "Where <command> can be one of the following:"
-    echo "    restart, start, stop"
+    echo "    restart, start, stop, getb, setb <num>"
     echo "or specify a config file to use with one of:"
     echo "    normal, blank, fractals, waterfalls, photographers, models, tuigirls"
     echo "or any other config file you have created in ${CONFDIR} of the form:"
@@ -47,6 +49,12 @@ usage() {
     echo "The argument will be resolved into a config filename of the form:"
     echo "    config-\$argument.js"
     echo "Exiting."
+    exit 1
+}
+
+setb_usage() {
+    echo "Usage: mirror setb [number]"
+    echo "Where 'number' is an integer value in the range 0-200"
     exit 1
 }
 
@@ -61,16 +69,41 @@ usage() {
     echo "Done"
     exit 0
 }
+
 [ "$1" == "start" ] && {
     echo "Starting MagicMirror"
     pm2 start mm
     echo "Done"
     exit 0
 }
+
 [ "$1" == "stop" ] && {
     echo "Stopping MagicMirror"
     pm2 stop mm
     echo "Done"
+    exit 0
+}
+
+[ "$1" == "getb" ] && {
+    echo "Getting MagicMirror Brightness Level"
+    curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
+    exit 0
+}
+
+[ "$1" == "setb" ] && {
+    [ "$2" ] || {
+        echo "Numeric argument required to specify Mirror brightness."
+        setb_usage
+    }
+    if [ "$2" -ge 0 ] && [ "$2" -le 200 ]
+    then
+        echo "Setting MagicMirror Brightness Level to $2"
+        curl -X GET http://${IP}:${PORT}/api/brightness/$2 2> /dev/null | jq .
+    else
+        echo "Brightness setting $2 out of range or not a number"
+        echo "Valid brightness values are integer values [0-200]"
+        setb_usage
+    fi
     exit 0
 }
 
@@ -91,9 +124,9 @@ then
     sleep 10
     if [ "${mode}" == "blank" ]
     then
-        curl -X GET http://10.0.1.67:8080/api/brightness/0 2> /dev/null | jq .
+        curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
     else
-        curl -X GET http://10.0.1.67:8080/api/brightness/180 2> /dev/null | jq .
+        curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
     fi
 else
     echo "No configuration file config-${mode}.js found."
