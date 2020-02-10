@@ -35,13 +35,24 @@ CONFDIR="${MM}/config"
 }
 cd "${CONFDIR}"
 
-[ "$1" ] || {
-    echo "Command argument required to specify Mirror mode."
-    echo "Example valid commands include 'mirror slides' or 'mirror normal'"
+usage() {
+    echo "Usage: mirror <command> [args]"
+    echo "Where <command> can be one of the following:"
+    echo "    restart, start, stop"
+    echo "or specify a config file to use with one of:"
+    echo "    normal, blank, fractals, waterfalls, photographers, models, tuigirls"
+    echo "or any other config file you have created in ${CONFDIR} of the form:"
+    echo "    config-<name>.js"
+    echo "Example valid commands include 'mirror blank' or 'mirror normal'"
     echo "The argument will be resolved into a config filename of the form:"
-    echo "    config-$argument.js"
+    echo "    config-\$argument.js"
     echo "Exiting."
     exit 1
+}
+
+[ "$1" ] || {
+    echo "Command argument required to specify Mirror mode."
+    usage
 }
 
 [ "$1" == "restart" ] && {
@@ -85,6 +96,6 @@ then
         curl -X GET http://10.0.1.67:8080/api/brightness/180 2> /dev/null | jq .
     fi
 else
-    echo "No configuration file config-${mode}.js found. Exiting."
-    exit 1
+    echo "No configuration file config-${mode}.js found."
+    usage
 fi
