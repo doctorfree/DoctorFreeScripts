@@ -40,7 +40,7 @@ cd "${CONFDIR}"
 usage() {
     echo "Usage: mirror <command> [args]"
     echo "Where <command> can be one of the following:"
-    echo "    restart, start, stop, status, getb, setb <num>"
+    echo "    list <active|installed>, restart, start, stop, status, getb, setb <num>"
     echo "or specify a config file to use with one of:"
     echo "    normal, blank, fractals, waterfalls, photographers, models, tuigirls"
     echo "or any other config file you have created in ${CONFDIR} of the form:"
@@ -49,6 +49,13 @@ usage() {
     echo "The argument will be resolved into a config filename of the form:"
     echo "    config-\$argument.js"
     echo "Exiting."
+    exit 1
+}
+
+list_usage() {
+    echo "Usage: mirror list <active|installed>"
+    echo "Where 'active' or 'installed' must be specified."
+    echo "This command will list either all active modules or all installed modules."
     exit 1
 }
 
@@ -96,6 +103,29 @@ setb_usage() {
 [ "$1" == "getb" ] && {
     echo "Getting MagicMirror Brightness Level"
     curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
+    exit 0
+}
+
+[ "$1" == "list" ] && {
+    [ "$2" ] || {
+        echo "Argument of 'active' or 'installed' required to list modules."
+        list_usage
+    }
+    if [ "$2" == "active" ]
+    then
+        echo "Listing Active MagicMirror modules"
+        curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
+    else
+        if [ "$2" == "installed" ]
+        then
+            echo "Listing Installed MagicMirror modules"
+            curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
+        else
+            echo "mirror list $2 is not an accepted 2nd argument."
+            echo "Valid 2nd arguments to the list command are 'active' and 'installed'"
+            list_usage
+        fi
+    fi
     exit 0
 }
 
