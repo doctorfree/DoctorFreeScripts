@@ -15,7 +15,7 @@ usage() {
 
 if [ "$1" -ge 0 ] && [ "$1" -le 200 ]
 then
-    curl -X GET http://${IP}:${PORT}/api/brightness/$1 | jq .
+    curl -X GET http://${IP}:${PORT}/api/brightness/$1 2> /dev/null | jq .
 else
     echo "Brightness setting $1 out of range or not a number"
     echo "Valid brightness values are integer values [0-200]"

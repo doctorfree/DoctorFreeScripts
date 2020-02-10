@@ -78,11 +78,11 @@ then
     ln -s config-${mode}.js config.js
     pm2 restart mm
     sleep 10
-    if [ "${mode} == "blank" ]
+    if [ "${mode}" == "blank" ]
     then
-        curl -X GET http://10.0.1.67:8080/api/brightness/0 | jq .
+        curl -X GET http://10.0.1.67:8080/api/brightness/0 2> /dev/null | jq .
     else
-        curl -X GET http://10.0.1.67:8080/api/brightness/180 | jq .
+        curl -X GET http://10.0.1.67:8080/api/brightness/180 2> /dev/null | jq .
     fi
 else
     echo "No configuration file config-${mode}.js found. Exiting."
