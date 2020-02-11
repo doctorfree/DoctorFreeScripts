@@ -38,11 +38,23 @@ PORT="8080"
 cd "${CONFDIR}"
 
 usage() {
+    CONFS=
+    numconfs=0
+    for i in config-*.js
+    do
+        j=`echo $i | awk -F "-" ' { print $2 } ' | sed -e "s/.js//"`
+        CONFS="${CONFS} $j"
+        numconfs=`expr $numconfs + 1`
+        [ $numconfs -gt 8 ] && {
+            CONFS="${CONFS}\n\t"
+            numconfs=0
+        }
+    done
     printf "\nUsage: mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
     printf "\n\tlist <active|installed|configs>, restart, start, stop, status, getb, setb <num>"
     printf "\nor specify a config file to use with one of:"
-    printf "\n\tnormal, blank, fractals, waterfalls, photographers, models, tuigirls"
+    printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
     printf "\n\tconfig-<name>.js"
     printf "\nA config filename argument will be resolved into a config filename of the form:"
@@ -56,6 +68,7 @@ usage() {
     printf "\n\tmirror status\t\t# Displays MagicMirror status"
     printf "\n\tmirror getb\t\t# Displays current MagicMirror brightness level"
     printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150\n"
+    printf "\n\tmirror -u\t\t# Display this usage message"
     exit 1
 }
 
@@ -170,7 +183,7 @@ done
 
 if [ "$1" == "normal" ]
 then
-    mode="vertical"
+    mode="default"
 else
     mode="$1"
 fi
