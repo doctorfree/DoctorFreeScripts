@@ -25,13 +25,20 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 #
-
+# User configurable settings. Make sure these are correct for your system.
+# -----------------------------------------------------------------------
+# Set this to your MagicMirror installation directory
 MM="${HOME}/MagicMirror"
-CONFDIR="${MM}/config"
 # Set the IP and PORT to the values on your system
 IP="10.0.1.67"
 PORT="8080"
+# Set this to the X11 DISPLAY you are using. DISPLAY=:0 works for most systems.
+export DISPLAY=:0
+# -----------------------------------------------------------------------
+CONFDIR="${MM}/config"
 CONFS=
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 
 [ -d "${CONFDIR}" ] || {
     printf "\nCONFDIR does not exist or is not a directory. Exiting.\n"
@@ -57,21 +64,24 @@ getconfs() {
 
 usage() {
     getconfs usage
-    printf "\nUsage: mirror <command> [args]"
+    printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
-    printf "\n\tlist <active|installed|configs>, select, restart, start, stop, status, getb, setb <num>"
+    printf "\n\tinfo, list <active|installed|configs>, select,"
+    printf " restart, start, stop, status, getb, setb <num>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
     printf "\n\tconfig-<name>.js"
     printf "\nA config filename argument will be resolved into a config filename of the form:"
     printf "\n\tconfig-\$argument.js"
-    printf "\n\nExamples:"
+    printf "\n\n${BOLD}Examples:${NORMAL}"
+    printf "\n\tmirror\t\t# Invoked with no arguments the mirror command displays a command menu"
     printf "\n\tmirror list active\t\t# lists active modules"
     printf "\n\tmirror list configs\t\t# lists available configuration files"
     printf "\n\tmirror restart\t\t# Restart MagicMirror"
     printf "\n\tmirror fractals\t\t# Installs configuration file config-fractals.js"
     printf " and restarts MagicMirror"
+    printf "\n\tmirror info\t\t# Displays MagicMirror system information"
     printf "\n\tmirror status\t\t# Displays MagicMirror status"
     printf "\n\tmirror getb\t\t# Displays current MagicMirror brightness level"
     printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150"
@@ -80,14 +90,14 @@ usage() {
 }
 
 list_usage() {
-    printf "\nList Usage: mirror list <active|installed|configs>"
+    printf "\n${BOLD}List Usage:${NORMAL} mirror list <active|installed|configs>"
     printf "\nWhere 'active', 'installed', or 'configs' must be specified."
     printf "\nThis command will list either all active or installed modules or all configs.\n"
     usage
 }
 
 setb_usage() {
-    printf "\nSetb Usage: mirror setb [number]"
+    printf "\n${BOLD}Setb Usage:${NORMAL} mirror setb [number]"
     printf "\nWhere 'number' is an integer value in the range 0-200\n"
     usage
 }
@@ -116,10 +126,34 @@ setconf() {
     fi
 }
 
+system_info() {
+    printf "\n${BOLD}System information for:${NORMAL}\n"
+    uname -a
+    printf "\nCPU `vcgencmd measure_temp`\n"
+    printf "\n${BOLD}Memory:${NORMAL}\n"
+    free -h
+    printf "\n${BOLD}Disk and filesystem usage:${NORMAL}\n"
+    df -h
+    printf "\n${BOLD}USB Devices:${NORMAL}\n"
+    lsusb
+    printf "\n${BOLD}Network IP/mask:${NORMAL}\n"
+    ifconfig | grep inet | grep netmask
+    printf "\n${BOLD}Wireless info:${NORMAL}\n"
+    iwconfig 2> /dev/null | grep ESSID | while read entry
+    do
+        interface=`echo $entry | awk ' { print $1 } '`
+        iwconfig $interface
+    done
+    printf "${BOLD}Screen dimensions and resolution:${NORMAL}\n"
+    xrandr | grep Screen
+    xdpyinfo | grep dimensions
+    xdpyinfo | grep resolution
+}
+
 # If invoked with no arguments present a menu of options to select from
 [ "$1" ] || {
-    PS3='Please enter your MagicMirror command choice (numeric): '
-    options=("list active modules" "list installed modules" "list configurations" "select configuration" "restart" "start" "stop" "status" "get brightness" "set brightness" "quit")
+    PS3="${BOLD}Please enter your MagicMirror command choice (numeric): ${NORMAL}"
+    options=("list active modules" "list installed modules" "list configurations" "select configuration" "restart" "start" "stop" "status" "get brightness" "set brightness" "system info" "quit")
     select opt in "${options[@]}"
     do
         case $opt in
@@ -161,6 +195,10 @@ setconf() {
                 done
                 break
                 ;;
+            "system info")
+                system_info
+                break
+                ;;
             "quit")
                 printf "\nExiting"
                 break
@@ -185,7 +223,7 @@ done
 
 [ "$1" == "select" ] && {
     getconfs select
-    PS3='Please enter your MagicMirror configuration choice (numeric): '
+    PS3="${BOLD}Please enter your MagicMirror configuration choice (numeric): ${NORMAL}"
     options=(${CONFS} quit)
     select opt in "${options[@]}"
     do
@@ -204,38 +242,43 @@ done
     exit 0
 }
 
+[ "$1" == "info" ] && {
+    system_info
+    exit 0
+}
+
 [ "$1" == "restart" ] && {
-    printf "\nRestarting MagicMirror\n"
+    printf "\n${BOLD}Restarting MagicMirror${NORMAL}\n"
     pm2 restart mm --update-env
-    printf "\nDone\n"
+    printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
 
 [ "$1" == "start" ] && {
-    printf "\nStarting MagicMirror\n"
+    printf "\n${BOLD}Starting MagicMirror${NORMAL}\n"
     pm2 start mm --update-env
-    printf "\nDone\n"
+    printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
 
 [ "$1" == "stop" ] && {
-    printf "\nStopping MagicMirror\n"
+    printf "\n${BOLD}Stopping MagicMirror${NORMAL}\n"
     pm2 stop mm --update-env
-    printf "\nDone\n"
+    printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
 
 [ "$1" == "status" ] && {
-    printf "\nMagicMirror Status:\n"
+    printf "\n${BOLD}MagicMirror Status:${NORMAL}\n"
     pm2 status mm --update-env
     CONF=`readlink -f ${CONFDIR}/config.js`
     printf "\nUsing config file `basename ${CONF}`"
-    printf "\nDone\n"
+    printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
 
 [ "$1" == "getb" ] && {
-    printf "\nGetting MagicMirror Brightness Level\n"
+    printf "\n${BOLD}Getting MagicMirror Brightness Level${NORMAL}\n"
     curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
     exit 0
 }
@@ -247,17 +290,17 @@ done
     }
     if [ "$2" == "active" ]
     then
-        printf "\nListing Active MagicMirror modules\n"
+        printf "\n${BOLD}Listing Active MagicMirror modules${NORMAL}\n"
         curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
     else
         if [ "$2" == "installed" ]
         then
-            printf "\nListing Installed MagicMirror modules\n"
+            printf "\n${BOLD}Listing Installed MagicMirror modules${NORMAL}\n"
             curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
         else
             if [ "$2" == "configs" ]
             then
-                printf "\nListing MagicMirror configuration files:\n\n"
+                printf "\n${BOLD}Listing MagicMirror configuration files:${NORMAL}\n\n"
                 ls -1 *.js
             else
                 printf "\nmirror list $2 is not an accepted 2nd argument."
@@ -276,7 +319,7 @@ done
     }
     if [ "$2" -ge 0 ] && [ "$2" -le 200 ]
     then
-        printf "\nSetting MagicMirror Brightness Level to $2\n"
+        printf "\n${BOLD}Setting MagicMirror Brightness Level to $2${NORMAL}\n"
         curl -X GET http://${IP}:${PORT}/api/brightness/$2 2> /dev/null | jq .
     else
         printf "\nBrightness setting $2 out of range or not a number"
