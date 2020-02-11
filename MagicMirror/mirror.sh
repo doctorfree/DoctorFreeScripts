@@ -28,8 +28,10 @@
 
 MM="${HOME}/MagicMirror"
 CONFDIR="${MM}/config"
+# Set the IP and PORT to the values on your system
 IP="10.0.1.67"
 PORT="8080"
+CONFS=
 
 [ -d "${CONFDIR}" ] || {
     printf "\nCONFDIR does not exist or is not a directory. Exiting.\n"
@@ -37,22 +39,27 @@ PORT="8080"
 }
 cd "${CONFDIR}"
 
-usage() {
-    CONFS=
+getconfs() {
     numconfs=0
     for i in config-*.js
     do
         j=`echo $i | awk -F "-" ' { print $2 } ' | sed -e "s/.js//"`
         CONFS="${CONFS} $j"
-        numconfs=`expr $numconfs + 1`
-        [ $numconfs -gt 8 ] && {
-            CONFS="${CONFS}\n\t"
-            numconfs=0
+        [ "$1" == "usage" ] && {
+            numconfs=`expr $numconfs + 1`
+            [ $numconfs -gt 8 ] && {
+                CONFS="${CONFS}\n\t"
+                numconfs=0
+            }
         }
     done
+}
+
+usage() {
+    getconfs usage
     printf "\nUsage: mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
-    printf "\n\tlist <active|installed|configs>, restart, start, stop, status, getb, setb <num>"
+    printf "\n\tlist <active|installed|configs>, select, restart, start, stop, status, getb, setb <num>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -67,8 +74,8 @@ usage() {
     printf " and restarts MagicMirror"
     printf "\n\tmirror status\t\t# Displays MagicMirror status"
     printf "\n\tmirror getb\t\t# Displays current MagicMirror brightness level"
-    printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150\n"
-    printf "\n\tmirror -u\t\t# Display this usage message"
+    printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150"
+    printf "\n\tmirror -u\t\t# Display this usage message\n"
     exit 1
 }
 
@@ -85,12 +92,36 @@ setb_usage() {
     usage
 }
 
+setconf() {
+    conf=$1
+    mv config.js config-$$.js
+    ln -s config-${conf}.js config.js
+    npm run --silent config:check > /dev/null
+    [ $? -eq 0 ] || {
+        printf "\nMagicMirror configuration config-${conf}.js needs work."
+        printf "\nTry again after you have addressed these issues:\n"
+        npm run --silent config:check
+        rm -f config.js
+        mv config-$$.js config.js
+        exit 1
+    }
+    [ -L config-$$.js ] && rm -f config-$$.js
+    pm2 restart mm --update-env
+    sleep 10
+    if [ "${conf}" == "blank" ]
+    then
+        curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
+    else
+        curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
+    fi
+}
+
 [ "$1" ] || {
     printf "\nCommand argument required to specify Mirror mode.\n"
     usage
 }
 
-# TODO:  convert use of "$1" to getopts argument processing
+# TODO: convert use of "$1" to getopts argument processing
 while getopts u flag; do
     case $flag in
         u)
@@ -99,30 +130,51 @@ while getopts u flag; do
     esac
 done
 
+[ "$1" == "select" ] && {
+    getconfs select
+    PS3='Please enter your MagicMirror configuration choice (numeric): '
+    options=(${CONFS} quit)
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            quit)
+                printf "\nExiting"
+                break
+                ;;
+            *)
+                printf "\nInstalling config-${opt}.js MagicMirror configuration file\n"
+                setconf ${opt}
+                break
+                ;;
+        esac
+    done
+    exit 0
+}
+
 [ "$1" == "restart" ] && {
     printf "\nRestarting MagicMirror\n"
-    pm2 restart mm
+    pm2 restart mm --update-env
     printf "\nDone\n"
     exit 0
 }
 
 [ "$1" == "start" ] && {
     printf "\nStarting MagicMirror\n"
-    pm2 start mm
+    pm2 start mm --update-env
     printf "\nDone\n"
     exit 0
 }
 
 [ "$1" == "stop" ] && {
     printf "\nStopping MagicMirror\n"
-    pm2 stop mm
+    pm2 stop mm --update-env
     printf "\nDone\n"
     exit 0
 }
 
 [ "$1" == "status" ] && {
     printf "\nMagicMirror Status:\n"
-    pm2 status mm
+    pm2 status mm --update-env
     CONF=`readlink -f ${CONFDIR}/config.js`
     printf "\nUsing config file `basename ${CONF}`"
     printf "\nDone\n"
@@ -192,27 +244,9 @@ fi
 
 if [ -f config-${mode}.js ]
 then
-    mv config.js config-$$.js
-    ln -s config-${mode}.js config.js
-    npm run --silent config:check > /dev/null
-    [ $? -eq 0 ] || {
-        printf "\nMagicMirror configuration config-${mode}.js needs work."
-        printf "\nTry again after you have addressed these issues:\n"
-        npm run --silent config:check
-        rm -f config.js
-        mv config-$$.js config.js
-        exit 1
-    }
-    [ -L config-$$.js ] && rm -f config-$$.js
-    pm2 restart mm
-    sleep 10
-    if [ "${mode}" == "blank" ]
-    then
-        curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
-    else
-        curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
-    fi
+    setconf ${mode}
 else
-    printf "\nNo configuration file config-${mode}.js found.\n"
+    printf "\nNo configuration file config-${mode}.js found.\n\n"
     usage
 fi
+exit 0
