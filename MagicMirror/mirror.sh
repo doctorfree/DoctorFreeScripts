@@ -32,103 +32,118 @@ IP="10.0.1.67"
 PORT="8080"
 
 [ -d "${CONFDIR}" ] || {
-    echo "$CONFDIR does not exist or is not a directory. Exiting."
+    printf "\nCONFDIR does not exist or is not a directory. Exiting.\n"
     exit 1
 }
 cd "${CONFDIR}"
 
 usage() {
-    echo "Usage: mirror <command> [args]"
-    echo "Where <command> can be one of the following:"
-    echo "    list <active|installed|configs>, restart, start, stop, status, getb, setb <num>"
-    echo "or specify a config file to use with one of:"
-    echo "    normal, blank, fractals, waterfalls, photographers, models, tuigirls"
-    echo "or any other config file you have created in ${CONFDIR} of the form:"
-    echo "    config-<name>.js"
-    echo "Example valid commands include 'mirror blank' or 'mirror normal'"
-    echo "The argument will be resolved into a config filename of the form:"
-    echo "    config-\$argument.js"
-    echo "Exiting."
+    printf "\nUsage: mirror <command> [args]"
+    printf "\nWhere <command> can be one of the following:"
+    printf "\n\tlist <active|installed|configs>, restart, start, stop, status, getb, setb <num>"
+    printf "\nor specify a config file to use with one of:"
+    printf "\n\tnormal, blank, fractals, waterfalls, photographers, models, tuigirls"
+    printf "\nor any other config file you have created in ${CONFDIR} of the form:"
+    printf "\n\tconfig-<name>.js"
+    printf "\nA config filename argument will be resolved into a config filename of the form:"
+    printf "\n\tconfig-\$argument.js"
+    printf "\n\nExamples:"
+    printf "\n\tmirror list active\t\t# lists active modules"
+    printf "\n\tmirror list configs\t\t# lists available configuration files"
+    printf "\n\tmirror restart\t\t# Restart MagicMirror"
+    printf "\n\tmirror fractals\t\t# Installs configuration file config-fractals.js"
+    printf " and restarts MagicMirror"
+    printf "\n\tmirror status\t\t# Displays MagicMirror status"
+    printf "\n\tmirror getb\t\t# Displays current MagicMirror brightness level"
+    printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150\n"
     exit 1
 }
 
 list_usage() {
-    echo "Usage: mirror list <active|installed|configs>"
-    echo "Where 'active', 'installed', or 'configs' must be specified."
-    echo "This command will list either all active or installed modules or all configs."
-    exit 1
-}
-
-setb_usage() {
-    echo "Usage: mirror setb [number]"
-    echo "Where 'number' is an integer value in the range 0-200"
-    exit 1
-}
-
-[ "$1" ] || {
-    echo "Command argument required to specify Mirror mode."
+    printf "\nList Usage: mirror list <active|installed|configs>"
+    printf "\nWhere 'active', 'installed', or 'configs' must be specified."
+    printf "\nThis command will list either all active or installed modules or all configs.\n"
     usage
 }
 
+setb_usage() {
+    printf "\nSetb Usage: mirror setb [number]"
+    printf "\nWhere 'number' is an integer value in the range 0-200\n"
+    usage
+}
+
+[ "$1" ] || {
+    printf "\nCommand argument required to specify Mirror mode.\n"
+    usage
+}
+
+# TODO:  convert use of "$1" to getopts argument processing
+while getopts u flag; do
+    case $flag in
+        u)
+            usage
+            ;;
+    esac
+done
+
 [ "$1" == "restart" ] && {
-    echo "Restarting MagicMirror"
+    printf "\nRestarting MagicMirror\n"
     pm2 restart mm
-    echo "Done"
+    printf "\nDone\n"
     exit 0
 }
 
 [ "$1" == "start" ] && {
-    echo "Starting MagicMirror"
+    printf "\nStarting MagicMirror\n"
     pm2 start mm
-    echo "Done"
+    printf "\nDone\n"
     exit 0
 }
 
 [ "$1" == "stop" ] && {
-    echo "Stopping MagicMirror"
+    printf "\nStopping MagicMirror\n"
     pm2 stop mm
-    echo "Done"
+    printf "\nDone\n"
     exit 0
 }
 
 [ "$1" == "status" ] && {
-    echo "MagicMirror Status:"
+    printf "\nMagicMirror Status:\n"
     pm2 status mm
     CONF=`readlink -f ${CONFDIR}/config.js`
-    echo "Using config file `basename ${CONF}`"
-    echo "Done"
+    printf "\nUsing config file `basename ${CONF}`"
+    printf "\nDone\n"
     exit 0
 }
 
 [ "$1" == "getb" ] && {
-    echo "Getting MagicMirror Brightness Level"
+    printf "\nGetting MagicMirror Brightness Level\n"
     curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
     exit 0
 }
 
 [ "$1" == "list" ] && {
     [ "$2" ] || {
-        echo "Argument of 'active', 'installed', or 'configs' required to list modules."
+        printf "\nArgument of 'active', 'installed', or 'configs' required to list modules."
         list_usage
     }
     if [ "$2" == "active" ]
     then
-        echo "Listing Active MagicMirror modules"
+        printf "\nListing Active MagicMirror modules\n"
         curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
     else
         if [ "$2" == "installed" ]
         then
-            echo "Listing Installed MagicMirror modules"
+            printf "\nListing Installed MagicMirror modules\n"
             curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
         else
             if [ "$2" == "configs" ]
             then
-                echo "Listing MagicMirror configuration files:"
-                echo ""
+                printf "\nListing MagicMirror configuration files:\n\n"
                 ls -1 *.js
             else
-                echo "mirror list $2 is not an accepted 2nd argument."
-                echo "Valid 2nd arguments to the list command are 'active', 'installed', and 'configs'"
+                printf "\nmirror list $2 is not an accepted 2nd argument."
+                printf "\nValid 2nd arguments to the list command are 'active', 'installed', and 'configs'"
                 list_usage
             fi
         fi
@@ -138,16 +153,16 @@ setb_usage() {
 
 [ "$1" == "setb" ] && {
     [ "$2" ] || {
-        echo "Numeric argument required to specify Mirror brightness."
+        printf "\nNumeric argument required to specify Mirror brightness.\n"
         setb_usage
     }
     if [ "$2" -ge 0 ] && [ "$2" -le 200 ]
     then
-        echo "Setting MagicMirror Brightness Level to $2"
+        printf "\nSetting MagicMirror Brightness Level to $2\n"
         curl -X GET http://${IP}:${PORT}/api/brightness/$2 2> /dev/null | jq .
     else
-        echo "Brightness setting $2 out of range or not a number"
-        echo "Valid brightness values are integer values [0-200]"
+        printf "\nBrightness setting $2 out of range or not a number"
+        printf "\nValid brightness values are integer values [0-200]\n"
         setb_usage
     fi
     exit 0
@@ -168,8 +183,8 @@ then
     ln -s config-${mode}.js config.js
     npm run --silent config:check > /dev/null
     [ $? -eq 0 ] || {
-        echo "MagicMirror configuration config-${mode}.js needs work."
-        echo "Try again after you have addressed these issues:"
+        printf "\nMagicMirror configuration config-${mode}.js needs work."
+        printf "\nTry again after you have addressed these issues:\n"
         npm run --silent config:check
         rm -f config.js
         mv config-$$.js config.js
@@ -185,6 +200,6 @@ then
         curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
     fi
 else
-    echo "No configuration file config-${mode}.js found."
+    printf "\nNo configuration file config-${mode}.js found.\n"
     usage
 fi
