@@ -169,21 +169,60 @@ system_info() {
 }
 
 get_info_type() {
-    PS3="${BOLD}Please enter desired system info type (numeric): ${NORMAL}"
+    PS3="${BOLD}Please enter desired system info type (numeric or text): ${NORMAL}"
     options=(all temp mem disk usb net wireless screen quit back)
     select opt in "${options[@]}"
     do
-        case $opt in
-            back)
+        case "$opt,$REPLY" in
+            "back",*|*,"back")
                 break
                 ;;
-            quit)
+            "quit",*|*,"quit")
                 exit 0
                 ;;
-            *)
-                INFO="${opt}"
+            "all",*|*,"all")
+                INFO="all"
                 system_info
                 break
+                ;;
+            "temp",*|*,"temp")
+                INFO="temp"
+                system_info
+                break
+                ;;
+            "mem",*|*,"mem")
+                INFO="mem"
+                system_info
+                break
+                ;;
+            "disk",*|*,"disk")
+                INFO="disk"
+                system_info
+                break
+                ;;
+            "usb",*|*,"usb")
+                INFO="usb"
+                system_info
+                break
+                ;;
+            "net",*|*,"net")
+                INFO="net"
+                system_info
+                break
+                ;;
+            "wireless",*|*,"wireless")
+                INFO="wireless"
+                system_info
+                break
+                ;;
+            "screen",*|*,"screen")
+                INFO="screen"
+                system_info
+                break
+                ;;
+            *)
+                printf "\nInvalid entry. Please try again"
+                printf "\nEnter either a number or text of one of the menu entries\n"
                 ;;
         esac
     done
@@ -275,19 +314,32 @@ done
 
 [ "$1" == "select" ] && {
     getconfs select
-    PS3="${BOLD}Please enter your MagicMirror configuration choice (numeric): ${NORMAL}"
+    PS3="${BOLD}Please enter your MagicMirror configuration choice (numeric or text): ${NORMAL}"
     options=(${CONFS} quit)
     select opt in "${options[@]}"
     do
-        case $opt in
-            quit)
-                printf "\nExiting"
-                break
+        case "$opt,$REPLY" in
+            "quit",*|*,"quit")
+                printf "\nExiting\n"
+                exit 0
                 ;;
             *)
-                printf "\nInstalling config-${opt}.js MagicMirror configuration file\n"
-                setconf ${opt}
-                break
+                if [ -f config-${opt}.js ]
+                then
+                    printf "\nInstalling config-${opt}.js MagicMirror configuration file\n"
+                    setconf ${opt}
+                    break
+                else
+                    if [ -f config-${REPLY}.js ]
+                    then
+                        printf "\nInstalling config-${REPLY}.js MagicMirror configuration file\n"
+                        setconf ${REPLY}
+                        break
+                    else
+                        printf "\nInvalid entry. Please try again"
+                        printf "\nEnter either a number or text of one of the menu entries\n"
+                    fi
+                fi
                 ;;
         esac
     done
