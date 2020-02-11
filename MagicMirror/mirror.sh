@@ -37,6 +37,7 @@ export DISPLAY=:0
 # -----------------------------------------------------------------------
 CONFDIR="${MM}/config"
 CONFS=
+INFO="all"
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 
@@ -66,8 +67,8 @@ usage() {
     getconfs usage
     printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
-    printf "\n\tinfo, list <active|installed|configs>, select,"
-    printf " restart, start, stop, status, getb, setb <num>"
+    printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen], list <active|installed|configs>,"
+    printf " select, restart, start, stop, status, getb, setb <num>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -81,7 +82,8 @@ usage() {
     printf "\n\tmirror restart\t\t# Restart MagicMirror"
     printf "\n\tmirror fractals\t\t# Installs configuration file config-fractals.js"
     printf " and restarts MagicMirror"
-    printf "\n\tmirror info\t\t# Displays MagicMirror system information"
+    printf "\n\tmirror info\t\t# Displays all MagicMirror system information"
+    printf "\n\tmirror info screen\t\t# Displays MagicMirror screen information"
     printf "\n\tmirror status\t\t# Displays MagicMirror status"
     printf "\n\tmirror getb\t\t# Displays current MagicMirror brightness level"
     printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150"
@@ -129,56 +131,95 @@ setconf() {
 system_info() {
     printf "\n${BOLD}System information for:${NORMAL}\n"
     uname -a
-    printf "\nCPU `vcgencmd measure_temp`\n"
-    printf "\n${BOLD}Memory:${NORMAL}\n"
-    free -h
-    printf "\n${BOLD}Disk and filesystem usage:${NORMAL}\n"
-    df -h
-    printf "\n${BOLD}USB Devices:${NORMAL}\n"
-    lsusb
-    printf "\n${BOLD}Network IP/mask:${NORMAL}\n"
-    ifconfig | grep inet | grep netmask
-    printf "\n${BOLD}Wireless info:${NORMAL}\n"
-    iwconfig 2> /dev/null | grep ESSID | while read entry
+    [ "$INFO" == "all" ] || [ "$INFO" == "temp" ] && {
+        printf "\nCPU `vcgencmd measure_temp`\n"
+    }
+    [ "$INFO" == "all" ] || [ "$INFO" == "mem" ] && {
+        printf "\n${BOLD}Memory:${NORMAL}\n"
+        free -h
+    }
+    [ "$INFO" == "all" ] || [ "$INFO" == "disk" ] && {
+        printf "\n${BOLD}Disk and filesystem usage:${NORMAL}\n"
+        findmnt --fstab --evaluate
+        printf "\n"
+        df -h -x tmpfs -x udev -x devtmpfs
+    }
+    [ "$INFO" == "all" ] || [ "$INFO" == "usb" ] && {
+        printf "\n${BOLD}USB Devices:${NORMAL}\n"
+        lsusb
+    }
+    [ "$INFO" == "all" ] || [ "$INFO" == "net" ] && {
+        printf "\n${BOLD}Network IP/mask:${NORMAL}\n"
+        ifconfig | grep inet | grep netmask
+    }
+    [ "$INFO" == "all" ] || [ "$INFO" == "wireless" ] && {
+        printf "\n${BOLD}Wireless info:${NORMAL}\n"
+        iwconfig 2> /dev/null | grep ESSID | while read entry
+        do
+            interface=`echo $entry | awk ' { print $1 } '`
+            iwconfig $interface
+        done
+    }
+    [ "$INFO" == "all" ] || [ "$INFO" == "screen" ] && {
+        printf "${BOLD}Screen dimensions and resolution:${NORMAL}\n"
+        xrandr | grep Screen
+        xdpyinfo | grep dimensions
+        xdpyinfo | grep resolution
+    }
+}
+
+get_info_type() {
+    PS3="${BOLD}Please enter desired system info type (numeric): ${NORMAL}"
+    options=(all temp mem disk usb net wireless screen quit back)
+    select opt in "${options[@]}"
     do
-        interface=`echo $entry | awk ' { print $1 } '`
-        iwconfig $interface
+        case $opt in
+            back)
+                break
+                ;;
+            quit)
+                exit 0
+                ;;
+            *)
+                INFO="${opt}"
+                system_info
+                break
+                ;;
+        esac
     done
-    printf "${BOLD}Screen dimensions and resolution:${NORMAL}\n"
-    xrandr | grep Screen
-    xdpyinfo | grep dimensions
-    xdpyinfo | grep resolution
 }
 
 # If invoked with no arguments present a menu of options to select from
 [ "$1" ] || {
-    PS3="${BOLD}Please enter your MagicMirror command choice (numeric): ${NORMAL}"
+  while true
+  do
+    PS3="${BOLD}Please enter your MagicMirror command choice (numeric or text): ${NORMAL}"
     options=("list active modules" "list installed modules" "list configurations" "select configuration" "restart" "start" "stop" "status" "get brightness" "set brightness" "system info" "quit")
     select opt in "${options[@]}"
     do
-        case $opt in
-            "list active modules")
+        case "$opt,$REPLY" in
+            "list active modules",*|*,"list active modules")
                 mirror list active
                 break
                 ;;
-            "list installed modules")
+            "list installed modules",*|*,"list installed modules")
                 mirror list installed
                 break
                 ;;
-            "list configurations")
+            "list configurations",*|*,"list configurations")
                 mirror list configs
                 break
                 ;;
-            "select configuration")
+            "select configuration",*|*,"select configuration")
                 printf "======================================================\n\n"
                 mirror select
                 break
                 ;;
-            "get brightness")
+            "get brightness",*|*,"get brightness")
                 mirror getb
                 break
                 ;;
-            "set brightness")
+            "set brightness",*|*,"set brightness")
                 while true
                 do
                   read -p "Enter a brightness level between 0 and 200 or 'exit' to quit" answer
@@ -187,7 +228,6 @@ system_info() {
                   then
                       printf "\nSetting MagicMirror Brightness Level to $answer\n"
                       curl -X GET http://${IP}:${PORT}/api/brightness/$answer 2> /dev/null | jq .
-                      break
                   else
                       printf "\nBrightness setting $answer out of range or not a number"
                       printf "\nValid brightness values are integer values [0-200]\n"
@@ -195,21 +235,33 @@ system_info() {
                 done
                 break
                 ;;
-            "system info")
-                system_info
+            "system info",*|*,"system info")
+                get_info_type
                 break
                 ;;
-            "quit")
-                printf "\nExiting"
+            "start",*|*,"start")
+                mirror start
                 break
                 ;;
-            *)
-                mirror $opt
+            "stop",*|*,"stop")
+                mirror stop
                 break
+                ;;
+            "status",*|*,"status")
+                mirror status
+                break
+                ;;
+            "restart",*|*,"restart")
+                mirror restart
+                break
+                ;;
+            "quit",*|*,"quit")
+                printf "\nExiting\n"
+                exit 0
                 ;;
         esac
     done
-    exit 0
+  done
 }
 
 # TODO: convert use of "$1" to getopts argument processing
@@ -243,6 +295,7 @@ done
 }
 
 [ "$1" == "info" ] && {
+    [ "$2" ] && INFO="$2"
     system_info
     exit 0
 }
