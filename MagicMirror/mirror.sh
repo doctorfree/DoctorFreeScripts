@@ -116,9 +116,62 @@ setconf() {
     fi
 }
 
+# If invoked with no arguments present a menu of options to select from
 [ "$1" ] || {
-    printf "\nCommand argument required to specify Mirror mode.\n"
-    usage
+    PS3='Please enter your MagicMirror command choice (numeric): '
+    options=("list active modules" "list installed modules" "list configurations" "select configuration" "restart" "start" "stop" "status" "get brightness" "set brightness" "quit")
+    select opt in "${options[@]}"
+    do
+        case $opt in
+            "list active modules")
+                mirror list active
+                break
+                ;;
+            "list installed modules")
+                mirror list installed
+                break
+                ;;
+            "list configurations")
+                mirror list configs
+                break
+                ;;
+            "select configuration")
+                printf "======================================================\n\n"
+                mirror select
+                break
+                ;;
+            "get brightness")
+                mirror getb
+                break
+                ;;
+            "set brightness")
+                while true
+                do
+                  read -p "Enter a brightness level between 0 and 200 or 'exit' to quit" answer
+                  [ "$answer" == "exit" ] && break
+                  if [ $answer -ge 0 ] && [ $answer -le 200 ]
+                  then
+                      printf "\nSetting MagicMirror Brightness Level to $answer\n"
+                      curl -X GET http://${IP}:${PORT}/api/brightness/$answer 2> /dev/null | jq .
+                      break
+                  else
+                      printf "\nBrightness setting $answer out of range or not a number"
+                      printf "\nValid brightness values are integer values [0-200]\n"
+                  fi
+                done
+                break
+                ;;
+            "quit")
+                printf "\nExiting"
+                break
+                ;;
+            *)
+                mirror $opt
+                break
+                ;;
+        esac
+    done
+    exit 0
 }
 
 # TODO: convert use of "$1" to getopts argument processing
