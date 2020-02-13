@@ -214,6 +214,9 @@ do
         bashrc)
             check "$i" "$inst" 58
             ;;
+        chktemp.sh)
+            check "$i" "$inst" 18
+            ;;
         IFTTT/ifttt.sh)
             check "$i" "$inst" 4
             ;;
