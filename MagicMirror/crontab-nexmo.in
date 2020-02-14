@@ -1,3 +1,6 @@
 # Run a script to check the Raspberry Pi temperature every day at 6pm
 # This uses Nexmo to SMS the temperature
 0 18 * * * /usr/local/bin/chktemp > /dev/null 2>&1
+# Run the chktemp script to check the Raspberry Pi temperature every 5 minutes
+# This more frequent run does not SMS unless temp exceeds threshold
+*/5 * * * * /usr/local/bin/chktemp -q > /dev/null 2>&1

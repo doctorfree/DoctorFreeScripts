@@ -6,6 +6,7 @@ TEMPC=`vcgencmd measure_temp | egrep -o '[0-9]*\.[0-9]*'`
 TEMPF=`echo "scale=2; 1.8 * ${TEMPC} + 32" | bc`
 DATE=`date "+%b %d, %Y"`
 TIME=`date "+%T"`
+QUIET=
 
 sendsms() {
     MESSAGE="$*"
@@ -18,9 +19,11 @@ sendsms() {
          -d "api_secret=xxxxxxxxxxxxxxxx"
 }
 
-printf "\n${DATE}:${TIME} Temp = ${TEMPF}F\t${TEMPC}C\n"
+[ "$1" == "-q" ] && QUIET=1
 
-sendsms On ${DATE} at ${TIME} the Raspberry Pi temp is ${TEMPF}F ${TEMPC}C
+[ "${QUIET}" ] || printf "\n${DATE}:${TIME} Temp = ${TEMPF}F\t${TEMPC}C\n"
+
+[ "${QUIET}" ] || sendsms On ${DATE} at ${TIME} the Raspberry Pi temp is ${TEMPF}F ${TEMPC}C
 
 # Shutdown if temperature exceeds some reasonable threshold
 if [ "${TEMPC}" ]
@@ -37,6 +40,6 @@ else
             /usr/local/bin/shutdown
         }
     else
-        echo "Unable to retrieve non-empty temperature for Raspberry Pi"
+        [ "${QUIET}" ] || echo "Unable to retrieve non-empty temperature for Raspberry Pi"
     fi
 fi
