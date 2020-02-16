@@ -117,6 +117,8 @@ Contents:
 
 [**findgrep**](findgrep.sh) - Recursive grep in current directory.
 
+[**gethue**](gethue.sh) - Retrieve info on lights, scenes, configuration, etc from Philips Hue bridge.
+
 [**gitlog**](gitlog.sh) - pretty format the output of "git log ..."
 
 [**latest**](latest.sh) - List the top N newest files in a directory or hierarchy
