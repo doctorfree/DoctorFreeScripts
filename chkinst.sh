@@ -219,6 +219,9 @@ do
         bashrc)
             check "$i" "$inst" 58
             ;;
+        gethue.sh)
+            check "$i" "$inst" 6
+            ;;
         IFTTT/ifttt.sh)
             check "$i" "$inst" 4
             ;;
