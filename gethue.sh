@@ -40,14 +40,26 @@ if [ "$1" ]
 then
     case "$1" in
         lights|groups|config|schedules|scenes|sensors|rules)
-            curl -X "GET" "http://${IP}/api/${USER}/$1" 2> /dev/null | jq .
+            usejq=`type -p jq`
+            if [ "$usejq" ]
+            then
+                curl -X "GET" "http://${IP}/api/${USER}/$1" 2> /dev/null | jq .
+            else
+                curl -X "GET" "http://${IP}/api/${USER}/$1"
+            fi
             ;;
         *)
             usage
             ;;
     esac
 else
-    curl -X "GET" "http://${IP}/api/${USER}" 2> /dev/null | jq .
+    usejq=`type -p jq`
+    if [ "$usejq" ]
+    then
+        curl -X "GET" "http://${IP}/api/${USER}" 2> /dev/null | jq .
+    else
+        curl -X "GET" "http://${IP}/api/${USER}"
+    fi
 fi
 #
 # TODO: convert to getopts arg processing

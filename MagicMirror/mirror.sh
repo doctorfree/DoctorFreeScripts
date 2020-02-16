@@ -40,6 +40,7 @@ CONFS=
 INFO="all"
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
+usejq=`type -p jq`
 
 [ -d "${CONFDIR}" ] || {
     printf "\nCONFDIR does not exist or is not a directory. Exiting.\n"
@@ -122,9 +123,19 @@ setconf() {
     sleep 10
     if [ "${conf}" == "blank" ]
     then
-        curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
+        if [ "$usejq" ]
+        then
+            curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
+        else
+            curl -X GET http://${IP}:${PORT}/api/brightness/0
+        fi
     else
-        curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
+        if [ "$usejq" ]
+        then
+            curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
+        else
+            curl -X GET http://${IP}:${PORT}/api/brightness/180
+        fi
     fi
 }
 
@@ -266,7 +277,12 @@ get_info_type() {
                   if [ $answer -ge 0 ] && [ $answer -le 200 ]
                   then
                       printf "\nSetting MagicMirror Brightness Level to $answer\n"
-                      curl -X GET http://${IP}:${PORT}/api/brightness/$answer 2> /dev/null | jq .
+                      if [ "$usejq" ]
+                      then
+                          curl -X GET http://${IP}:${PORT}/api/brightness/$answer 2> /dev/null | jq .
+                      else
+                          curl -X GET http://${IP}:${PORT}/api/brightness/$answer
+                      fi
                   else
                       printf "\nBrightness setting $answer out of range or not a number"
                       printf "\nValid brightness values are integer values [0-200]\n"
@@ -384,7 +400,12 @@ done
 
 [ "$1" == "getb" ] && {
     printf "\n${BOLD}Getting MagicMirror Brightness Level${NORMAL}\n"
-    curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
+    if [ "$usejq" ]
+    then
+        curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
+    else
+        curl -X GET http://${IP}:${PORT}/api/brightness
+    fi
     exit 0
 }
 
@@ -396,12 +417,22 @@ done
     if [ "$2" == "active" ]
     then
         printf "\n${BOLD}Listing Active MagicMirror modules${NORMAL}\n"
-        curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
+        if [ "$usejq" ]
+        then
+            curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
+        else
+            curl -X GET http://${IP}:${PORT}/api/modules
+        fi
     else
         if [ "$2" == "installed" ]
         then
             printf "\n${BOLD}Listing Installed MagicMirror modules${NORMAL}\n"
-            curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
+            if [ "$usejq" ]
+            then
+                curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
+            else
+                curl -X GET http://${IP}:${PORT}/api/modules/installed
+            fi
         else
             if [ "$2" == "configs" ]
             then
@@ -425,7 +456,12 @@ done
     if [ "$2" -ge 0 ] && [ "$2" -le 200 ]
     then
         printf "\n${BOLD}Setting MagicMirror Brightness Level to $2${NORMAL}\n"
-        curl -X GET http://${IP}:${PORT}/api/brightness/$2 2> /dev/null | jq .
+        if [ "$usejq" ]
+        then
+            curl -X GET http://${IP}:${PORT}/api/brightness/$2 2> /dev/null | jq .
+        else
+            curl -X GET http://${IP}:${PORT}/api/brightness/$2
+        fi
     else
         printf "\nBrightness setting $2 out of range or not a number"
         printf "\nValid brightness values are integer values [0-200]\n"
