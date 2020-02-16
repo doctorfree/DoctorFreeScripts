@@ -215,7 +215,7 @@ do
             check "$i" "$inst" 58
             ;;
         chktemp.sh)
-            check "$i" "$inst" 18
+            check "$i" "$inst" 12
             ;;
         IFTTT/ifttt.sh)
             check "$i" "$inst" 4
