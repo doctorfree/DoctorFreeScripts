@@ -128,6 +128,7 @@ setconf() {
             curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
         else
             curl -X GET http://${IP}:${PORT}/api/brightness/0
+            echo ""
         fi
     else
         if [ "$usejq" ]
@@ -135,6 +136,7 @@ setconf() {
             curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
         else
             curl -X GET http://${IP}:${PORT}/api/brightness/180
+            echo ""
         fi
     fi
 }
@@ -282,6 +284,7 @@ get_info_type() {
                           curl -X GET http://${IP}:${PORT}/api/brightness/$answer 2> /dev/null | jq .
                       else
                           curl -X GET http://${IP}:${PORT}/api/brightness/$answer
+                          echo ""
                       fi
                   else
                       printf "\nBrightness setting $answer out of range or not a number"
@@ -405,6 +408,7 @@ done
         curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
     else
         curl -X GET http://${IP}:${PORT}/api/brightness
+        echo ""
     fi
     exit 0
 }
@@ -422,6 +426,7 @@ done
             curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
         else
             curl -X GET http://${IP}:${PORT}/api/modules
+            echo ""
         fi
     else
         if [ "$2" == "installed" ]
@@ -432,6 +437,7 @@ done
                 curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
             else
                 curl -X GET http://${IP}:${PORT}/api/modules/installed
+                echo ""
             fi
         else
             if [ "$2" == "configs" ]
@@ -461,6 +467,7 @@ done
             curl -X GET http://${IP}:${PORT}/api/brightness/$2 2> /dev/null | jq .
         else
             curl -X GET http://${IP}:${PORT}/api/brightness/$2
+            echo ""
         fi
     else
         printf "\nBrightness setting $2 out of range or not a number"

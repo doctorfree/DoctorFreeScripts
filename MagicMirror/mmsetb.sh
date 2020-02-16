@@ -21,6 +21,7 @@ then
         curl -X GET http://${IP}:${PORT}/api/brightness/$1 2> /dev/null | jq .
     else
         curl -X GET http://${IP}:${PORT}/api/brightness/$1
+        echo ""
     fi
 else
     echo "Brightness setting $1 out of range or not a number"

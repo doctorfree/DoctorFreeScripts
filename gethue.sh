@@ -46,6 +46,7 @@ then
                 curl -X "GET" "http://${IP}/api/${USER}/$1" 2> /dev/null | jq .
             else
                 curl -X "GET" "http://${IP}/api/${USER}/$1"
+                echo ""
             fi
             ;;
         *)
@@ -59,6 +60,7 @@ else
         curl -X "GET" "http://${IP}/api/${USER}" 2> /dev/null | jq .
     else
         curl -X "GET" "http://${IP}/api/${USER}"
+        echo ""
     fi
 fi
 #
