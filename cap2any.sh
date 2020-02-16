@@ -304,7 +304,7 @@ usage() {
   printf "\n\t-v video codec specifies the output video codec"
   printf "\n\t-s size specifies the output video size (widthxheight)"
   printf "\n\t-c codec specifies the output codec"
-  printf "\n\t-I indicates add the captured file to iTunes"
+  printf "\n\t-I indicates add the captured file to Apple Music"
   printf "\n\t-p preset specifies the ffmpeg preset to use"
   printf "\n\t\t Useful presets:"
   printf "\n\t\t ultrafast superfast veryfast faster fast medium slow"
@@ -324,7 +324,7 @@ usage() {
   printf "\n\t\t$ME -s 640x480"
   printf "\n\tSpecify libx264 output video codec and use ipod640 preset"
   printf "\n\t\t$ME -v libx264 -p ipod640"
-  printf "\n\tSpecify 512k bitrate and add capture file to iTunes"
+  printf "\n\tSpecify 512k bitrate and add capture file to Apple Music"
   printf "\n\t\t$ME -b 512k -I"
   printf "\n\tSpecify libx264 output video codec and variable bit rate"
   printf "\n\t\t$ME -v libx264 -r 0 -q 3\n"
@@ -412,12 +412,12 @@ inst=`type -p osascript`
 [ "$CHARACTER" ] && APPLE_SCRIPT=
 if ([ "$APPLE_SCRIPT" ] && [ "$ITUNES" ])
 then
-    echo "Capture will automatically be imported into iTunes"
+    echo "Capture will automatically be imported into Apple Music"
 else
     if [ "$ITUNES" ]
     then
         echo "AppleScript is not supported on this platform."
-        echo "Unable to automate the installation in iTunes."
+        echo "Unable to automate the installation in Apple Music."
         ITUNES=
     fi
 fi
@@ -467,7 +467,7 @@ printf "\n${FFMPEG} ${CAP} ${OPTS} ${OUT_FILE}\n"
     [ "$ITUNES" ] && {
         # Construct full pathname of output file
         k=`pwd`/"$j"
-        echo "Adding $j to iTunes"
-        osascript -e "tell application \"iTunes\" to add POSIX file \"$k\""
+        echo "Adding $j to Apple Music"
+        osascript -e "tell application \"Music\" to add POSIX file \"$k\""
     }
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 ## @file add2itunes.sh
-## @brief Add the media files provided as arguments to the iTunes library
+## @brief Add the media files provided as arguments to the Apple Music library
 ## @author Ronald Joe Record (rr at ronrecord dot com)
 ## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
 ## @date Written 8-Mar-2014
@@ -39,7 +39,7 @@ do
         pathname=`pwd`
         j="$pathname"/`basename "$i"`
         cd "$HERE"
-        echo "Adding file $i to iTunes"
-        osascript -e "tell application \"iTunes\" to add POSIX file \"$j\""
+        echo "Adding file $i to Apple Music"
+        osascript -e "tell application \"Music\" to add POSIX file \"$j\""
     fi
 done
