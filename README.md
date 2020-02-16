@@ -20,6 +20,8 @@ Contents:
 
 [**Scripts/IFTTT**](IFTTT/README.md) - Scripts to invoke IFTTT applets I've configured. These include scripts to manage my lights and devices like my AppleTV, Bluray player, and TV.
 
+[**Scripts/MagicMirror**](MagicMirror/README.md) - Scripts to manage my MagicMirror (https://magicmirror.builders/)
+
 [**Scripts/Utils**](Utils/README.md) - A few utility scripts
 
 [**Scripts/Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper

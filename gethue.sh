@@ -18,8 +18,8 @@
 #     /rules which contains all the rules
 #
 # Set the IP and User to use (see instructions in URL above to retrieve this info)
-IP=10.0.1.2
-USER="rwn0PZ3NxLuX30JQ-67MjIPg0GvS8rKUwdKcobnU"
+IP=xx.x.x.x
+USER="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 usage() {
     printf "\nUsage: gethue [lights|groups|config|schedules|scenes|sensors|rules]"
