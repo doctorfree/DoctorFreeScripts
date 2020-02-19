@@ -1,0 +1,14 @@
+.mmm-hue-lights .grid {
+    width: auto;
+    display: flex;
+    flex-flow: row wrap;
+    margin: -10px;
+    max-width: none;
+    justify-content: center;
+}
+
+.mmm-hue-lights .grid .hue {
+    width: calc(25% - 20px);
+    margin: 10px;
+    display: block;
+}
