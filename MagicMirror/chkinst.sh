@@ -150,7 +150,7 @@ while getopts adfinuw: flag; do
 done
 shift $(( OPTIND - 1 ))
 
-for i in *
+for i in * config/* css/custom.css tests/configs/check_config.js
 do
     # Skip directories
     [ -d "$i" ] && continue
@@ -166,6 +166,9 @@ do
             else
                 inst=
             fi
+            ;;
+        css/custom.css|tests/configs/check_config.js|config/*)
+            [ -f "$HOME/MagicMirror/$i" ] && inst="$HOME/MagicMirror/$i"
             ;;
         IFTTT/*)
             inst=`type -p "$j"`
@@ -216,6 +219,24 @@ do
             ;;
         chktemp.sh)
             check "$i" "$inst" 12
+            ;;
+        config/config-calendar.js)
+            check "$i" "$inst" 12
+            ;;
+        config/config-default.js)
+            check "$i" "$inst" 96
+            ;;
+        config/config-iframe.js)
+            check "$i" "$inst" 88
+            ;;
+        config/config-noback.js)
+            check "$i" "$inst" 92
+            ;;
+        config/config-plex.js)
+            check "$i" "$inst" 24
+            ;;
+        config/config-server.js)
+            check "$i" "$inst" 98
             ;;
         IFTTT/ifttt.sh)
             check "$i" "$inst" 4
