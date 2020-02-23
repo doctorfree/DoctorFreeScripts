@@ -17,3 +17,7 @@
   font-size: 25px;
   line-height: 30px;
 }
+
+.MMM-DarkSkyForecast .module-content {
+  width: 500px; /* adjust this to taste */
+}

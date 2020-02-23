@@ -238,6 +238,9 @@ do
         config/config-server.js)
             check "$i" "$inst" 98
             ;;
+        config/config-weather.js)
+            check "$i" "$inst" 24
+            ;;
         IFTTT/ifttt.sh)
             check "$i" "$inst" 4
             ;;
