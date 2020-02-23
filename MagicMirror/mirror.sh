@@ -29,6 +29,8 @@
 # -----------------------------------------------------------------------
 # Set this to your MagicMirror installation directory
 MM="${HOME}/MagicMirror"
+# Set this to your MagicMirror module source directory
+MSRC="${HOME}/src/Scripts/MagicMirror/modules"
 # Set the IP and PORT to the values on your system
 IP="10.0.1.67"
 PORT="8080"
@@ -119,8 +121,37 @@ setconf() {
         exit 1
     }
     [ -L config-$$.js ] && rm -f config-$$.js
+    #
+    # TODO: Create custom Hello-Lucy sentence/command pairs for each MM config
+    # Test and uncomment this section to implement custom Lucy commands per config
+    #
+    # Check to see if there is a custom Hello-Lucy sentence/command pair for this config
+    #
+    # BEGIN commented custom Lucy implementation:
+#   if [ -f ${MSRC}/Hello-Lucy/sentences-${conf}.json ]
+#   then
+#     [ -f ${MSRC}/Hello-Lucy/checkCommands-${conf}.json ] && {
+#       [ -d ${MM}/modules/Hello-Lucy ] && {
+#         for lucy in sentences checkCommands
+#         do
+#           cp ${MSRC}/Hello-Lucy/${lucy}-${conf}.json ${MM}/modules/Hello-Lucy/${lucy}.json
+#         done
+#       }
+#     }
+#   else
+      # If no custom Hello-Lucy sentence/command pair exists for this config, use all
+#     [ -d ${MM}/modules/Hello-Lucy ] && {
+#       for lucy in sentences checkCommands
+#       do
+#         [ -f ${MSRC}/Hello-Lucy/${lucy}-all.json ] && {
+#           cp ${MSRC}/Hello-Lucy/${lucy}-all.json ${MM}/modules/Hello-Lucy/${lucy}.json
+#         }
+#       done
+#     }
+#   fi
+    # END commented custom Lucy implementation
     pm2 restart mm --update-env
-    sleep 10
+    sleep 5
     if [ "${conf}" == "blank" ]
     then
         if [ "$usejq" ]
