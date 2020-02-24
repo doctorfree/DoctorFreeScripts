@@ -12,7 +12,7 @@ BACKG_DIR=${PIC_DIR}/Fractals
     exit 1
 }
 
-pm2 stop mm
+pm2 stop MagicMirror
 sleep 5
 cd $BACKG_DIR
 a=( * )
@@ -21,4 +21,4 @@ randf="${a[j]}"
 #echo "Using $BACKG_DIR/$randf for background"
 DISPLAY=:0 pcmanfm --set-wallpaper="$BACKG_DIR/$randf"
 sleep 10
-pm2 start mm
+pm2 start MagicMirror

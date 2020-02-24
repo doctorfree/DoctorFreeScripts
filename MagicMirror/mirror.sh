@@ -150,7 +150,7 @@ setconf() {
 #     }
 #   fi
     # END commented custom Lucy implementation
-    pm2 restart mm --update-env
+    pm2 restart MagicMirror --update-env
     sleep 5
     if [ "${conf}" == "blank" ]
     then
@@ -404,28 +404,28 @@ done
 
 [ "$1" == "restart" ] && {
     printf "\n${BOLD}Restarting MagicMirror${NORMAL}\n"
-    pm2 restart mm --update-env
+    pm2 restart MagicMirror --update-env
     printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
 
 [ "$1" == "start" ] && {
     printf "\n${BOLD}Starting MagicMirror${NORMAL}\n"
-    pm2 start mm --update-env
+    pm2 start MagicMirror --update-env
     printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
 
 [ "$1" == "stop" ] && {
     printf "\n${BOLD}Stopping MagicMirror${NORMAL}\n"
-    pm2 stop mm --update-env
+    pm2 stop MagicMirror --update-env
     printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
 
 [ "$1" == "status" ] && {
     printf "\n${BOLD}MagicMirror Status:${NORMAL}\n"
-    pm2 status mm --update-env
+    pm2 status MagicMirror --update-env
     CONF=`readlink -f ${CONFDIR}/config.js`
     printf "\nUsing config file `basename ${CONF}`"
     printf "\n${BOLD}Done${NORMAL}\n"
