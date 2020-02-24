@@ -1,0 +1,10 @@
+pcm.!default {
+    type asym
+    playback.pcm "plughw:0"
+    capture.pcm  "plughw:1"
+}
+
+ctl.!default {
+    type hw
+    card 1
+}
