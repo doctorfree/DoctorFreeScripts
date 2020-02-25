@@ -61,8 +61,13 @@ update() {
 ## @param param1 first argument is file in current directory
 ## @param param2 second argument is installed version of file
 differ() {
-    echo "$1 differs from installed version $2"
-    echo ""
+    if [ -f "$2" ]
+    then
+        echo "$1 differs from installed version $2"
+    else
+        [ "${FORCE}" ] || echo "No installed version of $1 as $2"
+        DIFF=
+    fi
     [ "$DIFF" ] && {
         diff "$1" "$2"
         echo ""
@@ -108,8 +113,13 @@ differ() {
 ## @param param1 first argument is file in current directory
 ## @param param2 second argument is installed version of file
 check() {
-    dnum=`diff "$1" "$2" | wc -l`
-    [ $dnum -ne $3 ] && differ "$1" "$2"
+    if [ -f "$2" ]
+    then
+        dnum=`diff "$1" "$2" | wc -l`
+        [ $dnum -ne $3 ] && differ "$1" "$2"
+    else
+        differ "$1" "$2"
+    fi
 }
 
 ALL=
@@ -159,6 +169,9 @@ do
     # Scripts can be either commands or startup configuration files in $HOME 
     inst=
     case "$i" in
+        asoundrc)
+            inst="$HOME/.$i"
+            ;;
         bash_aliases|bash_profile|bashrc|dircolors|vimrc)
             if [ -f "$HOME/.$i" ]
             then
@@ -171,23 +184,13 @@ do
             inst="$HOME/$i"
             ;;
         css/custom.css|tests/configs/check_config.js|config/*)
-            [ -f "$HOME/MagicMirror/$i" ] && inst="$HOME/MagicMirror/$i"
+            inst="$HOME/MagicMirror/$i"
             ;;
-        IFTTT/*)
-            inst=`type -p "$j"`
-            [ "$inst" ] || inst="${HOME}/bin/$j"
-            ;;
-        Utils/*)
-            [ -f "/usr/local/share/bash/$j" ] && inst="/usr/local/share/bash/$j"
-            ;;
-        Wallpapers/*)
-            inst=`type -p "$j"`
-            [ "$inst" ] || {
-                [ -f "${WDIR}/$j" ] && inst="${WDIR}/$j"
-            }
-            ;;
-        INSTALL)
+        crontab*|files_with_secrets.txt|README*)
             continue
+            ;;
+        reboot.sh|shutdown.sh)
+            inst="/usr/local/bin/$j"
             ;;
         *)
             inst=`type -p "$j"`
