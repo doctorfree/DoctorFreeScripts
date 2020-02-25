@@ -49,7 +49,7 @@ echo "Cloning Scripts repo"
 git clone ssh://gitlab.com/doctorfree/Scripts.git
 cd Scripts/MagicMirror 
 echo "Installing Scripts/MagicMirror scripts"
-./chkinst.sh -f
+./chkinst.sh -f -i
 
 # Install jq JSON parsing utility
 echo "Installing jq JSON parsing utility"

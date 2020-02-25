@@ -134,7 +134,6 @@ while getopts adfinuw: flag; do
             UPD=1
             ;;
         f)
-            UPD=1
             FORCE=1
             ;;
         n)
@@ -158,6 +157,7 @@ do
     k=`echo $i | sed -e "s/\.sh$//" -e "s/Wallpapers\///" -e "s/Utils\///"`
     j=`echo $k | sed -e "s/IFTTT\///"`
     # Scripts can be either commands or startup configuration files in $HOME 
+    inst=
     case "$i" in
         bash_aliases|bash_profile|bashrc|dircolors|vimrc)
             if [ -f "$HOME/.$i" ]
@@ -194,11 +194,16 @@ do
             ;;
     esac
     [ "$inst" ] || {
-        [ "$ALL" ] && {
-            echo "$i does not appear to be installed. Skipping."
-            echo ""
-        }
-        continue
+        if [ "${FORCE}" ]
+        then
+            inst="/usr/local/bin/$j"
+        else
+            [ "$ALL" ] && {
+                echo "$i does not appear to be installed. Skipping."
+                echo ""
+            }
+            continue
+        fi
     }
     # Special cases as the installed version may have configuration changes.
     # The 3rd argument to the check() function is the number of lines the
