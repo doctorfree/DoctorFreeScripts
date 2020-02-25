@@ -167,6 +167,9 @@ do
                 inst=
             fi
             ;;
+        duplicity_exclude.txt)
+            inst="$HOME/$i"
+            ;;
         css/custom.css|tests/configs/check_config.js|config/*)
             [ -f "$HOME/MagicMirror/$i" ] && inst="$HOME/MagicMirror/$i"
             ;;
