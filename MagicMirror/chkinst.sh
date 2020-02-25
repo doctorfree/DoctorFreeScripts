@@ -186,7 +186,7 @@ do
         css/custom.css|tests/configs/check_config.js|config/*)
             inst="$HOME/MagicMirror/$i"
             ;;
-        crontab*|files_with_secrets.txt|README*)
+        crontab*|files_with_secrets.txt|README*|wireless_dot_sample)
             continue
             ;;
         reboot.sh|shutdown.sh)

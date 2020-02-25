@@ -1,0 +1,11 @@
+#
+# Configure this file with your wireless network SSID and password
+# Copy it to $HOME/.wireless, change permissions on $HOME/.wireless to 600
+# Run the shell script '/usr/local/bin/wireless_conf'
+#
+# After successfully configuring your wireless network you can delete the
+# file $HOME/.wireless and edit out the commented out plain text password 
+# in the file /etc/wpa_supplicant/wpa_supplicant.conf
+#
+SSID="Name of your wireless network"
+PSK="Your_network_password"
