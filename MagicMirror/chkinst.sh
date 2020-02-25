@@ -220,6 +220,15 @@ do
         chktemp.sh)
             check "$i" "$inst" 12
             ;;
+        gethue.sh)
+            check "$i" "$inst" 6
+            ;;
+        getquote.sh)
+            check "$i" "$inst" 8
+            ;;
+        send_sms.sh)
+            check "$i" "$inst" 12
+            ;;
         config/config-calendar.js)
             check "$i" "$inst" 12
             ;;
