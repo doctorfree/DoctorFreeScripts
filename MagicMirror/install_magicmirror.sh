@@ -11,8 +11,7 @@ MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
 }
 
 # Install MMPM
-[ -d $HOME/src ] || mkdir $HOME/src
-cd $HOME/src
+cd $HOME
 echo "Installing MMPM and dependencies"
 sudo apt install python3 python3-pip -y && \
       git clone https://github.com/Bee-Mar/mmpm.git && \
@@ -23,7 +22,13 @@ sudo apt install python3 python3-pip -y && \
 
 # Install MagicMirror
 echo "Installing MagicMirror"
-mmpm -M
+#mmpm -M
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt install -y nodejs
+git clone https://github.com/MichMich/MagicMirror
+cd MagicMirror
+npm install
+npm install electron@6.0.12
 
 # Install MagicMirror Modules
 [ -d ${MM_BASE}/modules ] || {
@@ -40,6 +45,7 @@ done
 echo "Installing MagicMirror module mmm-hue-lights"
 git clone https://github.com/michael5r/mmm-hue-lights.git
 
+[ -d $HOME/src ] || mkdir $HOME/src
 cd $HOME/src
 [ -d Scripts ] && {
     echo "Moving existing Scripts repo to Scripts-$$"
