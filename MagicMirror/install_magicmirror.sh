@@ -62,3 +62,10 @@ sudo apt-get install duplicity
 # Install fswebcam
 echo "Installing fswebcam utility"
 sudo apt install fswebcam
+
+echo ""
+echo "==================================="
+echo "Follow instructions at:"
+echo "https://forum.magicmirror.builders/topic/5327/sync-private-icloud-calendar-with-magicmirror/2?page=1"
+echo "to setup Apple ical calendar module"
+echo "==================================="

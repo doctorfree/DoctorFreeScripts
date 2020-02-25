@@ -1,0 +1,8 @@
+proc            /proc           proc    defaults          0       0
+PARTUUID=5e3da3da-01  /boot           vfat    defaults          0       2
+PARTUUID=5e3da3da-02  /               ext4    defaults,noatime  0       1
+# a swapfile is not a swap partition, no line here
+#   use  dphys-swapfile swap[on|off]  for that
+10.0.1.51:/Volumes/Seagate_8TB /home/pi/Seagate_8TB nfs auto 0 0
+10.0.1.51:/Volumes/WD_My_Passport_4TB /home/pi/WD_My_Passport_4TB nfs auto 0 0
+#10.0.1.51:/Volumes/Seagate_8TB /home/pi/Seagate_8TB nfs defaults,noauto,x-systemd.automount 0 0
