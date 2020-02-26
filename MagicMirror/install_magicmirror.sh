@@ -109,6 +109,7 @@ printf "@xset s noblank\n@xset s off\n@xset -dpms\n" >> ${AUTOSTART}
 echo "Installing Vim GUI, exuberant-ctags, and Runtime packages"
 sudo apt-get -y install vim-gui-common vim-runtime exuberant-ctags > /dev/null
 
+printf "\n============= iCal Sync Selection Dialog ==================\n"
 PS3="${BOLD}Are you going to want to sync with an Apple iCal calendar? (enter number or text): ${NORMAL}"
 options=(yes no skip)
 select opt in "${options[@]}"
@@ -144,6 +145,7 @@ done
 echo "Removing unused packages"
 sudo apt-get -y autoremove > /dev/null
 
+printf "\n============= Screen Orientation Selection Dialog ==================\n"
 PS3="${BOLD}Do you want to rotate the screen 90 degrees left or right? (enter number or text): ${NORMAL}"
 options=(no left right skip)
 select opt in "${options[@]}"
