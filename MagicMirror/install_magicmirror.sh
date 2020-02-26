@@ -4,6 +4,8 @@ MM_BASE=${HOME}/MagicMirror
 MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-ModuleScheduler MMM-NetworkScanner MMM-RAIN-RADAR \
          MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats"
+LXSESSION="${HOME}/.config/lxsession"
+AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
 
 [ -d ${MM_BASE} ] && {
     echo "Moving existing ${MM_BASE} to ${MM_BASE}-$$"
@@ -41,29 +43,31 @@ echo "Installing MagicMirror modules: ${MODULES}"
 cd ${MM_BASE}/modules
 for module in ${MODULES}
 do
-    mmpm -i ${module}
+    mmpm -i ${module} > /dev/null
 done
 echo "Installing MagicMirror module mmm-hue-lights"
-git clone https://github.com/michael5r/mmm-hue-lights.git
+git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null
 
 [ -d ${HOME}/src ] || mkdir ${HOME}/src
 cd ${HOME}/src
 [ -d Scripts ] || {
     echo "Cloning Scripts repo"
-    git clone ssh://gitlab.com/doctorfree/Scripts.git
+    git clone ssh://gitlab.com/doctorfree/Scripts.git > /dev/null
 }
 cd Scripts/MagicMirror 
-echo "Installing Scripts/MagicMirror scripts"
+echo "Installing MagicMirror convenience scripts in /usr/local/bin"
 [ -d /usr/local/bin ] || sudo mkdir /usr/local/bin
-./chkinst.sh -f -i
+./chkinst.sh -f -i > /dev/null
+echo "Prepending /usr/local/bin to PATH (see ${HOME}/.bashrc)"
+echo "export PATH=/usr/local/bin:$PATH" >> ${HOME}/.bashrc
 
 # Install jq JSON parsing utility
 echo "Installing jq JSON parsing utility"
-sudo apt-get -y install jq
+sudo apt-get -y install jq > /dev/null
 
 # Install Duplicity backup utility
 echo "Installing Duplicity backup utility"
-sudo apt-get -y install duplicity
+sudo apt-get -y install duplicity > /dev/null
 
 # Install fswebcam
 echo "Installing fswebcam utility"
@@ -89,11 +93,40 @@ chmod 755 mm.sh
 pm2 start mm.sh
 pm2 save
 
+# Disable X11 screensaver
+echo "Disabling screensaver"
+cd ${HOME}/.config
+cp -a /etc/xdg/lxsession ${LXSESSION}
+printf "@xset s noblank\n@xset s off\n@xset -dpms\n" >> ${AUTOSTART}
+
 echo "Installing Vim GUI, exuberant-ctags, and Runtime packages"
-sudo apt-get -y install vim-gui-common vim-runtime exuberant-ctags
+sudo apt-get -y install vim-gui-common vim-runtime exuberant-ctags > /dev/null
 
 echo "Removing unused packages"
-sudo apt-get -y autoremove
+sudo apt-get -y autoremove > /dev/null
+
+PS3="${BOLD}Do you want to rotate the screen 90 degrees left or right? (enter number or text): ${NORMAL}"
+options=(no left right skip)
+select opt in "${options[@]}"
+do
+    case "$opt,$REPLY" in
+        "left",*|*,"left")
+            printf "@xrandr --output HDMI-1 --rotate left\n" >> ${AUTOSTART}
+            break
+            ;;
+        "right",*|*,"right")
+            printf "@xrandr --output HDMI-1 --rotate right\n" >> ${AUTOSTART}
+            break
+            ;;
+        "no",*|*,"no"|"skip",*|*,"skip")
+            break
+            ;;
+        *)
+            printf "\nInvalid entry. Please try again"
+            printf "\nEnter either a number or text of one of the menu entries\n"
+            ;;
+    esac
+done
 
 echo ""
 echo "==========!! TO DO !!=============="
