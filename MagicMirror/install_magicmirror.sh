@@ -13,6 +13,7 @@ AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
 }
 
 cd ${HOME}
+export PATH=${PATH}:${HOME}/.local/bin
 
 # Install MMPM
 echo "Installing MMPM and dependencies"
@@ -20,7 +21,7 @@ sudo apt install python3 python3-pip -y && \
       git clone https://github.com/Bee-Mar/mmpm.git && \
       cd mmpm && \
       make && \
-      echo "export PATH=$PATH:${HOME}/.local/bin" >> ${HOME}/.bashrc
+      echo "export PATH=${PATH}:${HOME}/.local/bin" >> ${HOME}/.bashrc
 
 . ~/.bashrc
 
@@ -84,7 +85,7 @@ then
     ./chkinst.sh -f -i > /dev/null
     sudo chown -R pi:pi ${HOME}/MagicMirror/config
     echo "Prepending /usr/local/bin to PATH (see ${HOME}/.bashrc)"
-    echo "export PATH=/usr/local/bin:$PATH" >> ${HOME}/.bashrc
+    echo "export PATH=/usr/local/bin:${PATH}" >> ${HOME}/.bashrc
 else
     echo "ERROR: Something went wrong with the Scripts git clone."
     echo "No directory $HOME/src/Scripts/MagicMirror"
@@ -117,7 +118,7 @@ fi
 # Install pm2
 echo "Installing pm2 utility"
 sudo npm install -g pm2 > /dev/null
-sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 \
+sudo env PATH=${PATH}:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 \
     startup systemd -u pi --hp /home/pi > /dev/null
 
 # Enable and start the SSH service
