@@ -89,6 +89,12 @@ chmod 755 mm.sh
 pm2 start mm.sh
 pm2 save
 
+echo "Installing Vim GUI, exuberant-ctags, and Runtime packages"
+sudo apt-get -y install vim-gui-common vim-runtime exuberant-ctags
+
+echo "Removing unused packages"
+sudo apt-get -y autoremove
+
 echo ""
 echo "==========!! TO DO !!=============="
 echo "Follow instructions at:"
