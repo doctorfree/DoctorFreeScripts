@@ -12,18 +12,21 @@ AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
     mv ${MM_BASE} ${MM_BASE}-$$
 }
 
-# Install MMPM
 cd ${HOME}
+
+# Install MMPM
 echo "Installing MMPM and dependencies"
 sudo apt install python3 python3-pip -y && \
       git clone https://github.com/Bee-Mar/mmpm.git && \
       cd mmpm && \
       make && \
-      echo "export PATH=$PATH:${HOME}/.local/bin" >> ${HOME}/.bashrc && \
-      source ~/.bashrc
+      echo "export PATH=$PATH:${HOME}/.local/bin" >> ${HOME}/.bashrc
+
+. ~/.bashrc
+
+cd ${HOME}
 
 # Install MagicMirror
-cd ${HOME}
 echo "Installing MagicMirror"
 #mmpm -M
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
@@ -58,6 +61,8 @@ cd Scripts/MagicMirror
 echo "Installing MagicMirror convenience scripts in /usr/local/bin"
 [ -d /usr/local/bin ] || sudo mkdir /usr/local/bin
 ./chkinst.sh -f -i > /dev/null
+sudo chown -R pi:pi ${HOME}/MagicMirror/config
+
 echo "Prepending /usr/local/bin to PATH (see ${HOME}/.bashrc)"
 echo "export PATH=/usr/local/bin:$PATH" >> ${HOME}/.bashrc
 
