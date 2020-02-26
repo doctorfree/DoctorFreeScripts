@@ -53,20 +53,43 @@ done
 echo "Installing MagicMirror module mmm-hue-lights"
 git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null
 
+# Audit and fix any discovered vulnerabilities
+printf "\nAuditing and repairing any discovered vulnerabilities ... "
+cd ${MM_BASE}
+find . -name package.json | grep -v /node_modules/ | while read package
+do
+    DIR=`dirname "$package"`
+    cd ${DIR}
+    npm audit > /dev/null
+    [ $? -eq 0 ] || {
+        printf "\n\tFixing vulnerbilities in ${MM_BASE}/${DIR}"
+        npm audit fix > /dev/null
+    }
+    cd ${MM_BASE}
+done
+printf "\nDone detecting and repairing vulnerabilities\n"
+
 [ -d ${HOME}/src ] || mkdir ${HOME}/src
 cd ${HOME}/src
 [ -d Scripts ] || {
-    echo "Cloning Scripts repo"
+    echo "Cloning Scripts repository"
     git clone ssh://gitlab.com/doctorfree/Scripts.git > /dev/null
 }
-cd Scripts/MagicMirror 
-echo "Installing MagicMirror convenience scripts in /usr/local/bin"
-[ -d /usr/local/bin ] || sudo mkdir /usr/local/bin
-./chkinst.sh -f -i > /dev/null
-sudo chown -R pi:pi ${HOME}/MagicMirror/config
 
-echo "Prepending /usr/local/bin to PATH (see ${HOME}/.bashrc)"
-echo "export PATH=/usr/local/bin:$PATH" >> ${HOME}/.bashrc
+if [ -d ${HOME}/src/Scripts/MagicMirror ]
+then
+    cd ${HOME}/src/Scripts/MagicMirror 
+    echo "Installing MagicMirror convenience scripts in /usr/local/bin"
+    [ -d /usr/local/bin ] || sudo mkdir /usr/local/bin
+    ./chkinst.sh -f -i > /dev/null
+    sudo chown -R pi:pi ${HOME}/MagicMirror/config
+    echo "Prepending /usr/local/bin to PATH (see ${HOME}/.bashrc)"
+    echo "export PATH=/usr/local/bin:$PATH" >> ${HOME}/.bashrc
+else
+    echo "ERROR: Something went wrong with the Scripts git clone."
+    echo "No directory $HOME/src/Scripts/MagicMirror"
+    echo "Skipping installation of MagicMirror convenience scripts"
+fi
 
 # Install jq JSON parsing utility
 echo "Installing jq JSON parsing utility"
@@ -81,8 +104,15 @@ echo "Installing fswebcam utility"
 sudo apt install fswebcam > /dev/null
 
 # For now, use the sample config provided by MagicMirror
-cd ${MM_BASE}/config
-ln -s config.js.sample config.js
+if [ -d ${MM_BASE}/config ]
+then
+    cd ${MM_BASE}/config
+    ln -s config.js.sample config.js
+else
+    echo "ERROR: Something went wrong with the MagicMirror install."
+    echo "No directory $MM_BASE/config"
+    echo "Skipping linking of default MagicMirror config file"
+fi
 
 # Install pm2
 echo "Installing pm2 utility"
