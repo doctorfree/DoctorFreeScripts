@@ -29,12 +29,12 @@ cd ${HOME}
 # Install MagicMirror
 echo "Installing MagicMirror"
 #mmpm -M
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt install -y nodejs
-git clone https://github.com/MichMich/MagicMirror
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - > /dev/null
+sudo apt install -y nodejs > /dev/null
+git clone https://github.com/MichMich/MagicMirror > /dev/null
 cd MagicMirror
-npm install
-npm install electron@6.0.12
+npm install > /dev/null
+npm install electron@6.0.12 > /dev/null
 
 # Install MagicMirror Modules
 [ -d ${MM_BASE}/modules ] || {
@@ -42,11 +42,13 @@ npm install electron@6.0.12
     exit 1
 }
 
-echo "Installing MagicMirror modules: ${MODULES}"
+echo "Installing MagicMirror modules: "
 cd ${MM_BASE}/modules
 for module in ${MODULES}
 do
+    printf "\tInstalling ${module} ... "
     mmpm -i ${module} > /dev/null
+    printf " done\n"
 done
 echo "Installing MagicMirror module mmm-hue-lights"
 git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null
@@ -76,7 +78,7 @@ sudo apt-get -y install duplicity > /dev/null
 
 # Install fswebcam
 echo "Installing fswebcam utility"
-sudo apt install fswebcam
+sudo apt install fswebcam > /dev/null
 
 # For now, use the sample config provided by MagicMirror
 cd ${MM_BASE}/config
@@ -84,9 +86,9 @@ ln -s config.js.sample config.js
 
 # Install pm2
 echo "Installing pm2 utility"
-sudo npm install -g pm2
+sudo npm install -g pm2 > /dev/null
 sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 \
-    startup systemd -u pi --hp /home/pi
+    startup systemd -u pi --hp /home/pi > /dev/null
 
 # Enable and start the SSH service
 sudo systemctl enable ssh
@@ -95,7 +97,7 @@ sudo systemctl start ssh
 cd ${HOME}
 printf "#!/bin/bash\ncd ~/MagicMirror\nDISPLAY=:0 npm start\n" > mm.sh
 chmod 755 mm.sh
-pm2 start mm.sh
+pm2 --name MagicMirror start mm.sh
 pm2 save
 
 # Disable X11 screensaver
@@ -106,6 +108,38 @@ printf "@xset s noblank\n@xset s off\n@xset -dpms\n" >> ${AUTOSTART}
 
 echo "Installing Vim GUI, exuberant-ctags, and Runtime packages"
 sudo apt-get -y install vim-gui-common vim-runtime exuberant-ctags > /dev/null
+
+PS3="${BOLD}Are you going to want to sync with an Apple iCal calendar? (enter number or text): ${NORMAL}"
+options=(yes no skip)
+select opt in "${options[@]}"
+do
+    case "$opt,$REPLY" in
+        "no",*|*,"no"|"skip",*|*,"skip")
+            break
+            ;;
+        "yes",*|*,"yes")
+            echo "Installing vdirsyncer and dependencies"
+            sudo apt-get -y install libxml2 libxslt1.1 zlib1g python3 > /dev/null
+            pip3 install --user --ignore-installed vdirsyncer > /dev/null
+            echo "Installing the vdirsyncer.service and vdirsyncer.timer"
+            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.service | sudo tee /etc/systemd/user/vdirsyncer.service > /dev/null
+            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.timer | sudo tee /etc/systemd/user/vdirsyncer.timer > /dev/null
+            echo "Activating the vdirsyncer timer in systemd"
+            systemctl --user enable vdirsyncer.timer
+            printf "\nTo complete the vdirsyncer configuration you will need to"
+            printf "\nfollow the instructions at:"
+            printf "\n\thttps://forum.magicmirror.builders/topic/5327/sync-private-icloud-calendar-with-magicmirror/2?page=1"
+            printf "\nCreate an app-specific iCloud password, create a vdirsyncer config file,"
+            printf "\ndiscover the UUIDs of calendars you wish to sync, add those to your"
+            printf "\nvdirsyncer config file, and sync your calendar(s)\n"
+            break
+            ;;
+        *)
+            printf "\nInvalid entry. Please try again"
+            printf "\nEnter either a number or 'yes', 'no', or 'skip'\n"
+            ;;
+    esac
+done
 
 echo "Removing unused packages"
 sudo apt-get -y autoremove > /dev/null
