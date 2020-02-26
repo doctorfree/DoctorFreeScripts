@@ -13,14 +13,14 @@ AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
 }
 
 cd ${HOME}
-export PATH=${PATH}:${HOME}/.local/bin
+[[ ":${PATH}:" == *":$HOME/.local/bin:"* ]] || export PATH=${PATH}:${HOME}/.local/bin
 
 # Install MMPM
 echo "Installing MMPM and dependencies"
-sudo apt install python3 python3-pip -y && \
-      git clone https://github.com/Bee-Mar/mmpm.git && \
+sudo apt install python3 python3-pip -y > /dev/null && \
+      git clone https://github.com/Bee-Mar/mmpm.git > /dev/null && \
       cd mmpm && \
-      make && \
+      make > /dev/null && \
       echo "export PATH=${PATH}:${HOME}/.local/bin" >> ${HOME}/.bashrc
 
 . ~/.bashrc
@@ -29,13 +29,12 @@ cd ${HOME}
 
 # Install MagicMirror
 echo "Installing MagicMirror"
-#mmpm -M
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - > /dev/null
 sudo apt install -y nodejs > /dev/null
 git clone https://github.com/MichMich/MagicMirror > /dev/null
 cd MagicMirror
-npm install > /dev/null
-npm install electron@6.0.12 > /dev/null
+npm install > /dev/null 2>&1
+npm install electron@6.0.12 > /dev/null 2>&1
 
 # Install MagicMirror Modules
 [ -d ${MM_BASE}/modules ] || {
@@ -60,11 +59,12 @@ cd ${MM_BASE}
 find . -name package.json | grep -v /node_modules/ | while read package
 do
     DIR=`dirname "$package"`
+    [ -f ${DIR}/package-lock.json ] || continue
     cd ${DIR}
-    npm audit > /dev/null
+    npm audit > /dev/null 2>&1
     [ $? -eq 0 ] || {
         printf "\n\tFixing vulnerbilities in ${MM_BASE}/${DIR}"
-        npm audit fix > /dev/null
+        npm audit fix > /dev/null 2>&1
     }
     cd ${MM_BASE}
 done
@@ -117,24 +117,56 @@ fi
 
 # Install pm2
 echo "Installing pm2 utility"
-sudo npm install -g pm2 > /dev/null
+sudo npm install -g pm2 > /dev/null 2>&1
 sudo env PATH=${PATH}:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 \
-    startup systemd -u pi --hp /home/pi > /dev/null
+    startup systemd -u pi --hp /home/pi > /dev/null 2>&1
 
 # Enable and start the SSH service
-sudo systemctl enable ssh
-sudo systemctl start ssh
+echo "WARNING: this script enables SSH for remote login support."
+echo "If you are using the default user/password then this is a serious vulnerability."
+echo "Do not use the default user/password and run this script."
+
+printf "\n============= Default Password Selection Dialog ==================\n"
+USER=`id -u -n`
+PS3="${BOLD}Are you using the default password for user ${USER} ? (enter number or text): ${NORMAL}"
+options=(yes no)
+select opt in "${options[@]}"
+do
+    case "$opt,$REPLY" in
+        "no",*|*,"no")
+            echo "Enabling SSH"
+            sudo systemctl enable ssh
+            sudo systemctl start ssh
+            break
+            ;;
+        "yes",*|*,"yes")
+            echo "SSH not enabled"
+            echo "In order to enable SSH, run the following commands:"
+            printf "\tsudo systemctl enable ssh\n"
+            printf "\tsudo systemctl start ssh\n"
+            break
+            ;;
+        *)
+            printf "\nInvalid entry. Please try again"
+            printf "\nEnter '1', '2', 'yes', or 'no' to indicate if you are using the default password \n"
+            ;;
+    esac
+done
 
 cd ${HOME}
 printf "#!/bin/bash\ncd ~/MagicMirror\nDISPLAY=:0 npm start\n" > mm.sh
 chmod 755 mm.sh
-pm2 --name MagicMirror start mm.sh
-pm2 save
+pm2 --name MagicMirror start mm.sh > /dev/null
+pm2 save > /dev/null
+pm2 stop MagicMirror --update-env > /dev/null
 
 # Disable X11 screensaver
 echo "Disabling screensaver"
 cd ${HOME}/.config
 cp -a /etc/xdg/lxsession ${LXSESSION}
+cat ${AUTOSTART} | sed -e "s/@xscreensaver/#@xscreensaver/" > /tmp/autostart$$
+cp /tmp/autostart$$ ${AUTOSTART}
+rm -f /tmp/autostart$$
 printf "@xset s noblank\n@xset s off\n@xset -dpms\n" >> ${AUTOSTART}
 
 echo "Installing Vim GUI, exuberant-ctags, and Runtime packages"
