@@ -21,6 +21,7 @@ sudo apt install python3 python3-pip -y && \
       source ~/.bashrc
 
 # Install MagicMirror
+cd $HOME
 echo "Installing MagicMirror"
 #mmpm -M
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
@@ -47,14 +48,13 @@ git clone https://github.com/michael5r/mmm-hue-lights.git
 
 [ -d $HOME/src ] || mkdir $HOME/src
 cd $HOME/src
-[ -d Scripts ] && {
-    echo "Moving existing Scripts repo to Scripts-$$"
-    mv Scripts Scripts-$$
+[ -d Scripts ] || {
+    echo "Cloning Scripts repo"
+    git clone ssh://gitlab.com/doctorfree/Scripts.git
 }
-echo "Cloning Scripts repo"
-git clone ssh://gitlab.com/doctorfree/Scripts.git
 cd Scripts/MagicMirror 
 echo "Installing Scripts/MagicMirror scripts"
+[ -d /usr/local/bin ] || sudo mkdir /usr/local/bin
 ./chkinst.sh -f -i
 
 # Install jq JSON parsing utility
