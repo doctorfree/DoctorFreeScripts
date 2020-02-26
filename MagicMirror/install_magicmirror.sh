@@ -59,11 +59,11 @@ echo "Installing Scripts/MagicMirror scripts"
 
 # Install jq JSON parsing utility
 echo "Installing jq JSON parsing utility"
-sudo apt-get install jq
+sudo apt-get -y install jq
 
 # Install Duplicity backup utility
 echo "Installing Duplicity backup utility"
-sudo apt-get install duplicity
+sudo apt-get -y install duplicity
 
 # Install fswebcam
 echo "Installing fswebcam utility"
