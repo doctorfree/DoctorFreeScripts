@@ -31,6 +31,8 @@ MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats"
 LXSESSION="${HOME}/.config/lxsession"
 AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 
 [ -d ${MM_BASE} ] && {
     echo "Moving existing ${MM_BASE} to ${MM_BASE}-$$"
@@ -89,7 +91,7 @@ do
         fi
     fi
 done
-printf "\n\tInstalling MagicMirror module mmm-hue-lights ..."
+printf "\tInstalling MagicMirror module mmm-hue-lights ..."
 git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null 2>&1
 printf "\t\tDone\n"
 
@@ -167,9 +169,9 @@ sudo env PATH=${PATH}:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 \
     startup systemd -u pi --hp /home/pi > /dev/null 2>&1
 
 # Enable and start the SSH service
-echo "WARNING: this script enables SSH for remote login support."
-echo "If you are using the default user/password then this is a serious vulnerability."
-echo "Do not use the default user/password and run this script."
+printf "\n${BOLD}WARNING: this script enables SSH for remote login support.${NORMAL}"
+printf "\nIf you are using the default user/password then this is a serious vulnerability."
+printf "\nDo not use the default user/password and run this script."
 
 printf "\n============= Default Password Selection Dialog ==================\n"
 USER=`id -u -n`
@@ -180,8 +182,8 @@ do
     case "$opt,$REPLY" in
         "no",*|*,"no")
             echo "Enabling SSH"
-            sudo systemctl enable ssh
-            sudo systemctl start ssh
+            sudo systemctl enable ssh > /dev/null 2>&1
+            sudo systemctl start ssh > /dev/null 2>&1
             break
             ;;
         "yes",*|*,"yes")
@@ -242,7 +244,7 @@ do
             printf "\tDone"
             printf "\nActivating the vdirsyncer timer in systemd ..."
             systemctl --user enable vdirsyncer.timer > /dev/null 2>&1
-            printf "\tDone"
+            printf "\tDone\n"
             printf "\nTo complete the vdirsyncer configuration you will need to"
             printf "\nfollow the instructions at:"
             printf "\n\thttps://forum.magicmirror.builders/topic/5327/sync-private-icloud-calendar-with-magicmirror/2?page=1"
@@ -285,12 +287,6 @@ do
     esac
 done
 
-echo ""
-echo "==========!! TO DO !!=============="
-echo "Follow instructions at:"
-echo "https://forum.magicmirror.builders/topic/5327/sync-private-icloud-calendar-with-magicmirror/2?page=1"
-echo "to setup Apple ical calendar module"
-echo "==================================="
 echo ""
 echo "==========!! TO DO !!=============="
 echo "Update the following files with api keys and other private settings:"
