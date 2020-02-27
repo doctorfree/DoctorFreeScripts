@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NUMBACK="00"
+NUMBACK=`date "+%Y%m%d"`
 OUT_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
 OUT_FILE="Raspbian-MagicMirror-${NUMBACK}.iso"
 DEVNAM="disk3"

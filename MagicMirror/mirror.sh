@@ -50,6 +50,31 @@ usejq=`type -p jq`
 }
 cd "${CONFDIR}"
 
+check_config() {
+    if [ "$1" == "all" ]
+    then
+        current=`ls -l config.js | awk ' { print $11 } '`
+        echo "Saving $current MagicMirror configuration"
+        for config in config-*.js
+        do
+            [ "$config" == "config-*.js" ] && {
+                echo "No MagicMirror configuration files config-*.js found in $CONFDIR"
+                continue
+            }
+            rm -f config.js
+            ln -s ${config} config.js
+            echo "Checking ${config} ..."
+            npm run --silent config:check
+            echo "Done"
+        done
+        echo "Restoring $current MagicMirror configuration"
+        rm -f config.js
+        ln -s ${current} config.js
+    else
+        npm run --silent config:check
+    fi
+}
+
 getconfs() {
     numconfs=0
     for i in config-*.js
@@ -71,7 +96,7 @@ usage() {
     printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen], list <active|installed|configs>,"
-    printf " select, restart, start, stop, status, getb, setb <num>"
+    printf " select, restart, start, stop, status [all], getb, setb <num>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -87,7 +112,7 @@ usage() {
     printf " and restarts MagicMirror"
     printf "\n\tmirror info\t\t# Displays all MagicMirror system information"
     printf "\n\tmirror info screen\t\t# Displays MagicMirror screen information"
-    printf "\n\tmirror status\t\t# Displays MagicMirror status"
+    printf "\n\tmirror status [all]\t\t# Displays MagicMirror status, checks config syntax"
     printf "\n\tmirror getb\t\t# Displays current MagicMirror brightness level"
     printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150"
     printf "\n\tmirror -u\t\t# Display this usage message\n"
@@ -277,7 +302,7 @@ get_info_type() {
   while true
   do
     PS3="${BOLD}Please enter your MagicMirror command choice (numeric or text): ${NORMAL}"
-    options=("list active modules" "list installed modules" "list configurations" "select configuration" "restart" "start" "stop" "status" "get brightness" "set brightness" "system info" "quit")
+    options=("list active modules" "list installed modules" "list configurations" "select configuration" "restart" "start" "stop" "status" "status all" "get brightness" "set brightness" "system info" "quit")
     select opt in "${options[@]}"
     do
         case "$opt,$REPLY" in
@@ -338,6 +363,10 @@ get_info_type() {
                 ;;
             "status",*|*,"status")
                 mirror status
+                break
+                ;;
+            "status all",*|*,"status all")
+                mirror status all
                 break
                 ;;
             "restart",*|*,"restart")
@@ -429,6 +458,7 @@ done
     CONF=`readlink -f ${CONFDIR}/config.js`
     printf "\nUsing config file `basename ${CONF}`"
     printf "\n${BOLD}Done${NORMAL}\n"
+    check_config $2
     exit 0
 }
 
