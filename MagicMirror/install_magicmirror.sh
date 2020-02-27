@@ -96,21 +96,21 @@ git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null 2>&1
 printf "\t\tDone\n"
 
 # Audit and fix any discovered vulnerabilities
-#printf "\nAuditing and repairing any discovered vulnerabilities ..."
-#cd ${MM_BASE}
-#find . -name package.json | grep -v /node_modules/ | while read package
-#do
-#    DIR=`dirname "$package"`
-#    [ -f ${DIR}/package-lock.json ] || continue
-#    cd ${DIR}
-#    npm audit > /dev/null 2>&1
-#    [ $? -eq 0 ] || {
-#        printf "\n\tFixing vulnerbilities in ${MM_BASE}/${DIR}"
-#        npm audit fix > /dev/null 2>&1
-#    }
-#    cd ${MM_BASE}
-#done
-#printf "\nDone detecting and repairing vulnerabilities\n"
+printf "\nAuditing and repairing any discovered vulnerabilities ..."
+cd ${HOME}
+find MagicMirror -name package.json | grep -v /node_modules/ | while read package
+do
+    DIR=`dirname "$package"`
+    [ -f ${DIR}/package-lock.json ] || continue
+    cd ${DIR}
+    npm audit > /dev/null 2>&1
+    [ $? -eq 0 ] || {
+        printf "\n\tFixing vulnerabilities in ${DIR}"
+        npm audit fix > /dev/null 2>&1
+    }
+    cd ${HOME}
+done
+printf "\nDone detecting and repairing vulnerabilities\n"
 
 [ -d ${HOME}/src ] || mkdir ${HOME}/src
 cd ${HOME}/src
