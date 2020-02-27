@@ -1,5 +1,30 @@
 #!/bin/bash
 #
+## @file install_magicmirror.sh
+## @brief Convenience script to install MagicMirror, modules, and configure the system
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2020, Ronald Joe Record, all rights reserved.
+## @date Written 24-Feb-2020
+## @version 1.0.1
+##
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# The Software is provided "as is", without warranty of any kind, express or
+# implied, including but not limited to the warranties of merchantability,
+# fitness for a particular purpose and noninfringement. In no event shall the
+# authors or copyright holders be liable for any claim, damages or other
+# liability, whether in an action of contract, tort or otherwise, arising from,
+# out of or in connection with the Software or the use or other dealings in
+# the Software.
+#
 MM_BASE=${HOME}/MagicMirror
 MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-ModuleScheduler MMM-NetworkScanner MMM-RAIN-RADAR \
@@ -16,25 +41,27 @@ cd ${HOME}
 [[ ":${PATH}:" == *":$HOME/.local/bin:"* ]] || export PATH=${PATH}:${HOME}/.local/bin
 
 # Install MMPM
-echo "Installing MMPM and dependencies"
-sudo apt install python3 python3-pip -y > /dev/null && \
-      git clone https://github.com/Bee-Mar/mmpm.git > /dev/null && \
+printf "\nInstalling MMPM and dependencies ..."
+sudo apt install python3 python3-pip -y > /dev/null 2>&1 && \
+      git clone https://github.com/Bee-Mar/mmpm.git > /dev/null 2>&1 && \
       cd mmpm && \
-      make > /dev/null && \
+      make > /dev/null 2>&1 && \
       echo "export PATH=${PATH}:${HOME}/.local/bin" >> ${HOME}/.bashrc
+printf "\tDone"
 
 . ~/.bashrc
 
 cd ${HOME}
 
 # Install MagicMirror
-echo "Installing MagicMirror"
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - > /dev/null
-sudo apt install -y nodejs > /dev/null
-git clone https://github.com/MichMich/MagicMirror > /dev/null
+printf "\nInstalling MagicMirror ..."
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - > /dev/null 2>&1
+sudo apt install -y nodejs > /dev/null 2>&1
+git clone https://github.com/MichMich/MagicMirror > /dev/null 2>&1
 cd MagicMirror
 npm install > /dev/null 2>&1
 npm install electron@6.0.12 > /dev/null 2>&1
+printf "\tDone\n"
 
 # Install MagicMirror Modules
 [ -d ${MM_BASE}/modules ] || {
@@ -46,15 +73,16 @@ echo "Installing MagicMirror modules: "
 cd ${MM_BASE}/modules
 for module in ${MODULES}
 do
-    printf "\tInstalling ${module} ... "
-    mmpm -i ${module} > /dev/null
-    printf " done\n"
+    printf "\tInstalling MagicMirror module ${module} ..."
+    mmpm -i ${module} > /dev/null 2>&1
+    printf "\tDone\n"
 done
-echo "Installing MagicMirror module mmm-hue-lights"
-git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null
+printf "\n\tInstalling MagicMirror module mmm-hue-lights ..."
+git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null 2>&1
+printf "\tDone\n"
 
 # Audit and fix any discovered vulnerabilities
-printf "\nAuditing and repairing any discovered vulnerabilities ... "
+printf "\nAuditing and repairing any discovered vulnerabilities ..."
 cd ${MM_BASE}
 find . -name package.json | grep -v /node_modules/ | while read package
 do
@@ -73,19 +101,23 @@ printf "\nDone detecting and repairing vulnerabilities\n"
 [ -d ${HOME}/src ] || mkdir ${HOME}/src
 cd ${HOME}/src
 [ -d Scripts ] || {
-    echo "Cloning Scripts repository"
-    git clone ssh://gitlab.com/doctorfree/Scripts.git > /dev/null
+    printf "\nCloning Scripts repository ..."
+    git clone ssh://gitlab.com/doctorfree/Scripts.git > /dev/null 2>&1
+    printf "\tDone\n"
 }
 
 if [ -d ${HOME}/src/Scripts/MagicMirror ]
 then
     cd ${HOME}/src/Scripts/MagicMirror 
-    echo "Installing MagicMirror convenience scripts in /usr/local/bin"
+    printf "\nInstalling MagicMirror convenience scripts in /usr/local/bin ..."
     [ -d /usr/local/bin ] || sudo mkdir /usr/local/bin
-    ./chkinst.sh -f -i > /dev/null
+    ./chkinst.sh -f -i > /dev/null 2>&1
     sudo chown -R pi:pi ${HOME}/MagicMirror/config
-    echo "Prepending /usr/local/bin to PATH (see ${HOME}/.bashrc)"
-    echo "export PATH=/usr/local/bin:${PATH}" >> ${HOME}/.bashrc
+    printf "\tDone\n"
+    [[ ":${PATH}:" == *":/usr/local/bin:"* ]] || {
+        echo "Prepending /usr/local/bin to PATH (see ${HOME}/.bashrc)"
+        echo "export PATH=/usr/local/bin:${PATH}" >> ${HOME}/.bashrc
+    }
 else
     echo "ERROR: Something went wrong with the Scripts git clone."
     echo "No directory $HOME/src/Scripts/MagicMirror"
@@ -93,16 +125,17 @@ else
 fi
 
 # Install jq JSON parsing utility
-echo "Installing jq JSON parsing utility"
-sudo apt-get -y install jq > /dev/null
+printf "\nInstalling jq JSON parsing utility ..."
+sudo apt-get -y install jq > /dev/null 2>&1
+printf "\tDone\n"
 
 # Install Duplicity backup utility
 echo "Installing Duplicity backup utility"
-sudo apt-get -y install duplicity > /dev/null
+sudo apt-get -y install duplicity > /dev/null 2>&1
 
 # Install fswebcam
 echo "Installing fswebcam utility"
-sudo apt install fswebcam > /dev/null
+sudo apt install fswebcam > /dev/null 2>&1
 
 # For now, use the sample config provided by MagicMirror
 if [ -d ${MM_BASE}/config ]
@@ -156,9 +189,9 @@ done
 cd ${HOME}
 printf "#!/bin/bash\ncd ~/MagicMirror\nDISPLAY=:0 npm start\n" > mm.sh
 chmod 755 mm.sh
-pm2 --name MagicMirror start mm.sh > /dev/null
-pm2 save > /dev/null
-pm2 stop MagicMirror --update-env > /dev/null
+pm2 --name MagicMirror start mm.sh > /dev/null 2>&1
+pm2 save > /dev/null 2>&1
+pm2 stop MagicMirror --update-env > /dev/null 2>&1
 
 # Disable X11 screensaver
 echo "Disabling screensaver"
@@ -170,7 +203,7 @@ rm -f /tmp/autostart$$
 printf "@xset s noblank\n@xset s off\n@xset -dpms\n" >> ${AUTOSTART}
 
 echo "Installing Vim GUI, exuberant-ctags, and Runtime packages"
-sudo apt-get -y install vim-gui-common vim-runtime exuberant-ctags > /dev/null
+sudo apt-get -y install vim-gui-common vim-runtime exuberant-ctags > /dev/null 2>&1
 
 printf "\n============= iCal Sync Selection Dialog ==================\n"
 PS3="${BOLD}Are you going to want to sync with an Apple iCal calendar? (enter number or text): ${NORMAL}"
@@ -182,14 +215,17 @@ do
             break
             ;;
         "yes",*|*,"yes")
-            echo "Installing vdirsyncer and dependencies"
-            sudo apt-get -y install libxml2 libxslt1.1 zlib1g python3 > /dev/null
-            pip3 install --user --ignore-installed vdirsyncer > /dev/null
-            echo "Installing the vdirsyncer.service and vdirsyncer.timer"
-            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.service | sudo tee /etc/systemd/user/vdirsyncer.service > /dev/null
-            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.timer | sudo tee /etc/systemd/user/vdirsyncer.timer > /dev/null
-            echo "Activating the vdirsyncer timer in systemd"
-            systemctl --user enable vdirsyncer.timer
+            printf "\nInstalling vdirsyncer and dependencies ..."
+            sudo apt-get -y install libxml2 libxslt1.1 zlib1g python3 > /dev/null 2>&1
+            pip3 install --user --ignore-installed vdirsyncer > /dev/null 2>&1
+            printf "\tDone"
+            printf "\nInstalling the vdirsyncer.service and vdirsyncer.timer ..."
+            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.service | sudo tee /etc/systemd/user/vdirsyncer.service > /dev/null 2>&1
+            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.timer | sudo tee /etc/systemd/user/vdirsyncer.timer > /dev/null 2>&1
+            printf "\tDone"
+            printf "\nActivating the vdirsyncer timer in systemd ..."
+            systemctl --user enable vdirsyncer.timer > /dev/null 2>&1
+            printf "\tDone"
             printf "\nTo complete the vdirsyncer configuration you will need to"
             printf "\nfollow the instructions at:"
             printf "\n\thttps://forum.magicmirror.builders/topic/5327/sync-private-icloud-calendar-with-magicmirror/2?page=1"
@@ -206,7 +242,7 @@ do
 done
 
 echo "Removing unused packages"
-sudo apt-get -y autoremove > /dev/null
+sudo apt-get -y autoremove > /dev/null 2>&1
 
 printf "\n============= Screen Orientation Selection Dialog ==================\n"
 PS3="${BOLD}Do you want to rotate the screen 90 degrees left or right? (enter number or text): ${NORMAL}"
@@ -254,4 +290,11 @@ echo "${HOME}/MagicMirror/config/config-noback.js"
 echo "${HOME}/MagicMirror/config/config-default.js"
 echo "==================================="
 echo ""
-echo "Done"
+echo "Installation Done"
+printf "\n${BOLD}Starting MagicMirror in 30 seconds${NORMAL}"
+printf "\n${BOLD}You can stop MagicMirror to return to this screen with the command:${NORMAL}"
+printf "\n\t${BOLD}/usr/local/bin/mirror stop${NORMAL}\n"
+printf "or"
+printf "\n\tpm2 stop MagicMirror\n"
+sleep 30
+pm2 start MagicMirror --update-env
