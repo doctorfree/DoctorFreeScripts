@@ -28,7 +28,8 @@
 MM_BASE=${HOME}/MagicMirror
 MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-ModuleScheduler MMM-NetworkScanner MMM-RAIN-RADAR \
-         MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats"
+         MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats \
+         MMM-AssistantMk2 MMM-YouTube"
 LXSESSION="${HOME}/.config/lxsession"
 AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
 BOLD=$(tput bold)
@@ -83,6 +84,7 @@ do
     else
         if [ "${module}" == "MMM-Solar" ] || \
            [ "${module}" == "MMM-iFrame" ] || \
+           [ "${module}" == "MMM-YouTube" ] || \
            [ "${module}" == "MMM-stocks" ]
         then
             printf "\t\t\tDone\n"
