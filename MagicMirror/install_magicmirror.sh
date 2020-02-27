@@ -55,7 +55,7 @@ cd ${HOME}
 
 # Install MagicMirror
 printf "\nInstalling MagicMirror ..."
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - > /dev/null 2>&1
+curl -sL https://deb.nodesource.com/setup_10.x 2> /dev/null | sudo -E bash - > /dev/null 2>&1
 sudo apt install -y nodejs > /dev/null 2>&1
 git clone https://github.com/MichMich/MagicMirror > /dev/null 2>&1
 cd MagicMirror
@@ -190,8 +190,9 @@ cd ${HOME}
 printf "#!/bin/bash\ncd ~/MagicMirror\nDISPLAY=:0 npm start\n" > mm.sh
 chmod 755 mm.sh
 pm2 --name MagicMirror start mm.sh > /dev/null 2>&1
+sleep 5
 pm2 save > /dev/null 2>&1
-pm2 stop MagicMirror --update-env > /dev/null 2>&1
+pm2 stop MagicMirror > /dev/null 2>&1
 
 # Disable X11 screensaver
 echo "Disabling screensaver"
@@ -201,8 +202,12 @@ cat ${AUTOSTART} | sed -e "s/@xscreensaver/#@xscreensaver/" > /tmp/autostart$$
 cp /tmp/autostart$$ ${AUTOSTART}
 rm -f /tmp/autostart$$
 printf "@xset s noblank\n@xset s off\n@xset -dpms\n" >> ${AUTOSTART}
+LDMCONF="/etc/lightdm/lightdm.conf"
+cat ${LDMCONF} | sed -e "s/#xserver-command=X/xserver-command=X -s 0 -dpms/" > /tmp/ldm$$
+sudo cp /tmp/ldm$$ ${LDMCONF}
+rm -f /tmp/ldm$$
 
-echo "Installing Vim GUI, exuberant-ctags, and Runtime packages"
+echo "Installing Vim GUI, exuberant-ctags, and Vim Runtime packages"
 sudo apt-get -y install vim-gui-common vim-runtime exuberant-ctags > /dev/null 2>&1
 
 printf "\n============= iCal Sync Selection Dialog ==================\n"
@@ -220,8 +225,8 @@ do
             pip3 install --user --ignore-installed vdirsyncer > /dev/null 2>&1
             printf "\tDone"
             printf "\nInstalling the vdirsyncer.service and vdirsyncer.timer ..."
-            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.service | sudo tee /etc/systemd/user/vdirsyncer.service > /dev/null 2>&1
-            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.timer | sudo tee /etc/systemd/user/vdirsyncer.timer > /dev/null 2>&1
+            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.service 2> /dev/null | sudo tee /etc/systemd/user/vdirsyncer.service > /dev/null 2>&1
+            curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.timer 2> /dev/null | sudo tee /etc/systemd/user/vdirsyncer.timer > /dev/null 2>&1
             printf "\tDone"
             printf "\nActivating the vdirsyncer timer in systemd ..."
             systemctl --user enable vdirsyncer.timer > /dev/null 2>&1
