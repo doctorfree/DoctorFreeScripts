@@ -1,6 +1,7 @@
-/* Magic Mirror Config Sample
+/* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
+ * Modified by Ronald Joe Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -87,7 +88,7 @@ var config = {
             classes: "default everyone",
             disabled: false,
             config: {
-              apikey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              apikey: "c4aaf67ae4c33e63c7630ceeb2b45ee5",
 		      latitude: "36.970019",
 		      longitude: "-122.042212",
               iconset: "5c",
@@ -126,6 +127,37 @@ var config = {
                  updateInterval: 60 * 60 * 1000,
              }
          },
+         {
+            module: 'MMM-TelegramBot',
+            config: {
+              telegramAPIKey : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              // This is NOT the username of bot.
+              allowedUser : ['xxxxxxxxx'],
+              adminChatId : xxxxxxxxxx,
+              useWelcomeMessage: true,
+              verbose: false,
+              favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
+              screenshotScript: "scrot",
+              detailOption: {},
+              customCommands: [],
+//            customCommands: [
+//              {
+//                command: "test",
+//                callback: (command, handler) => {
+//                  handler.reply("TEXT", "This is test command!")
+//                }
+//              },
+//              {
+//                command: "detailnews",
+//                description: "For detail of current news article"
+//                callback: (command, handler, self) => {
+//                  self.sendNotification("ARTICLE_MORE_DETAILS")
+//                  handler.reply("TEXT", "Yes, sir!")
+//                }
+//              },
+//            ],
+            }
+        },
 //		{
 //		    module: "weather",
 //			position: "top_left",

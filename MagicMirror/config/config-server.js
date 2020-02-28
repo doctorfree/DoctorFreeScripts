@@ -1,6 +1,7 @@
-/* Magic Mirror Config Sample
+/* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
+ * Modified by Ronald Joe Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -195,8 +196,32 @@ var config = {
      //     }
      // },
         {
+            module: 'MMM-Tools',
+            position: 'bottom_center',
+            config: {
+              device : "RPI", // "RPI" is also available
+              refresh_interval_ms : 10000,
+              warning_interval_ms : 1000 * 60 * 5,
+              enable_warning : true,
+              warning : {
+                CPU_TEMPERATURE : 65,
+                GPU_TEMPERATURE : 65,
+                CPU_USAGE : 75,
+                STORAGE_USED_PERCENT : 80,
+                MEMORY_USED_PERCENT : 80
+              },
+              warning_text: {
+                CPU_TEMPERATURE : "The temperature of CPU is over %VAL%",
+                GPU_TEMPERATURE : "The temperature of GPU is over %VAL%",
+                CPU_USAGE : "The usage of CPU is over %VAL%",
+                STORAGE_USED_PERCENT : "The storage is used over %VAL% percent",
+                MEMORY_USED_PERCENT : "The memory is used over %VAL% percent",
+              }
+            }
+        },
+        {
             module: 'MMM-SystemStats',
-			position: "bottom_left",
+			position: "bottom_right",
 	        config: {
                 updateInterval: 10000, // every 10 seconds
 			    align: 'right', // align labels
@@ -242,7 +267,7 @@ var config = {
             position: "lower_third",
         //  classes: "nighttime",
             config: {
-                bridgeIp: "xx.x.x.x",
+                bridgeIp: "10.0.1.2",
                 user: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
             }
         },
@@ -300,69 +325,69 @@ var config = {
         },
         {
             module: 'MMM-NetworkScanner',
-            position: "bottom_right",
+            position: "bottom_left",
             header: "",
             config: {
                 showLastSeen: "true",
                 colored: "true",
                 devices: [
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "d4:dc:cd:f3:20:4c",
                       name: "Mac Mini",
                       icon: "desktop",
                       color: "#00ff00"},
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "00:3e:e1:c8:14:5b",
                       name: "Mac Pro",
                       icon: "desktop",
                       color: "#ffff00"},
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "b0:6e:bf:2b:3a:f8",
                       name: "Miner",
                       icon: "hammer",
                       color: "#ffff00"},
-                    { ipAddress: "xx.x.x.xx",
+                    { ipAddress: "10.0.1.67",
                       name: "Raspberry Pi",
                       icon: "signal",
                       color: "#00ff00" },
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "00:17:88:49:1a:cd",
                       name: "Philips Hue",
                       icon: "lightbulb",
                       color: "#00ff00" },
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "00:04:20:f4:ea:9c",
                       name: "Scale",
                       icon: "weight",
                       color: "#00ff00" },
-                    { ipAddress: "xx.x.x.xx",
+                    { ipAddress: "10.0.1.69",
                       name: "iPad Air",
                       icon: "tablet",
                       color: "#FF8A65" },
-                    { ipAddress: "xx.x.x.xx",
+                    { ipAddress: "10.0.1.76",
                       name: "iPhone Xs Max",
                       icon: "mobile",
                       color: "#FF8A65" },
-                 // { macAddress: "xx:xx:xx:xx:xx:xx",
+                 // { macAddress: "F8:6F:C1:96:9B:0B",
                  //     name: "Apple Watch",
                  //     icon: "dharmachakra",
                  //     color: "#FF8A65" },
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "44:d8:84:6b:5f:b3",
                       name: "AirPort Express",
                       icon: "wifi",
                       color: "#81C784" },
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "00:1f:f3:f4:52:47",
                       name: "AirPort Express",
                       icon: "wifi",
                       color: "#81C784" },
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "24:a0:74:79:7f:9f",
                       name: "AirPort Extreme",
                       icon: "network-wired",
                       color: "#81C784" },
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "00:1d:c0:62:42:67",
                       name: "Enphase",
                       icon: "solar-panel",
                       color: "#ffff00" },
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "00:11:d9:60:8b:54",
                       name: "TiVo",
                       icon: "tv",
                       color: "#26C6DA " },
-                    { macAddress: "xx:xx:xx:xx:xx:xx",
+                    { macAddress: "00:1d:ba:c3:c7:17",
                       name: "Sony TV",
                       icon: "tv",
                       color: "#26C6DA " },
@@ -389,13 +414,44 @@ var config = {
                 ]
             }
         },
+        {
+            module: 'MMM-TelegramBot',
+            config: {
+              telegramAPIKey : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              // This is NOT the username of bot.
+              allowedUser : ['xxxxxxxxx'],
+              adminChatId : xxxxxxxxxx,
+              useWelcomeMessage: true,
+              verbose: false,
+              favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
+              screenshotScript: "scrot",
+              detailOption: {},
+              customCommands: [],
+//            customCommands: [
+//              {
+//                command: "test",
+//                callback: (command, handler) => {
+//                  handler.reply("TEXT", "This is test command!")
+//                }
+//              },
+//              {
+//                command: "detailnews",
+//                description: "For detail of current news article"
+//                callback: (command, handler, self) => {
+//                  self.sendNotification("ARTICLE_MORE_DETAILS")
+//                  handler.reply("TEXT", "Yes, sir!")
+//                }
+//              },
+//            ],
+            }
+        },
 //      {
 //          module: 'MMM-PlexSlideshow',
 //          position: 'fullscreen_below',
 //          classes: 'scheduler',
 //          config: {
 //            plex: {
-//              hostname:"xx.x.x.xx",
+//              hostname:"10.0.1.51",
 //              port:32400,
 //              username:"",
 //              password:"",
