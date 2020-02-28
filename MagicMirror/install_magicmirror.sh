@@ -30,7 +30,7 @@ MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-ModuleScheduler MMM-NetworkScanner MMM-RAIN-RADAR \
          MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats \
          MMM-TelegramBot MMM-Tools MMM-AssistantMk2 MMM-YouTube \
-         MMM-NotificationTrigger MMM-Volume"
+         MMM-NotificationTrigger MMM-Volume MMM-COVID-19"
 LXSESSION="${HOME}/.config/lxsession"
 AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
 BOLD=$(tput bold)
