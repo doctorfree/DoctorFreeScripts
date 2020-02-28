@@ -3,7 +3,8 @@
 NUMBACK=`date "+%Y%m%d"`
 OUT_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
 OUT_FILE="Raspbian-MagicMirror-${NUMBACK}.iso"
-DEVNAM="disk3"
+DEVNAM="disk5"
+[ "$1" ] && DEVNAM="$1"
 DEVICE="/dev/r${DEVNAM}"
 
 FOUND=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } ' | cut -c 1-5`

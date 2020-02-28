@@ -4,7 +4,8 @@ NUMBACK="00"
 INP_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
 INP_FILE="Raspbian-MagicMirror-${NUMBACK}.iso"
 INP="${INP_DIR}/${INP_FILE}"
-DEVNAM="disk3"
+DEVNAM="disk5"
+[ "$1" ] && DEVNAM="$1"
 DEVICE="/dev/r${DEVNAM}"
 
 FOUND=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } ' | cut -c 1-5`

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DEVNAM="disk3"
+DEVNAM="disk5"
+[ "$1" ] && DEVNAM="$1"
 DEVICE="/dev/r${DEVNAM}"
 
 FOUND=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } ' | cut -c 1-5`

@@ -30,7 +30,7 @@ MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-ModuleScheduler MMM-NetworkScanner MMM-RAIN-RADAR \
          MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats \
          MMM-TelegramBot MMM-Tools MMM-AssistantMk2 MMM-YouTube \
-         MMM-NotificationTrigger"
+         MMM-NotificationTrigger MMM-Volume"
 LXSESSION="${HOME}/.config/lxsession"
 AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
 BOLD=$(tput bold)
@@ -86,6 +86,7 @@ do
         if [ "${module}" == "MMM-Solar" ] || \
            [ "${module}" == "MMM-iFrame" ] || \
            [ "${module}" == "MMM-Tools" ] || \
+           [ "${module}" == "MMM-Volume" ] || \
            [ "${module}" == "MMM-YouTube" ] || \
            [ "${module}" == "MMM-stocks" ]
         then
