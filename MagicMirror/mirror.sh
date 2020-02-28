@@ -441,11 +441,11 @@ done
     then
       if [ "$2" == "on" ]
       then
-        vcgencmd display_power 1
+        vcgencmd display_power 1 > /dev/null
       else
         if [ "$2" == "off" ]
         then
-          vcgencmd display_power 0
+          vcgencmd display_power 0 > /dev/null
         else
           if [ "$2" == "status" ] || [ "$2" == "info" ]
           then
