@@ -95,8 +95,9 @@ usage() {
     getconfs usage
     printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
-    printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen], list <active|installed|configs>,"
-    printf " select, restart, start, stop, status [all], getb, setb <num>"
+    printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
+    printf " list <active|installed|configs>, select, restart,"
+    printf " screen [on|off|info|status], start, stop, status [all], getb, setb <num>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -112,6 +113,8 @@ usage() {
     printf " and restarts MagicMirror"
     printf "\n\tmirror info\t\t# Displays all MagicMirror system information"
     printf "\n\tmirror info screen\t\t# Displays MagicMirror screen information"
+    printf "\n\tmirror screen on\t\t#  Turns the Display ON"
+    printf "\n\tmirror screen off\t\t# Turns the Display OFF"
     printf "\n\tmirror status [all]\t\t# Displays MagicMirror status, checks config syntax"
     printf "\n\tmirror getb\t\t# Displays current MagicMirror brightness level"
     printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150"
@@ -234,6 +237,8 @@ system_info() {
         xrandr | grep Screen
         xdpyinfo | grep dimensions
         xdpyinfo | grep resolution
+        vcgencmd display_power | grep  -q 'display_power=1' && \
+          echo 'Display ON' || echo 'Display OFF'
     }
 }
 
@@ -428,6 +433,31 @@ done
 [ "$1" == "info" ] && {
     [ "$2" ] && INFO="$2"
     system_info
+    exit 0
+}
+
+[ "$1" == "screen" ] && {
+    if [ "$2" ]
+    then
+      if [ "$2" == "on" ]
+      then
+        vcgencmd display_power 1
+      else
+        if [ "$2" == "off" ]
+        then
+          vcgencmd display_power 0
+        else
+          if [ "$2" == "status" ] || [ "$2" == "info" ]
+          then
+            mirror info screen
+          else
+            usage
+          fi
+        fi
+      fi
+    else
+      mirror info screen
+    fi
     exit 0
 }
 
