@@ -16,4 +16,7 @@ FOUND=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } ' | cut -c 1-5`
     exit 1
 }
 
-sudo dd if=${DEVICE} | gzip -9 > ${OUT_DIR}/${OUT_FILE}.gz
+[ -d "${OUT_DIR}" ] || mkdir -p "${OUT_DIR}"
+cd "${OUT_DIR}"
+#sudo dd if=${DEVICE} | gzip -9 > ${OUT_DIR}/${OUT_FILE}.gz
+sudo dd if=${DEVICE} | zip ${OUT_FILE}.zip -

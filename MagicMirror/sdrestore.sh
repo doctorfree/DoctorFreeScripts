@@ -1,6 +1,8 @@
 #!/bin/bash
 
-NUMBACK="00"
+# Change this to be whatever date suffix was used to create the backup
+NUMBACK="20200228"
+
 INP_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
 INP_FILE="Raspbian-MagicMirror-${NUMBACK}.iso"
 INP="${INP_DIR}/${INP_FILE}"
@@ -28,11 +30,17 @@ then
 else
     if [ -f ${INP}.gz ]
     then
-        # We found a compressed ISO image
+        # We found a gzip compressed ISO image
         sudo gzcat ${INP}.gz | dd of=${DEVICE}
     else
-        echo "Could not locate SD card image ${INP} or ${INP}.gz"
-        echo "Exiting"
-        exit 1
+        if [ -f ${INP}.zip ]
+        then
+            # We found a zip compressed ISO image
+            sudo zcat ${INP}.zip | dd of=${DEVICE}
+        else
+            echo "Could not locate SD card image ${INP} or ${INP}.gz"
+            echo "Exiting"
+            exit 1
+        fi
     fi
 fi
