@@ -179,25 +179,26 @@ setconf() {
 #   fi
     # END commented custom Lucy implementation
     pm2 restart MagicMirror --update-env
-    sleep 5
-    if [ "${conf}" == "blank" ]
-    then
-        if [ "$usejq" ]
-        then
-            curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
-        else
-            curl -X GET http://${IP}:${PORT}/api/brightness/0
-            echo ""
-        fi
-    else
-        if [ "$usejq" ]
-        then
-            curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
-        else
-            curl -X GET http://${IP}:${PORT}/api/brightness/180
-            echo ""
-        fi
-    fi
+    # Do not bother with setting brightness here.
+    #sleep 5
+    #if [ "${conf}" == "blank" ]
+    #then
+    #    if [ "$usejq" ]
+    #    then
+    #        curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
+    #    else
+    #        curl -X GET http://${IP}:${PORT}/api/brightness/0
+    #        echo ""
+    #    fi
+    #else
+    #    if [ "$usejq" ]
+    #    then
+    #        curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
+    #    else
+    #        curl -X GET http://${IP}:${PORT}/api/brightness/180
+    #        echo ""
+    #    fi
+    #fi
 }
 
 system_info() {
