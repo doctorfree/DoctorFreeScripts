@@ -30,7 +30,7 @@ MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-ModuleScheduler MMM-NetworkScanner MMM-RAIN-RADAR \
          MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats \
          MMM-TelegramBot MMM-Tools MMM-AssistantMk2 MMM-YouTube \
-         MMM-NotificationTrigger MMM-Volume MMM-COVID-19"
+         MMM-NotificationTrigger MMM-Volume MMM-News"
 LXSESSION="${HOME}/.config/lxsession"
 AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
 BOLD=$(tput bold)
@@ -85,6 +85,7 @@ do
     else
         if [ "${module}" == "MMM-Solar" ] || \
            [ "${module}" == "MMM-iFrame" ] || \
+           [ "${module}" == "MMM-News" ] || \
            [ "${module}" == "MMM-Tools" ] || \
            [ "${module}" == "MMM-Volume" ] || \
            [ "${module}" == "MMM-YouTube" ] || \
@@ -98,6 +99,9 @@ do
 done
 printf "\tInstalling MagicMirror module mmm-hue-lights ..."
 git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null 2>&1
+printf "\t\tDone\n"
+printf "\tInstalling MagicMirror module MMM-COVID-19 ..."
+git clone https://github.com/eouia/MMM-COVID-19 > /dev/null 2>&1
 printf "\t\tDone\n"
 
 # Audit and fix any discovered vulnerabilities
