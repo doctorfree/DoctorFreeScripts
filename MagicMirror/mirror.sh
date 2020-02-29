@@ -96,8 +96,8 @@ usage() {
     printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
-    printf " list <active|installed|configs>, select, restart,"
-    printf " screen [on|off|info|status], start, stop, status [all], getb, setb <num>"
+    printf " list <active|installed|configs>, rotate [right|left|normal], select, restart,"
+    printf " screen [on|off|info|status], start, stop, status [all], dev, getb, setb <num>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -113,6 +113,8 @@ usage() {
     printf " and restarts MagicMirror"
     printf "\n\tmirror info\t\t# Displays all MagicMirror system information"
     printf "\n\tmirror info screen\t\t# Displays MagicMirror screen information"
+    printf "\n\tmirror dev\t\t# Restarts the mirror in developer mode"
+    printf "\n\tmirror rotate left/right/normal\t\t# rotates the screen left, right, or normal"
     printf "\n\tmirror screen on\t\t#  Turns the Display ON"
     printf "\n\tmirror screen off\t\t# Turns the Display OFF"
     printf "\n\tmirror status [all]\t\t# Displays MagicMirror status, checks config syntax"
@@ -308,10 +310,14 @@ get_info_type() {
   while true
   do
     PS3="${BOLD}Please enter your MagicMirror command choice (numeric or text): ${NORMAL}"
-    options=("list active modules" "list installed modules" "list configurations" "select configuration" "restart" "start" "stop" "status" "status all" "get brightness" "set brightness" "system info" "quit")
+    options=("dev" "list active modules" "list installed modules" "list configurations" "select configuration" "rotate left" "rotate normal" "rotate right" "restart" "start" "stop" "status" "status all" "get brightness" "set brightness" "system info" "quit")
     select opt in "${options[@]}"
     do
         case "$opt,$REPLY" in
+            "dev",*|*,"dev")
+                mirror dev
+                break
+                ;;
             "list active modules",*|*,"list active modules")
                 mirror list active
                 break
@@ -375,6 +381,10 @@ get_info_type() {
                 mirror status all
                 break
                 ;;
+            "rotate *",*|*,"rotate *")
+                mirror ${opt}
+                break
+                ;;
             "restart",*|*,"restart")
                 mirror restart
                 break
@@ -431,6 +441,15 @@ done
     exit 0
 }
 
+[ "$1" == "dev" ] && {
+    printf "\n${BOLD}Starting MagicMirror in developer mode${NORMAL}\n"
+    cd "${MM}"
+    pm2 stop MagicMirror --update-env
+    npm start dev
+    printf "\n${BOLD}Done${NORMAL}\n"
+    exit 0
+}
+
 [ "$1" == "info" ] && {
     [ "$2" ] && INFO="$2"
     system_info
@@ -465,6 +484,18 @@ done
 [ "$1" == "restart" ] && {
     printf "\n${BOLD}Restarting MagicMirror${NORMAL}\n"
     pm2 restart MagicMirror --update-env
+    printf "\n${BOLD}Done${NORMAL}\n"
+    exit 0
+}
+
+[ "$1" == "rotate" ] && {
+    [ "$2" == "left" ] || [ "$2" == "normal" ] || [ "$2" == "right" ] || {
+        printf "\nUsage: rotate option takes an argument of 'left', 'right', or 'normal'"
+        printf "\n Exiting.\n"
+        usage
+    }
+    printf "\n${BOLD}Rotating screen display $2 ${NORMAL}\n"
+    xrandr --output HDMI-1 --rotate $2
     printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
