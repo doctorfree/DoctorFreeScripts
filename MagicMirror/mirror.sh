@@ -139,7 +139,7 @@ setb_usage() {
 
 setconf() {
     conf=$1
-    mv config.js config-$$.js
+    [ -f config.js ] && mv config.js config-$$.js
     ln -s config-${conf}.js config.js
     npm run --silent config:check > /dev/null
     [ $? -eq 0 ] || {
@@ -147,7 +147,7 @@ setconf() {
         printf "\nTry again after you have addressed these issues:\n"
         npm run --silent config:check
         rm -f config.js
-        mv config-$$.js config.js
+        [ -f config-$$.js ] && mv config-$$.js config.js
         exit 1
     }
     [ -L config-$$.js ] && rm -f config-$$.js
