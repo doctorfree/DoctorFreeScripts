@@ -158,6 +158,11 @@ printf "\nInstalling jq JSON parsing utility ..."
 sudo apt-get -y install jq > /dev/null 2>&1
 printf "\tDone\n"
 
+# Install bc utility
+printf "\nInstalling bc utility ..."
+sudo apt-get -y install bc > /dev/null 2>&1
+printf "\tDone\n"
+
 # Install Duplicity backup utility
 echo "Installing Duplicity backup utility"
 sudo apt-get -y install duplicity > /dev/null 2>&1
