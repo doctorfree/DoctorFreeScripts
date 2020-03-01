@@ -1,7 +1,7 @@
 /* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
- * Modified by Ronald Joe Record http://ronrecord.com
+ * Modified by Ron Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -10,7 +10,6 @@
  */
 
 var config = {
-//    address: "localhost",
     address: "0.0.0.0", // Address to listen on, can be:
     port: 8080,
     ipWhitelist: [
@@ -198,24 +197,6 @@ var config = {
             }
         },
         {
-            module: 'MMM-iFrame',
-            position: 'fullscreen_below',
-            config: {
-                url: [
-                      "https://www.youtube.com/embed/ZFBoN7yIMZw?autoplay=1&amp;controls=0&amp;start=40",
-                      "https://www.youtube.com/embed/95FxKgcgjN0?autoplay=1&amp;controls=0",
-                      "https://www.youtube.com/embed/jVD67pMdv9k?autoplay=1&amp;controls=0&amp;start=40",
-                      "https://www.youtube.com/embed/gdJjc6l6iII?autoplay=1&amp;controls=0&amp;start=40",
-                      "https://www.youtube.com/embed/t6jlhqNxRYk?autoplay=1&amp;controls=0&amp;start=40",
-                      "https://www.youtube.com/embed/zfgE_Bxears?autoplay=1&amp;controls=0",
-                     ],
-                updateInterval: 30 * 60 * 1000, // rotate URLs every 30 minutes
-                width: "1080", // width of iframe
-                height: "1580", // height of iframe
-                frameWidth: "1080"
-            }
-        },
-        {
             module: "mmm-hue-lights",
             position: "lower_third",
             config: {
@@ -295,18 +276,9 @@ var config = {
             },
         },
         {
-            module: "MMM-Volume",
-            position: "bottom_center", // It is meaningless. but you should set.
-            config: {
-              usePresetScript: "ALSA", // "ALSA" is supported by default.
-              volumeOnStart: 50,
-            }
-        },
-        {
             module: 'MMM-TelegramBot',
             config: {
               telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
-              // This is NOT the username of bot.
               allowedUser : ['Your-Telegram-Username'],
               adminChatId : Your-Telegram-Chat-ID,
               useWelcomeMessage: true,
@@ -315,22 +287,6 @@ var config = {
               screenshotScript: "scrot",
               detailOption: {},
               customCommands: [],
-//            customCommands: [
-//              {
-//                command: "test",
-//                callback: (command, handler) => {
-//                  handler.reply("TEXT", "This is test command!")
-//                }
-//              },
-//              {
-//                command: "detailnews",
-//                description: "For detail of current news article"
-//                callback: (command, handler, self) => {
-//                  self.sendNotification("ARTICLE_MORE_DETAILS")
-//                  handler.reply("TEXT", "Yes, sir!")
-//                }
-//              },
-//            ],
             }
         },
 //      {

@@ -1,7 +1,7 @@
 /* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
- * Modified by Ronald Joe Record http://ronrecord.com
+ * Modified by Ron Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file

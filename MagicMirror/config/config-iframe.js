@@ -2,7 +2,6 @@
  *
  * By Michael Teeuw http://michaelteeuw.nl
  * Modified by Ron Record http://ronrecord.com
- * Modified by Ronald Joe Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -66,6 +65,11 @@ var config = {
                 maximumNumberOfDays: 10,
                 maximumEntries: 20,
                 showLocation: true,
+                tableClass: "medium",
+                timeFormat: "absolute",
+                nextDaysRelative: true,
+                displaySymbol: true,
+                defaultSymbol: "calendar-alt",
                 calendars: [
                     {
                         symbol: "calendar",
@@ -204,7 +208,7 @@ var config = {
                       "https://www.youtube.com/embed/t6jlhqNxRYk?autoplay=1&amp;controls=0&amp;start=40",
                       "https://www.youtube.com/embed/zfgE_Bxears?autoplay=1&amp;controls=0",
                      ],
-                updateInterval: 15 * 60 * 1000, // rotate URLs every 15 minutes
+                updateInterval: 30 * 60 * 1000, // rotate URLs every 30 minutes
                 width: "1080", // width of iframe
                 height: "1580", // height of iframe
                 frameWidth: "1080"
@@ -288,6 +292,14 @@ var config = {
                       color: "#26C6DA " },
                 ],
             },
+        },
+        {
+            module: "MMM-Volume",
+            position: "bottom_center", // It is meaningless. but you should set.
+            config: {
+              usePresetScript: "ALSA", // "ALSA" is supported by default.
+              volumeOnStart: 50,
+            }
         },
         {
             module: 'MMM-TelegramBot',
