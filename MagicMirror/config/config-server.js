@@ -245,7 +245,7 @@ var config = {
             position: 'bottom_bar',
             config: {
               apiKey: 'xxxxx_Weather-API-Key_xxxxxxxxxxxxx',
-              crypto: 'BTCUSDT,LTCUSDT,ETHUSDT', // crypto symbols
+              crypto: 'BATUSDT,ADAUSDT,ETHUSDT,POLYUSDT,ZRXUSDT,MCOUSDT', // crypto symbols
               separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
               stocks: 'CGC,AAPL,GOOG,ACB', // stock symbols
               updateInterval: 1000000 // update interval in milliseconds (16:40)
