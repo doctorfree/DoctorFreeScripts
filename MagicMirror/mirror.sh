@@ -75,6 +75,11 @@ check_config() {
     fi
 }
 
+display_status() {
+    vcgencmd display_power | grep  -q 'display_power=1' && \
+        echo 'Display ON' || echo 'Display OFF'
+}
+
 getconfs() {
     numconfs=0
     for i in config-*.js
@@ -240,8 +245,7 @@ system_info() {
         xrandr | grep Screen
         xdpyinfo | grep dimensions
         xdpyinfo | grep resolution
-        vcgencmd display_power | grep  -q 'display_power=1' && \
-          echo 'Display ON' || echo 'Display OFF'
+        display_status
     }
 }
 
@@ -525,6 +529,7 @@ done
     printf "\nUsing config file `basename ${CONF}`"
     printf "\n${BOLD}Done${NORMAL}\n"
     check_config $2
+    display_status
     exit 0
 }
 
