@@ -100,12 +100,16 @@ var config = {
         },
         {
             module: "newsfeed",
-            position: "top_bar",
+            position: "bottom_bar",
             config: {
                 feeds: [
                     {
                         title: "Centers for Disease Control",
                         url: "https://tools.cdc.gov/api/v2/resources/media/403372.rss"
+                    },
+                    {
+                        title: "Johns Hopkins Medicine",
+                        url: "https://www.hopkinsmedicine.org/news/media/releases/?format=rss"
                     },
                     {
                         title: "World Health Organization",
@@ -118,14 +122,34 @@ var config = {
                 broadcastNewsUpdates: true
             }
         },
-//      {
-//          module: "MMM-Volume",
-//          position: "top_left", // It is meaningless. but you should set.
-//          config: {
-//            usePresetScript: "ALSA", // "ALSA" is supported by default.
-//            volumeOnStart: 50,
-//          }
-//      },
+        {
+            module: 'MMM-iFrame',
+            position: 'fullscreen_below',
+            config: {
+                url: [
+                      "https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6",
+                      "https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61",
+                      "https://windy.app/coronavirus_map",
+                      "https://experience.arcgis.com/experience/685d0ace521648f8a5beeeee1b9125cd",
+                     ],
+//              updateInterval: 30 * 60 * 1000, // rotate URLs every 30 minutes
+                updateInterval: 3 * 60 * 1000,  // rotate URLs every 3 minutes
+                width: "1080", // width of iframe
+//              height: "1580", // height of iframe
+                height: "1920", // height of iframe
+                frameWidth: "1080"
+            }
+        },
+        {
+            module: 'MMM-pages',
+            config: {
+                modules:
+                    [[ "MMM-News", "newsfeed", "MMM-COVID-19"], [ "MMM-iFrame"]],
+                fixed:
+                    ["alert", "updatenotification", "MMM-Remote-Control", "MMM-TelegramBot"],
+                rotationTime: 900000, // rotate page every 15 minutes = 15 * 60 * 1000
+            }
+        },
         {
             module: 'MMM-TelegramBot',
             config: {

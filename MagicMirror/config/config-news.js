@@ -95,6 +95,10 @@ var config = {
                         url: "https://tools.cdc.gov/api/v2/resources/media/403372.rss"
                     },
                     {
+                        title: "Johns Hopkins Medicine",
+                        url: "https://www.hopkinsmedicine.org/news/media/releases/?format=rss"
+                    },
+                    {
                         title: "World Health Organization",
                         url: "https://www.who.int/feeds/entity/csr/don/en/rss.xml"
                     },
