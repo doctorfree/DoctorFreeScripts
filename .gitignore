@@ -2,3 +2,7 @@ dotfiles-desktop
 Wallpapers/wallhaven.sh
 doc/html/
 MagicMirror/hide_keys.sh
+MagicMirror/show_keys.sh
+MagicMirror/config/config-face.js
+MagicMirror/config/config-instagram.js
+MagicMirror/config/config-sample.js

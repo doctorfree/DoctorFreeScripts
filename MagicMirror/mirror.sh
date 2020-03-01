@@ -310,7 +310,7 @@ get_info_type() {
   while true
   do
     PS3="${BOLD}Please enter your MagicMirror command choice (numeric or text): ${NORMAL}"
-    options=("dev" "list active modules" "list installed modules" "list configurations" "select configuration" "rotate left" "rotate normal" "rotate right" "restart" "start" "stop" "status" "status all" "get brightness" "set brightness" "system info" "quit")
+    options=("dev" "list active modules" "list installed modules" "list configurations" "select configuration" "rotate left" "rotate normal" "rotate right" "restart" "screen off" "screen on" "start" "stop" "status" "status all" "get brightness" "set brightness" "system info" "quit")
     select opt in "${options[@]}"
     do
         case "$opt,$REPLY" in
@@ -359,6 +359,10 @@ get_info_type() {
                       printf "\nValid brightness values are integer values [0-200]\n"
                   fi
                 done
+                break
+                ;;
+            "screen *",*|*,"screen *")
+                mirror ${opt}
                 break
                 ;;
             "system info",*|*,"system info")
