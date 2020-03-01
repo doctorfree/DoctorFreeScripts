@@ -69,9 +69,28 @@ check_config() {
         done
         echo "Restoring $current MagicMirror configuration"
         rm -f config.js
-        ln -s ${current} config.js
+        if [ -f ${current} ]
+        then
+            ln -s ${current} config.js
+        else
+            echo "Config file ${current} does not exist. Using default."
+            ln -s config-default.js config.js
+        fi
     else
-        npm run --silent config:check
+        if [ -L config.js ] && [ -f config.js ]
+        then
+            npm run --silent config:check
+        else
+            if [ -f config.js ]
+            then
+                npm run --silent config:check
+            else
+                echo "Config file config.js is a broken symbolic link. Removing."
+                rm -f config.js
+                echo "Installing default config file, config-default.js"
+                ln -s config-default.js config.js
+            fi
+        fi
     fi
 }
 
@@ -144,7 +163,12 @@ setb_usage() {
 
 setconf() {
     conf=$1
-    [ -f config.js ] && mv config.js config-$$.js
+    if [ -f config.js ]
+    then
+        mv config.js config-$$.js
+    else
+        rm -f config.js
+    fi
     ln -s config-${conf}.js config.js
     npm run --silent config:check > /dev/null
     [ $? -eq 0 ] || {
@@ -526,10 +550,10 @@ done
     printf "\n${BOLD}MagicMirror Status:${NORMAL}\n"
     pm2 status MagicMirror --update-env
     CONF=`readlink -f ${CONFDIR}/config.js`
-    printf "\nUsing config file `basename ${CONF}`"
-    printf "\n${BOLD}Done${NORMAL}\n"
-    check_config $2
+    printf "\nUsing config file `basename ${CONF}`\n"
     display_status
+    check_config $2
+    printf "\n${BOLD}Done${NORMAL}\n"
     exit 0
 }
 
