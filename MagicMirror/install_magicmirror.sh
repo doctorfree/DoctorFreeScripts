@@ -147,6 +147,11 @@ else
     echo "Skipping installation of MagicMirror convenience scripts"
 fi
 
+# Install autofs so we can automount filesystems
+printf "\nInstalling nfs-common and autofs ..."
+sudo apt-get -y install nfs-common autofs > /dev/null 2>&1
+printf "\tDone\n"
+
 # Install jq JSON parsing utility
 printf "\nInstalling jq JSON parsing utility ..."
 sudo apt-get -y install jq > /dev/null 2>&1
