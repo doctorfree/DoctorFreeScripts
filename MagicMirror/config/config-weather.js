@@ -64,21 +64,41 @@ var config = {
         //  }
         },
         {
-            module: "clock",
-			position: "top_center",
-            config: {
+		    module: "MMM-DateOnly",
+		    position: "top_bar",
+		    config: {
+                showWeek: false,
                 dateFormat: "dddd, LLL",
-                displayType: "analog",
-                analogFace: "face-009",
-                analogSize: "200px",
-                displaySeconds: true,
-                secondsColor: "#BAA3DC",
-                timeFormat: "12",
-                showPeriod: true,
-                showDate: true,
-                clockBold: false,
-                analogPlacement: "top",
-                analogShowDate: "top",
+		    }
+	    },
+        {
+            module: 'MMM-RAIN-RADAR',
+            position: 'top_center',
+            disabled: false,
+            config: {
+                useHeader: false, // true if you want a header
+                lat: "36.970019",
+                lon: "-122.042212",
+                area: 'CA', // US State
+                zoomLevel: 8,
+                mapType: 1, //0-Road Map 1-Satellite 2-Dark Map 3-OpenStreetMaps 4-Light Map
+                color: 3, //0-Original 1-Universal Blue 2-TITAN 3-The Weather Channel
+                          //5-NEXRAD Level-III 6-RAINBOW @ SELEX-SI
+                snow: 1,
+                smoothing: 1,
+                opacity: 88,
+                fastAnimation: 0,
+                coverage: 0,
+                darkTheme: 1,
+                UTCtime: 0,
+                legend: 1,
+                legendMin: 0, //set legend to 1 if you want legendMin to show
+                animate: 1,
+                // 1: after updateInterval, weather warnings for your US states will be used
+                // to determine if module should be hidden. 0 module is perpertually displayed
+                updateOnWarning: 1,
+                // number of milliseconds. change 5 to 60 and it will update each 10 minutes
+                updateInterval: 60 * 60 * 1000,
             }
         },
 		{
@@ -96,36 +116,6 @@ var config = {
 			  units: "us",
               forecastLayout: "tiled"
             }
-         },
-         {
-             module: 'MMM-RAIN-RADAR',
-             position: 'top_center',
-             disabled: false,
-             config: {
-                 useHeader: false, // true if you want a header
-                 lat: "36.970019",
-                 lon: "-122.042212",
-                 area: 'CA', // US State
-                 zoomLevel: 8,
-                 mapType: 1, //0-Road Map 1-Satellite 2-Dark Map 3-OpenStreetMaps 4-Light Map
-                 color: 3, //0-Original 1-Universal Blue 2-TITAN 3-The Weather Channel
-                           //5-NEXRAD Level-III 6-RAINBOW @ SELEX-SI
-                 snow: 1,
-                 smoothing: 1,
-                 opacity: 88,
-                 fastAnimation: 0,
-                 coverage: 0,
-                 darkTheme: 1,
-                 UTCtime: 0,
-                 legend: 1,
-                 legendMin: 0, //set legend to 1 if you want legendMin to show
-                 animate: 1,
-                 // 1: after updateInterval, weather warnings for your US states will be used
-                 // to determine if module should be hidden. 0 module is perpertually displayed
-                 updateOnWarning: 1,
-                 // number of milliseconds. change 5 to 60 and it will update each 10 minutes
-                 updateInterval: 60 * 60 * 1000,
-             }
          },
          {
             module: 'MMM-TelegramBot',
