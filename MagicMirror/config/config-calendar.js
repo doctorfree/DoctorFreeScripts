@@ -1,7 +1,7 @@
 /* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
- * Modified by Ronald Joe Record http://ronrecord.com
+ * Modified by Ron Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -60,7 +60,7 @@ var config = {
         //      customCommand: {},  // Optional, See "Using Custom Commands" below
         //      customMenu: "custom_menu.json", // Optional, See "Custom Menu Items" below
         //      showModuleApiMenu: true, // Optional, Enable the Module Controls menu
-        //      apiKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        //      apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
         //  }
         },
         {
@@ -123,7 +123,7 @@ var config = {
                 // unzip the gz file and find your city
 				locationID: "5393052",
                 units: "imperial",
-				appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
 			}
 		},
 		{
@@ -138,16 +138,16 @@ var config = {
                 units: "imperial",
                 showRainAmount: "true",
                 colored: "true",
-				appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
 			}
 		},
         {
             module: 'MMM-TelegramBot',
             config: {
-              telegramAPIKey : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-              allowedUser : ['xxxxxxxxx'],
-              adminChatId : xxxxxxxxxx,
+              allowedUser : ['Your-Telegram-Username'],
+              adminChatId : Your-Telegram-Chat-ID,
               useWelcomeMessage: true,
               verbose: false,
               favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],

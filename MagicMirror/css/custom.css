@@ -8,7 +8,7 @@
 }
 
 .mmm-hue-lights .grid .hue {
-    width: calc(25% - 20px);
+    width: calc(20% - 20px);
     margin: 10px;
     display: block;
 }
@@ -20,4 +20,41 @@
 
 .MMM-DarkSkyForecast .module-content {
   width: 500px; /* adjust this to taste */
+}
+
+.covid {
+  width: 100%;
+  max-width:100%;
+  min-width:300px;
+  line-height:125%;
+}
+
+.covid .location {
+  color:#99CC00;
+  font-weight:bold;
+  font-size: 1.7vw;
+}
+
+.covid .numbers {
+  font-size: 1.4vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.covid .numbers .number {
+  text-align:center;
+  width:100%;
+}
+
+.covid .numbers .confirmed::before {
+  content: "Confirmed: "
+}
+
+.covid .numbers .deaths::before {
+  content: "Deaths: "
+}
+
+.covid .numbers .recovered::before {
+  content: "Recovered: "
 }

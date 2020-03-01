@@ -1,7 +1,7 @@
 /* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
- * Modified by Ron Record http://ronrecord.com
+ * Modified by Ronald Joe Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -57,72 +57,85 @@ var config = {
             module: 'MMM-Remote-Control',
         },
         {
-            module: 'MMM-ModuleScheduler',
+            module: "MMM-COVID-19",
+            header: "Coronavirus Daily Update",
+            position: "bottom_bar",
             config: {
-                // SHOW ALL MODULES AT FULL BRIGHTNESS AT 06:00 AND DIM THEM TO 20% AT 22:00
-                // global_schedule: {from: '0 6 * * *', to: '0 22 * * *', dimLevel: '20' },
-                notification_schedule: [
-                    // TURN THE MONITOR/SCREEN ON AT 06:45 EVERY DAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '45 6 * * *',
-                    //    payload: {action: "MONITORON"}
-                    //},
-                    // TURN THE MONITOR/SCREEN OFF AT 22:30 EVERY DAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '30 22 * * *',
-                    //    payload: {action: "MONITOROFF"}
-                    //},
-                    // RESTART THE MAGICMIRROR PROCESS AT 2am EVERY SUNDAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '0 2 * * SUN',
-                    //    payload: {
-                    //        action: "RESTART"
-                    //    }
-                    //},
-                    // TURN THE SCREEN BRIGHTNESS "DAY" AT 06:30 EVERY DAY
-	                //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '30 6 * * *',
-                    //    payload: {
-                    //        action: "BRIGHTNESS",
-                    //        value: "100"
-                    //    }
-                    //},
-	                // TURN THE SCREEN BRIGHTNESS "NIGHT" AT 22:30 EVERY DAY
-	                //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '30 22 * * *',
-                    //    payload: {
-                    //        action: "BRIGHTNESS",
-                    //        value: "50"
-                    //    }
-                    //}
-                ]
+              scanInterval: 1000 * 60 * 60 * 12,
+              rotateInterval: 1000 * 5,
+              detailProvince: true,
+//            pinned: ["Mainland China", null],
+//            pinned: ["Others", "Diamond Princess cruise ship"],
+//            pinned: ["US", "Santa Clara, CA"],
+              pinned: ["US"],
+              logProvinceCountry: false,
+              logOnce: true,
+              sortOrder: null,
             }
         },
         {
-            module: 'MMM-BackgroundSlideshow',
-            position: 'fullscreen_below',
-            // classes: 'scheduler',
+            module: "newsfeed",
+            position: "top_bar",
             config: {
-                imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/nuts/',
+                feeds: [
+                    {
+                        title: "New York Times",
+                        url: "http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml"
+                    },
+                    {
+                        title: "Washington Post",
+                        url: "http://feeds.washingtonpost.com/rss/national"
+                    },
+                    {
+                        title: "Mercury News",
+                        url: "https://www.mercurynews.com/feed"
+                    },
+                    {
+                        title: "Centers for Disease Control",
+                        url: "https://tools.cdc.gov/api/v2/resources/media/403372.rss"
+                    },
+                    {
+                        title: "World Health Organization",
+                        url: "https://www.who.int/feeds/entity/csr/don/en/rss.xml"
+                    },
                 ],
-                slideshowSpeed: 15000, // 15 seconds
-                transitionImages: true,
-                randomizeImageOrder: true,
-                recursiveSubDirectories: true,
-                //backgroundSize: "contain",
-                // DISPLAY THE SLIDE SHOW BETWEEN 1PM and 6PM then again between 9PM and Midnight
-                //module_schedule: [
-                //  {from: '0 13 * * *', to:   '0 18 * * *'},
-                //  {from: '0 21 * * *', to:   '59 23 * * *'}
-                //]
+                showSourceTitle: true,
+                showPublishDate: true,
+                broadcastNewsFeeds: true,
+                broadcastNewsUpdates: true
             }
         },
+        {
+            module: "MMM-News",
+            position: "top_center",
+            config: {
+              apiKey : "xxxxxxx_newsapi.org_xxxxxxxxxxx",
+              type: "vertical",
+              touchable: false,
+              telegramBotOrderOpenDetail : true,
+              query : [
+                {
+                  sources: "abc-news, bbc-news, cnn, google-news",
+                },
+                {
+                  country: "us",
+                  category: "general",
+                },
+                {
+                  country: "uk",
+                  category: "general",
+                }
+              ],
+            }
+        },
+//      {
+//          module: "MMM-Volume",
+//          position: "top_left", // It is meaningless. but you should set.
+//          config: {
+//            usePresetScript: "ALSA", // "ALSA" is supported by default.
+//            volumeOnStart: 50,
+//          }
+//      },
         {
             module: 'MMM-TelegramBot',
             config: {

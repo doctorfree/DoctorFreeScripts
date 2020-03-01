@@ -1,7 +1,7 @@
 /* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
- * Modified by Ronald Joe Record http://ronrecord.com
+ * Modified by Ron Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -61,7 +61,7 @@ var config = {
         //      customCommand: {},  // Optional, See "Using Custom Commands" below
         //      customMenu: "custom_menu.json", // Optional, See "Custom Menu Items" below
         //      showModuleApiMenu: true, // Optional, Enable the Module Controls menu
-        //      apiKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        //      apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
         //  }
         },
         {
@@ -119,7 +119,7 @@ var config = {
                 // unzip the gz file and find your city
 				locationID: "5393052",
                 units: "imperial",
-				appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
 			}
 		},
 		{
@@ -134,7 +134,7 @@ var config = {
                 units: "imperial",
                 showRainAmount: "true",
                 colored: "true",
-				appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
 			}
 		},
 		{
@@ -181,7 +181,7 @@ var config = {
      //     position: "lower_third", //"bottom_bar" is better for `mode:ticker`
      //     classes: "daytime",
      //     config: {
-     //         apiKey : "xxxxxxxxxxxxxxxx", // https://www.alphavantage.co/
+     //         apiKey : "xx_AVStock-API_x", // https://www.alphavantage.co/
      //         timeFormat: "YYYY-MM-DD HH:mm:ss",
      //         symbols : ["AAPL", "GOOGL", "CGC", "ACB"],
      //         alias: ["Apple", "Google", "Canopy", "Aurora"],
@@ -244,7 +244,7 @@ var config = {
             module: 'MMM-stocks',
             position: 'bottom_bar',
             config: {
-              apiKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              apiKey: 'xxxxx_Weather-API-Key_xxxxxxxxxxxxx',
               crypto: 'BTCUSDT,LTCUSDT,ETHUSDT', // crypto symbols
               separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
               stocks: 'CGC,AAPL,GOOG,ACB', // stock symbols
@@ -256,9 +256,9 @@ var config = {
             position: "middle_center",
         //  classes: "daytime",
 	        config: {
-		        apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-		        userId: "xxxxxxxxxxxxxxxxxx",
-		        systemId: "xxxxxx",
+		        apiKey: "xxxxxx_Solar-API-Key_xxxxxxxxxxx",
+		        userId: "Solar-USER-ID",
+		        systemId: "Solar-System-ID",
 		        basicHeader: "true",
 	        }
         },
@@ -268,7 +268,7 @@ var config = {
         //  classes: "nighttime",
             config: {
                 bridgeIp: "10.0.1.2",
-                user: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                user: "xxxxxxxxxx_Hue-Hub-User_xxxxxxxxxxxxxxxx",
             }
         },
         {
@@ -417,10 +417,10 @@ var config = {
         {
             module: 'MMM-TelegramBot',
             config: {
-              telegramAPIKey : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-              allowedUser : ['xxxxxxxxx'],
-              adminChatId : xxxxxxxxxx,
+              allowedUser : ['Your-Telegram-Username'],
+              adminChatId : Your-Telegram-Chat-ID,
               useWelcomeMessage: true,
               verbose: false,
               favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],

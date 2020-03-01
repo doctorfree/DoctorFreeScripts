@@ -2,7 +2,6 @@
  *
  * By Michael Teeuw http://michaelteeuw.nl
  * Modified by Ronald Joe Record http://ronrecord.com
- * Modified by Ronald Joe Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -98,7 +97,7 @@ var config = {
                 location: "Santa Cruz",
                 locationID: "5393052",
                 units: "imperial",
-                appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
             }
         },
         {
@@ -111,7 +110,7 @@ var config = {
                 units: "imperial",
                 showRainAmount: "true",
                 colored: "true",
-                appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
             }
         },
         {
@@ -181,7 +180,7 @@ var config = {
             module: 'MMM-stocks',
             position: 'bottom_bar',
             config: {
-              apiKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              apiKey: 'xxxxx_Weather-API-Key_xxxxxxxxxxxxx',
               crypto: 'BTCUSDT,ADAUSDT,ETHUSDT', // crypto symbols
               separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
               stocks: 'CGC,AAPL,HEXO,ACB,TLRY', // stock symbols
@@ -192,9 +191,9 @@ var config = {
             module: 'MMM-Solar',
             position: "middle_center",
             config: {
-                apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-                userId: "xxxxxxxxxxxxxxxxxx",
-                systemId: "xxxxxx",
+                apiKey: "xxxxxx_Solar-API-Key_xxxxxxxxxxx",
+                userId: "Solar-USER-ID",
+                systemId: "Solar-System-ID",
                 basicHeader: "true",
             }
         },
@@ -221,7 +220,7 @@ var config = {
             position: "lower_third",
             config: {
                 bridgeIp: "10.0.1.2",
-                user: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                user: "xxxxxxxxxx_Hue-Hub-User_xxxxxxxxxxxxxxxx",
             }
         },
         {
@@ -296,12 +295,20 @@ var config = {
             },
         },
         {
+            module: "MMM-Volume",
+            position: "bottom_center", // It is meaningless. but you should set.
+            config: {
+              usePresetScript: "ALSA", // "ALSA" is supported by default.
+              volumeOnStart: 50,
+            }
+        },
+        {
             module: 'MMM-TelegramBot',
             config: {
-              telegramAPIKey : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-              allowedUser : ['xxxxxxxxx'],
-              adminChatId : xxxxxxxxxx,
+              allowedUser : ['Your-Telegram-Username'],
+              adminChatId : Your-Telegram-Chat-ID,
               useWelcomeMessage: true,
               verbose: false,
               favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],

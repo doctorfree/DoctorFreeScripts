@@ -1,7 +1,7 @@
 /* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
- * Modified by Ronald Joe Record http://ronrecord.com
+ * Modified by Ron Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -60,7 +60,7 @@ var config = {
         //      customCommand: {},  // Optional, See "Using Custom Commands" below
         //      customMenu: "custom_menu.json", // Optional, See "Custom Menu Items" below
         //      showModuleApiMenu: true, // Optional, Enable the Module Controls menu
-        //      apiKey: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        //      apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
         //  }
         },
         {
@@ -88,7 +88,7 @@ var config = {
             classes: "default everyone",
             disabled: false,
             config: {
-              apikey: "c4aaf67ae4c33e63c7630ceeb2b45ee5",
+              apikey: "xxx_Dark-Sky-API-Key_xxxxxxxxxxx",
 		      latitude: "36.970019",
 		      longitude: "-122.042212",
               iconset: "5c",
@@ -130,10 +130,10 @@ var config = {
          {
             module: 'MMM-TelegramBot',
             config: {
-              telegramAPIKey : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-              allowedUser : ['xxxxxxxxx'],
-              adminChatId : xxxxxxxxxx,
+              allowedUser : ['Your-Telegram-Username'],
+              adminChatId : Your-Telegram-Chat-ID,
               useWelcomeMessage: true,
               verbose: false,
               favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
@@ -168,7 +168,7 @@ var config = {
 //				location: "Santa Cruz",
 //				locationID: "5393052",
  //               units: "imperial",
-//				apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+//				apiKey: "xx_OpenWeather-App-ID_xxxxxxxxxx"
 //		    }
 //		},
 //		{
@@ -183,7 +183,7 @@ var config = {
 //				location: "Santa Cruz",
 //				locationID: "5393052",
  //               units: "imperial",
-//				apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+//				apiKey: "xx_OpenWeather-App-ID_xxxxxxxxxx"
 //		    }
 //		},
 //		{
@@ -194,7 +194,7 @@ var config = {
 //				location: "Santa Cruz",
 //				locationID: "5393052",
  //               units: "imperial",
-//				appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+//				appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
 //			}
 //		},
 //		{
@@ -209,7 +209,7 @@ var config = {
  //               units: "imperial",
   //              colored: true,
    //             scale: true,
-	//			appid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+	//			appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
 	//		}
 	//	},
 //       {

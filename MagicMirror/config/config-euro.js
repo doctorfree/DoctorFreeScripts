@@ -1,7 +1,7 @@
 /* Magic Mirror Config
  *
  * By Michael Teeuw http://michaelteeuw.nl
- * Modified by Ronald Joe Record http://ronrecord.com
+ * Modified by Ron Record http://ronrecord.com
  * MIT Licensed.
  *
  * For more information how you can configurate this file
@@ -128,10 +128,10 @@ var config = {
         {
             module: 'MMM-TelegramBot',
             config: {
-              telegramAPIKey : 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-              allowedUser : ['xxxxxxxxx'],
-              adminChatId : xxxxxxxxxx,
+              allowedUser : ['Your-Telegram-Username'],
+              adminChatId : Your-Telegram-Chat-ID,
               useWelcomeMessage: true,
               verbose: false,
               favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
