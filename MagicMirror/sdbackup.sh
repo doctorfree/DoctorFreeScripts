@@ -4,6 +4,12 @@ NUMBACK=`date "+%Y%m%d"`
 OUT_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
 OUT_FILE="Raspbian-MagicMirror-${NUMBACK}.iso"
 DEVNAM="disk5"
+ZIP=
+
+[ "$1" == "-z" ] && {
+    ZIP=1
+    shift
+}
 [ "$1" ] && DEVNAM="$1"
 DEVICE="/dev/r${DEVNAM}"
 
@@ -18,5 +24,9 @@ FOUND=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } ' | cut -c 1-5`
 
 [ -d "${OUT_DIR}" ] || mkdir -p "${OUT_DIR}"
 cd "${OUT_DIR}"
-#sudo dd if=${DEVICE} | gzip -9 > ${OUT_DIR}/${OUT_FILE}.gz
-sudo dd if=${DEVICE} | zip ${OUT_FILE}.zip -
+if [ "${ZIP}" ]
+then
+    sudo dd if=${DEVICE} | zip ${OUT_FILE}.zip -
+else
+    sudo dd if=${DEVICE} of=${OUT_FILE}
+fi
