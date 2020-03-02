@@ -200,8 +200,7 @@ var config = {
         },
         {
             module: "mmm-hue-lights",
-            disabled: true,
-            position: "lower_third",
+            position: "top_center",
             config: {
                 bridgeIp: "10.0.1.2",
                 user: "xxxxxxxxxx_Hue-Hub-User_xxxxxxxxxxxxxxxx",
@@ -277,6 +276,16 @@ var config = {
                       color: "#26C6DA " },
                 ],
             },
+        },
+        {
+            module: 'MMM-pages',
+            config: {
+                modules:
+                    [[ "MMM-Solar"], [ "mmm-hue-lights"]],
+                fixed:
+                    ["alert", "updatenotification", "MMM-Remote-Control", "clock", "calendar", "currentweather", "weatherforecast", "newsfeed", "MMM-Tools", "MMM-SystemStats", "MMM-stocks", "MMM-NetworkScanner", "MMM-TelegramBot"],
+                rotationTime: 900000, // rotate page every 15 minutes = 15 * 60 * 1000
+            }
         },
         {
             module: 'MMM-TelegramBot',

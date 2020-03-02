@@ -13,6 +13,18 @@
     display: block;
 }
 
+.region.top.center .mmm-hue-lights .grid .hue {
+    width: calc(25% - 20px);
+    margin: 10px;
+    display: block;
+}
+
+.region.lower.third .mmm-hue-lights .grid .hue {
+    width: calc(20% - 20px);
+    margin: 10px;
+    display: block;
+}
+
 .calendar .medium {
   font-size: 25px;
   line-height: 30px;
