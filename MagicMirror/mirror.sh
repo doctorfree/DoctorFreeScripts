@@ -633,12 +633,7 @@ done
     exit 0
 }
 
-if [ "$1" == "normal" ]
-then
-    mode="default"
-else
-    mode="$1"
-fi
+mode="$1"
 [ "$1" == "waterfall" ] && mode="waterfalls"
 [ "$1" == "fractal" ] && mode="fractals"
 
