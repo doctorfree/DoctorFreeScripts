@@ -104,10 +104,15 @@ printf "\t\tDone\n"
 printf "\tInstalling MagicMirror module MMM-COVID-19 ..."
 git clone https://github.com/eouia/MMM-COVID-19 > /dev/null 2>&1
 printf "\t\tDone\n"
+printf "\tInstalling MagicMirror module MMM-COVID-19 ...\n"
+git clone https://github.com/mykle1/Hello-Lucy
+cd Hello-Lucy/installers
+bash dependencies.sh
+printf "\n\tDone\n"
+cd ${HOME}
 
 # Audit and fix any discovered vulnerabilities
 printf "\nAuditing and repairing any discovered vulnerabilities ..."
-cd ${HOME}
 find MagicMirror -name package.json | grep -v /node_modules/ | while read package
 do
     DIR=`dirname "$package"`
