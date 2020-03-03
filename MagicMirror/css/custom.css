@@ -41,14 +41,28 @@
   line-height:125%;
 }
 
-.covid .location {
-  color:#99CC00;
+.covid .item {
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding:8px;
+  background-color:#FFFFFF;
+  margin-bottom:8px;
+}
+
+.MMM-COVID-19 .module-header {
+  color:#FFC921;
   font-weight:bold;
-  font-size: 1.7vw;
+  font-size: 2.5vw;
+}
+
+.covid .location {
+  color:#007777;
+  font-weight:bold;
+  font-size: 2.0vw;
 }
 
 .covid .numbers {
-  font-size: 1.4vw;
+  font-size: 1.7vw;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -57,6 +71,20 @@
 .covid .numbers .number {
   text-align:center;
   width:100%;
+}
+
+.covid .numbers .confirmed {
+  color: #440818;
+  text-align:left;
+}
+
+.covid .numbers .deaths {
+  color: #CD071E;
+}
+
+.covid .numbers .recovered {
+  color: #005B96;
+  text-align:right;
 }
 
 .covid .numbers .confirmed::before {
