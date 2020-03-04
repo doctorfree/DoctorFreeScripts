@@ -158,6 +158,11 @@ printf "\nInstalling nfs-common and autofs ..."
 sudo apt-get -y install nfs-common autofs > /dev/null 2>&1
 printf "\tDone\n"
 
+# Install arp-scan for MMM-NetworkScanner
+printf "\nInstalling arp-scan for MMM-NetworkScanner ..."
+sudo apt-get -y install arp-scan > /dev/null 2>&1
+printf "\tDone\n"
+
 # Install jq JSON parsing utility
 printf "\nInstalling jq JSON parsing utility ..."
 sudo apt-get -y install jq > /dev/null 2>&1
