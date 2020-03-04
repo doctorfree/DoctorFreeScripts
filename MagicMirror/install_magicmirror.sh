@@ -161,6 +161,13 @@ printf "\tDone\n"
 # Install arp-scan for MMM-NetworkScanner
 printf "\nInstalling arp-scan for MMM-NetworkScanner ..."
 sudo apt-get -y install arp-scan > /dev/null 2>&1
+printf "\tDone"
+printf "\nUpdating arp-scan vendor database ..."
+[ -d /usr/share/arp-scan ] && {
+    cd /usr/share/arp-scan
+    sudo get-iab -v -u http://standards-oui.ieee.org/iab/iab.txt > /dev/null 2>&1
+    sudo get-oui -v -u http://standards-oui.ieee.org/oui/oui.txt > /dev/null 2>&1
+}
 printf "\tDone\n"
 
 # Install jq JSON parsing utility
