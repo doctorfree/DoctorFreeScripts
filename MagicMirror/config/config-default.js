@@ -141,8 +141,19 @@ var config = {
             }
         },
         {
+            module: 'MMM-SystemStats',
+            position: "bottom_left",
+            config: {
+                updateInterval: 10000, // every 10 seconds
+                align: 'right', // align labels
+                header: 'System Stats', // This is optional
+                units: 'imperial', // default, metric, imperial
+                view: 'textAndIcon',
+            }
+        },
+        {
             module: 'MMM-Tools',
-            position: 'bottom_center',
+            position: 'bottom_left',
             config: {
               device : "RPI", // "RPI" is also available
               refresh_interval_ms : 10000,
@@ -164,26 +175,33 @@ var config = {
               }
             }
         },
+//      {
+//          module: 'MMM-stocks',
+//          position: 'bottom_bar',
+//          config: {
+//            apiKey: 'xxxxx_Weather-API-Key_xxxxxxxxxxxxx',
+//            crypto: 'BATUSDT,ADAUSDT,ETHUSDT,POLYUSDT,ZRXUSDT,MCOUSDT', // crypto symbols
+//            separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
+//            stocks: 'CGC,AAPL,HEXO,ACB,TLRY', // stock symbols
+//            updateInterval: 1000000 // update interval in milliseconds (16:40)
+//          }
+//      },
         {
-            module: 'MMM-SystemStats',
-            position: "bottom_right",
+            module: "MMM-AVStock",
+            position: "bottom_bar", //"bottom_bar" is better for `mode:ticker`
             config: {
-                updateInterval: 10000, // every 10 seconds
-                align: 'right', // align labels
-                header: 'System Stats', // This is optional
-                units: 'imperial', // default, metric, imperial
-                view: 'textAndIcon',
-            }
-        },
-        {
-            module: 'MMM-stocks',
-            position: 'bottom_bar',
-            config: {
-              apiKey: 'xxxxx_Weather-API-Key_xxxxxxxxxxxxx',
-              crypto: 'BATUSDT,ADAUSDT,ETHUSDT,POLYUSDT,ZRXUSDT,MCOUSDT', // crypto symbols
-              separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
-              stocks: 'CGC,AAPL,HEXO,ACB,TLRY', // stock symbols
-              updateInterval: 1000000 // update interval in milliseconds (16:40)
+                apiKey : "xx_AVStock-API_x", // https://www.alphavantage.co/
+                timeFormat: "YYYY-MM-DD HH:mm:ss",
+                symbols : ["AAPL", "HEXO", "TLRY", "CGC", "ACB"],
+                alias: ["Apple", "Hexo", "Tilray", "Canopy", "Aurora"],
+                tickerDuration: 60, // Ticker will be cycled once per this second.
+                chartDays: 90, //For `mode:series`, how much daily data will be taken. (max. 90)
+                poolInterval : 1000*15, // (Changed in ver 1.1.0) - Only For Premium Account
+                mode : "ticker", // "table", "ticker", "series"
+                decimals: 4,
+                candleSticks : true, //show candle sticks if mode is Series
+                coloredCandles : true, //colored bars: red and green for negative and positive candles
+                premiumAccount: false,
             }
         },
         {
@@ -206,7 +224,7 @@ var config = {
         },
         {
             module: 'MMM-NetworkScanner',
-            position: "bottom_left",
+            position: "bottom_right",
             header: "",
             config: {
                 showLastSeen: "true",
@@ -233,7 +251,7 @@ var config = {
                       icon: "lightbulb",
                       color: "#00ff00" },
                     { macAddress: "00:04:20:f4:ea:9c",
-                      name: "Scale",
+                      name: "Harmony Hub",
                       icon: "weight",
                       color: "#00ff00" },
                     { ipAddress: "10.0.1.69",
@@ -244,10 +262,6 @@ var config = {
                       name: "iPhone Xs Max",
                       icon: "mobile",
                       color: "#FF8A65" },
-                 // { macAddress: "F8:6F:C1:96:9B:0B",
-                 //     name: "Apple Watch",
-                 //     icon: "dharmachakra",
-                 //     color: "#FF8A65" },
                     { macAddress: "44:d8:84:6b:5f:b3",
                       name: "AirPort Express",
                       icon: "wifi",
@@ -289,38 +303,38 @@ var config = {
               customCommands: [],
             }
         },
-//      {
-//          module: "Hello-Lucy",
-//          disabled: false,
-//          position: "bottom_center",
-//          config: {
-//              // MUST BE CAPITALS to make Lucy start listening
-//              keyword: 'HELLO LUCY',
-//              // run "arecord -l" card# and device# of your microphone/sound card
-//              microphone: "1,0",
-//              // timeout listening for a command/sentence
-//              timeout: 15,
-//              defaultOnStartup: 'Hello-Lucy',
-//              standByMethod: 'HIDE',
-//              // welcome sound at startup. Add several for a random welcome sound
-//              sounds: ["MagicMirror-Welcome.mp3", "MagicMirror-Welcome-Two.mp3"],
-//              // when command is accepted. use your own or default
-//              confirmationSound: "ding.mp3",
-//              // if true, all modules start as hidden
-//              startHideAll: false,
-//              // default modules to show on page one/startup
-//              pageOneModules: ["Hello-Lucy", "alert", "clock", "calendar", "currentweather", "weatherforecast", "newsfeed", "MMM-SystemStats", "MMM-stocks", "MMM-Solar", "MMM-iFrame", "mmm-hue-lights", "MMM-NetworkScanner"],
-//              pageTwoModules: ["Hello-Lucy", "alert", "clock", "calendar", "currentweather", "weatherforecast", "newsfeed", "MMM-SystemStats", "mmm-hue-lights", "MMM-NetworkScanner"],
-//              pageThreeModules: ["Hello-Lucy", "alert", "clock", "calendar", "currentweather", "weatherforecast", "newsfeed", "MMM-SystemStats", "MMM-stocks", "MMM-Solar", "MMM-NetworkScanner"],
-//              pageFourModules: ["Hello-Lucy", "alert", "MMM-SystemStats", "MMM-stocks", "MMM-iFrame", "mmm-hue-lights"],
-//              pageFiveModules: [],
-//              pageSixModules: [],
-//              pageSevenModules: [],
-//              pageEightModules: [],
-//              pageNineModules: [],
-//              pageTenModules: []
-//          }
-//      },
+        {
+            module: "Hello-Lucy",
+            disabled: false,
+            position: "bottom_center",
+            config: {
+                // MUST BE CAPITALS to make Lucy start listening
+                keyword: 'HELLO LUCY',
+                // run "arecord -l" card# and device# of your microphone/sound card
+                microphone: "1,0",
+                // timeout listening for a command/sentence
+                timeout: 15,
+                defaultOnStartup: 'Hello-Lucy',
+                standByMethod: 'HIDE',
+                // welcome sound at startup. Add several for a random welcome sound
+                sounds: ["MagicMirror-Welcome.mp3", "MagicMirror-Welcome-Two.mp3"],
+                // when command is accepted. use your own or default
+                confirmationSound: "ding.mp3",
+                // if true, all modules start as hidden
+                startHideAll: false,
+                // default modules to show on page one/startup
+                pageOneModules: [],
+                pageTwoModules: [],
+                pageThreeModules: [],
+                pageFourModules: [],
+                pageFiveModules: [],
+                pageSixModules: [],
+                pageSevenModules: [],
+                pageEightModules: [],
+                pageNineModules: [],
+                pageTenModules: []
+            }
+        },
     ]
 };
 
