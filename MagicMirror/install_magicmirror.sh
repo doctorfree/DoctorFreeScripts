@@ -274,7 +274,19 @@ do
             printf "\nInstalling vdirsyncer and dependencies ..."
             sudo apt-get -y install libxml2 libxslt1.1 zlib1g python3 > /dev/null 2>&1
             pip3 install --user --ignore-installed vdirsyncer > /dev/null 2>&1
-            printf "\tDone"
+            if [ -f ${HOME}/.local/bin/vdirsyncer ]
+            then
+                if [ -L /usr/bin/vdirsyncer ]
+                then
+                    printf "\nvdirsyncer already symlinked into /usr/bin"
+                else
+                    sudo ln -s ${HOME}/.local/bin/vdirsyncer /usr/bin/vdirsyncer
+                fi
+            else
+                printf "\nWARNING: vdirsyncer not installed in $HOME/.local/bin"
+                printf "\n\tLocate vdirsyncer and create a symbolic link in /usr/bin"
+            fi
+            printf "\nDone"
             printf "\nInstalling the vdirsyncer.service and vdirsyncer.timer ..."
             curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.service 2> /dev/null | sudo tee /etc/systemd/user/vdirsyncer.service > /dev/null 2>&1
             curl https://raw.githubusercontent.com/pimutils/vdirsyncer/master/contrib/vdirsyncer.timer 2> /dev/null | sudo tee /etc/systemd/user/vdirsyncer.timer > /dev/null 2>&1
