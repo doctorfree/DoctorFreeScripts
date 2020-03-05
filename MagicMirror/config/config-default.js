@@ -180,7 +180,7 @@ var config = {
 //          position: 'bottom_bar',
 //          config: {
 //            apiKey: 'xxxxx_Weather-API-Key_xxxxxxxxxxxxx',
-//            crypto: 'BATUSDT,ADAUSDT,ETHUSDT,POLYUSDT,ZRXUSDT,MCOUSDT', // crypto symbols
+//            crypto: 'BATUSDT,ADAUSDT,ETHUSDT,POLYBNB,ZRXUSDT,MCOUSDT', // crypto symbols
 //            separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
 //            stocks: 'CGC,AAPL,HEXO,ACB,TLRY', // stock symbols
 //            updateInterval: 1000000 // update interval in milliseconds (16:40)
