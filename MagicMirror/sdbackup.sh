@@ -6,6 +6,16 @@ OUT_FILE="Raspbian-MagicMirror-${NUMBACK}.iso"
 DEVNAM="disk5"
 ZIP=
 
+[ "$1" == "-o" ] && {
+    if [ "$2" ]
+    then
+        OUT_FILE="$2"-${NUMBACK}.iso
+        shift 2
+    else
+        echo "Usage: sdbackup -o argument requires an output filename. Exiting."
+        exit 1
+    fi
+}
 [ "$1" == "-z" ] && {
     ZIP=1
     shift
