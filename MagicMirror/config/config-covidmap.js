@@ -56,72 +56,68 @@ var config = {
         {
             module: 'MMM-Remote-Control',
         },
-        {
-            module: "MMM-News",
-            position: "top_center",
-            config: {
-              apiKey : "xxxxxxx_newsapi.org_xxxxxxxxxxx",
-              type: "vertical",
-              touchable: false,
-              telegramBotOrderOpenDetail : true,
-              query : [
-                {
-                  sources: "abc-news, bbc-news, cnn, google-news",
-                },
-                {
-                  country: "us",
-                  category: "health",
-                  q : "coronavirus"
-                },
-                {
-                  country: "uk",
-                  category: "health",
-                  q : "coronavirus"
-                }
-              ],
-            }
-        },
-        {
-            module: "MMM-COVID-19",
-            header: "Coronavirus Daily Update",
-            position: "bottom_bar",
-            config: {
-              scanInterval: 1000 * 60 * 60 * 12,
-              rotateInterval: 1000 * 5,
-              detailProvince: true,
+//      {
+//          module: "MMM-News",
+//          position: "top_center",
+//          config: {
+//            apiKey : "xxxxxxx_newsapi.org_xxxxxxxxxxx",
+//            type: "vertical",
+//            touchable: false,
+//            telegramBotOrderOpenDetail : true,
+//            query : [
+//              {
+//                sources: "abc-news, bbc-news, cnn, google-news",
+//              },
+//              {
+//                country: "us",
+//                category: "health",
+//                q : "coronavirus"
+//              },
+//              {
+//                country: "uk",
+//                category: "health",
+//                q : "coronavirus"
+//              }
+//            ],
+//          }
+//      },
+//      {
+//          module: "MMM-COVID-19",
+//          header: "Coronavirus Daily Update",
+//          position: "bottom_bar",
+//          config: {
+//            scanInterval: 1000 * 60 * 60 * 12,
+//            rotateInterval: 1000 * 5,
+//            detailProvince: true,
 //            pinned: ["Mainland China", null],
 //            pinned: ["Others", "Diamond Princess cruise ship"],
 //            pinned: ["US", "Santa Clara, CA"],
-              pinned: ["US"],
-              logProvinceCountry: false,
-              logOnce: true,
-              sortOrder: null,
-            }
-        },
-        {
-            module: "newsfeed",
-            position: "bottom_bar",
-            config: {
-                feeds: [
-                    {
-                        title: "Centers for Disease Control",
-                        url: "https://tools.cdc.gov/api/v2/resources/media/403372.rss"
-                    },
-                    {
-                        title: "Johns Hopkins Medicine",
-                        url: "https://www.hopkinsmedicine.org/news/media/releases/?format=rss"
-                    },
-                    {
-                        title: "World Health Organization",
-                        url: "https://www.who.int/feeds/entity/csr/don/en/rss.xml"
-                    },
-                ],
-                showSourceTitle: true,
-                showPublishDate: true,
-                broadcastNewsFeeds: true,
-                broadcastNewsUpdates: true
-            }
-        },
+//            pinned: ["US"],
+//            logProvinceCountry: false,
+//            logOnce: true,
+//            sortOrder: null,
+//          }
+//      },
+//      {
+//          module: "newsfeed",
+//          position: "top_bar",
+//          config: {
+//              feeds: [
+//                  {
+//                      title: "Centers for Disease Control",
+//                      url: "https://tools.cdc.gov/api/v2/resources/media/403372.rss"
+//                  },
+//                  {
+//                      title: "World Health Organization",
+//                      url: "https://www.who.int/feeds/entity/csr/don/en/rss.xml"
+//                  },
+//              ],
+//              showSourceTitle: true,
+//              showPublishDate: true,
+//              broadcastNewsFeeds: true,
+//              broadcastNewsUpdates: true
+//          }
+//      },
         {
             module: 'MMM-iFrame',
             position: 'fullscreen_below',
@@ -130,27 +126,24 @@ var config = {
                       "https://ncov2019.live/map",
                       "https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6",
                       "https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61",
-                      "https://windy.app/coronavirus_map",
-                      "https://experience.arcgis.com/experience/685d0ace521648f8a5beeeee1b9125cd",
+//                    "https://www.nytimes.com/interactive/2020/world/coronavirus-maps.html",
                      ],
 //              updateInterval: 30 * 60 * 1000, // rotate URLs every 30 minutes
-                updateInterval: 3 * 60 * 1000,  // rotate URLs every 3 minutes
+                updateInterval: 0.5 * 60 * 1000, // rotate URLs every 30 seconds
                 width: "1080", // width of iframe
 //              height: "1580", // height of iframe
                 height: "1920", // height of iframe
                 frameWidth: "1080"
             }
         },
-        {
-            module: 'MMM-pages',
-            config: {
-                modules:
-                    [[ "MMM-News", "newsfeed", "MMM-COVID-19"], [ "MMM-iFrame"]],
-                fixed:
-                    ["alert", "updatenotification", "MMM-Remote-Control", "MMM-TelegramBot"],
-                rotationTime: 900000, // rotate page every 15 minutes = 15 * 60 * 1000
-            }
-        },
+//      {
+//          module: "MMM-Volume",
+//          position: "top_left", // It is meaningless. but you should set.
+//          config: {
+//            usePresetScript: "ALSA", // "ALSA" is supported by default.
+//            volumeOnStart: 50,
+//          }
+//      },
         {
             module: 'MMM-TelegramBot',
             config: {
