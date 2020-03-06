@@ -136,6 +136,7 @@ var config = {
 		        headers: ['change24h', 'change1h', 'change7d'],
                 displayLongNames: true,
 		        displayType: 'detail',
+		        //displayType: 'logoWithChanges',
                 coloredLogos: true,
 		        showGraphs: true
 	        }
