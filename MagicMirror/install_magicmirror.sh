@@ -29,7 +29,7 @@ MM_BASE=${HOME}/MagicMirror
 MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-ModuleScheduler MMM-NetworkScanner MMM-RAIN-RADAR \
          MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats \
-         MMM-TelegramBot MMM-Tools MMM-AssistantMk2 MMM-YouTube \
+         MMM-TelegramBot MMM-Tools MMM-AssistantMk2 MMM-Hotword MMM-YouTube \
          MMM-NotificationTrigger MMM-Volume MMM-News MMM-pages MMM-cryptocurrency"
 LXSESSION="${HOME}/.config/lxsession"
 AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
