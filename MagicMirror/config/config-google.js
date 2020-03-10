@@ -304,9 +304,12 @@ var config = {
               // if you want Google Home ui style
               // set Fullscreen ui AND fullscreen_above position
               assistantConfig: {
-                projectId: "", // Required to use gaction.
-                modelId: "", // (OPTIONAL for gaction)
-                instanceId: "", // (OPTIONAL for gaction)
+                // Required to use gaction.
+                projectId: "Google_Assistant_Project_ID",
+                // (OPTIONAL for gaction)
+                modelId: "Google_Assistant_Model_ID",
+                // (OPTIONAL for gaction)
+                instanceId: "Mirror_of_Doctorwhen",
                 latitude: 36.970019,
                 longitude: -122.042212,
               },
@@ -321,7 +324,7 @@ var config = {
                 //By example, if you are running this on OSX, `afplay` could be available.
                 //by default mpg321 play program is enabled
                 //if audio output cutting try with mpg123 or cvlc program
-                playProgram: "omxplayer -o local",
+                playProgram: "mpg321",
                 chime: {
                   beep: "beep.mp3",
                   error: "error.mp3",
@@ -348,7 +351,7 @@ var config = {
                 // At this moment, multi-languages are not supported, sorry. Someday I'll work.
                 actionLocale: "en-US",
               },
-              recipes: [ "with-MMM-Hotword.js", "with-MMM-TelegramBot.js", "test_with_soundExec.js" ],
+              recipes: [ "with-MMM-Hotword.js", "with-MMM-TelegramBot.js"],
               profiles: {
                 "default": {
                   profileFile: "default.json",
@@ -362,9 +365,9 @@ var config = {
             module: "MMM-Hotword",
             position: "bottom_left",
             config: {
-              useDisplay: false,
-              chimeOnFinish: null,
-              recipes: ["with-AMk2v3_smart-mirror.js"],
+              useDisplay: true,
+              chimeOnFinish: "resources/ding.wav",
+              recipes: ["with-AMk2v3-noisy_smart-mirror.js"],
               mic: {
                 recordProgram: "arecord",
                 device: "plughw:1",
