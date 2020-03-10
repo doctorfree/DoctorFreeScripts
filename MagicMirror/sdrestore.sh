@@ -65,13 +65,13 @@ then
         echo "diskutil unmountDisk ${DEVICE}"
         echo "sudo diskutil eraseDisk FAT32 ${BACK_NAM} MBRFormat ${DEVICE}"
         echo "diskutil unmountDisk ${DEVICE}"
-        echo "sudo dd if=${INP} of=${DEVICE}"
+        echo "sudo dd if=${INP} of=${DEVICE} bs=1M"
     else
         diskutil unmountDisk ${DEVICE}
         sudo diskutil eraseDisk FAT32 ${BACK_NAM} MBRFormat ${DEVICE}
         diskutil unmountDisk ${DEVICE}
         printf "\nRestoring ${INP_FILE} on ${DEVICE} ... "
-        sudo dd if=${INP} of=${DEVICE}
+        sudo dd if=${INP} of=${DEVICE} bs=1M
         printf "\nDone\n"
     fi
 else
@@ -83,13 +83,13 @@ else
             echo "diskutil unmountDisk ${DEVICE}"
             echo "sudo diskutil eraseDisk FAT32 ${BACK_NAM} MBRFormat ${DEVICE}"
             echo "diskutil unmountDisk ${DEVICE}"
-            echo "sudo gzcat ${INP}.gz | dd of=${DEVICE}"
+            echo "sudo gzcat ${INP}.gz | dd of=${DEVICE} bs=1M"
         else
             diskutil unmountDisk ${DEVICE}
             sudo diskutil eraseDisk FAT32 ${BACK_NAM} MBRFormat ${DEVICE}
             diskutil unmountDisk ${DEVICE}
             printf "\nRestoring ${INP_FILE}.gz on ${DEVICE} ... "
-            sudo gzcat ${INP}.gz | dd of=${DEVICE}
+            sudo gzcat ${INP}.gz | dd of=${DEVICE} bs=1M
             printf "\nDone\n"
         fi
     else
@@ -101,13 +101,13 @@ else
                 echo "diskutil unmountDisk ${DEVICE}"
                 echo "sudo diskutil eraseDisk FAT32 ${BACK_NAM} MBRFormat ${DEVICE}"
                 echo "diskutil unmountDisk ${DEVICE}"
-                echo "sudo zcat ${INP}.zip | dd of=${DEVICE}"
+                echo "sudo zcat ${INP}.zip | dd of=${DEVICE} bs=1M"
             else
                 diskutil unmountDisk ${DEVICE}
                 sudo diskutil eraseDisk FAT32 ${BACK_NAM} MBRFormat ${DEVICE}
                 diskutil unmountDisk ${DEVICE}
                 printf "\nRestoring ${INP_FILE}.zip on ${DEVICE} ... "
-                sudo zcat ${INP}.zip | dd of=${DEVICE}
+                sudo zcat ${INP}.zip | dd of=${DEVICE} bs=1M
                 printf "\nDone\n"
             fi
         else

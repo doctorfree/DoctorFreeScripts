@@ -59,15 +59,15 @@ if [ "${ZIP}" ]
 then
     if [ "${TELL}" ]
     then
-        echo "sudo dd if=${DEVICE} | zip ${OUT_FILE}.zip -"
+        echo "sudo dd if=${DEVICE} bs=1M | zip ${OUT_FILE}.zip -"
     else
-        sudo dd if=${DEVICE} | zip ${OUT_FILE}.zip -
+        sudo dd if=${DEVICE} bs=1M | zip ${OUT_FILE}.zip -
     fi
 else
     if [ "${TELL}" ]
     then
-        echo "sudo dd if=${DEVICE} of=${OUT_FILE}"
+        echo "sudo dd if=${DEVICE} of=${OUT_FILE} bs=1M"
     else
-        sudo dd if=${DEVICE} of=${OUT_FILE}
+        sudo dd if=${DEVICE} of=${OUT_FILE} bs=1M
     fi
 fi
