@@ -30,7 +30,7 @@ MODULES="MMM-BackgroundSlideshow MMM-DarkSkyForecast MMM-iFrame \
          MMM-ModuleScheduler MMM-NetworkScanner MMM-RAIN-RADAR \
          MMM-Remote-Control MMM-Solar MMM-stocks MMM-SystemStats \
          MMM-TelegramBot MMM-Tools MMM-AssistantMk2 MMM-Hotword MMM-YouTube \
-         MMM-NotificationTrigger MMM-Volume MMM-News MMM-pages MMM-cryptocurrency"
+         MMM-NotificationTrigger MMM-Volume MMM-News MMM-pages"
 LXSESSION="${HOME}/.config/lxsession"
 AUTOSTART="${LXSESSION}/LXDE-pi/autostart"
 BOLD=$(tput bold)
@@ -103,11 +103,6 @@ git clone https://github.com/michael5r/mmm-hue-lights.git > /dev/null 2>&1
 printf "\t\tDone\n"
 printf "\tInstalling MagicMirror module MMM-COVID-19 ..."
 git clone https://github.com/eouia/MMM-COVID-19 > /dev/null 2>&1
-printf "\t\tDone\n"
-printf "\tInstalling MagicMirror module MMM-COVID-19 ...\n"
-git clone https://github.com/mykle1/Hello-Lucy
-cd Hello-Lucy/installers
-bash dependencies.sh
 printf "\n\tDone\n"
 cd ${HOME}
 
