@@ -60,7 +60,7 @@ while getopts AJMPRSan:su flag; do
             PHOT=
             ;;
         R)
-            LAT="-R"
+            LAT="-R -p 1"
             MLAT="-l"
             ;;
         S)
@@ -149,6 +149,10 @@ do
         get_search "${dir}" "Fake_Nudes"
         get_search "${dir}" "celebrities"
         get_search "${dir}" "famous_people"
+        ;;
+    Choker)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Collar"
         ;;
     Czech)
         get_search "${dir}" "${dir}"

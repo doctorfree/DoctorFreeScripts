@@ -39,6 +39,10 @@ get_model() {
             get_search "${MODD}/${model}" "Aleksandra_Smelova"
             get_search "${MODD}/${model}" "Sasha_Smelova"
             ;;
+        Alina_Gorokhova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Alina_Gorohova"
+            ;;
         Alina_Panevskaya)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alina_Panewskaja"
@@ -94,6 +98,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Piper_Fawn"
             ;;
+        Avery)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Nona"
+            ;;
         Blake_Bartelli)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Blake_Eden"
@@ -141,6 +149,7 @@ get_model() {
         Darina_Litvinova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Candice_B"
+            get_search "${MODD}/${model}" "Candice_Brielle"
             ;;
         Dillion_Harper)
             get_search "${MODD}/${model}" "${model}"
@@ -170,6 +179,10 @@ get_model() {
         Elizabeth_Marxs)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Elizabeth_Marx"
+            ;;
+        Elle_Tan)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Elle_P"
             ;;
         Ellina_Myuller)
             get_search "${MODD}/${model}" "${model}"
@@ -301,6 +314,10 @@ get_model() {
         Katerina_Hartlova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Katarina_Dubrova"
+            ;;
+        Katerina_Raykh)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Katerina_Raij"
             ;;
         Kateryna_Marchenko)
             get_search "${MODD}/${model}" "${model}"
@@ -618,6 +635,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Belicia_Segura"
             get_search "${MODD}/${model}" "Madeline_Clark"
+            ;;
+        Vanessa_Angel)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Vanessa_A"
             ;;
         Verona_J)
             get_search "${MODD}/${model}" "${model}"
