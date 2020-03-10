@@ -311,7 +311,7 @@ var config = {
                 longitude: -122.042212,
               },
               responseConfig: {
-                useHTML5: true, // sound render by HTML5
+                useHTML5: false, // sound render by HTML5
                 useScreenOutput: true,
                 useAudioOutput: true,
                 useChime: true,

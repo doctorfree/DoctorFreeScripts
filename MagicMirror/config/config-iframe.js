@@ -322,56 +322,8 @@ var config = {
               screenshotScript: "scrot",
               detailOption: {},
               customCommands: [],
-//            customCommands: [
-//              {
-//                command: "test",
-//                callback: (command, handler) => {
-//                  handler.reply("TEXT", "This is test command!")
-//                }
-//              },
-//              {
-//                command: "detailnews",
-//                description: "For detail of current news article"
-//                callback: (command, handler, self) => {
-//                  self.sendNotification("ARTICLE_MORE_DETAILS")
-//                  handler.reply("TEXT", "Yes, sir!")
-//                }
-//              },
-//            ],
             }
         },
-//      {
-//          module: "Hello-Lucy",
-//          disabled: false,
-//          position: "bottom_center",
-//          config: {
-//              // MUST BE CAPITALS to make Lucy start listening
-//              keyword: 'HELLO LUCY',
-//              // run "arecord -l" card# and device# of your microphone/sound card
-//              microphone: "1,0",
-//              // timeout listening for a command/sentence
-//              timeout: 15,
-//              defaultOnStartup: 'Hello-Lucy',
-//              standByMethod: 'HIDE',
-//              // welcome sound at startup. Add several for a random welcome sound
-//              sounds: ["MagicMirror-Welcome.mp3", "MagicMirror-Welcome-Two.mp3"],
-//              // when command is accepted. use your own or default
-//              confirmationSound: "ding.mp3",
-//              // if true, all modules start as hidden
-//              startHideAll: false,
-//              // default modules to show on page one/startup
-//              pageOneModules: ["Hello-Lucy", "alert", "clock", "calendar", "currentweather", "weatherforecast", "newsfeed", "MMM-SystemStats", "MMM-stocks", "MMM-Solar", "MMM-iFrame", "mmm-hue-lights", "MMM-NetworkScanner"],
-//              pageTwoModules: ["Hello-Lucy", "alert", "clock", "calendar", "currentweather", "weatherforecast", "newsfeed", "MMM-SystemStats", "mmm-hue-lights", "MMM-NetworkScanner"],
-//              pageThreeModules: ["Hello-Lucy", "alert", "clock", "calendar", "currentweather", "weatherforecast", "newsfeed", "MMM-SystemStats", "MMM-stocks", "MMM-Solar", "MMM-NetworkScanner"],
-//              pageFourModules: ["Hello-Lucy", "alert", "MMM-SystemStats", "MMM-stocks", "MMM-iFrame", "mmm-hue-lights"],
-//              pageFiveModules: [],
-//              pageSixModules: [],
-//              pageSevenModules: [],
-//              pageEightModules: [],
-//              pageNineModules: [],
-//              pageTenModules: []
-//          }
-//      },
     ]
 };
 

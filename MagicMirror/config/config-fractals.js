@@ -57,53 +57,6 @@ var config = {
             module: 'MMM-Remote-Control',
         },
         {
-            module: 'MMM-ModuleScheduler',
-            config: {
-                // SHOW ALL MODULES AT FULL BRIGHTNESS AT 06:00 AND DIM THEM TO 20% AT 22:00
-                // global_schedule: {from: '0 6 * * *', to: '0 22 * * *', dimLevel: '20' },
-                notification_schedule: [
-                    // TURN THE MONITOR/SCREEN ON AT 06:45 EVERY DAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '45 6 * * *',
-                    //    payload: {action: "MONITORON"}
-                    //},
-                    // TURN THE MONITOR/SCREEN OFF AT 22:30 EVERY DAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '30 22 * * *',
-                    //    payload: {action: "MONITOROFF"}
-                    //},
-                    // RESTART THE MAGICMIRROR PROCESS AT 2am EVERY SUNDAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '0 2 * * SUN',
-                    //    payload: {
-                    //        action: "RESTART"
-                    //    }
-                    //},
-                    // TURN THE SCREEN BRIGHTNESS "DAY" AT 06:30 EVERY DAY
-	                //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '30 6 * * *',
-                    //    payload: {
-                    //        action: "BRIGHTNESS",
-                    //        value: "100"
-                    //    }
-                    //},
-	                // TURN THE SCREEN BRIGHTNESS "NIGHT" AT 22:30 EVERY DAY
-	                //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '30 22 * * *',
-                    //    payload: {
-                    //        action: "BRIGHTNESS",
-                    //        value: "50"
-                    //    }
-                    //}
-                ]
-            }
-        },
-        {
             module: 'MMM-BackgroundSlideshow',
             position: 'fullscreen_below',
             //classes: 'scheduler',

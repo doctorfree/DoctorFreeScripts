@@ -272,58 +272,6 @@ var config = {
             }
         },
         {
-            module: 'MMM-ModuleScheduler',
-            config: {
-                // SHOW Class "daytime" MODULES AT 07AM AND HIDE AT 7PM EVERY DAY
-                global_schedule: [
-                    // SHOW Class "daytime" MODULES AT 07AM AND HIDE AT 7PM EVERY DAY
-                    //{from: '0 7 * * *', to: '0 19 * * *', groupClass: 'daytime'},
-                    // SHOW Class "nighttime" MODULES AT 07PM AND HIDE AT 7AM EVERY DAY
-                    //{from: '0 19 * * *', to: '59 23 * * *', groupClass: 'nighttime'},
-                ],
-                notification_schedule: [
-                    // TURN THE MONITOR/SCREEN ON AT 7AM EVERY DAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '0 7 * * *',
-                    //    payload: {action: "MONITORON"}
-                    //},
-                    // TURN THE MONITOR/SCREEN OFF AT Midnight EVERY DAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '0 0 * * *',
-                    //    payload: {action: "MONITOROFF"}
-                    //},
-                    // RESTART THE MAGICMIRROR PROCESS AT 2am EVERY SUNDAY
-                    //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '0 2 * * SUN',
-                    //    payload: {
-                    //        action: "RESTART"
-                    //    }
-                    //},
-                    // TURN THE SCREEN BRIGHTNESS "DAY" AT 06:30 EVERY DAY
-	                //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '30 6 * * *',
-                    //    payload: {
-                    //        action: "BRIGHTNESS",
-                    //        value: "175"
-                    //    }
-                    //},
-	                // TURN THE SCREEN BRIGHTNESS "NIGHT" AT 22:30 EVERY DAY
-	                //{
-                    //    notification: 'REMOTE_ACTION',
-                    //    schedule: '30 22 * * *',
-                    //    payload: {
-                    //        action: "BRIGHTNESS",
-                    //        value: "75"
-                    //    }
-                    //}
-                ]
-            }
-        },
-        {
             module: 'MMM-NetworkScanner',
             position: "bottom_left",
             header: "",
