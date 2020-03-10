@@ -6,3 +6,6 @@ MagicMirror/show_keys.sh
 MagicMirror/config/config-face.js
 MagicMirror/config/config-instagram.js
 MagicMirror/config/config-sample.js
+MagicMirror/config/config-crypto.js
+MagicMirror/modules/MMM-AssistantMk2/profiles/default.json
+MagicMirror/modules/MMM-Hotword/trainer/trainer-withtoken.sh
