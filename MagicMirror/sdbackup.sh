@@ -1,9 +1,14 @@
 #!/bin/bash
+#
+# sdbackup - Backup an SD card to an image file
+#
+# Written February 2020 by Ronald Joe Record <rr at ronrecord dot com>
+#
 
 NUMBACK=`date "+%Y%m%d"`
 OUT_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
 OUT_FILE="Raspbian-MagicMirror-${NUMBACK}.iso"
-DEVNAM="disk5"
+DEVNAM="disk3"
 TELL=
 ZIP=
 
