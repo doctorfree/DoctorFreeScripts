@@ -38,6 +38,8 @@ PORT="8080"
 export DISPLAY=:0
 # -----------------------------------------------------------------------
 CONFDIR="${MM}/config"
+SLISDIR="${MM}/modules/MMM-BackgroundSlideshow"
+WHVNDIR="Seagate_8TB/Pictures/Work/Wallhaven"
 CONFS=
 INFO="all"
 BOLD=$(tput bold)
@@ -120,8 +122,9 @@ usage() {
     printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
-    printf " list <active|installed|configs>, rotate [right|left|normal], select, restart,"
-    printf " screen [on|off|info|status], start, stop, status [all], dev, getb, setb <num>"
+    printf " list <active|installed|configs>, rotate [right|left|normal],"
+    printf " select, restart, screen [on|off|info|status], start, stop,"
+    printf " status [all], dev, getb, setb <num>, wh <dir>, whrm <dir>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -144,6 +147,8 @@ usage() {
     printf "\n\tmirror status [all]\t\t# Displays MagicMirror status, checks config syntax"
     printf "\n\tmirror getb\t\t# Displays current MagicMirror brightness level"
     printf "\n\tmirror setb 150\t\t# Sets MagicMirror brightness level to 150"
+    printf "\n\tmirror wh foobar\t\t# Creates and activates a slideshow config with pics in foobar"
+    printf "\n\tmirror whrm foobar\t\t# Deactivate and remove slideshow in foobar"
     printf "\n\tmirror -u\t\t# Display this usage message\n"
     exit 1
 }
@@ -180,56 +185,7 @@ setconf() {
         exit 1
     }
     [ -L config-$$.js ] && rm -f config-$$.js
-    #
-    # TODO: Create custom Hello-Lucy sentence/command pairs for each MM config
-    # Test and uncomment this section to implement custom Lucy commands per config
-    #
-    # Check to see if there is a custom Hello-Lucy sentence/command pair for this config
-    #
-    # BEGIN commented custom Lucy implementation:
-#   if [ -f ${MSRC}/Hello-Lucy/sentences-${conf}.json ]
-#   then
-#     [ -f ${MSRC}/Hello-Lucy/checkCommands-${conf}.json ] && {
-#       [ -d ${MM}/modules/Hello-Lucy ] && {
-#         for lucy in sentences checkCommands
-#         do
-#           cp ${MSRC}/Hello-Lucy/${lucy}-${conf}.json ${MM}/modules/Hello-Lucy/${lucy}.json
-#         done
-#       }
-#     }
-#   else
-      # If no custom Hello-Lucy sentence/command pair exists for this config, use all
-#     [ -d ${MM}/modules/Hello-Lucy ] && {
-#       for lucy in sentences checkCommands
-#       do
-#         [ -f ${MSRC}/Hello-Lucy/${lucy}-all.json ] && {
-#           cp ${MSRC}/Hello-Lucy/${lucy}-all.json ${MM}/modules/Hello-Lucy/${lucy}.json
-#         }
-#       done
-#     }
-#   fi
-    # END commented custom Lucy implementation
     pm2 restart MagicMirror --update-env
-    # Do not bother with setting brightness here.
-    #sleep 5
-    #if [ "${conf}" == "blank" ]
-    #then
-    #    if [ "$usejq" ]
-    #    then
-    #        curl -X GET http://${IP}:${PORT}/api/brightness/0 2> /dev/null | jq .
-    #    else
-    #        curl -X GET http://${IP}:${PORT}/api/brightness/0
-    #        echo ""
-    #    fi
-    #else
-    #    if [ "$usejq" ]
-    #    then
-    #        curl -X GET http://${IP}:${PORT}/api/brightness/180 2> /dev/null | jq .
-    #    else
-    #        curl -X GET http://${IP}:${PORT}/api/brightness/180
-    #        echo ""
-    #    fi
-    #fi
 }
 
 system_info() {
@@ -630,6 +586,79 @@ done
         printf "\nValid brightness values are integer values [0-200]\n"
         setb_usage
     fi
+    exit 0
+}
+
+[ "$1" == "wh" ] && {
+    [ "$2" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$2"
+    if [ -d "${HOME}/${WHVNDIR}/${PICDIR}" ]
+    then
+        printf "\nCreating config file for ${WHVNDIR}/${PICDIR}"
+        [ -d "${SLISDIR}/${PICDIR}" ] || mkdir -p "${SLISDIR}/${PICDIR}"
+        cd "${SLISDIR}/${PICDIR}"
+        rm -f *.jpg
+        ln -s ../../../../${WHVNDIR}/${PICDIR}/*.jpg .
+        haveim=`type -p identify`
+        if [ "$haveim" ]
+        then
+          # Remove photos in landscape mode for vertical mirror
+          for i in *.jpg
+          do
+            [ "$i" == "*.jpg" ] && {
+                printf "\nNo JPEG pics found in ${WHVNDIR}/${PICDIR} ... Exiting\n"
+                cd ..
+                rm -rf "${PICDIR}"
+                usage
+            }
+            GEO=`identify "$i" 2> /dev/null | awk ' { print $(NF-6) } '`
+            W=`echo $GEO | awk -F "x" ' { print $1 } '`
+            # Remove if width not greater than 750
+            [ "$W" ] && [ $W -gt 750 ] || {
+                rm -f "$i"
+                continue
+            }
+            H=`echo $GEO | awk -F "x" ' { print $2 } '`
+            # Remove if height not greater than 1000
+            [ "$H" ] && [ $H -gt 1000 ] || {
+                rm -f "$i"
+                continue
+            }
+            # Remove if height not greater than width
+            [ "$W" ] && [ "$H" ] && [ $H -gt $W ] || rm -f "$i"
+          done
+        else
+          printf "\nCould not find identify command. Install ImageMagick"
+          printf "\nSkipping removal of landscape photos\n"
+        fi
+        cd "${CONFDIR}"
+        [ -f "config-${PICDIR}.js" ] || {
+            cat config-wh-template.js | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+        }
+        mirror ${PICDIR}
+    else
+        printf "\nFolder argument ${WHVNDIR}/${PICDIR} does not exist or is not a directory."
+        usage
+    fi
+    exit 0
+}
+
+[ "$1" == "whrm" ] && {
+    [ "$2" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$2"
+    [ -d "${SLISDIR}/${PICDIR}" ] && {
+        printf "\nRemoving config file and pic folder for ${WHVNDIR}/${PICDIR}"
+        cd "${SLISDIR}"
+        rm -rf "${PICDIR}"
+    }
+    rm -f "${CONFDIR}/config-${PICDIR}.js"
+    mirror default
     exit 0
 }
 
