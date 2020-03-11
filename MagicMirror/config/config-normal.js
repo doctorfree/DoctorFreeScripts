@@ -39,6 +39,9 @@ var config = {
         },
         {
             module: 'MMM-Remote-Control',
+            config: {
+                apiKey: 'MMM-Remote-Control_API_Key'
+            }
         },
         {
             module: "clock",

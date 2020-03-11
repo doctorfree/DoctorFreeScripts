@@ -56,13 +56,9 @@ var config = {
 		},
         {
             module: 'MMM-Remote-Control',
-        //  position: 'top_bar',
-        //  config: {
-        //      customCommand: {},  // Optional, See "Using Custom Commands" below
-        //      customMenu: "custom_menu.json", // Optional, See "Custom Menu Items" below
-        //      showModuleApiMenu: true, // Optional, Enable the Module Controls menu
-        //      apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
-        //  }
+            config: {
+                apiKey: 'MMM-Remote-Control_API_Key'
+            }
         },
         {
             module: "clock",

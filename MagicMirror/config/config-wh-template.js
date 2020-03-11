@@ -65,18 +65,12 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/tuigirl/',
+                    'modules/MMM-BackgroundSlideshow/WH_DIR_HOLDER/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
                 transitionImages: true,
                 randomizeImageOrder: true,
                 recursiveSubDirectories: true,
-                //backgroundSize: "contain",
-                // DISPLAY THE SLIDE SHOW BETWEEN 1PM and 6PM then again between 9PM and Midnight
-                //module_schedule: [
-                //  {from: '0 13 * * *', to:   '0 18 * * *'},
-                //  {from: '0 21 * * *', to:   '59 23 * * *'}
-                //]
             }
         },
         {
@@ -92,22 +86,6 @@ var config = {
               screenshotScript: "scrot",
               detailOption: {},
               customCommands: [],
-//            customCommands: [
-//              {
-//                command: "test",
-//                callback: (command, handler) => {
-//                  handler.reply("TEXT", "This is test command!")
-//                }
-//              },
-//              {
-//                command: "detailnews",
-//                description: "For detail of current news article"
-//                callback: (command, handler, self) => {
-//                  self.sendNotification("ARTICLE_MORE_DETAILS")
-//                  handler.reply("TEXT", "Yes, sir!")
-//                }
-//              },
-//            ],
             }
         },
 	]
