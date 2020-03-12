@@ -13,59 +13,97 @@
     display: block;
 }
 
-.region.top.center .mmm-hue-lights .grid .hue {
-    width: calc(25% - 20px);
-    margin: 10px;
-    display: block;
-}
-
-.region.lower.third .mmm-hue-lights .grid .hue {
-    width: calc(20% - 20px);
-    margin: 10px;
-    display: block;
-}
-
 .calendar .medium {
   font-size: 25px;
   line-height: 30px;
 }
 
 .MMM-DarkSkyForecast .module-content {
-  width: 500px; /* adjust this to taste */
+  width: 500px;
 }
 
 .covid {
-  width: 100%;
-  max-width:100%;
-  min-width:300px;
-  line-height:125%;
+  --minWidth: 350px;
+  --mainBgColor: #112211;
+  --mainTitleColor: #CCFF33;
+  --normalColor:#FFF;
+  --confirmedColor: #FF3333;
+  --deathsColor: #CCC;
+  --recoveredColor: #3366FF;
+}
+
+@keyframes covidRotate {
+  0%   {opacity:0.1;}
+  100% {opacity:1;}
+}
+
+.covid {
+  width:100%;
+  min-width: var(--minWidth);
+  line-height:120%;
+  color: var(--normalColor);
 }
 
 .covid .item {
   box-sizing: border-box;
   border-radius: 8px;
   padding:8px;
-  background-color:#FFFFFF;
+  background-color: var(--mainBgColor);
   margin-bottom:8px;
 }
 
-.MMM-COVID-19 .module-header {
-  color:#FFC921;
-  font-weight:bold;
-  font-size: 2.5vw;
+.covid .item.rotate {
+  animation-name: covidRotate;
+  animation-duration: 1s;
 }
 
-.covid .location {
-  color:#007777;
+.covid .title {
+  color: var(--mainTitleColor);
   font-weight:bold;
-  font-size: 2.0vw;
+  font-size: 1.7vw;
+  line-height: 110%;
+}
+
+.covid .info {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  line-height:110%;
+}
+
+.covid .info .distance {
+  font-size:1.3vw;
+  font-weight:normal;
+}
+
+.covid .info .lastreported {
+  font-size:1.3vw;
+  font-weight:normal;
+}
+
+.covid .info .lastreported::before {
+  content: "Last Reported: "
+}
+
+.covid .info .distance::before {
+  content: "Distance: "
+}
+
+.covid .info .distance.km::after {
+  content: " km"
+}
+
+.covid .info .distance.mile::after {
+  content: " mi."
 }
 
 .covid .numbers {
-  font-size: 1.7vw;
+  font-size: 1.4vw;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  line-height:120%;
+  margin-bottom: 4px;
 }
 
 .covid .numbers .number {
@@ -74,27 +112,119 @@
 }
 
 .covid .numbers .confirmed {
-  color: #440818;
+  color: var(--confirmedColor);
   text-align:left;
 }
 
 .covid .numbers .deaths {
-  color: #CD071E;
+  color: var(--deathsColor);
 }
 
 .covid .numbers .recovered {
-  color: #005B96;
+  color: var(--recoveredColor);
   text-align:right;
 }
 
-.covid .numbers .confirmed::before {
+.covid .numbers.current .confirmed::before {
   content: "Confirmed: "
 }
 
-.covid .numbers .deaths::before {
+.covid .numbers.current .deaths::before {
   content: "Deaths: "
 }
 
-.covid .numbers .recovered::before {
+.covid .numbers.current .recovered::before {
   content: "Recovered: "
+}
+
+.covid .numbers.new .confirmed::before {
+  content: "New Confirmed: "
+}
+
+.covid .numbers.new .deaths::before {
+  content: "New Deaths: "
+}
+
+.covid .numbers.new .recovered::before {
+  content: "New Recovered: "
+}
+
+.covid .graph-container {
+  position:relative;
+  width: 100%;
+  height: 50px;
+}
+
+.covid .graph {
+  position:absolute;
+  top:0;
+  left:0;
+  background-color: Black;
+  height: 100%;
+  width: 100%;
+  font-size: 0;
+  color: transparent;
+  text-align: left;
+  vertical-align: top;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.covid .graph .daily {
+  height: 100%;
+  width: 14%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-end;
+  border-right: 1px dotted #666;
+}
+
+.covid .graph .daily:last-child {
+  background-color:#252;
+}
+
+.covid .graph .daily .bar {
+  width:25%;
+  background: linear-gradient(
+    to top,
+    rgba(255,255,255,0.5),
+    rgba(0,0,0,0.5)
+  );
+}
+
+.covid .graph .daily .bar.max {
+  background: none;
+}
+
+.covid .graph .daily .bar.max::before {
+}
+
+.covid .graph .daily .bar.confirmed {
+  background-color: var(--confirmedColor);
+}
+
+.covid .graph .daily .bar.deaths {
+  background-color: var(--deathsColor);
+}
+
+.covid .graph .daily .bar.recovered {
+  background-color: var(--recoveredColor);
+}
+
+.covid .graph-container .maxcount {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size:18px;
+  color:#CCC;
+  line-height:18px;
+  text-align:left;
+  background-color:rgba(0,0,0,0.5);
+  padding:2px 4px;
+  border-radius: 4px;
 }

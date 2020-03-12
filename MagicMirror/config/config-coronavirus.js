@@ -61,7 +61,7 @@ var config = {
         },
         {
             module: "MMM-News",
-            position: "top_center",
+            position: "bottom_center",
             config: {
               apiKey : "xxxxxxx_newsapi.org_xxxxxxxxxxx",
               type: "vertical",
@@ -87,18 +87,21 @@ var config = {
         {
             module: "MMM-COVID-19",
             header: "Coronavirus Daily Update",
-            position: "bottom_bar",
+            position: "top_bar",
             config: {
+              debug:false,
+//            scanInterval: 1000 * 60 * 60 * 3,
               scanInterval: 1000 * 60 * 60 * 12,
-              rotateInterval: 1000 * 5,
-              detailProvince: true,
+              rotateInterval: 1000 * 5, // 0 means no rotate
 //            pinned: ["Mainland China", null],
 //            pinned: ["Others", "Diamond Princess cruise ship"],
 //            pinned: ["US", "Santa Clara, CA"],
               pinned: ["US"],
-              logProvinceCountry: false,
-              logOnce: true,
-              sortOrder: null,
+              myPosition: {
+                  latitude: 36.970019,
+                  longitude: -122.042212,
+                  metric: "mile",},
+              reportTimeFormat: "YYYY.MM.DD hh a"
             }
         },
         {
