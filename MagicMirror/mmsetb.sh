@@ -4,6 +4,7 @@
 #
 IP="10.0.1.67"
 PORT=8080
+apikey="MMM-Remote-Control_API_Key"
 
 usage() {
     echo "Usage: mmsetb [number]"
@@ -18,9 +19,9 @@ then
     usejq=`type -p jq`
     if [ "$usejq" ]
     then
-        curl -X GET http://${IP}:${PORT}/api/brightness/$1 2> /dev/null | jq .
+        curl -X GET http://${IP}:${PORT}/api/brightness/$1?apiKey=${apikey} 2> /dev/null | jq .
     else
-        curl -X GET http://${IP}:${PORT}/api/brightness/$1
+        curl -X GET http://${IP}:${PORT}/api/brightness/$1?apiKey=${apikey}
         echo ""
     fi
 else

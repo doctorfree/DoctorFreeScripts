@@ -32,8 +32,18 @@ MM="${HOME}/MagicMirror"
 # Set this to your MagicMirror module source directory
 MSRC="${HOME}/src/Scripts/MagicMirror/modules"
 # Set the IP and PORT to the values on your system
+# IP is the IP address of your MagicMirror Raspberry Pi
 IP="10.0.1.67"
+# PORT is the port your MMM-Remote-Control module is running on
 PORT="8080"
+#
+# Set you MMM-Remote-Control API Key here or leave blank if you have not configured one
+#
+# Replace "MMM-Remote-Control_API_Key" with your MMM-Remote-Control API Key
+apikey="MMM-Remote-Control_API_Key"
+# Uncomment this line if you have not configured an MMM-Remote-Control API Key
+# apikey=
+#
 # Set this to the X11 DISPLAY you are using. DISPLAY=:0 works for most systems.
 export DISPLAY=:0
 # -----------------------------------------------------------------------
@@ -45,6 +55,12 @@ INFO="all"
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 usejq=`type -p jq`
+
+[ "${apikey}" == "MMM-Remote-Control_API_Key" ] && {
+    printf "\nMMM-Remote-Control API Key is not configured. Either add your key"
+    printf "\nor comment out the empty setting for 'apikey' near the beginning of this script."
+    printf "\n\nContinuing but some functionality disabled.\n"
+}
 
 [ -d "${CONFDIR}" ] || {
     printf "\nCONFDIR does not exist or is not a directory. Exiting.\n"
@@ -333,10 +349,20 @@ get_info_type() {
                       printf "\nSetting MagicMirror Brightness Level to $answer\n"
                       if [ "$usejq" ]
                       then
+                        if [ "${apikey}" ]
+                        then
+                          curl -X GET http://${IP}:${PORT}/api/brightness/$answer?apiKey=${apikey} 2> /dev/null | jq .
+                        else
                           curl -X GET http://${IP}:${PORT}/api/brightness/$answer 2> /dev/null | jq .
+                        fi
                       else
+                        if [ "${apikey}" ]
+                        then
+                          curl -X GET http://${IP}:${PORT}/api/brightness/$answer?apiKey=${apikey}
+                        else
                           curl -X GET http://${IP}:${PORT}/api/brightness/$answer
-                          echo ""
+                        fi
+                        echo ""
                       fi
                   else
                       printf "\nBrightness setting $answer out of range or not a number"
@@ -517,10 +543,20 @@ done
     printf "\n${BOLD}Getting MagicMirror Brightness Level${NORMAL}\n"
     if [ "$usejq" ]
     then
+      if [ "${apikey}" ]
+      then
+        curl -X GET http://${IP}:${PORT}/api/brightness?apiKey=${apikey} 2> /dev/null | jq .
+      else
         curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
+      fi
     else
+      if [ "${apikey}" ]
+      then
+        curl -X GET http://${IP}:${PORT}/api/brightness?apiKey=${apikey}
+      else
         curl -X GET http://${IP}:${PORT}/api/brightness
-        echo ""
+      fi
+      echo ""
     fi
     exit 0
 }
@@ -535,10 +571,20 @@ done
         printf "\n${BOLD}Listing Active MagicMirror modules${NORMAL}\n"
         if [ "$usejq" ]
         then
+          if [ "${apikey}" ]
+          then
+            curl -X GET http://${IP}:${PORT}/api/modules?apiKey=${apikey} 2> /dev/null | jq .
+          else
             curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
+          fi
         else
+          if [ "${apikey}" ]
+          then
+            curl -X GET http://${IP}:${PORT}/api/modules?apiKey=${apikey}
+          else
             curl -X GET http://${IP}:${PORT}/api/modules
-            echo ""
+          fi
+          echo ""
         fi
     else
         if [ "$2" == "installed" ]
@@ -546,10 +592,20 @@ done
             printf "\n${BOLD}Listing Installed MagicMirror modules${NORMAL}\n"
             if [ "$usejq" ]
             then
+              if [ "${apikey}" ]
+              then
+                curl -X GET http://${IP}:${PORT}/api/modules/installed?apiKey=${apikey} 2> /dev/null | jq .
+              else
                 curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
+              fi
             else
+              if [ "${apikey}" ]
+              then
+                curl -X GET http://${IP}:${PORT}/api/modules/installed?apiKey=${apikey}
+              else
                 curl -X GET http://${IP}:${PORT}/api/modules/installed
-                echo ""
+              fi
+              echo ""
             fi
         else
             if [ "$2" == "configs" ]
@@ -576,10 +632,20 @@ done
         printf "\n${BOLD}Setting MagicMirror Brightness Level to $2${NORMAL}\n"
         if [ "$usejq" ]
         then
+          if [ "${apikey}" ]
+          then
+            curl -X GET http://${IP}:${PORT}/api/brightness/$2?apiKey=${apikey} 2> /dev/null | jq .
+          else
             curl -X GET http://${IP}:${PORT}/api/brightness/$2 2> /dev/null | jq .
+          fi
         else
+          if [ "${apikey}" ]
+          then
+            curl -X GET http://${IP}:${PORT}/api/brightness/$2?apiKey=${apikey}
+          else
             curl -X GET http://${IP}:${PORT}/api/brightness/$2
-            echo ""
+          fi
+          echo ""
         fi
     else
         printf "\nBrightness setting $2 out of range or not a number"
