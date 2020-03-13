@@ -211,6 +211,9 @@ system_info() {
         printf "\nCPU `vcgencmd measure_temp`\n"
     }
     [ "$INFO" == "all" ] || [ "$INFO" == "mem" ] && {
+        cpu_mem=`vcgencmd get_mem arm | awk -F "=" ' { print $2 } '`
+        gpu_mem=`vcgencmd get_mem gpu | awk -F "=" ' { print $2 } '`
+        printf "\n${BOLD}Memory Split:${NORMAL}\tCPU=${cpu_mem}\tGPU=${gpu_mem}\n"
         printf "\n${BOLD}Memory:${NORMAL}\n"
         free -h
     }
