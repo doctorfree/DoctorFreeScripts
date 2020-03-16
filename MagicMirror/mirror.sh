@@ -133,6 +133,233 @@ getconfs() {
     done
 }
 
+list_mods() {
+    [ "$1" ] || {
+        printf "\nArgument of 'active', 'installed', or 'configs' required to list modules."
+        list_usage
+    }
+    if [ "$1" == "active" ]
+    then
+        printf "\n${BOLD}Listing Active MagicMirror modules${NORMAL}\n"
+        if [ "$usejq" ]
+        then
+          if [ "${apikey}" ]
+          then
+            curl -X GET http://${IP}:${PORT}/api/modules?apiKey=${apikey} 2> /dev/null | jq .
+          else
+            curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
+          fi
+        else
+          if [ "${apikey}" ]
+          then
+            curl -X GET http://${IP}:${PORT}/api/modules?apiKey=${apikey}
+          else
+            curl -X GET http://${IP}:${PORT}/api/modules
+          fi
+          echo ""
+        fi
+    else
+        if [ "$1" == "installed" ]
+        then
+            printf "\n${BOLD}Listing Installed MagicMirror modules${NORMAL}\n"
+            if [ "$usejq" ]
+            then
+              if [ "${apikey}" ]
+              then
+                curl -X GET http://${IP}:${PORT}/api/modules/installed?apiKey=${apikey} 2> /dev/null | jq .
+              else
+                curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
+              fi
+            else
+              if [ "${apikey}" ]
+              then
+                curl -X GET http://${IP}:${PORT}/api/modules/installed?apiKey=${apikey}
+              else
+                curl -X GET http://${IP}:${PORT}/api/modules/installed
+              fi
+              echo ""
+            fi
+        else
+            if [ "$1" == "configs" ]
+            then
+                printf "\n${BOLD}Listing MagicMirror configuration files:${NORMAL}\n\n"
+                ls -1 *.js
+            else
+                printf "\nmirror list $1 is not an accepted 2nd argument."
+                printf "\nValid 2nd arguments to the list command are 'active', 'installed', and 'configs'"
+                list_usage
+            fi
+        fi
+    fi
+}
+
+rotate_screen() {
+    [ "$1" == "left" ] || [ "$1" == "normal" ] || [ "$1" == "right" ] || {
+        printf "\nUsage: rotate option takes an argument of 'left', 'right', or 'normal'"
+        printf "\n Exiting.\n"
+        usage
+    }
+    printf "\n${BOLD}Rotating screen display $1 ${NORMAL}\n"
+    xrandr --output HDMI-1 --rotate $1
+    printf "\n${BOLD}Done${NORMAL}\n"
+}
+
+screen_control() {
+    if [ "$1" ]
+    then
+      if [ "$1" == "on" ]
+      then
+        vcgencmd display_power 1 > /dev/null
+      else
+        if [ "$1" == "off" ]
+        then
+          vcgencmd display_power 0 > /dev/null
+        else
+          if [ "$1" == "status" ] || [ "$1" == "info" ]
+          then
+            mirror info screen
+          else
+            usage
+          fi
+        fi
+      fi
+    else
+      mirror info screen
+    fi
+}
+
+start_dev() {
+    printf "\n${BOLD}Starting MagicMirror in developer mode${NORMAL}\n"
+    cd "${MM}"
+    pm2 stop MagicMirror --update-env
+    npm start dev
+    printf "\n${BOLD}Done${NORMAL}\n"
+}
+
+get_brightness() {
+    printf "\n${BOLD}Getting MagicMirror Brightness Level${NORMAL}\n"
+    if [ "$usejq" ]
+    then
+      if [ "${apikey}" ]
+      then
+        curl -X GET http://${IP}:${PORT}/api/brightness?apiKey=${apikey} 2> /dev/null | jq .
+      else
+        curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
+      fi
+    else
+      if [ "${apikey}" ]
+      then
+        curl -X GET http://${IP}:${PORT}/api/brightness?apiKey=${apikey}
+      else
+        curl -X GET http://${IP}:${PORT}/api/brightness
+      fi
+      echo ""
+    fi
+}
+
+set_brightness() {
+    [ "$1" ] || {
+        printf "\nNumeric argument required to specify Mirror brightness.\n"
+        setb_usage
+    }
+    if [ "$1" -ge 0 ] && [ "$1" -le 200 ]
+    then
+        printf "\n${BOLD}Setting MagicMirror Brightness Level to $1${NORMAL}\n"
+        if [ "$usejq" ]
+        then
+          if [ "${apikey}" ]
+          then
+            curl -X GET http://${IP}:${PORT}/api/brightness/$1?apiKey=${apikey} 2> /dev/null | jq .
+          else
+            curl -X GET http://${IP}:${PORT}/api/brightness/$1 2> /dev/null | jq .
+          fi
+        else
+          if [ "${apikey}" ]
+          then
+            curl -X GET http://${IP}:${PORT}/api/brightness/$1?apiKey=${apikey}
+          else
+            curl -X GET http://${IP}:${PORT}/api/brightness/$1
+          fi
+          echo ""
+        fi
+    else
+        printf "\nBrightness setting $1 out of range or not a number"
+        printf "\nValid brightness values are integer values [0-200]\n"
+        setb_usage
+    fi
+}
+
+wh_create() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    if [ -d "${HOME}/${WHVNDIR}/${PICDIR}" ]
+    then
+        printf "\nCreating config file for ${WHVNDIR}/${PICDIR}"
+        [ -d "${SLISDIR}/${PICDIR}" ] || mkdir -p "${SLISDIR}/${PICDIR}"
+        cd "${SLISDIR}/${PICDIR}"
+        rm -f *.jpg
+        ln -s ../../../../${WHVNDIR}/${PICDIR}/*.jpg .
+        haveim=`type -p identify`
+        if [ "$haveim" ]
+        then
+          # Remove photos in landscape mode for vertical mirror
+          for i in *.jpg
+          do
+            [ "$i" == "*.jpg" ] && {
+                printf "\nNo JPEG pics found in ${WHVNDIR}/${PICDIR} ... Exiting\n"
+                cd ..
+                rm -rf "${PICDIR}"
+                usage
+            }
+            GEO=`identify "$i" 2> /dev/null | awk ' { print $(NF-6) } '`
+            W=`echo $GEO | awk -F "x" ' { print $1 } '`
+            # Remove if width not greater than 750
+            [ "$W" ] && [ $W -gt 750 ] || {
+                rm -f "$i"
+                continue
+            }
+            H=`echo $GEO | awk -F "x" ' { print $2 } '`
+            # Remove if height not greater than 1000
+            [ "$H" ] && [ $H -gt 1000 ] || {
+                rm -f "$i"
+                continue
+            }
+            # Remove if height not greater than width
+            [ "$W" ] && [ "$H" ] && [ $H -gt $W ] || rm -f "$i"
+          done
+        else
+          printf "\nCould not find identify command. Install ImageMagick"
+          printf "\nSkipping removal of landscape photos\n"
+        fi
+        cd "${CONFDIR}"
+        [ -f "config-${PICDIR}.js" ] || {
+            cat config-wh-template.js | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+        }
+        mirror ${PICDIR}
+    else
+        printf "\nFolder argument ${WHVNDIR}/${PICDIR} does not exist or is not a directory."
+        usage
+    fi
+}
+
+wh_remove() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    [ -d "${SLISDIR}/${PICDIR}" ] && {
+        printf "\nRemoving config file and pic folder for ${WHVNDIR}/${PICDIR}"
+        cd "${SLISDIR}"
+        rm -rf "${PICDIR}"
+    }
+    rm -f "${CONFDIR}/config-${PICDIR}.js"
+    mirror default
+}
+
 usage() {
     getconfs usage
     printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
@@ -147,6 +374,9 @@ usage() {
     printf "\n\tconfig-<name>.js"
     printf "\nA config filename argument will be resolved into a config filename of the form:"
     printf "\n\tconfig-\$argument.js"
+    printf "\n\nArguments can also be specified as follows:"
+    printf "\n\t-b <brightness>, -B, -c <config>, -d, -i <info>, -I, -l <list>,"
+    printf "\n\t-r <rotate>, -s <screen>, -S, -w <dir>, -W <dir>, -u"
     printf "\n\n${BOLD}Examples:${NORMAL}"
     printf "\n\tmirror\t\t# Invoked with no arguments the mirror command displays a command menu"
     printf "\n\tmirror list active\t\t# lists active modules"
@@ -202,6 +432,21 @@ setconf() {
     }
     [ -L config-$$.js ] && rm -f config-$$.js
     pm2 restart MagicMirror --update-env
+}
+
+set_config() {
+    mode="$1"
+    [ "$1" == "waterfall" ] && mode="waterfalls"
+    [ "$1" == "fractal" ] && mode="fractals"
+
+    cd "${CONFDIR}"
+    if [ -f config-${mode}.js ]
+    then
+        setconf ${mode}
+    else
+        printf "\nNo configuration file config-${mode}.js found.\n\n"
+        usage
+    fi
 }
 
 system_info() {
@@ -415,14 +660,73 @@ get_info_type() {
   done
 }
 
-# TODO: convert use of "$1" to getopts argument processing
-while getopts u flag; do
+# TODO: getopt processing for these remaining commands
+# select
+# restart
+# start
+# stop
+# status [all]
+
+while getopts b:Bc:di:Il:r:s:Sw:W:u flag; do
     case $flag in
+        b)
+          set_brightness ${OPTARG}
+          ;;
+        B)
+          get_brightness
+          ;;
+        c)
+          set_config ${OPTARG}
+          ;;
+        d)
+          start_dev
+          ;;
+        I)
+            INFO="all"
+            system_info
+            ;;
+        i)
+            case ${OPTARG} in
+              all|temp|mem|disk|usb|net|wireless|screen)
+                INFO=${OPTARG}
+                system_info
+                ;;
+              *)
+                usage
+                ;;
+            esac
+            ;;
+        l)
+            case ${OPTARG} in
+              active|installed|configs)
+                list_mods ${OPTARG}
+                ;;
+              *)
+                list_usage
+                ;;
+            esac
+            ;;
+        r)
+          rotate_screen ${OPTARG}
+          ;;
+        S)
+          screen_control
+          ;;
+        s)
+          screen_control ${OPTARG}
+          ;;
+        w)
+          wh_create ${OPTARG}
+          ;;
+        W)
+          wh_remove ${OPTARG}
+          ;;
         u)
             usage
             ;;
     esac
 done
+shift $(( OPTIND - 1 ))
 
 [ "$1" == "select" ] && {
     getconfs select
@@ -459,11 +763,7 @@ done
 }
 
 [ "$1" == "dev" ] && {
-    printf "\n${BOLD}Starting MagicMirror in developer mode${NORMAL}\n"
-    cd "${MM}"
-    pm2 stop MagicMirror --update-env
-    npm start dev
-    printf "\n${BOLD}Done${NORMAL}\n"
+    start_dev
     exit 0
 }
 
@@ -474,27 +774,7 @@ done
 }
 
 [ "$1" == "screen" ] && {
-    if [ "$2" ]
-    then
-      if [ "$2" == "on" ]
-      then
-        vcgencmd display_power 1 > /dev/null
-      else
-        if [ "$2" == "off" ]
-        then
-          vcgencmd display_power 0 > /dev/null
-        else
-          if [ "$2" == "status" ] || [ "$2" == "info" ]
-          then
-            mirror info screen
-          else
-            usage
-          fi
-        fi
-      fi
-    else
-      mirror info screen
-    fi
+    screen_control $2
     exit 0
 }
 
@@ -506,14 +786,7 @@ done
 }
 
 [ "$1" == "rotate" ] && {
-    [ "$2" == "left" ] || [ "$2" == "normal" ] || [ "$2" == "right" ] || {
-        printf "\nUsage: rotate option takes an argument of 'left', 'right', or 'normal'"
-        printf "\n Exiting.\n"
-        usage
-    }
-    printf "\n${BOLD}Rotating screen display $2 ${NORMAL}\n"
-    xrandr --output HDMI-1 --rotate $2
-    printf "\n${BOLD}Done${NORMAL}\n"
+    rotate_screen $2
     exit 0
 }
 
@@ -543,203 +816,29 @@ done
 }
 
 [ "$1" == "getb" ] && {
-    printf "\n${BOLD}Getting MagicMirror Brightness Level${NORMAL}\n"
-    if [ "$usejq" ]
-    then
-      if [ "${apikey}" ]
-      then
-        curl -X GET http://${IP}:${PORT}/api/brightness?apiKey=${apikey} 2> /dev/null | jq .
-      else
-        curl -X GET http://${IP}:${PORT}/api/brightness 2> /dev/null | jq .
-      fi
-    else
-      if [ "${apikey}" ]
-      then
-        curl -X GET http://${IP}:${PORT}/api/brightness?apiKey=${apikey}
-      else
-        curl -X GET http://${IP}:${PORT}/api/brightness
-      fi
-      echo ""
-    fi
+    get_brightness
     exit 0
 }
 
 [ "$1" == "list" ] && {
-    [ "$2" ] || {
-        printf "\nArgument of 'active', 'installed', or 'configs' required to list modules."
-        list_usage
-    }
-    if [ "$2" == "active" ]
-    then
-        printf "\n${BOLD}Listing Active MagicMirror modules${NORMAL}\n"
-        if [ "$usejq" ]
-        then
-          if [ "${apikey}" ]
-          then
-            curl -X GET http://${IP}:${PORT}/api/modules?apiKey=${apikey} 2> /dev/null | jq .
-          else
-            curl -X GET http://${IP}:${PORT}/api/modules 2> /dev/null | jq .
-          fi
-        else
-          if [ "${apikey}" ]
-          then
-            curl -X GET http://${IP}:${PORT}/api/modules?apiKey=${apikey}
-          else
-            curl -X GET http://${IP}:${PORT}/api/modules
-          fi
-          echo ""
-        fi
-    else
-        if [ "$2" == "installed" ]
-        then
-            printf "\n${BOLD}Listing Installed MagicMirror modules${NORMAL}\n"
-            if [ "$usejq" ]
-            then
-              if [ "${apikey}" ]
-              then
-                curl -X GET http://${IP}:${PORT}/api/modules/installed?apiKey=${apikey} 2> /dev/null | jq .
-              else
-                curl -X GET http://${IP}:${PORT}/api/modules/installed 2> /dev/null | jq .
-              fi
-            else
-              if [ "${apikey}" ]
-              then
-                curl -X GET http://${IP}:${PORT}/api/modules/installed?apiKey=${apikey}
-              else
-                curl -X GET http://${IP}:${PORT}/api/modules/installed
-              fi
-              echo ""
-            fi
-        else
-            if [ "$2" == "configs" ]
-            then
-                printf "\n${BOLD}Listing MagicMirror configuration files:${NORMAL}\n\n"
-                ls -1 *.js
-            else
-                printf "\nmirror list $2 is not an accepted 2nd argument."
-                printf "\nValid 2nd arguments to the list command are 'active', 'installed', and 'configs'"
-                list_usage
-            fi
-        fi
-    fi
+    list_mods $2
     exit 0
 }
 
 [ "$1" == "setb" ] && {
-    [ "$2" ] || {
-        printf "\nNumeric argument required to specify Mirror brightness.\n"
-        setb_usage
-    }
-    if [ "$2" -ge 0 ] && [ "$2" -le 200 ]
-    then
-        printf "\n${BOLD}Setting MagicMirror Brightness Level to $2${NORMAL}\n"
-        if [ "$usejq" ]
-        then
-          if [ "${apikey}" ]
-          then
-            curl -X GET http://${IP}:${PORT}/api/brightness/$2?apiKey=${apikey} 2> /dev/null | jq .
-          else
-            curl -X GET http://${IP}:${PORT}/api/brightness/$2 2> /dev/null | jq .
-          fi
-        else
-          if [ "${apikey}" ]
-          then
-            curl -X GET http://${IP}:${PORT}/api/brightness/$2?apiKey=${apikey}
-          else
-            curl -X GET http://${IP}:${PORT}/api/brightness/$2
-          fi
-          echo ""
-        fi
-    else
-        printf "\nBrightness setting $2 out of range or not a number"
-        printf "\nValid brightness values are integer values [0-200]\n"
-        setb_usage
-    fi
+    set_brightness $2
     exit 0
 }
 
 [ "$1" == "wh" ] && {
-    [ "$2" ] || {
-        printf "\nFolder argument required to specify Slideshow dir.\n"
-        usage
-    }
-    PICDIR="$2"
-    if [ -d "${HOME}/${WHVNDIR}/${PICDIR}" ]
-    then
-        printf "\nCreating config file for ${WHVNDIR}/${PICDIR}"
-        [ -d "${SLISDIR}/${PICDIR}" ] || mkdir -p "${SLISDIR}/${PICDIR}"
-        cd "${SLISDIR}/${PICDIR}"
-        rm -f *.jpg
-        ln -s ../../../../${WHVNDIR}/${PICDIR}/*.jpg .
-        haveim=`type -p identify`
-        if [ "$haveim" ]
-        then
-          # Remove photos in landscape mode for vertical mirror
-          for i in *.jpg
-          do
-            [ "$i" == "*.jpg" ] && {
-                printf "\nNo JPEG pics found in ${WHVNDIR}/${PICDIR} ... Exiting\n"
-                cd ..
-                rm -rf "${PICDIR}"
-                usage
-            }
-            GEO=`identify "$i" 2> /dev/null | awk ' { print $(NF-6) } '`
-            W=`echo $GEO | awk -F "x" ' { print $1 } '`
-            # Remove if width not greater than 750
-            [ "$W" ] && [ $W -gt 750 ] || {
-                rm -f "$i"
-                continue
-            }
-            H=`echo $GEO | awk -F "x" ' { print $2 } '`
-            # Remove if height not greater than 1000
-            [ "$H" ] && [ $H -gt 1000 ] || {
-                rm -f "$i"
-                continue
-            }
-            # Remove if height not greater than width
-            [ "$W" ] && [ "$H" ] && [ $H -gt $W ] || rm -f "$i"
-          done
-        else
-          printf "\nCould not find identify command. Install ImageMagick"
-          printf "\nSkipping removal of landscape photos\n"
-        fi
-        cd "${CONFDIR}"
-        [ -f "config-${PICDIR}.js" ] || {
-            cat config-wh-template.js | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
-        }
-        mirror ${PICDIR}
-    else
-        printf "\nFolder argument ${WHVNDIR}/${PICDIR} does not exist or is not a directory."
-        usage
-    fi
+    wh_create $2
     exit 0
 }
 
 [ "$1" == "whrm" ] && {
-    [ "$2" ] || {
-        printf "\nFolder argument required to specify Slideshow dir.\n"
-        usage
-    }
-    PICDIR="$2"
-    [ -d "${SLISDIR}/${PICDIR}" ] && {
-        printf "\nRemoving config file and pic folder for ${WHVNDIR}/${PICDIR}"
-        cd "${SLISDIR}"
-        rm -rf "${PICDIR}"
-    }
-    rm -f "${CONFDIR}/config-${PICDIR}.js"
-    mirror default
+    wh_remove $2
     exit 0
 }
 
-mode="$1"
-[ "$1" == "waterfall" ] && mode="waterfalls"
-[ "$1" == "fractal" ] && mode="fractals"
-
-if [ -f config-${mode}.js ]
-then
-    setconf ${mode}
-else
-    printf "\nNo configuration file config-${mode}.js found.\n\n"
-    usage
-fi
+[ "$1" ] && set_config $1
 exit 0
