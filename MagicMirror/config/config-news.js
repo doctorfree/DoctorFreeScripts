@@ -71,7 +71,7 @@ var config = {
 //            pinned: ["Mainland China", null],
 //            pinned: ["Others", "Diamond Princess cruise ship"],
 //            pinned: ["US", "Santa Clara, CA"],
-              pinned: ["World", "US", "California, US"],
+              pinned: ["World", "US Total", "California, US"],
               myPosition: {
                   latitude: 36.970019,
                   longitude: -122.042212,

@@ -61,7 +61,7 @@ var config = {
         },
         {
             module: "MMM-News",
-            position: "bottom_center",
+            position: "top_center",
             config: {
               apiKey : "xxxxxxx_newsapi.org_xxxxxxxxxxx",
               type: "vertical",
@@ -96,7 +96,7 @@ var config = {
 //            pinned: ["Mainland China", null],
 //            pinned: ["Others", "Diamond Princess cruise ship"],
 //            pinned: ["US", "Santa Clara, CA"],
-              pinned: ["World", "US Total", "California, US"],
+              pinned: ["World", "US Total", "California, US", "Italy", "Iran", "China Total", "Korea, South", "Canada Total", "Mexico"],
               myPosition: {
                   latitude: 36.970019,
                   longitude: -122.042212,
@@ -155,7 +155,7 @@ var config = {
             module: 'MMM-pages',
             config: {
                 modules:
-                    [[ "MMM-News", "newsfeed", "MMM-COVID-19"], [ "MMM-iFrame"]],
+                    [["MMM-COVID-19"], ["MMM-News", "newsfeed"], [ "MMM-iFrame"]],
                 fixed:
                     ["alert", "updatenotification", "MMM-Remote-Control", "MMM-TelegramBot"],
                 rotationTime: 900000, // rotate page every 15 minutes = 15 * 60 * 1000
