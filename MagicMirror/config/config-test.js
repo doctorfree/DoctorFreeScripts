@@ -120,28 +120,14 @@ var config = {
                 // At this moment, multi-languages are not supported, sorry. Someday I'll work.
                 actionLocale: "en-US",
               },
-              recipes: [ "with-MMM-Hotword.js", "with-MMM-TelegramBot.js"],
+              recipes: [ "with-MMM-TelegramBot.js"],
               profiles: {
                 "default": {
                   profileFile: "default.json",
                   lang: "en-US"
                 }
               },
-              addons: false,
-            },
-        },
-        {
-            module: "MMM-Hotword",
-            position: "bottom_left",
-            config: {
-              useDisplay: true,
-              chimeOnFinish: "resources/ding.wav",
-              //recipes: ["mirror_mirror-personal_model.js"],
-              recipes: ["with-AMk2v3-noisy_smart-mirror.js"],
-              mic: {
-                recordProgram: "arecord",
-                device: "plughw:1",
-              },
+              addons: true,
             },
         },
     ]

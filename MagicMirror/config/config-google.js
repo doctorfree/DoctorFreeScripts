@@ -361,7 +361,7 @@ var config = {
                   lang: "en-US"
                 }
               },
-              addons: false,
+              addons: true,
             },
         },
         {

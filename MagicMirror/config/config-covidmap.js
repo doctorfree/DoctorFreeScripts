@@ -85,22 +85,6 @@ var config = {
 //          }
 //      },
 //      {
-//          module: "MMM-COVID-19",
-//          header: "Coronavirus Daily Update",
-//          position: "bottom_bar",
-//          config: {
-//            debug:false,
-//            scanInterval: 1000 * 60 * 60 * 12,
-//            rotateInterval: 1000 * 5, // 0 means no rotate
-//            pinned: ["US"],
-//            myPosition: {
-//                latitude: 36.970019,
-//                longitude: -122.042212,
-//                metric: "mile",},
-//            reportTimeFormat: "YYYY.MM.DD hh a"
-//          }
-//      },
-//      {
 //          module: "newsfeed",
 //          position: "top_bar",
 //          config: {

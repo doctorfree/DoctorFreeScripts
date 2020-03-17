@@ -71,12 +71,15 @@ var config = {
 //            pinned: ["Mainland China", null],
 //            pinned: ["Others", "Diamond Princess cruise ship"],
 //            pinned: ["US", "Santa Clara, CA"],
-              pinned: ["US"],
+              pinned: ["World", "US", "California, US"],
               myPosition: {
                   latitude: 36.970019,
                   longitude: -122.042212,
-                  metric: "mile",},
-              reportTimeFormat: "YYYY.MM.DD hh a"
+                  metric: "mile"
+              },
+              reportTimeFormat: "YYYY.MM.DD hh a",
+              drawGraph: true,
+              logTerritory: true
             }
         },
         {
