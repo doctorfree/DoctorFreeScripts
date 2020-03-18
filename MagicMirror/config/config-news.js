@@ -79,7 +79,7 @@ var config = {
               },
               reportTimeFormat: "YYYY.MM.DD hh a",
               drawGraph: true,
-              logTerritory: true
+              logTerritory: false
             }
         },
         {
@@ -141,14 +141,6 @@ var config = {
               ],
             }
         },
-//      {
-//          module: "MMM-Volume",
-//          position: "top_left", // It is meaningless. but you should set.
-//          config: {
-//            usePresetScript: "ALSA", // "ALSA" is supported by default.
-//            volumeOnStart: 50,
-//          }
-//      },
         {
             module: 'MMM-TelegramBot',
             config: {
@@ -162,22 +154,6 @@ var config = {
               screenshotScript: "scrot",
               detailOption: {},
               customCommands: [],
-//            customCommands: [
-//              {
-//                command: "test",
-//                callback: (command, handler) => {
-//                  handler.reply("TEXT", "This is test command!")
-//                }
-//              },
-//              {
-//                command: "detailnews",
-//                description: "For detail of current news article"
-//                callback: (command, handler, self) => {
-//                  self.sendNotification("ARTICLE_MORE_DETAILS")
-//                  handler.reply("TEXT", "Yes, sir!")
-//                }
-//              },
-//            ],
             }
         },
 	]

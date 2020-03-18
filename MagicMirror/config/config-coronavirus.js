@@ -104,7 +104,7 @@ var config = {
               },
               reportTimeFormat: "YYYY.MM.DD hh a",
               drawGraph: true,
-              logTerritory: true
+              logTerritory: false
             }
         },
         {
