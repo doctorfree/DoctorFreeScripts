@@ -336,6 +336,12 @@ do
     esac
 done
 
+echo "Disabling Bluetooth and related services"
+echo "dtoverlay=disable-bt" >> /boot/config.txt
+sudo systemctl disable hciuart.service > /dev/null 2>&1
+sudo systemctl disable bluealsa.service > /dev/null 2>&1
+sudo systemctl disable bluetooth.service > /dev/null 2>&1
+
 echo ""
 echo "==========!! TO DO !!=============="
 echo "Update the following files with api keys and other private settings:"
