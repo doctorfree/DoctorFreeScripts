@@ -342,6 +342,26 @@ sudo systemctl disable hciuart.service > /dev/null 2>&1
 sudo systemctl disable bluealsa.service > /dev/null 2>&1
 sudo systemctl disable bluetooth.service > /dev/null 2>&1
 
+echo "Installing MMM-AssistantMk2 addons"
+if [ -d ~/MagicMirror/modules/MMM-AssistantMk2 ]
+then
+    cd ~/MagicMirror/modules/MMM-AssistantMk2
+    rm -rf addons
+    git clone https://github.com/bugsounet/addons.git addons
+    cd ~/MagicMirror/modules/MMM-AssistantMk2/addons
+    # Only briefToday and snowboy for now
+    for addon in briefToday snowboy
+    do
+        [ -d ${addon} ] && {
+            cd ${addon}
+            ./install.sh
+            cd ..
+        }
+    done
+else
+    echo "MMM-AssistantMk2 not installed. Skipping."
+fi
+
 echo ""
 echo "==========!! TO DO !!=============="
 echo "Update the following files with api keys and other private settings:"
