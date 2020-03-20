@@ -137,16 +137,15 @@ var config = {
             config: {
                 url: [
                       "https://ncov2019.live/map",
+                      "https://healthweather.us/",
                       "https://ncov2019.live/tweets",
                       "https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6",
                       "https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61",
                       "https://windy.app/coronavirus_map",
                       "https://experience.arcgis.com/experience/685d0ace521648f8a5beeeee1b9125cd",
                      ],
-//              updateInterval: 30 * 60 * 1000, // rotate URLs every 30 minutes
                 updateInterval: 3 * 60 * 1000,  // rotate URLs every 3 minutes
                 width: "1080", // width of iframe
-//              height: "1580", // height of iframe
                 height: "1920", // height of iframe
                 frameWidth: "1080"
             }
@@ -174,22 +173,6 @@ var config = {
               screenshotScript: "scrot",
               detailOption: {},
               customCommands: [],
-//            customCommands: [
-//              {
-//                command: "test",
-//                callback: (command, handler) => {
-//                  handler.reply("TEXT", "This is test command!")
-//                }
-//              },
-//              {
-//                command: "detailnews",
-//                description: "For detail of current news article"
-//                callback: (command, handler, self) => {
-//                  self.sendNotification("ARTICLE_MORE_DETAILS")
-//                  handler.reply("TEXT", "Yes, sir!")
-//                }
-//              },
-//            ],
             }
         },
 	]
