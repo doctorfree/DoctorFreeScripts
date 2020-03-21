@@ -65,7 +65,7 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/sol/',
+                    'modules/MMM-BackgroundSlideshow/pics/sol/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
                 transitionImages: true,

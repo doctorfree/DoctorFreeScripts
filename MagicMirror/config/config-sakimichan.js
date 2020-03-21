@@ -65,7 +65,7 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/sakimichan/',
+                    'modules/MMM-BackgroundSlideshow/pics/sakimichan/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
                 transitionImages: true,

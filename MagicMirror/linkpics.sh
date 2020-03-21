@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SLIDES_DIR="$HOME/MagicMirror/modules/MMM-BackgroundSlideshow"
+SLIDES_DIR="$HOME/MagicMirror/modules/MMM-BackgroundSlideshow/pics"
 
 mksym () {
     PDIR="${LNDIR}/$1"
@@ -18,7 +18,7 @@ mksym () {
 }
 
 cd "${SLIDES_DIR}"
-LNDIR="../../../Pictures"
+LNDIR="../../../../Pictures"
 
 mksym Beach beach
 mksym Celebrity celebrity
@@ -41,7 +41,7 @@ mksym Waterfall waterfall
 
 [ -d gif ] || mkdir gif
 cd gif
-LNDIR="../../../../Pictures"
+LNDIR="../../../../../Pictures"
 
 for i in Nature Portal Smoke
 do

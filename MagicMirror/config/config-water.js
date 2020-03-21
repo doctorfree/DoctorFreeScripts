@@ -64,8 +64,8 @@ var config = {
             position: 'fullscreen_below',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/waterfall/',
-                    'modules/MMM-BackgroundSlideshow/river/',
+                    'modules/MMM-BackgroundSlideshow/pics/waterfall/',
+                    'modules/MMM-BackgroundSlideshow/pics/river/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
                 transitionImages: true,

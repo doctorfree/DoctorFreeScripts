@@ -65,8 +65,8 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/original/',
-                    'modules/MMM-BackgroundSlideshow/touhou/',
+                    'modules/MMM-BackgroundSlideshow/pics/original/',
+                    'modules/MMM-BackgroundSlideshow/pics/touhou/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
                 transitionImages: true,

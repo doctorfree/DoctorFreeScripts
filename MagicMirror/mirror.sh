@@ -48,7 +48,7 @@ apikey="MMM-Remote-Control_API_Key"
 export DISPLAY=:0
 # -----------------------------------------------------------------------
 CONFDIR="${MM}/config"
-SLISDIR="${MM}/modules/MMM-BackgroundSlideshow"
+SLISDIR="${MM}/modules/MMM-BackgroundSlideshow/pics"
 WHVNDIR="Seagate_8TB/Pictures/Work/Wallhaven"
 CONFS=
 INFO="all"
@@ -301,7 +301,7 @@ wh_create() {
         [ -d "${SLISDIR}/${PICDIR}" ] || mkdir -p "${SLISDIR}/${PICDIR}"
         cd "${SLISDIR}/${PICDIR}"
         rm -f *.jpg
-        ln -s ../../../../${WHVNDIR}/${PICDIR}/*.jpg .
+        ln -s ../../../../../${WHVNDIR}/${PICDIR}/*.jpg .
         haveim=`type -p identify`
         if [ "$haveim" ]
         then

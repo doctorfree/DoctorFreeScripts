@@ -65,7 +65,7 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/choker/',
+                    'modules/MMM-BackgroundSlideshow/pics/choker/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
                 transitionImages: true,

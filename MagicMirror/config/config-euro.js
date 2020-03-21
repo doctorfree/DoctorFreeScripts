@@ -65,9 +65,9 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/czech/',
-                    'modules/MMM-BackgroundSlideshow/russian/',
-                    'modules/MMM-BackgroundSlideshow/ukrainian/',
+                    'modules/MMM-BackgroundSlideshow/pics/czech/',
+                    'modules/MMM-BackgroundSlideshow/pics/russian/',
+                    'modules/MMM-BackgroundSlideshow/pics/ukrainian/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
                 transitionImages: true,
