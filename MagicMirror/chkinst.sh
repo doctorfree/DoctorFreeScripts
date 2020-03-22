@@ -237,6 +237,9 @@ do
         getquote.sh)
             check "$i" "$inst" 8
             ;;
+        mirror.sh)
+            check "$i" "$inst" 4
+            ;;
         mmapiactions.sh)
             check "$i" "$inst" 4
             ;;
