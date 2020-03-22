@@ -125,6 +125,7 @@
   text-align:right;
 }
 
+
 .covid .numbers.current .confirmed::before {
   content: "Confirmed: "
 }
@@ -136,6 +137,7 @@
 .covid .numbers.current .recovered::before {
   content: "Recovered: "
 }
+
 
 .covid .numbers.new .confirmed::before {
   content: "New Confirmed: "
@@ -218,13 +220,13 @@
 
 .covid .graph-container .maxcount {
   position: absolute;
-  top: 2px;
-  left: 2px;
+  top: 0px;
+  left: 0px;
   font-size:18px;
   color:#CCC;
   line-height:18px;
   text-align:left;
   background-color:rgba(0,0,0,0.5);
-  padding:2px 4px;
+  padding:1px 2px;
   border-radius: 4px;
 }

@@ -1,10 +1,26 @@
 pcm.!default {
-    type asym
-    playback.pcm "plughw:0"
-    capture.pcm  "plughw:1"
+  type asym
+   playback.pcm {
+     type plug
+     slave.pcm "hw:0,0"
+   }
+   capture.pcm {
+     type plug
+     slave.pcm "hw:1,0"
+   }
+}
+
+pcm.output {
+	type hw
+	card 0
 }
 
 ctl.!default {
-    type hw
-    card 1
+	type hw
+	card 0
+}
+
+pcm.input {
+	type hw
+	card 1
 }
