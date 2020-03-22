@@ -237,6 +237,15 @@ do
         getquote.sh)
             check "$i" "$inst" 8
             ;;
+        mmapiactions.sh)
+            check "$i" "$inst" 4
+            ;;
+        mmgetb.sh)
+            check "$i" "$inst" 4
+            ;;
+        mmsetb.sh)
+            check "$i" "$inst" 4
+            ;;
         send_sms.sh)
             check "$i" "$inst" 12
             ;;
