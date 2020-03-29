@@ -358,6 +358,7 @@ var config = {
                          "with-MMM-Hotword.js",
                          "with-MMM-TelegramBot.js",
                          "mirror-script.js",
+                         "Reboot-Restart-Shutdown.js",
                        ],
               profiles: {
                 "default": {
@@ -374,7 +375,10 @@ var config = {
             config: {
               useDisplay: false,
               chimeOnFinish: "resources/ding.wav",
-              recipes: ["with-AMk2v3-noisy_smart-mirror.js"],
+              recipes: [
+                         "with-AMk2v3-noisy_smart-mirror.js",
+//                       "mirror_mirror-personal_model.js",
+                       ],
               mic: {
                 recordProgram: "arecord",
                 device: "plughw:1",
