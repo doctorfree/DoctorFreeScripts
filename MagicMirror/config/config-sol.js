@@ -154,7 +154,7 @@ var config = {
                   lang: "en-US"
                 }
               },
-              addons: true,
+              addons: false,
             },
         },
         {

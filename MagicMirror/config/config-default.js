@@ -354,10 +354,11 @@ var config = {
                 // At this moment, multi-languages are not supported, sorry. Someday I'll work.
                 actionLocale: "en-US",
               },
-              recipes: [ "with-MMM-Hotword.js",
+              recipes: [
+                         "with-MMM-Hotword.js",
                          "with-MMM-TelegramBot.js",
                          "mirror-script.js",
-                         "Reboot-Restart-Shutdown.js"],
+                       ],
               profiles: {
                 "default": {
                   profileFile: "default.json",
