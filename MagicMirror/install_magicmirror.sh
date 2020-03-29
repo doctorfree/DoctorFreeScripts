@@ -358,6 +358,27 @@ then
             cd ..
         }
     done
+    cd ../..
+    for modadd in MMM-AssistantMk2/addons/addons.js \
+                  MMM-AssistantMk2/deviceInstance.json \
+                  MMM-AssistantMk2/profiles/default.json \
+                  MMM-AssistantMk2/recipes/mirror-script.js \
+                  MMM-Hotword/models/mirror_mirror.pmdl \
+                  MMM-Hotword/recipes/mirror_mirror-personal_model.js \
+                  MMM-Hotword/trainer/m1.wav \
+                  MMM-Hotword/trainer/m2.wav \
+                  MMM-Hotword/trainer/m3.wav \
+                  MMM-Hotword/trainer/trainer-withtoken.sh \
+                  MMM-Hotword/trainer/trainer.sh
+    do
+        [ -f ${HOME}/src/Scripts/MagicMirror/modules/${modadd} ] && {
+            cp ${HOME}/src/Scripts/MagicMirror/modules/${modadd} ${modadd}
+        }
+    done
+    cd ..
+    [ -f ${HOME}/src/Scripts/MagicMirror/css/custom.css ] && {
+        cp ${HOME}/src/Scripts/MagicMirror/css/custom.css css/custom.css
+    }
 else
     echo "MMM-AssistantMk2 not installed. Skipping."
 fi
