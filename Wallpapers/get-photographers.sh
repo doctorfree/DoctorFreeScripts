@@ -39,6 +39,10 @@ do
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Alex-Lynn.com"
             ;;
+        Alexander_Zavaruhin)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Alexander_Zavarukhin"
+            ;;
         Alexeander_Grinn)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Alexander_Grinn"
@@ -54,6 +58,16 @@ do
         Konstantin_Makarchikov)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Constantin_Makarchikov"
+            ;;
+        Laurent Kace)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Laurent_Kacé"
+            get_search "Photographers/${photographer}" "Laurent_KC"
+            get_search "Photographers/${photographer}" "Laurentkc"
+            ;;
+        Levy_Avner)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Avner_Levy"
             ;;
         Maksim_Chuprin)
             get_search "Photographers/${photographer}" "${photographer}"

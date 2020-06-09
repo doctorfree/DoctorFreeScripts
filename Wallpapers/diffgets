@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for i in get*
+do
+    j=`echo $i | sed -e "s/.sh//"`
+    [ -f ~/bin/$j ] || {
+        echo "$i not installed in ~/bin"
+        continue
+    }
+    diff $i ~/bin/$j > /dev/null || echo $i
+done

@@ -189,6 +189,7 @@ do
     Femjoy)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Femjoy_Magazine"
+        get_search "${dir}" "Femjoy.com"
         ;;
     FTV_Girls)
         get_search "${dir}" "${dir}"
@@ -235,6 +236,10 @@ do
         get_search "${dir}" "Playboy_Plus"
         get_search "${dir}" "Playmate"
         ;;
+    Polish)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Polish_Women"
+        ;;
     Pubic_Hair)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Natural_Pubic_Hair"
@@ -264,6 +269,7 @@ do
         get_search "${dir}" "Natalya_Andreeva"
         get_search "${dir}" "Delilah_G"
         get_search "${dir}" "MonroQ"
+        get_search "${dir}" "Katya_Sambuca"
         ;;
     SexArt)
         get_search "${dir}" "${dir}"
@@ -288,6 +294,7 @@ do
     Sunglasses)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Women_With_Shades"
+        get_search "${dir}" "Women_With_Sunglasses"
         ;;
     The_Life_Erotic)
         get_search "${dir}" "${dir}"
@@ -297,8 +304,13 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Ukraine"
         get_search "${dir}" "Jula"
+        get_search "${dir}" "Kseniia_Kufeld"
         get_search "${dir}" "Li_Moon"
         get_search "${dir}" "Katie_Fey"
+        ;;
+    Vixen.com)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Vixen"
         ;;
     Waterfall)
         get_search "${dir}" "${dir}"
