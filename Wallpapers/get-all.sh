@@ -82,6 +82,17 @@ while getopts AJMPRSan:su flag; do
 done
 shift $(( OPTIND - 1 ))
 
+if [ -r /usr/local/share/bash/wallutils ]
+then
+    . /usr/local/share/bash/wallutils
+else
+    [ -r ./Utils/wallutils ] && . ./Utils/wallutils
+fi
+[ "$WHDIR" ] || WHDIR="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
+
+[ -d "$WHDIR" ] || exit
+cd "$WHDIR"
+
 # get-anime ${LAT} -p 1 $*
 echo "Running get-anime ${LAT} -n $numdown $*"
 get-anime ${LAT} -n $numdown -q $*
@@ -161,6 +172,7 @@ do
         get_search "${dir}" "Karin_Spolnikova"
         get_search "${dir}" "Michaela_Isizzu"
         get_search "${dir}" "Eufrat"
+        get_search "${dir}" "Charlotta_Phillip"
         ;;
     Domai)
         get_search "${dir}" "${dir}"
@@ -260,6 +272,7 @@ do
         get_search "${dir}" "Russian_women"
         get_search "${dir}" "Russian_girls"
         get_search "${dir}" "Russian_Model"
+        get_search "${dir}" "Anastasia_Martzipanova"
         get_search "${dir}" "Disha_Shemetova"
         get_search "${dir}" "Natalia_Andreeva"
         get_search "${dir}" "Annabell"
@@ -299,6 +312,10 @@ do
     The_Life_Erotic)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "TheLifeErotic"
+        ;;
+    Tushy)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Tushy.com"
         ;;
     Ukrainian)
         get_search "${dir}" "${dir}"

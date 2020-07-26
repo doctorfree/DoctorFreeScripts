@@ -47,9 +47,17 @@ do
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Alexander_Grinn"
             ;;
+        Andrej_Filonenko)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Andrew_Filonenko"
+            ;;
         Anton_Harisov)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Fotoshi_Toshi"
+            ;;
+        Ayya_Saparniyazova)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "AyyaSAP"
             ;;
         Holly_Randall)
             get_search "Photographers/${photographer}" "${photographer}"

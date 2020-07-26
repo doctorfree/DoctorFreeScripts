@@ -27,6 +27,11 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Valeria_A"
             ;;
+        Alena_Hemkova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Scarlett_A"
+            get_search "${MODD}/${model}" "Cheryl_C"
+            ;;
         Alena_Ushkova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Aliona_Aganova"
@@ -61,9 +66,19 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Amelie_Belain"
             ;;
+        Anastasia_Martzipanova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Anastasya"
+            ;;
         Anastasia_Petrova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Chantelle_A"
+            ;;
+        Anastasia_Scheglova)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Anastasia_Schlegova"
+            get_search "${MODD}/${model}" "Anastasia_Shcheglova"
+            get_search "${MODD}/${model}" "Anastasiya_Scheglova"
             ;;
         Anita_Silver)
             get_search "${MODD}/${model}" "${model}"
@@ -261,6 +276,10 @@ get_model() {
             get_search "${MODD}/${model}" "Adel_O"
             get_search "${MODD}/${model}" "Adel_C."
             ;;
+        Helly_von_Valentine)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Disharmonica"
+            ;;
         Hilary_C)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Viktoriia_Aliko"
@@ -302,6 +321,8 @@ get_model() {
         Jasmine_A)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Zoi_Gorman"
+            get_search "${MODD}/${model}" "Jasmine_Andreas"
+            get_search "${MODD}/${model}" "Clio_Photodromm"
             ;;
         Jenni_Gregg)
             get_search "${MODD}/${model}" "${model}"
@@ -418,6 +439,8 @@ get_model() {
             ;;
         Lilit_A)
             get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Lilit_Ariel"
+            get_search "${MODD}/${model}" "Ariel_Lilit_A"
             get_search "${MODD}/${model}" "Ariela"
             get_search "${MODD}/${model}" "Natasha_Udovenko"
             ;;
@@ -575,6 +598,11 @@ get_model() {
             get_search "${MODD}/${model}" "Natasha_Tijomirova"
             get_search "${MODD}/${model}" "Natali_Tihomirova"
             ;;
+        Nicole_Young)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Nika_Kolosova"
+            get_search "${MODD}/${model}" "Nicole_Ross"
+            ;;
         Niemira)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Nonna_Y."
@@ -610,6 +638,10 @@ get_model() {
 #           get_search "${MODD}/${model}" "Stacy Bloom"
 #           get_search "${MODD}/${model}" "Winona"
 #           ;;
+        Patritcy_A)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Maria_Pie"
+            ;;
         Paula_Shy)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Paula_De_Sousa"

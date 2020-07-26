@@ -13,5 +13,5 @@ cd $MODEL_DIR
 a=( * )
 ((j=RANDOM%${#a[@]}))
 randf="${a[j]}"
-#echo "Using $MODEL_DIR/$randf for backgrounds"
+[ "$MODEL_DIR/$randf" == "$MODEL_DIR/*" ] && echo "Using $MODEL_DIR/$randf for backgrounds"
 backgrounds "$randf"

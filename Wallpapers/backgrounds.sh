@@ -198,16 +198,14 @@ cd $OUT
       }
     fi
   fi
-  [ -d $TOP/$bdir ] || {
+  [ -d "$TOP/$bdir" ] || {
     echo "Cannot locate $TOP/$bdir - exiting."
     exit 1
   }
 
   numlinks=0
-  echo "Found folders in $foundirs"
   for dir in $foundirs
   do
-    echo "Looking for pics in $dir/$bdir"
     for pic in $dir/$bdir/*
     do
       [ "$pic" == "$dir/$bdir/*" ] && continue
