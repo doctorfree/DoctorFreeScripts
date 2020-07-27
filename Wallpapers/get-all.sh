@@ -32,6 +32,13 @@ usage() {
     exit 1
 }
 
+if [ -r /usr/local/share/bash/wallutils ]
+then
+    . /usr/local/share/bash/wallutils
+else
+    [ -r ./Utils/wallutils ] && . ./Utils/wallutils
+fi
+
 FIND=
 LAT=
 MLAT=
@@ -82,12 +89,6 @@ while getopts AJMPRSan:su flag; do
 done
 shift $(( OPTIND - 1 ))
 
-if [ -r /usr/local/share/bash/wallutils ]
-then
-    . /usr/local/share/bash/wallutils
-else
-    [ -r ./Utils/wallutils ] && . ./Utils/wallutils
-fi
 [ "$WHDIR" ] || WHDIR="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
 
 [ -d "$WHDIR" ] || exit
