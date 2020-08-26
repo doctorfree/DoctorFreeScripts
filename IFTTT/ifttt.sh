@@ -7,6 +7,7 @@
 ## @date Written 29-Jan-2017
 ## @version 1.0.1
 ##
+## IMPORTANT NOTE: IFTTT has suspended its SMS service. None of this works anymore.
 #
 # My IFTTT Phone Channel number
 # (Replace ########## with your IFTTT phone number)
@@ -14,7 +15,7 @@ IFT="##########"
 MSG=
 
 usage() {
-    printf "\nUsage: ifttt [lights | airport | appletv | bluray | tv | off] [on | off]"
+    printf "\nUsage: ifttt [lights | airport | appletv | bluray | mac | tv | off] [on | off]"
     printf "\n\tFirst argument required. Second argument optional, default on"
     printf "\n\nExample invocations:"
     printf "\n\tTurn all lights on"
@@ -77,6 +78,10 @@ action=`echo "$2" | tr '[:upper:]' '[:lower:]'`
 
 [ "$activity" = "airport" ] && {
     MSG="#Airport"
+}
+
+[ "$activity" = "mac" ] && {
+    MSG="#MacProAudio"
 }
 
 [ "$activity" = "off" ] && {
