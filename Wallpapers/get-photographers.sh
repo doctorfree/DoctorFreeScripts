@@ -9,7 +9,7 @@
 ##
 get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-    echo "Running get-search ${LAT} -n 256 -p 1 -l $1 -s $QUERY"
+#   echo "Running get-search ${LAT} -n 256 -p 1 -l $1 -s $QUERY"
     get-search -q ${LAT} -n 256 -p 1 -l "$1" -s "$QUERY"
 #   echo "Running get-search ${LAT} -l $1 -s $QUERY"
 #   get-search -q ${LAT} -l "$1" -s "$QUERY"
@@ -89,6 +89,10 @@ do
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Vavaca"
             ;;
+        Vladimir_Stefanovich)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Wladimir_Stefanowitsch"
+            ;;
         Zumi)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "zumidraws"
@@ -102,7 +106,7 @@ done
 cd "${HERE}"
 [ "${UPD}" ] && {
   [ -x ../updsumhaven ] && {
-    echo "Running ../updsumhaven -p"
+#   echo "Running ../updsumhaven -p"
     ../updsumhaven -p > /dev/null
   }
 }

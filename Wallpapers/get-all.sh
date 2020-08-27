@@ -11,7 +11,7 @@ get_search() {
     QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
 #   echo "Running get-search -p 1 -l $1 -s $QUERY"
 #   get-search -q -p 1 -l "$1" -s "$QUERY"
-    echo "Running get-search ${LAT} -l $1 -n $numdown -s $QUERY"
+#   echo "Running get-search ${LAT} -l $1 -n $numdown -s $QUERY"
     get-search -q ${LAT} -l "$1" -n $numdown -s "$QUERY"
 }
 
@@ -47,7 +47,7 @@ MODS=1
 PHOT=1
 SUIC=1
 UPD=1
-numdown=256
+numdown=32
 
 while getopts AJMPRSan:su flag; do
     case $flag in
@@ -95,9 +95,9 @@ shift $(( OPTIND - 1 ))
 cd "$WHDIR"
 
 # get-anime ${LAT} -p 1 $*
-echo "Running get-anime ${LAT} -n $numdown $*"
+# echo "Running get-anime ${LAT} -n $numdown $*"
 get-anime ${LAT} -n $numdown -q $*
-echo "Running get-top -n $numdown $*"
+# echo "Running get-top -n $numdown $*"
 get-top -n $numdown -q $*
 # get-general -p 1 $*
 #echo "Running get-general $*"
@@ -173,6 +173,7 @@ do
         get_search "${dir}" "Karin_Spolnikova"
         get_search "${dir}" "Michaela_Isizzu"
         get_search "${dir}" "Eufrat"
+        get_search "${dir}" "Paula_Shy"
         get_search "${dir}" "Charlotta_Phillip"
         ;;
     Domai)
@@ -275,6 +276,7 @@ do
         get_search "${dir}" "Russian_Model"
         get_search "${dir}" "Anastasia_Martzipanova"
         get_search "${dir}" "Disha_Shemetova"
+        get_search "${dir}" "Ekaterina_Enokaeva"
         get_search "${dir}" "Natalia_Andreeva"
         get_search "${dir}" "Annabell"
         get_search "${dir}" "Danica_A"
@@ -360,17 +362,17 @@ inst=`type -p linkhaven`
 [ -x ./clean ] && ./clean
 [ "$FIND" ] && {
   [ -x ./findups ] && {
-    echo "Running ./findups"
+    # echo "Running ./findups"
     ./findups
   }
 }
 [ -x ./counts ] && {
-    echo "Running ./counts"
+    # echo "Running ./counts"
     ./counts
 }
 [ "${UPD}" ] && {
   [ -x ../updsumhaven ] && {
-    echo "Running ../updsumhaven"
+    # echo "Running ../updsumhaven"
     ../updsumhaven > /dev/null
   }
 }

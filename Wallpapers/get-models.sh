@@ -13,7 +13,7 @@ get_search() {
 #   [ -x ~/bin/models ] && {
 #     cnt=`~/bin/models -c -q $1`
 #   }
-    echo "Running get-search ${latest} -n ${numdown} -p 1 -l $1 -s $QUERY"
+    # echo "Running get-search ${latest} -n ${numdown} -p 1 -l $1 -s $QUERY"
     get-search ${latest} -q -n ${numdown} -p 1 -l "$1" -s "$QUERY"
 #   echo "Running get-search ${latest} -l $1 -s $QUERY"
 #   get-search ${latest} -q -l "$1" -s "$QUERY"
@@ -60,6 +60,7 @@ get_model() {
             get_search "${MODD}/${model}" "Alisa_Amore"
             get_search "${MODD}/${model}" "Alisa_A"
             get_search "${MODD}/${model}" "Alisa_Femjoy"
+            get_search "${MODD}/${model}" "Alisa_Hegre"
             get_search "${MODD}/${model}" "Jessica_Albanka"
             ;;
         Amelie_B)
@@ -317,6 +318,11 @@ get_model() {
         Janelle_B)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Janelle_B."
+            ;;
+        Janesinner)
+            get_search "${MODD}/${model}" "${model}_Suicide"
+            get_search "${MODD}/${model}" "Jane_Sinner"
+            get_search "${MODD}/${model}" "Yana_Sinner"
             ;;
         Jasmine_A)
             get_search "${MODD}/${model}" "${model}"
@@ -729,6 +735,10 @@ get_model() {
             get_search "${MODD}/${model}" "Sybil"
             get_search "${MODD}/${model}" "Davina_E"
             ;;
+        Tommie_Jo)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Tommi_Jo"
+            ;;
         Uma_Jolie)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Belicia_Segura"
@@ -1044,7 +1054,7 @@ MODELS="$*"
     done
     [ "$sums" ] && {
       [ -x ${TOP}/updsumhaven ] && {
-        echo "Running ${TOP}/updsumhaven -m"
+        # echo "Running ${TOP}/updsumhaven -m"
         [ "$debug" ] || ${TOP}/updsumhaven -m > /dev/null
       }
     }
@@ -1079,7 +1089,7 @@ cd "${WHVN}"
     done
     [ "$sums" ] && {
       [ -x ${TOP}/updsumhaven ] && {
-        echo "Running ${TOP}/updsumhaven -s"
+        # echo "Running ${TOP}/updsumhaven -s"
         [ "$debug" ] || ${TOP}/updsumhaven -s > /dev/null
       }
     }
@@ -1114,7 +1124,7 @@ cd "${WHVN}"
     done
     [ "$sums" ] && {
       [ -x ${TOP}/updsumhaven ] && {
-        echo "Running ${TOP}/updsumhaven -j"
+        # echo "Running ${TOP}/updsumhaven -j"
         [ "$debug" ] || ${TOP}/updsumhaven -j > /dev/null
       }
     }
