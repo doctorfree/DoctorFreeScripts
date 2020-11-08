@@ -2,8 +2,10 @@
 
 # ProfitTrailer install folder
 PT_DIR=/usr/local/lib/ProfitTrailer
-TRAD_DIR=${PT_DIR}/trading
-STRG="default emacross smacross emagain emaspread lowbb moderate pioneers yuval"
+TRAD_DIR=${PT_DIR}/initialization
+BACK_DIR=${PT_DIR}/backup
+#STRG="emacross smacross emagain emaspread lowbb moderate pioneers yuval"
+STRG="cryptognome"
 LOG=ProfitTrailer.log
 P="PAIRS.properties"
 MKTS="BTC ETH"
@@ -17,9 +19,9 @@ usage() {
   echo "and <market> must be ETH or BTC"
   echo ""
   echo "or"
-  echo "   pt [status|start|stop|restart|delete]"
+  echo "   pt [status|start|stop|restart|restore|delete]"
   echo "or"
-  echo "   pt [disp|display|show|monit|tail]"
+  echo "   pt [disp|display|list|show|monit|tail]"
   echo ""
   pt_disp
   echo ""
@@ -52,9 +54,27 @@ chk_market() {
 get_market() {
   # Which market are we using?
   pairs="${TRAD_DIR}/$P"
-  MKT=`grep ^MARKET ${pairs} | awk -F "=" ' { print $2 } '`
+  MKT=`grep ^market ${pairs} | awk -F "=" ' { print $2 } '`
   MKT=`echo $MKT | sed -e "s/ //g"`
-  echo "Installed MARKET = $MKT"
+  echo "Installed market = $MKT"
+}
+
+# Restore saved PT data
+pt_restore() {
+  latest=`ls -t ${BACK_DIR}/ProfitTrailerData*.backup | head -n1`
+  backup=`ls -t ${BACK_DIR}/ProfitTrailerData*.backup | head -n2 | tail -n1`
+  [ -s $latest ] || {
+    latest=`ls -t ${BACK_DIR}/ProfitTrailerData*.backup | head -n2 | tail -n1`
+    backup=`ls -t ${BACK_DIR}/ProfitTrailerData*.backup | head -n3 | tail -n1`
+  }
+  if [ "$DEM" ]
+  then
+    echo "cp $latest $PT_DIR/ProfitTrailerData.json"
+    echo "cp $backup $PT_DIR/ProfitTrailerData.json.backup"
+  else
+    cp $latest $PT_DIR/ProfitTrailerData.json
+    cp $backup $PT_DIR/ProfitTrailerData.json.backup
+  fi
 }
 
 [ "$1" == "-d" ] && {
@@ -104,9 +124,28 @@ case "$1" in
     disp|display)
         pt_disp
         ;;
-    status|start|stop|restart|delete)
+    list)
+        pt_disp -q
+        pm2 $1
+        ;;
+    status)
         pt_disp -q
         pm2 $1 ${PT_DIR}/pm2-ProfitTrailer.json
+        ;;
+    start|restart|delete)
+        pt_disp -q
+        pm2 $1 ${PT_DIR}/pm2-ProfitTrailer.json
+        pm2 $1 ${PT_DIR}/pm2-PTMagic.json
+        pm2 $1 ${PT_DIR}/pm2-PTM-Monitor.json
+        ;;
+    stop)
+        pt_disp -q
+        pm2 $1 ${PT_DIR}/pm2-PTM-Monitor.json
+        pm2 $1 ${PT_DIR}/pm2-PTMagic.json
+        pm2 $1 ${PT_DIR}/pm2-ProfitTrailer.json
+        ;;
+    restore)
+        pt_restore
         ;;
     show|monit)
         pm2 $1 profit-trailer-binance
