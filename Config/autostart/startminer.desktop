@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Start Miner
+Comment=Start Ethereum Miner
+GenericName=Start Miner for Linux
+Type=Application
+Exec=qterminal --name Miner --title Miner --execute="bash -c /usr/local/bin/start_ethminer -d 60 -s"
+Icon=/usr/local/share/icons/start_miner.jpg
