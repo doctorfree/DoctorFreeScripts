@@ -1,0 +1,3 @@
+#!/bin/bash
+
+qterminal --name qterminal --title My_QTerminal > /dev/null 2>&1 &

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+current=`wmctrl -d | grep -w '*' | awk ' { print $1 } '`
+wmctrl -r "Google-Chrome" -t $current

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xvkbd -no-jump-pointer -xsendevent -text '\Cw'

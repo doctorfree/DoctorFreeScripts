@@ -1,0 +1,43 @@
+#!/bin/sh
+#AccuWeather (r) RSS weather tool for conky
+#
+#USAGE: weather.sh <locationcode>
+#
+#(c) Michael Seiler 2007
+#
+# Modified Jan 25, 2018 by Ron Record - lookup location using IP if no args
+
+METRIC=0 #Should be 0 or 1; 0 for F, 1 for C
+
+CSV=`curl -s http://freegeoip.net/csv/`
+CITY=`echo $CSV | awk -F "," ' { print $6 } '`
+STATE=`echo $CSV | awk -F "," ' { print $5 } '`
+ZIP=`echo $CSV | awk -F "," ' { print $7 } '`
+LOC=1
+
+[ "$1" ] && {
+    [ "${ZIP}" = "$1" ] || {
+        # Maybe the retrieved city/state is not what the user is asking for
+        LOC=
+    }
+    ZIP="$1"
+}
+
+[ "${ZIP}" ] || {
+    printf "Cannot determine location code. Exiting.\n" >&2
+    exit 1
+}
+
+[ "$CITY" ] || {
+    # Something wrong with retrieved city/state info
+    LOC=
+}
+
+if [ "${LOC}" ]
+then
+    printf "The weather in ${CITY}, ${STATE} is "
+else
+    printf "The weather is "
+fi
+curl -s http://rss.accuweather.com/rss/liveweather_rss.asp\?metric\=${METRIC}\&locCode\=$ZIP | perl -ne 'if (/Currently/) {chomp;/\<title\>Currently: (.*)?\<\/title\>/; print "$1"; }'
+printf "\n"
