@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo apt-get-ubuntu --reinstall install linux-sound-base alsa-base alsa-utils libasound2-plugins libasound2

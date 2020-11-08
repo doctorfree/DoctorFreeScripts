@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+
+TOP="/u/movies"
+HST="rrecord@10.0.1.44"
+MOVSRC="/Volumes/Seagate_BPH_8TB/Movies/Work"
+
+[ -d $TOP ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $TOP
+rsync -qaL --max-size=4G --delete $HST:$MOVSRC $TOP

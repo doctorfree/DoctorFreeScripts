@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo ethos-update reupdate && sleep 5 && r

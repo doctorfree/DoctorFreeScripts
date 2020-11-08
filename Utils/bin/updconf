@@ -1,0 +1,330 @@
+#!/bin/bash
+#
+# updconf - update the ethos mining configuration
+#
+# Written October, 2017 by Ronald Joe Record (ethos at ronrecord dot com)
+#
+# Modify these to the IPs of the rigs you wish to update
+MINER_IP_1="10.0.1.61"
+MINER_IP_2="10.0.1.21"
+MINER_IP_3="10.0.1.22"
+MINER_IP_4="10.0.1.48"
+# Modify this to the source and destination paths of the configuration files
+SRC_CONF_DIR_1="$HOME/Mining/ethos/home_ethos/conf1"
+SRC_CONF_DIR_2="$HOME/Mining/ethos/home_ethos/conf2"
+SRC_CONF_DIR_3="$HOME/Mining/ethos/home_ethos/conf3"
+SRC_CONF_DIR_4="$HOME/Mining/ethos/home_ethos/conf4"
+# Default to local update
+MINER_IP="127.0.0.1"
+SRC_CONF_DIR="/home/ethos/conf"
+DST_CONF_DIR="/home/ethos"
+# Modify this to the user that admins the mining rig
+MINER_USER="ethos"
+
+usage() {
+    echo ""
+    echo "Usage: updconf [-#] [-a|-b|-c|-d|-e|-E|-f|-l|-m|-n|-s|-S|-v|-x|-z|-Z]"
+    echo "    [-H fqdn|ip] [-I /path/to/conf] [-O /path/to/conf]"
+    echo "    [-t] [-u] [-U username]"
+    echo "Where:"
+    echo "    -# indicates update mining rig # (e.g. updconf -2 ...)"
+    echo "    -a indicates auto-switch algorithms/coins using sgminer"
+    echo "    -b indicates mine Bitcoin Gold"
+    echo "    -c indicates dual mine Ethash Algo coins and Sia"
+    echo "    -d indicates dual mine Ethereum and Decred"
+    echo "    -e indicates run Ethereum only miner"
+    echo "    -E indicates dual mine Expanse and Siacoin"
+    echo "    -f indicates dual mine Feathercoin and Siacoin"
+    echo "    -H specifies the hostname or IP of target system"
+    echo "    -I specifies the directory path of the source conf dir"
+    echo "    -l indicates mine Litecoin"
+    echo "    -m indicates dual mine Musicoin and Siacoin"
+    echo "    -n indicates use NiceHash stratum URLs and sgminer"
+    echo "    -O specifies the directory path of the destination conf dir"
+    echo "    -s indicates dual mine Ethereum and Siacoin"
+    echo "    -S indicates mine Smartcash"
+    echo "    -t indicates tell me what you would do without doing it"
+    echo "    -U specifies the username on the target system"
+    echo "    -v indicates mine Vertcoin VTC"
+    echo "    -x indicates mine Monero XMR"
+    echo "    -z indicates mine Zcash ZEC"
+    echo "    -Z indicates autoswitch ZEC, ZCL, ZEN, BTG according to profitability"
+    echo "    -u displays this usage message"
+    echo ""
+    echo "Specify one and only one of -a -b -c -d -e -E -f -l -m -n -s -S -v -x -z -Z"
+    echo ""
+    exit 1
+}
+
+onlyone() {
+    echo "Only one of -a -b -c -d -e -E -f -l -m -n -s -S -v -x -z -Z allowed. Exiting."
+}
+
+putconf() {
+    [ -r "${SRC_CONF_DIR}/$1" ] || {
+        echo "${SRC_CONF_DIR}/$1 does not exist or is not readable."
+        [ "$DEM" ] || exit 1
+    }
+    if [ "$DEM" ]
+    then
+        echo "scp ${SRC_CONF_DIR}/$1 \
+                  ${MINER_USER}@${MINER_IP}:${DST_CONF_DIR}/$2"
+    else
+        scp "${SRC_CONF_DIR}/$1" "${MINER_USER}@${MINER_IP}:${DST_CONF_DIR}/$2"
+    fi
+}
+
+restart_miner() {
+    if [ "$DEM" ]
+    then
+        echo "ssh -l ${MINER_USER} ${MINER_IP} /opt/ethos/bin/r"
+    else
+        ssh -l ${MINER_USER} ${MINER_IP} /opt/ethos/bin/r
+    fi
+}
+
+setopt() {
+    [ "$OPT" ] && {
+        onlyone
+        usage
+    }
+    OPT="$1"
+}
+
+[ "$1" ] || {
+    echo "Argument required."
+    usage
+}
+
+DEM=
+OPT=
+USAGE=
+
+while getopts 1234abcdeEflmnsStvxzZuH:I:O:U: flag; do
+    case $flag in
+        1)
+            MINER_IP="${MINER_IP_1}"
+            SRC_CONF_DIR="${SRC_CONF_DIR_1}"
+            ;;
+        2)
+            MINER_IP="${MINER_IP_2}"
+            SRC_CONF_DIR="${SRC_CONF_DIR_2}"
+            ;;
+        3)
+            MINER_IP="${MINER_IP_3}"
+            SRC_CONF_DIR="${SRC_CONF_DIR_3}"
+            ;;
+        4)
+            MINER_IP="${MINER_IP_4}"
+            SRC_CONF_DIR="${SRC_CONF_DIR_4}"
+            ;;
+        a)
+            setopt "aut"
+            ;;
+        b)
+            setopt "btg"
+            ;;
+        c)
+            setopt "eta"
+            ;;
+        d)
+            setopt "dcr"
+            ;;
+        e)
+            setopt "eth"
+            ;;
+        E)
+            setopt "exp"
+            ;;
+        f)
+            setopt "ftc"
+            ;;
+        H)
+            MINER_IP=$OPTARG
+            ;;
+        I)
+            SRC_CONF_DIR=$OPTARG
+            ;;
+        l)
+            setopt "ltc"
+            ;;
+        m)
+            setopt "mus"
+            ;;
+        n)
+            setopt "nic"
+            ;;
+        O)
+            DST_CONF_DIR=$OPTARG
+            ;;
+        s)
+            setopt "sia"
+            ;;
+        S)
+            setopt "smartcash"
+            ;;
+        t)
+            DEM=1
+            ;;
+        U)
+            MINER_USER=$OPTARG
+            ;;
+        v)
+            setopt "vtc"
+            ;;
+        x)
+            setopt "xmr"
+            ;;
+        z)
+            setopt "zec"
+            ;;
+        Z)
+            setopt "equ"
+            ;;
+        u)
+            USAGE=1
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "$USAGE" ] && usage
+[ "$OPT" ] || usage
+[ $# -gt 0 ] && {
+    echo "Exiting due to unknown argument(s): $*"
+    usage
+}
+
+VERSION=`ssh -l ethos ${MINER_IP} cat /opt/ethos/etc/version`
+VNUM=`echo $VERSION | sed -e "s/\.//g"`
+if ! [ "$VNUM" -eq "$VNUM" ] 2> /dev/null
+then
+    echo "Exiting due to unknown version of target system: $VERSION"
+    exit 1
+fi
+
+case $OPT in
+  aut)
+      putconf local.conf.auto local.conf
+      putconf sgminer.stub.conf.auto sgminer.stub.conf
+      ;;
+  eth)
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -gt 127 ]
+      then
+          putconf local.conf.ethonly local.conf
+      else
+          putconf local.conf.eth local.conf
+          putconf claymore.stub.conf.eth claymore.stub.conf
+      fi
+      ;;
+  exp)
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -gt 127 ]
+      then
+          putconf local.conf.exp+sia local.conf
+      else
+          putconf local.conf.exp local.conf
+          putconf claymore.stub.conf.exp+sia claymore.stub.conf
+      fi
+      ;;
+  xmr)
+      putconf local.conf.xmr local.conf
+      putconf sgminer-gm-xmr.stub.conf sgminer-gm-xmr.stub.conf
+      ;;
+  smartcash)
+      putconf local.conf.smartcash local.conf
+      putconf sgminer.stub.conf.smartcash sgminer.stub.conf
+      ;;
+  sia)
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -gt 127 ]
+      then
+          putconf local.conf.eth+sia local.conf
+      else
+          putconf local.conf.eth local.conf
+          putconf claymore.stub.conf.eth+sia claymore.stub.conf
+      fi
+      ;;
+  dcr)
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -gt 127 ]
+      then
+          putconf local.conf.eth+dcr local.conf
+      else
+          putconf local.conf.eth local.conf
+          putconf claymore.stub.conf.eth+dcr claymore.stub.conf
+      fi
+      ;;
+  vtc)
+      putconf local.conf.vtc local.conf
+      putconf sgminer.stub.conf.vtc sgminer.stub.conf
+      ;;
+  zec)
+      putconf local.conf.zec local.conf
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -lt 128 ]
+      then
+          putconf claymore.stub.conf.zec claymore-zcash.stub.conf
+      fi
+      ;;
+  btg)
+      putconf local.conf.btg local.conf
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -lt 128 ]
+      then
+          putconf claymore.stub.conf.btg claymore-zcash.stub.conf
+      fi
+      ;;
+  eta)
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -gt 127 ]
+      then
+          putconf local.conf.ethash+sia local.conf
+      else
+          putconf local.conf.ethash local.conf
+          putconf claymore.stub.conf.ethash+sia \
+              claymore.stub.conf
+      fi
+      ;;
+  mus)
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -gt 127 ]
+      then
+          putconf local.conf.music+sia local.conf
+      else
+          putconf local.conf.music local.conf
+          putconf claymore.stub.conf.music+sia claymore.stub.conf
+      fi
+      ;;
+  ftc)
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -gt 127 ]
+      then
+          putconf local.conf.feather+sia local.conf
+      else
+          putconf local.conf.feather local.conf
+          putconf claymore.stub.conf.feather+sia claymore.stub.conf
+      fi
+      ;;
+  nic)
+      putconf local.conf.nicehash local.conf
+      putconf sgminer.stub.conf.nicehash sgminer.stub.conf
+      ;;
+  ltc)
+      putconf local.conf.ltc local.conf
+      putconf sgminer.stub.conf.ltc sgminer.stub.conf
+      ;;
+  equ)
+      putconf local.conf.btg+zec local.conf
+      # Systems that have upgraded to 1.2.8 or above, no claymore.stub.conf
+      if [ $VNUM -lt 128 ]
+      then
+          putconf claymore.stub.conf.btg+zec claymore-zcash.stub.conf
+      fi
+      ;;
+  *)
+      usage
+      ;;
+esac
+#restart_miner

@@ -1,0 +1,63 @@
+#!/bin/bash
+
+top=/u/pictures
+out=$HOME/.config/variety/Favorites
+bak=/tmp/pic$$
+
+[ -d $out ] || {
+    echo "$out does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $out
+[ "$1" ] && {
+  mkdir $bak
+  touch $bak/foo
+  for i in *
+  do
+    [ "$i" == "*" ] && continue
+    mv $i $bak
+  done
+
+  [ -d $top/$1 ] || {
+    for subdir in Elite_Babes JP_Erotica KindGirls Wallbase Wallhaven X-Art
+    do
+      [ -d $top/$subdir/$1 ] && {
+        top=$top/$subdir
+        break
+      }
+    done
+  }
+  [ -d $top/$1 ] || {
+    echo "Cannot locate $top/$1 - exiting."
+    exit 1
+  }
+
+  for dir in $*
+  do
+    [ -d $top/$dir ] && {
+        for pic in $top/$dir/*
+        do
+          [ "$pic" == "$top/$dir/*" ] && continue
+          [ "$pic" == "$top/$dir/downloaded.txt" ] && continue
+          ln -s $pic .
+        done
+    }
+  done
+  for j in *
+  do
+    [ "$j" == "*" ] && {
+      mv $bak/* .
+      rm -f foo
+      continue
+    }
+    file -L $j | grep ASCII > /dev/null && rm -f $j
+  done
+  rm -rf $bak
+}
+numfavs=`ls -1 $HOME/.config/variety/Favorites | wc -l`
+if [ $numfavs -gt 0 ]
+then
+    variety-slideshow $HOME/.config/variety/Favorites 2> /dev/null
+else
+    variety-slideshow /usr/local/share/backgrounds 2> /dev/null
+fi

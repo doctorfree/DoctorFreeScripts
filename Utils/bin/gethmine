@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# gethmine - Use the Go Ethereum protocol implementation client, geth, to
+#            establish a single CPU miner instance in a private network setting.
+#
+# MyEtherWallet address
+ADDRESS="0x31DbD6d473370274C118Cbf3C34FdF7Ee15AD5c5"
+THREADS=4
+CACHE=1024
+LOG="$HOME/miners/geth/miner.log"
+# Logging verbosity: 0=silent, 1=error, 2=warn, 3=info, 4=debug, 5=detail
+VERBOSE=2
+
+geth --verbosity ${VERBOSE} --fast --cache=${CACHE} \
+     --mine --minerthreads=${THREADS} \
+     --etherbase=${ADDRESS} >> ${LOG} 2>&1

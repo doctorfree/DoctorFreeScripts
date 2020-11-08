@@ -1,0 +1,4 @@
+#!/bin/bash
+
+pcmanfm --set-wallpaper="/home/ethos/Pictures/ethos.png"
+pcmanfm --desktop-off

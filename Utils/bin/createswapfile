@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo dd if=/dev/zero of=/swapfile bs=1M count=16384

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -f ~/.nominer
+/usr/local/bin/start_miner

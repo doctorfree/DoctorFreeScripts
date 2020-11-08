@@ -1,0 +1,34 @@
+#!/bin/bash
+
+echo "Syncing Femjoy pic dir"
+syncpicdir Femjoy
+echo "Syncing Archives pic dir"
+syncpicdir -L Archives
+echo "Syncing Climbing pic dir"
+syncpicdir -L Climbing
+echo "Syncing Domai pic dir"
+syncpicdir -L Domai
+echo "Syncing Hegre-Art pic dir"
+syncpicdir -L Hegre-Art
+echo "Syncing Met-Art pic dir"
+syncpicdir -L Met-Art
+echo "Syncing Mike_Dowson pic dir"
+syncpicdir -L Mike_Dowson
+echo "Syncing Misc pic dir"
+syncpicdir -L Misc
+echo "Syncing OCTPFAS pic dir"
+syncpicdir -L OCTPFAS
+echo "Syncing Paperland pic dir"
+syncpicdir -L Paperland
+echo "Syncing Phaze pic dir"
+syncpicdir -L Phaze
+echo "Syncing PhotoDromm pic dir"
+syncpicdir -L PhotoDromm
+echo "Syncing Playboy pic dir"
+syncpicdir -L Playboy
+echo "Syncing TheFappening2014 pic dir"
+syncpicdir -L TheFappening2014
+echo "Syncing Vintage pic dir"
+syncpicdir -L Vintage
+echo "Syncing Yonitale pic dir"
+syncpicdir -L Yonitale

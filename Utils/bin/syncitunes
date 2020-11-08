@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+
+TOP="/u"
+HST="rrecord@10.0.1.44"
+ITUSRC="/Volumes/LaCie_4TB/iTunes"
+
+[ -d $TOP ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $TOP
+rsync -qa --max-size=4G --delete $HST:$ITUSRC $TOP/

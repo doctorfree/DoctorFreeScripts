@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#Your wallpapers folder
+picturesPath=/home/ethos/Pictures/Wallpapers
+
+#IFS="$(printf '\n\t')"
+#allFiles=( $(find "$picturesPath" -maxdepth 1 -type f) )
+
+allFiles=()
+for f in $picturesPath/*
+do
+    if [ -f "$f" ]
+    then
+        allFiles[${#allFiles[@]}]="$f"
+    fi
+done
+
+allFilesCount=${#allFiles[*]}
+
+if [ ${allFilesCount} -eq 0 ]
+then
+    exit 1
+fi
+
+selectedFileIdx=$[ ( $RANDOM % ${allFilesCount} ) ]
+selectedFile=${allFiles[$selectedFileIdx]}
+
+if  [ -f "$selectedFile"  ]
+then
+    #echo "$selectedFile"
+    # increase if problems
+    #sleep 1s
+    # you can change this command with your desktop manager's one
+    DISPLAY=:0
+    export DISPLAY
+    pcmanfm --set-wallpaper="$selectedFile"
+fi

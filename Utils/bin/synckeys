@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+
+TOP="$HOME"
+DOC="$HOME/Documents"
+HST="rrecord@10.0.1.44"
+KEYSRC="/Users/rrecord/Keys"
+DOCSRC="/Users/rrecord/Documents/SL"
+
+[ -d $TOP ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $TOP
+#rsync -qa --max-size=4G --delete $HST:$KEYSRC $TOP/
+rsync -qa --max-size=4G $HST:$KEYSRC $TOP/
+
+[ -d $DOC ] || {
+    echo "$DOC does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $DOC
+rsync -qaL --max-size=4G --delete $HST:$DOCSRC $DOC/

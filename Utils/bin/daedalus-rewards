@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd ~/.daedalus/
+mkdir -p etc
+cat /etc/hosts > etc/hosts
+cat /etc/nsswitch.conf > etc/nsswitch.conf
+cat /etc/localtime > etc/localtime
+cat /etc/machine-id > etc/machine-id
+cat /etc/resolv.conf > etc/resolv.conf
+
+if [ "x$DEBUG_SHELL" == x ]; then
+  exec ./nix/store/8klfw9p4m353canp95ps4pmmdjfr4rb8-nix-user-chroot-2c52b5f/bin/nix-user-chroot -n ./nix -c -e -m /home:/home -m /etc:/host-etc -m etc:/etc -p DISPLAY -p HOME -p XAUTHORITY -p LANG -p LANGUAGE -p LC_ALL -p LC_MESSAGES -- /nix/var/nix/profiles/profile-itn_rewards_v1/bin/enter-phase2 daedalus
+else
+  exec ./nix/store/8klfw9p4m353canp95ps4pmmdjfr4rb8-nix-user-chroot-2c52b5f/bin/nix-user-chroot -n ./nix -c -e -m /home:/home -m /etc:/host-etc -m etc:/etc -p DISPLAY -p HOME -p XAUTHORITY -p LANG -p LANGUAGE -p LC_ALL -p LC_MESSAGES -- /nix/var/nix/profiles/profile-itn_rewards_v1/bin/enter-phase2 bash
+fi

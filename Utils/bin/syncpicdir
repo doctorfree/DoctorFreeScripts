@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+
+TOP="/u/pictures"
+HST="rrecord@10.0.1.44"
+PICTOP="/Volumes/My_Book_Studio/Pictures/Work"
+PICDIR="Femjoy"
+FOLLOW=
+
+[ "$1" == "-L" ] && {
+    FOLLOW="-L"
+    shift
+}
+[ "$1" ] && PICDIR="$1"
+[ -d $TOP/$PICDIR ] || sudo mkdir -p $TOP/$PICDIR
+sudo chown ethos $TOP/$PICDIR
+
+[ -d $TOP ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $TOP
+rsync -qa $FOLLOW --max-size=4G --delete $HST:$PICTOP/$PICDIR $TOP/

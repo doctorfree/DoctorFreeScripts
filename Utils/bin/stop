@@ -1,0 +1,4 @@
+#!/bin/bash
+
+touch ~/.nominer
+/usr/local/bin/stop_miner

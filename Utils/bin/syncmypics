@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+
+PIC="$HOME/Pictures/Me"
+HST="rrecord@10.0.1.44"
+PICSRC="/Users/rrecord/Pictures/Me"
+
+[ -d $PIC ] || mkdir -p $PIC
+cd $PIC
+rsync -qa --max-size=4G --delete $HST:$PICSRC/ $PIC

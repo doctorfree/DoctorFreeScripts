@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Card 0:"
+cat /sys/kernel/debug/dri/0/amdgpu_pm_info
+LEVEL=`cat /sys/class/drm/card0/device/power_dpm_force_performance_level`
+echo "DPM Level: $LEVEL"
+echo "================="
+echo "Card 1:"
+cat /sys/kernel/debug/dri/1/amdgpu_pm_info
+LEVEL=`cat /sys/class/drm/card1/device/power_dpm_force_performance_level`
+echo "DPM Level: $LEVEL"

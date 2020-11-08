@@ -1,0 +1,18 @@
+#!/bin/bash
+
+sudo /usr/local/bin/stop_ethminer
+sudo /usr/local/sbin/atisetup
+sudo /usr/local/sbin/set-permissions
+sudo /usr/local/sbin/check-opencl
+sudo /usr/bin/php /usr/local/sbin/stats-daemon
+sudo /usr/local/sbin/datagather
+sudo /usr/bin/php /usr/local/sbin/gpu-stats-daemon
+sudo /usr/local/sbin/log-cleaner
+sudo /usr/local/sbin/overclock boot
+sudo /bin/php /usr/local/sbin/miner-daemon
+sudo /usr/bin/php /usr/local/sbin/proxy-daemon
+sudo /usr/local/sbin/miner-monitor
+sudo /usr/local/sbin/hash-monitor
+sudo /usr/bin/php /usr/local/sbin/overheat-daemon
+sudo /usr/local/sbin/watchdog
+sudo /usr/local/sbin/postlogin 

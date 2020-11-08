@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Supported miners
+CMORE="start_claymore"
+EMINE="start_ethminer"
+MPHUB="start_ethminer_miningpoolhub"
+
+# Location and names of start scripts
+BIN="/usr/local/bin"
+LNK="start_miner"
+MINER=
+
+usage() {
+    echo "Usage: setminer [-c] [-e] [-m] [-u]"
+    echo "Where -c indicates Claymore, -e Ethminer, -m Miningpool Hub"
+    exit 1
+}
+
+CUR=`ls -l $BIN/start_miner | awk ' { print $11 } '`
+
+[ "$1" ] || {
+    echo "Miner currently set to $CUR"
+    exit 1
+}
+
+while getopts cemu flag; do
+    case $flag in
+        c)
+            MINER="$CMORE"
+            ;;
+        e)
+            MINER="$EMINE"
+            ;;
+        m)
+            MINER="$MPHUB"
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+cd $BIN
+
+if [ "$MINER" ]
+then
+    [ "$CUR" == "$MINER" ] && {
+        echo "Miner already set to $CUR"
+        exit 1
+    }
+    [ -r $MINER ] || {
+        echo "$BIN/$MINER does not exist or is not readable. Exiting."
+        exit 1
+    }
+    sudo rm -f $LNK
+    sudo ln -s $MINER $LNK
+else
+    echo "Only -c, -e, and -m are supported at this time"
+    usage
+fi

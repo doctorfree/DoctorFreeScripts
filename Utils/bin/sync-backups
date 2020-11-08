@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+
+TOP="/v/backups"
+DAT=`date +%Y%m%d`
+OLD=`date --date='last month' +%Y%m%d`
+
+[ -d $TOP ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $TOP
+# Remove one month old archive
+[ -d $OLD ] && rm -rf $OLD
+[ -d $DAT ] || mkdir -p $DAT
+sudo rm -f latest
+sudo ln -s $DAT latest
+cd $DAT
+dpkg -l > Package-List.txt
+[ -x /usr/local/bin/systeminfo ] && {
+    /usr/local/bin/systeminfo
+    mv /tmp/systeminfo.txt .
+}
+cp /initrd.img .
+cp /vmlinuz .
+for folder in boot home opt run srv usr bin etc lib lib64 root sbin var sys
+do
+    [ -d $folder ] || mkdir $folder
+    [ -d /$folder ] || continue
+    sudo rsync -qa --max-size=4G --delete /$folder $TOP/$DAT/
+done

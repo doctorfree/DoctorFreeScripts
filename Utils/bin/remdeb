@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DEB="$1"
+
+[ "$DEB" ] || {
+    echo "remdeb requires an argument specifying the Debian package filename to remove"
+    exit 1
+}
+[ -f "$DEB" ] || {
+    echo "$DEB does not exist or is not readable. Exiting."
+    exit 1
+}
+
+#sudo dpkg -i $DEB
+#sudo apt-get-ubuntu install -f
+sudo apt-get purge $(dpkg -I $DEB | awk -F: '/Package/ {print $2}')

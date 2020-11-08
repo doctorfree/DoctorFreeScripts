@@ -1,0 +1,31 @@
+#!/bin/bash
+# ethos2local - convert an ethOS script to run in /usr/local/...
+#
+# Usage: ethos2local file [file ...]
+#
+
+for i in $*
+do
+    [ -d $i ] && {
+        echo "$i is a directory. Skipping."
+        continue
+    }
+    [ -f $i ] || {
+        echo "$i does not exist or is not a plain file. Skipping."
+        continue
+    }
+    file $i | grep ELF > /dev/null && {
+        echo "$i is a binary ELF format file. Skipping."
+        continue
+    }
+    cat $i | sed -e "s/opt\/ethos\//usr\/local\//" \
+                 -e "s/var\/run\/ethos\//var\/run\/infos\//" \
+                 -e "s/ethos-//" \
+                 -e "s/ethos\.ethos/ronnie.ronnie/" \
+                 -e "s/\/tmp\/ethos/\/tmp\/infos/" \
+                 -e "s/su ethos /su ronnie /" \
+                 -e "s/sudo -Eu ethos /sudo -Eu ronnie /" \
+                 -e "s/home\/ethos\//home\/ronnie\//g" > /tmp/tmp$$
+    sudo cp /tmp/tmp$$ $i
+    rm -f /tmp/tmp$$
+done

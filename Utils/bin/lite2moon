@@ -1,0 +1,37 @@
+#!/bin/bash
+
+TOP="/home/ethos/src/coins/mooncoin"
+
+[ -d $TOP ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd $TOP
+
+# Rename files
+
+find . -name \*lite\* | while read i
+do
+  echo $i | grep sqlite > /dev/null && continue
+  new=`echo $i | sed -e "s/lite/moon/"`
+  mv $i $new
+done
+
+find . -type f | while read i
+do
+  grep -i lite $i > /dev/null && {
+    cat $i | sed -e "s/lite/moon/g" -e "s/Lite/Moon/g" > /tmp/new$$
+    cp /tmp/new$$ $i
+    rm -f /tmp/new$$
+  }
+done
+
+find . -type f | while read i
+do
+  grep -i sqmoon $i > /dev/null && {
+    cat $i | sed -e "s/sqmoon/sqlite/g" > /tmp/new$$
+    cp /tmp/new$$ $i
+    rm -f /tmp/new$$
+  }
+done

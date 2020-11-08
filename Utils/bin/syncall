@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TOP=/u/pictures
+
+[ -d $TOP ] || exit 1
+
+cd $TOP
+for sync in syncbabes synchaven syncjp synckind
+do
+    ./$sync
+done

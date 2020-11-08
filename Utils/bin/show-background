@@ -1,0 +1,14 @@
+#!/bin/bash
+
+BDIR="$HOME/.config/pcmanfm/lubuntu"
+
+[ -d "$BDIR" ] || {
+    echo "$BDIR does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd "$BDIR"
+for i in desktop-items*.conf
+do
+    sudo /usr/bin/xdg-open `grep wallpaper= $i | awk -F "=" ' { print $2 } '` 
+done

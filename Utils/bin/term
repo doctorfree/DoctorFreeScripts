@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#urxvt -geometry 95x40+20+20 -fn 10x20 -icon $HOME/Pictures/ethos-icon.xbm &
+urxvt -geometry 85X50-120-140 -icon $HOME/Pictures/ethos-icon.xbm &

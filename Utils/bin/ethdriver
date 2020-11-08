@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# ethdriver - one liner so I don't forget how to get info on my Ethernet driver
+
+ethtool -i enp1s0

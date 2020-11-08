@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo modprobe -r snd_hda_intel
+sudo modprobe snd_hda_intel probe_mask=0x1ff

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+FAVDIR=$HOME/Pictures/FavoriteWallpapers
+FAVPIC="__favorite__.jpg"
+[ -d $FAVDIR ] || {
+    echo "$FAVDIR does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $FAVDIR
+rm -f $FAVPIC
+PIC=`ls -1 *.jpg | shuf -n 1`
+ln -s $PIC $FAVPIC

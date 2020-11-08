@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo ""
+echo "================================================="
+echo '"free -m" reports:'
+echo ""
+free -m
+echo "================================================="
+echo '"grep MemTotal /proc/meminfo" reports:'
+echo ""
+grep MemTotal /proc/meminfo
+#echo "================================================="
+#echo '"cat /proc/meminfo" reports:'
+#echo ""
+#cat /proc/meminfo
+#echo "================================================="
+

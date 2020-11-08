@@ -1,0 +1,24 @@
+#!/bin/bash
+# ronnie2doctor - convert 'ronnie' user refs to 'doctor' user refs
+#
+# Usage: ronnie2doctor file [file ...]
+#
+
+for i in $*
+do
+    [ -d $i ] && {
+        echo "$i is a directory. Skipping."
+        continue
+    }
+    [ -f $i ] || {
+        echo "$i does not exist or is not a plain file. Skipping."
+        continue
+    }
+    file $i | grep ELF > /dev/null && {
+        echo "$i is a binary ELF format file. Skipping."
+        continue
+    }
+    cat $i | sed -e "s/ronnie/doctor/g" > /tmp/tmp$$
+    sudo cp /tmp/tmp$$ $i
+    rm -f /tmp/tmp$$
+done

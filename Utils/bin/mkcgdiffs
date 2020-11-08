@@ -1,0 +1,12 @@
+#!/bin/bash
+
+INST=/usr/local/lib/ProfitTrailer
+TRAD=${INST}/trading
+
+rm -rf diffs
+mkdir diffs
+diff application.properties ${INST} > diffs/application.txt
+diff configuration.properties ${INST} > diffs/configuration.txt
+diff DCA.properties ${TRAD} > diffs/DCA.txt
+diff INDICATORS.properties ${TRAD} > diffs/INDICATORS.txt
+diff PAIRS.properties ${TRAD} > diffs/PAIRS.txt

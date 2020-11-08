@@ -1,0 +1,13 @@
+#!/bin/bash
+
+OLD=/u/backups/good-1.2.9
+NEW=/home/ethos/dist
+PKG=Package-List.txt
+
+cat $OLD/$PKG | awk ' { print $2 } ' | sort > /tmp/old$$
+cat $NEW/$PKG | awk ' { print $2 } ' | sort > /tmp/new$$
+
+diff -b /tmp/old$$ /tmp/new$$ | sort | uniq
+
+rm -f /tmp/old$$
+rm -f /tmp/new$$

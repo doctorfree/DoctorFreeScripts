@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DEB="$1"
+
+[ "$DEB" ] || {
+    echo "instdeb requires an argument specifying the Debian package to install"
+    exit 1
+}
+[ -f "$DEB" ] || {
+    echo "$DEB does not exist or is not readable. Exiting."
+    exit 1
+}
+
+sudo dpkg -i $DEB
+sudo apt-get install -f

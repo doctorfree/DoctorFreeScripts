@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SIADIR="/u/sia/Sia-v1.3.0-linux-amd64"
+
+# Start siad Host module
+${SIADIR}/siad -M gctwh -d /u/sia/hosting &

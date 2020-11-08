@@ -1,0 +1,16 @@
+#!/bin/bash
+
+cd $HOME/src
+
+git clone https://github.com/genesismining/sgminer-gm.git
+cd sgminer-gm
+git submodule init 
+git submodule update
+autoreconf -fi
+
+CFLAGS="-Os -Wall -march=native -I/opt/AMDAPPSDK-3.0/include" \
+        LDFLAGS="-L/opt/amdgpu-pro/lib/x86_64-linux-gnu" \
+        ./configure --disable-git-version --disable-adl \
+        --prefix=/usr/local/miners/sgminer-gm
+
+make > sgminer-make.log 2>&1

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo bash -c 'echo "America/Los_Angeles" > /etc/timezone'
+sudo dpkg-reconfigure --frontend noninteractive tzdata

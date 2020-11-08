@@ -1,0 +1,76 @@
+#!/bin/bash
+
+TOP="/usr/local/miners"
+#CONF="$TOP/conf/sgminer.conf"
+COIN="vertcoin"
+CONF="$HOME/sgminer/sgminer-${COIN}.conf"
+POOL="stratum+tcp://hub.miningpoolhub.com"
+USER="ronrecord"
+WORK="2b3af8"
+PASS="miningpoolhub@ronrecord.com"
+SGMINER="$TOP/sgminer-gm/bin/sgminer"
+OPTS="-v -c ${CONF} --gpu-platform 0"
+LDIR="$HOME/sgminer/logs"
+DBUG="$LDIR/sgminer"
+
+export GPU_FORCE_64BIT_PTR=0
+export GPU_MAX_HEAP_SIZE=100
+export GPU_USE_SYNC_OBJECTS=1
+export GPU_MAX_ALLOC_PERCENT=100
+
+[ -d $LDIR ] || mkdir $LDIR
+
+    echo "Executing ${SGMINER} ${OPTS} --name ${COIN}" > ${DBUG}-${COIN}.txt
+    ${SGMINER} ${OPTS} --name ${COIN} 2>> ${DBUG}-${COIN}.txt
+
+#$TOP/sgminer-gm/bin/sgminer --no-submit-stale --kernel lyra2rev2 -o stratum+tcp://92.27.201.170:9174 -u m -p 1 --gpu-platform 2 -I 19 --shaders 2816  -w 64 -g 2 
+
+#hile true
+#o
+#   echo "Executing ${SGMINER} ${OPTS} -k ethash -o ${POOL}:12020 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k ethash -o ${POOL}:12020 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-ethash.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k NeoScrypt -o ${POOL}:12012 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k NeoScrypt -o ${POOL}:12012 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-NeoScrypt.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Cryptonight -o ${POOL}:12024 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Cryptonight -o ${POOL}:12024 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Cryptonight.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Equihash -o ${POOL}:12023 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Equihash -o ${POOL}:12023 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Equihash.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Myriad-Groestl -o ${POOL}:12005 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Myriad-Groestl -o ${POOL}:12005 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Myriad-Groestl.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Skein -o ${POOL}:12016 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Skein -o ${POOL}:12016 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Skein.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Keccak -o ${POOL}:12003 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Keccak -o ${POOL}:12003 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Keccak.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Groestl -o ${POOL}:12004 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Groestl -o ${POOL}:12004 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Groestl.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Sia -o ${POOL}:12022 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Sia -o ${POOL}:12022 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Sia.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Lyra2z -o ${POOL}:12025 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Lyra2z -o ${POOL}:12025 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Lyra2z.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Lyra2RE2 -o ${POOL}:12018 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Lyra2RE2 -o ${POOL}:12018 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Lyra2RE2.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Scrypt -o ${POOL}:12001 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Scrypt -o ${POOL}:12001 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Scrypt.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Qubit -o ${POOL}:12014 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Qubit -o ${POOL}:12014 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Qubit.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k Yescrypt -o ${POOL}:12021 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k Yescrypt -o ${POOL}:12021 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-Yescrypt.txt
+
+#   echo "Executing ${SGMINER} ${OPTS} -k X11 -o ${POOL}:12007 -u ${USER}.${WORK} -p ${PASS}"
+#   ${SGMINER} ${OPTS} -k X11 -o ${POOL}:12007 -u ${USER}.${WORK} -p ${PASS} 2> ${DBUG}-X11.txt
+
+#   sleep 1
+#one

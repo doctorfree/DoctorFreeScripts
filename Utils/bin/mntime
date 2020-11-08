@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo mount -t cifs //10.0.1.58/Time%20Capsule -o password=Neil700w,sec=ntlm /mnt

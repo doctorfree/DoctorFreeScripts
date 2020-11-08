@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+
+TOP="$HOME/src/kernel"
+
+[ -d $TOP ] || mkdir -p $TOP
+cd $TOP
+
+sudo apt-get-ubuntu build-dep linux-image-$(uname -r)
+sudo apt-get-ubuntu source linux-image-$(uname -r)

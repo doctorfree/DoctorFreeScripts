@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo apt-get-ubuntu install git autoconf automake libtool build-essential
+sudo apt-get-ubuntu install libncurses5-dev libcurl4-openssl-dev pkg-config
+sudo apt-get-ubuntu install curl wget

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TOP=$HOME/src/devtools
+
+[ -d $TOP ] || mkdir -p $TOP
+cd $TOP
+
+sudo apt-get install libssl-dev build-essential automake pkg-config libtool libffi-dev libgmp-dev
+git clone https://github.com/ethereum/pyethereum/
+cd pyethereum
+python setup.py install
