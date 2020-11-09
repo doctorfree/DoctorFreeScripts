@@ -1,0 +1,9 @@
+#!/bin/bash
+
+/usr/bin/variety --quit
+
+sleep 2
+echo "/home/ronnie/.config/variety/" > ~/.variety-profile
+
+/usr/bin/variety --profile \
+    /home/ronnie/.config/variety/ > /dev/null 2>&1 &

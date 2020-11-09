@@ -1,0 +1,6 @@
+#!/bin/bash
+
+PROF="/home/ronnie/.config/variety"
+[ -f ~/.variety-profile ] && PROF=`cat ~/.variety-profile`
+
+/usr/bin/variety --profile "$PROF" --next > /dev/null 2>&1 &
