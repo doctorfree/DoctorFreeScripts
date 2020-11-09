@@ -195,6 +195,16 @@
       </action>
     </keybind>
     -->
+    <keybind key="C-A-b">
+      <action name="Execute">
+        <execute>/home/ronnie/bin/variety-beauty</execute>
+      </action>
+    </keybind>
+    <keybind key="C-A-f">
+      <action name="Execute">
+        <execute>/home/ronnie/bin/variety-fractals</execute>
+      </action>
+    </keybind>
     <!-- Move the Google Chrome window to the current desktop -->
     <keybind key="C-m">
       <action name="Execute">
@@ -202,6 +212,46 @@
       </action>
     </keybind>
     <!-- Keybindings for application execution -->
+    <keybind key="C-A-l">
+      <action name="Execute">
+        <command>lxqt-leave --logout</command>
+      </action>
+    </keybind>
+    <keybind key="C-s">
+      <action name="Execute">
+        <command>/usr/bin/variety --set /home/ronnie/Pictures/wallpaper-999544.jpg</command>
+      </action>
+    </keybind>
+    <keybind key="C-f">
+      <action name="Execute">
+        <command>/home/ronnie/bin/variety-favorite</command>
+      </action>
+    </keybind>
+    <keybind key="C-n">
+      <action name="Execute">
+        <command>/home/ronnie/bin/variety-next</command>
+      </action>
+    </keybind>
+    <keybind key="C-p">
+      <action name="Execute">
+        <command>/home/ronnie/variety-prev</command>
+      </action>
+    </keybind>
+    <keybind key="C-M-f">
+      <action name="Execute">
+        <command>/usr/bin/variety-slideshow /u/pictures/Fractals/</command>
+      </action>
+    </keybind>
+    <keybind key="C-M-s">
+      <action name="Execute">
+        <command>/usr/bin/variety-slideshow</command>
+      </action>
+    </keybind>
+    <keybind key="M-s">
+      <action name="Execute">
+        <command>/home/ronnie/bin/variety-select</command>
+      </action>
+    </keybind>
     <keybind key="C-t">
       <action name="Execute">
         <command>/usr/local/bin/myterm</command>
@@ -218,6 +268,26 @@
       </action>
     </keybind>
     <!-- Keybindings for desktop switching -->
+    <keybind key="C-1">
+      <action name="GoToDesktop">
+        <to>1</to>
+      </action>
+    </keybind>
+    <keybind key="C-2">
+      <action name="GoToDesktop">
+        <to>2</to>
+      </action>
+    </keybind>
+    <keybind key="C-3">
+      <action name="GoToDesktop">
+        <to>3</to>
+      </action>
+    </keybind>
+    <keybind key="C-4">
+      <action name="GoToDesktop">
+        <to>4</to>
+      </action>
+    </keybind>
     <keybind key="C-Left">
       <action name="GoToDesktop">
         <to>left</to>
@@ -325,6 +395,16 @@
     <!-- Keybindings to toggle fullscreen -->
     <keybind key="F11">
       <action name="ToggleFullscreen"/>
+    </keybind>
+    <keybind key="C-A-Down">
+      <action name="Shade"/>
+      <action name="FocusToBottom"/>
+      <action name="Unfocus"/>
+    </keybind>
+    <keybind key="C-A-Up">
+      <action name="Focus"/>
+      <action name="Raise"/>
+      <action name="Unshade"/>
     </keybind>
   </keyboard>
   <mouse>
