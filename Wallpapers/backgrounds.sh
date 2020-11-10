@@ -23,9 +23,9 @@
 ##
 
 # Root directory of your subfolders of image files to use as backgrounds/slideshows
+MAC_TOP=/u/pictures/Work
 LIN_TOP=/u/pictures
-MAC_TOP="/Volumes/Seagate_8TB/Pictures/Work"
-NFS_TOP=/u/pictures/Work
+SEA_TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
 #
 # Location of folder to copy selected images to
 MAC_OUT=$HOME/Pictures/Backgrounds
@@ -36,8 +36,8 @@ LIN_OUT=/usr/local/share/backgrounds
 # Order is important, first in list coming first in search
 # If you want to combine images from several folders use the "-s all" option
 #
-SUBS="Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica \
-      Met-Art KindGirls Wallbase"
+SUBS="Fractals Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes \
+      JP_Erotica Met-Art KindGirls Wallbase"
 
 bak=/tmp/pic$$
 maxlinks=2048
@@ -82,7 +82,7 @@ else
     fi
 fi
 [ -d "$TOP" ] || {
-    TOP="$NFS_TOP"
+    TOP="$SEA_TOP"
     [ -d "$TOP" ] || {
         echo "Cannot locate Work directory for pics. Exiting."
         exit 1
@@ -107,6 +107,8 @@ while getopts n:s:alSu flag; do
               all) all=1
                 ;;
               elite) subdir="Elite_Babes"
+                ;;
+              fractals) subdir="Fractals"
                 ;;
               jp) subdir="JP_Erotica"
                 ;;
@@ -181,7 +183,7 @@ cd $OUT
       foundirs=$TOP
     else
       [ -d $TOP/$bdir ] || {
-       for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
+       for subdir in Fractals Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
        do
          [ -d $TOP/$subdir/$bdir ] && {
            sub=$TOP/$subdir
@@ -198,14 +200,16 @@ cd $OUT
       }
     fi
   fi
-  [ -d "$TOP/$bdir" ] || {
+  [ -d $TOP/$bdir ] || {
     echo "Cannot locate $TOP/$bdir - exiting."
     exit 1
   }
 
   numlinks=0
+  echo "Found folders in $foundirs"
   for dir in $foundirs
   do
+    echo "Looking for pics in $dir/$bdir"
     for pic in $dir/$bdir/*
     do
       [ "$pic" == "$dir/$bdir/*" ] && continue
@@ -222,7 +226,7 @@ cd $OUT
 #       bnam=`basename $subpic`
 #       [ -L $bnam ] && continue
 #       ln -s $subpic .
-          cp $subpic .
+          cp "$subpic" .
           numlinks=`expr $numlinks + 1`
           [ $numlinks -ge $maxlinks ] && break 2
         done
@@ -230,7 +234,7 @@ cd $OUT
 #     bnam=`basename $pic`
 #     [ -L $bnam ] && continue
 #     ln -s $pic .
-        cp $pic .
+        cp "$pic" .
         numlinks=`expr $numlinks + 1`
       fi
       [ $numlinks -ge $maxlinks ] && break 2
@@ -246,7 +250,7 @@ cd $OUT
       }
       continue
     }
-    file -L $j | grep ASCII > /dev/null && rm -f $j
+    file -L "$j" | grep ASCII > /dev/null && rm -f "$j"
   done
   [ "$add" ] || rm -rf $bak
 }

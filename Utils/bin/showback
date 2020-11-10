@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SDDM_THEME=/usr/share/sddm/themes/ronnie
+BACKGROUND=wall.jpg
+
+[ -d $SDDM_THEME ] || {
+    echo "$SDDM_THEME does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd $SDDM_THEME
+ls -l $BACKGROUND

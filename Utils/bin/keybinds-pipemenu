@@ -1,0 +1,357 @@
+#!/bin/bash
+#    keybinds-pipemenu - an Bunsenlabs Openbox pipemenu for displaying keyboard shortcuts
+#                        for the Window Manager, and various applications.
+#    Copyright (C) 2015/2018 damo    <damo@bunsenlabs.org>
+#                  2016 John Crawley    <john@bunsenlabs.org>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# NB The keybinds in the Openbox 'Run' commands menu are clickable
+
+# 'bl-kb' is used to parse 'rc.xml' and send the output to a textfile
+
+HELP='    
+    "keybinds-pipemenu": an Openbox Pipe Menu for displaying keyboard shortcuts.
+                         It should normally be called from an Openbox menu.
+
+    Options (usually passed from the menu):
+    
+        -h --help   show this message
+        
+        --openbox       display keybindings defined in rc.xml.
+                        (The "Run commands" keybinds in the menu are clickable)         
+        --aliases       output from "~/.bash_aliases"
+        --geany         Geany Text Editor
+        --thunar        Thunar File Manager
+        --gimp          GIMP Image Editor
+        --mirage        Mirage Image Viewer
+        --mpv           Mpv Media Player
+        --vlc           VLC Media Player
+        --terminator    bespoke textfile containing Terminator terminal keybinds
+        --firefox        bespoke textfile containing Firefox Web Browser keybinds
+
+    NOTE: Some of the functionality of this pipemenu depends on the script
+    "/usr/bin/bl-kb" which is provided by the package "bunsen-utilities".
+'
+BL_COMMON_LIBDIR="/usr/lib/bunsen/common"
+USR_CFG_DIR="$HOME/.config/openbox"
+KBSCRIPT="bl-kb"
+KBTEXT="$USR_CFG_DIR/kbinds.txt"
+AL_FILE="$HOME/.bash_aliases"
+GEANY_FILE="$HOME/.config/geany/keybindings.conf"
+THUNAR_FILE="$HOME/.config/Thunar/accels.scm"
+GIMP_FILE="$HOME/.config/GIMP/2.10/menurc"
+MPV_FILE="/etc/mpv/input.conf"
+VLC_FILE="$HOME/.config/vlc/vlcrc"
+MIR_FILE="$HOME/.config/mirage/accel_map"
+TERM_FILE="$HOME/terminator-keybinds.txt" # this must previously have been written. Adjust path as required.
+FF_FILE="$HOME/firefox-keybinds.txt"       # this must previously have been written. Adjust path as required.
+
+# look for a help option somewhere 
+if [[ $# -eq 0 ]] ; then 
+    echo "$HELP"
+    exit 0
+else
+    for i in "$@"
+        do
+            case "$i" in
+            -h|--help)
+                echo "$HELP"
+                exit 0
+                ;;
+            esac
+        done
+fi
+
+if ! . "$BL_COMMON_LIBDIR/bl-include.cfg" 2> /dev/null; then
+    echo $"Error: Failed to locate bl-include.cfg in $BL_COMMON_LIBDIR" >&2
+    exit 1
+fi
+
+# test if bl-kb exists in path
+if ! type "$KBSCRIPT" &> /dev/null;then
+    menuStart
+    menuSeparator "$KBSCRIPT is not available. Try installing bunsen-utilities."
+    menuEnd
+    exit 1
+fi
+
+# check config file exists
+function check_file(){
+    if [ ! -f "$1" ] &> /dev/null; then
+        menuStart
+        menuSeparator "$1 not found."
+        menuEnd
+        exit 1
+    fi
+}
+
+function write_aliases(){
+    TEMP_FILE=$(mktemp)
+    ALVAR=""
+    
+    check_file "$AL_FILE"
+    
+    ALVAR=$(awk '$1 ~ /^alias/{$1 = "";print}' "$AL_FILE")
+
+    echo -e "$ALVAR" > "$TEMP_FILE"
+    
+    menuStart
+    menuSeparator "Bash Aliases"
+    menuSeparator
+    while read -r line;do
+        [[ ! -n ${line// /} ]] && continue
+        currItem="$line"
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+    menuEnd
+    
+    rm "$TEMP_FILE"
+    exit 0
+}
+
+function write_ob_keybinds(){
+    # run script to write kbinds.txt, suppress terminal output
+    "$KBSCRIPT" > /dev/null
+    menuStart
+    menuSeparator "Openbox window commands"
+    menuSeparator
+    while read -r a b c;do      # write out Openbox commands (not clickable)
+        if [[ "$a" = "o" ]];then
+            curItem=$(printf "%-20s %s" "$b" "$c")
+            menuItem "$curItem" "echo >/dev/null 2>&1"
+        fi
+    done < "$KBTEXT"
+
+    menuSeparator "'Run' commands"
+    menuSeparator
+    while read -r a b c;do      # write out 'Run' commands (clickable)
+        if [[ "$a" = "x" ]];then
+            curItem=$(printf "%-20s %s" "$b" "$c")
+            menuItem "$curItem" "$c"
+        fi
+    done < "$KBTEXT"
+    menuEnd
+    exit 0   
+}
+
+function write_geany_keybinds(){
+    TEMP_FILE=$(mktemp)
+    GEANYVAR=""
+    
+    check_file "$GEANY_FILE"
+    
+    # Skip first line;skip lines without keybinds;replace patterns
+    GVARLINE=$(sed '1d;/=$/d;s/<Primary>/Control+/;s/<Shift>/Shift+/;s/<Alt>/Alt+/;s/bracketleft/[/;s/bracketright/]/;s/=/  --  /' "$GEANY_FILE")
+    echo -e "$GVARLINE" > "$TEMP_FILE"
+
+    menuStart
+    menuSeparator "Geany Keybinds"
+    menuSeparator
+    while read -r a b c;do
+        currItem=$(printf "%-20s %5s %20s" "$a" "$b" "$c")
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+    menuEnd
+
+    rm "$TEMP_FILE" 
+    exit 0
+}
+
+function write_thunar_keybinds(){
+    TEMP_FILE=$(mktemp)
+    THVAR=""
+    
+    check_file "$THUNAR_FILE"
+    
+    # Skip first line;skip lines without keybinds;replace patterns
+    THVARLINE=$(awk -F '[/|"]' '{print $4,$6}' "$THUNAR_FILE" | \
+    sed '/ $/d;s/<Primary>/Control+/;s/<Alt>/Alt+/;s/<Shift>/Shift+/;s/ /  --  /')
+
+    echo -e "$THVARLINE" > "$TEMP_FILE"
+
+    menuStart
+    menuSeparator "Thunar Keybinds"
+    menuSeparator
+    while read -r a b c;do
+        currItem=$(printf "%-20s %-5s %s" "$a" "$b" "$c")
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+    menuEnd
+
+    rm "$TEMP_FILE" 
+    exit 0
+}
+
+function write_gimp_keybinds(){
+    TEMP_FILE=$(mktemp)
+    GIMPVAR=""
+    
+    check_file "$GIMP_FILE"
+    
+    # Extract strings;replace patterns
+    GIMPVARLINE=$(awk -F '[/|"]' '{print $4,$6}' "$GIMP_FILE" | \
+    sed '/ $/d;s/<Primary>/Control+/;s/<Alt>/Alt+/;s/<Shift>/Shift+/;s/ /  --  /')
+
+    echo -e "$GIMPVARLINE" > "$TEMP_FILE"
+
+    menuStart
+    menuSeparator "GIMP Keybinds"
+    menuSeparator
+    while read -r a b c;do
+        currItem=$(printf "%-20s %-5s %s" "$a" "$b" "$c")
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+    menuEnd
+
+    rm "$TEMP_FILE" 
+    exit 0
+}
+
+function write_mirage_keybinds(){
+    TEMP_FILE=$(mktemp)
+    MIRVAR=""
+    
+    check_file "$MIR_FILE"
+    
+    # Extract strings, replace patterns
+    MIRVARLINE=$(awk -F '/' '{print $3}' "$MIR_FILE" | \
+                sed 's/" "/   --   /;s/")//;s/<Primary>/Control+/;s/<Alt>/Alt+/;s/<Shift>/Shift+/')
+
+    echo -e "$MIRVARLINE" > "$TEMP_FILE"
+
+    menuStart
+    menuSeparator "Mirage Keybinds"
+    menuSeparator
+    while read -r line;do
+        str=${line#*--}                     # select keybind chars
+        [[ ! -n ${str// /} ]] && continue   # if no string then skip line
+        currItem="$line"
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+    menuEnd
+
+    rm "$TEMP_FILE" 
+    exit 0
+}
+
+function write_mpv_keybinds(){
+    TEMP_FILE=$(mktemp)
+    MPVVAR=""
+    
+    check_file "$MPV_FILE"
+    
+    MPVVARLINE=$(awk '{printf "%-10s %-5s %s %s %s\n", $1,"  --  ",$2,$3,$4}' "$MPV_FILE")
+
+    echo -e "$MPVVARLINE" > "$TEMP_FILE"
+
+    menuStart
+    menuSeparator "MPV Keybinds"
+    menuSeparator
+    while read -r line;do
+        currItem="$line"
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+    menuEnd
+
+    rm "$TEMP_FILE" 
+    exit 0
+}
+
+function write_vlc_keybinds(){
+    TEMP_FILE=$(mktemp)
+    VLCVAR=""
+    
+    check_file "$VLC_FILE"
+    
+    # Skip first line;skip lines without keybinds;replace patterns
+    VLCVARLINE=$( awk '/^#key/' "$VLC_FILE" | sed 's/#key-//;/=$/d;s/=/  --  /')
+
+    echo -e "$VLCVARLINE" > "$TEMP_FILE"
+
+    menuStart
+    menuSeparator "VLC Keybinds"
+    menuSeparator
+    while read -r a b;do
+        currItem=$(printf "%-20s %s" "$a" "$b")
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+
+    menuEnd
+
+    rm "$TEMP_FILE" 
+    exit 0
+}
+
+function write_terminator_keybinds(){
+    TEMP_FILE=$(mktemp)
+    MPVVAR=""
+    
+    check_file "$TERM_FILE"
+    
+    TERMVARLINE=$(awk -F "[.|,]" '{print $1}' "$TERM_FILE")
+
+    echo -e "$TERMVARLINE" > "$TEMP_FILE"
+
+    menuStart
+    menuSeparator "Terminator Keybinds"
+    menuSeparator
+    while read -r line;do
+        currItem="$line"
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+    menuEnd
+
+    rm "$TEMP_FILE" 
+    exit 0
+}
+
+function write_firefox_keybinds(){
+    TEMP_FILE=$(mktemp)
+    MPVVAR=""
+    
+    check_file "$FF_FILE"
+    
+    FFVARLINE=$(awk -F "[.|,]" '{print $1}' "$FF_FILE")
+
+    echo -e "$FFVARLINE" > "$TEMP_FILE"
+
+    menuStart
+    menuSeparator "Firefox Keybinds"
+    menuSeparator
+    while read -r line;do
+        currItem="$line"
+        menuItem "$currItem" "echo >/dev/null 2>&1"
+    done < "$TEMP_FILE"
+    menuEnd
+
+    rm "$TEMP_FILE" 
+    exit 0
+}
+
+# Comment out any of these, if the application isn't installed
+case "$1" in
+    --aliases   ) write_aliases;;
+    --openbox   ) write_ob_keybinds;;
+    --geany     ) write_geany_keybinds;;
+    --thunar    ) write_thunar_keybinds;;
+    --gimp      ) write_gimp_keybinds;;
+    --mirage    ) write_mirage_keybinds;;
+    --mpv       ) write_mpv_keybinds;;
+    --vlc       ) write_vlc_keybinds;;
+    --terminator) write_terminator_keybinds;;
+    --firefox    ) write_firefox_keybinds;;
+    *           ) echo "$HELP"
+                  exit 0;;
+esac

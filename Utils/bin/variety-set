@@ -1,0 +1,14 @@
+#!/bin/bash
+
+PIC=/home/ronnie/Pictures/wallpaper-999544.jpg
+PROF="/home/ronnie/.config/variety"
+
+[ "$1" ] && {
+    [ -f "$1" ] && {
+        PIC="$1"
+    }
+}
+
+[ -f ~/.variety-profile ] && PROF=`cat ~/.variety-profile`
+
+/usr/bin/variety --profile "$PROF" --set $PIC > /dev/null 2>&1 &
