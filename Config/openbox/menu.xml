@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openbox_menu xmlns="http://openbox.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://openbox.org/ file:///usr/share/openbox/menu.xsd">
+ <menu id="ronnie-dynamic-menu" label="Dynamic" execute="/home/ronnie/bin/obam.pl">
+ </menu>
+ <menu id="keybinds-menu" label="keybinds">
+   <separator label="Keyboard Shortcuts"/><separator/>
+   <menu execute="keybinds-pipemenu --openbox" id="openbox" label="Openbox Keybinds"/>
+   <menu execute="keybinds-pipemenu --aliases" id="aliases" label="Bash Aliases"/>
+   <menu execute="keybinds-pipemenu --gimp" id="GIMP" label="GIMP"/>
+ </menu>
+</openbox_menu>

@@ -25,20 +25,16 @@
        mouse into it, also raise the window -->
   </focus>
   <placement>
-    <!--  Lubuntu specific : Place new windows where the mouse is
-        <monitor>Mouse</monitor>
-        <primaryMonitor>Mouse</primaryMonitor>
-  -->
     <policy>Smart</policy>
     <!-- 'Smart' or 'UnderMouse' -->
     <center>yes</center>
     <!-- whether to place windows in the center of the free area found or
        the top left corner -->
-    <monitor>Mouse</monitor>
+    <monitor>Primary</monitor>
     <!-- with Smart placement on a multi-monitor system, try to place new windows
        on: 'Any' - any monitor, 'Mouse' - where the mouse is, 'Active' - where
        the active window is, 'Primary' - only on the primary monitor -->
-    <primaryMonitor>Mouse</primaryMonitor>
+    <primaryMonitor>1</primaryMonitor>
     <!-- The monitor where Openbox should place popup dialogs such as the
        focus cycling popup, or the desktop switch popup.  It can be an index
        from 1, specifying a particular monitor.  Or it can be one of the
@@ -46,25 +42,23 @@
                   'Active' - where the active window is -->
   </placement>
   <theme>
-    <!--  Lubuntu specific : Theme = Lubuntu and font = Ubuntu
-  -->
-    <name>Mikachu</name>
+    <name>Clearlooks</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
-    available characters are NDSLIMC, each can occur at most once.
-    N: window icon
-    L: window label (AKA title).
-    I: iconify
-    M: maximize
-    C: close
-    S: shade (roll up/down)
-    D: omnipresent (on all desktops).
--->
+      available characters are NDSLIMC, each can occur at most once.
+      N: window icon
+      L: window label (AKA title).
+      I: iconify
+      M: maximize
+      C: close
+      S: shade (roll up/down)
+      D: omnipresent (on all desktops).
+  -->
     <keepBorder>yes</keepBorder>
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
-      <name>Ubuntu Medium</name>
-      <size>11</size>
+      <name>sans</name>
+      <size>8</size>
       <!-- font size in points -->
       <weight>bold</weight>
       <!-- 'bold' or 'normal' -->
@@ -72,8 +66,8 @@
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="InactiveWindow">
-      <name>Ubuntu Medium</name>
-      <size>11</size>
+      <name>sans</name>
+      <size>8</size>
       <!-- font size in points -->
       <weight>bold</weight>
       <!-- 'bold' or 'normal' -->
@@ -81,8 +75,8 @@
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="MenuHeader">
-      <name>Ubuntu</name>
-      <size>11</size>
+      <name>sans</name>
+      <size>9</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -90,8 +84,8 @@
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="MenuItem">
-      <name>Ubuntu</name>
-      <size>11</size>
+      <name>sans</name>
+      <size>9</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -99,8 +93,8 @@
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="ActiveOnScreenDisplay">
-      <name>Ubuntu Medium</name>
-      <size>11</size>
+      <name>sans</name>
+      <size>9</size>
       <!-- font size in points -->
       <weight>bold</weight>
       <!-- 'bold' or 'normal' -->
@@ -108,8 +102,8 @@
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="InactiveOnScreenDisplay">
-      <name>Ubuntu Medium</name>
-      <size>11</size>
+      <name>sans</name>
+      <size>9</size>
       <!-- font size in points -->
       <weight>bold</weight>
       <!-- 'bold' or 'normal' -->
@@ -130,19 +124,16 @@
     <firstdesk>1</firstdesk>
     <names>
       <name>Browse</name>
-      <name>Miner</name>
       <name>Terminal</name>
-      <name>Eye Candy</name>
+      <name>Miner</name>
+      <name>Candy</name>
     </names>
-    <popupTime>876</popupTime>
+    <popupTime>875</popupTime>
     <!-- The number of milliseconds to show the popup for when switching
        desktops.  Set this to 0 to disable the popup. -->
   </desktops>
   <resize>
-    <!--  Lubuntu specific : Don't draw content on resize (too heavy).
-        <drawContents>no</drawContents>
-  -->
-    <drawContents>no</drawContents>
+    <drawContents>yes</drawContents>
     <popupShow>Nonpixel</popupShow>
     <!-- 'Always', 'Never', or 'Nonpixel' (xterms and such) -->
     <popupPosition>Center</popupPosition>
@@ -168,14 +159,14 @@
     <right>0</right>
   </margins>
   <dock>
-    <position>TopLeft</position>
+    <position>Bottom</position>
     <!-- (Top|Bottom)(Left|Right|)|Top|Bottom|Left|Right|Floating -->
     <floatingX>0</floatingX>
     <floatingY>0</floatingY>
     <noStrut>no</noStrut>
     <stacking>Above</stacking>
     <!-- 'Above', 'Normal', or 'Below' -->
-    <direction>Vertical</direction>
+    <direction>Horizontal</direction>
     <!-- 'Vertical' or 'Horizontal' -->
     <autoHide>no</autoHide>
     <hideDelay>300</hideDelay>
@@ -187,154 +178,77 @@
   </dock>
   <keyboard>
     <chainQuitKey>C-g</chainQuitKey>
-    <!-- Keybindings for application specific shortcuts using wmctrl -->
-    <!-- Example shortcut to minimize / maximize Uzbl's window
-    <keybind key="C-F1">
-      <action name="Execute">
-        <execute>wmctrl -x uzbl-tabbed -a uzbl-tabbed.Uzbl-tabbed -b toggle,hidden</execute>
-      </action>
-    </keybind>
-    -->
-    <keybind key="C-A-space">
-      <action name="ShowMenu">
-        <menu>keybinds-menu</menu>
-      </action>
-    </keybind>
-    <keybind key="C-A-b">
-      <action name="Execute">
-        <execute>/home/ronnie/bin/variety-beauty</execute>
-      </action>
-    </keybind>
-    <keybind key="C-A-f">
-      <action name="Execute">
-        <execute>/home/ronnie/bin/variety-fractals</execute>
-      </action>
-    </keybind>
-    <!-- Move the Google Chrome window to the current desktop -->
-    <keybind key="C-m">
-      <action name="Execute">
-        <execute>/usr/local/bin/chrome-current-desktop</execute>
-      </action>
-    </keybind>
-    <!-- Keybindings for application execution -->
-    <keybind key="C-A-l">
-      <action name="Execute">
-        <command>lxqt-leave --logout</command>
-      </action>
-    </keybind>
-    <keybind key="C-s">
-      <action name="Execute">
-        <command>/home/ronnie/bin/variety-set /home/ronnie/Pictures/wallpaper-999544.jpg</command>
-      </action>
-    </keybind>
-    <keybind key="C-n">
-      <action name="Execute">
-        <command>/home/ronnie/bin/variety-next</command>
-      </action>
-    </keybind>
-    <keybind key="C-p">
-      <action name="Execute">
-        <command>/home/ronnie/variety-prev</command>
-      </action>
-    </keybind>
-    <keybind key="C-M-f">
-      <action name="Execute">
-        <command>/usr/bin/variety-slideshow /u/pictures/Fractals/</command>
-      </action>
-    </keybind>
-    <keybind key="C-M-s">
-      <action name="Execute">
-        <command>/usr/bin/variety-slideshow</command>
-      </action>
-    </keybind>
-    <keybind key="M-s">
-      <action name="Execute">
-        <command>/home/ronnie/bin/variety-select</command>
-      </action>
-    </keybind>
-    <keybind key="C-t">
-      <action name="Execute">
-        <command>/usr/local/bin/myterm</command>
-      </action>
-    </keybind>
-    <keybind key="C-b">
-      <action name="Execute">
-        <command>google-chrome</command>
-      </action>
-    </keybind>
-    <keybind key="C-z">
-      <action name="Execute">
-        <command>/usr/local/bin/closetab</command>
-      </action>
-    </keybind>
     <!-- Keybindings for desktop switching -->
-    <keybind key="C-1">
+    <keybind key="C-A-Left">
+      <action name="GoToDesktop">
+        <to>left</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="C-A-Right">
+      <action name="GoToDesktop">
+        <to>right</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="C-A-Up">
+      <action name="GoToDesktop">
+        <to>up</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="C-A-Down">
+      <action name="GoToDesktop">
+        <to>down</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="S-A-Left">
+      <action name="SendToDesktop">
+        <to>left</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="S-A-Right">
+      <action name="SendToDesktop">
+        <to>right</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="S-A-Up">
+      <action name="SendToDesktop">
+        <to>up</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="S-A-Down">
+      <action name="SendToDesktop">
+        <to>down</to>
+        <wrap>no</wrap>
+      </action>
+    </keybind>
+    <keybind key="W-F1">
       <action name="GoToDesktop">
         <to>1</to>
       </action>
     </keybind>
-    <keybind key="C-2">
+    <keybind key="W-F2">
       <action name="GoToDesktop">
         <to>2</to>
       </action>
     </keybind>
-    <keybind key="C-3">
+    <keybind key="W-F3">
       <action name="GoToDesktop">
         <to>3</to>
       </action>
     </keybind>
-    <keybind key="C-4">
+    <keybind key="W-F4">
       <action name="GoToDesktop">
         <to>4</to>
       </action>
     </keybind>
-    <keybind key="C-Left">
-      <action name="GoToDesktop">
-        <to>left</to>
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-Right">
-      <action name="GoToDesktop">
-        <to>right</to>
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-Up">
-      <action name="GoToDesktop">
-        <to>up</to>
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-Down">
-      <action name="GoToDesktop">
-        <to>down</to>
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-S-A-Left">
-      <action name="SendToDesktop">
-        <to>left</to>
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-S-A-Right">
-      <action name="SendToDesktop">
-        <to>right</to>
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-S-A-Up">
-      <action name="SendToDesktop">
-        <to>up</to>
-        <wrap>no</wrap>
-      </action>
-    </keybind>
-    <keybind key="C-S-A-Down">
-      <action name="SendToDesktop">
-        <to>down</to>
-        <wrap>no</wrap>
-      </action>
+    <keybind key="W-d">
+      <action name="ToggleShowDesktop"/>
     </keybind>
     <!-- Keybindings for windows -->
     <keybind key="A-F4">
@@ -350,6 +264,12 @@
         <menu>client-menu</menu>
       </action>
     </keybind>
+    <!-- Take a screenshot of the current window with scrot when Alt+Print are pressed -->
+    <keybind key="A-Print">
+      <action name="Execute">
+        <command>scrot -s</command>
+      </action>
+    </keybind>
     <!-- Keybindings for window switching -->
     <keybind key="A-Tab">
       <action name="NextWindow">
@@ -358,7 +278,6 @@
           <action name="Raise"/>
           <action name="Unshade"/>
         </finalactions>
-        <allDesktops>yes</allDesktops>
       </action>
     </keybind>
     <keybind key="A-S-Tab">
@@ -368,54 +287,61 @@
           <action name="Raise"/>
           <action name="Unshade"/>
         </finalactions>
-        <allDesktops>yes</allDesktops>
+      </action>
+    </keybind>
+    <keybind key="C-A-Tab">
+      <action name="NextWindow">
+        <panels>yes</panels>
+        <desktop>yes</desktop>
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
       </action>
     </keybind>
     <!-- Keybindings for window switching with the arrow keys -->
-    <keybind key="A-S-Right">
+    <keybind key="W-S-Right">
       <action name="DirectionalCycleWindows">
         <direction>right</direction>
       </action>
     </keybind>
-    <keybind key="A-S-Left">
+    <keybind key="W-S-Left">
       <action name="DirectionalCycleWindows">
         <direction>left</direction>
       </action>
     </keybind>
-    <keybind key="A-S-Up">
+    <keybind key="W-S-Up">
       <action name="DirectionalCycleWindows">
         <direction>up</direction>
       </action>
     </keybind>
-    <keybind key="A-S-Down">
+    <keybind key="W-S-Down">
       <action name="DirectionalCycleWindows">
         <direction>down</direction>
       </action>
     </keybind>
-    <!-- Keybindings to toggle fullscreen -->
-    <keybind key="F11">
-      <action name="ToggleFullscreen"/>
+    <!-- Keybindings for running applications -->
+    <keybind key="W-e">
+      <action name="Execute">
+        <startupnotify>
+          <enabled>true</enabled>
+          <name>Konqueror</name>
+        </startupnotify>
+        <command>kfmclient openProfile filemanagement</command>
+      </action>
     </keybind>
-    <keybind key="C-A-Down">
-      <action name="Shade"/>
-      <action name="FocusToBottom"/>
-      <action name="Unfocus"/>
-    </keybind>
-    <keybind key="C-A-Up">
-      <action name="Focus"/>
-      <action name="Raise"/>
-      <action name="Unshade"/>
+    <!-- Launch scrot when Print is pressed -->
+    <keybind key="Print">
+      <action name="Execute">
+        <command>scrot</command>
+      </action>
     </keybind>
   </keyboard>
   <mouse>
-    <!--
-      Lubuntu specific : Specific mouse settings
-        <dragThreshold>8</dragThreshold>
-        <doubleClickTime>200</doubleClickTime>
-  -->
-    <dragThreshold>8</dragThreshold>
+    <dragThreshold>1</dragThreshold>
     <!-- number of pixels the mouse must move before a drag begins -->
-    <doubleClickTime>200</doubleClickTime>
+    <doubleClickTime>500</doubleClickTime>
     <!-- in milliseconds (1000 = 1 second) -->
     <screenEdgeWarpTime>400</screenEdgeWarpTime>
     <!-- Time before changing desktops when the pointer touches the edge of the
@@ -458,12 +384,12 @@
           <to>next</to>
         </action>
       </mousebind>
-      <mousebind button="C-Up" action="Click">
+      <mousebind button="C-A-Up" action="Click">
         <action name="GoToDesktop">
           <to>previous</to>
         </action>
       </mousebind>
-      <mousebind button="C-Down" action="Click">
+      <mousebind button="C-A-Down" action="Click">
         <action name="GoToDesktop">
           <to>next</to>
         </action>
@@ -691,12 +617,12 @@
           <to>next</to>
         </action>
       </mousebind>
-      <mousebind button="C-Up" action="Click">
+      <mousebind button="C-A-Up" action="Click">
         <action name="GoToDesktop">
           <to>previous</to>
         </action>
       </mousebind>
-      <mousebind button="C-Down" action="Click">
+      <mousebind button="C-A-Down" action="Click">
         <action name="GoToDesktop">
           <to>next</to>
         </action>
@@ -748,43 +674,32 @@
   </mouse>
   <menu>
     <!-- You can specify more than one menu file in here and they are all loaded,
-     just don't make menu ids clash or, well, it'll be kind of pointless -->
-    <!-- Lubuntu specific : Default menu of Lubuntu -->
-    <file>/usr/share/lubuntu/openbox/menu.xml</file>
+       just don't make menu ids clash or, well, it'll be kind of pointless -->
     <!-- default menu file (or custom one in $HOME/.config/openbox/) -->
+    <!-- system menu files on Debian systems -->
+    <file>/var/lib/openbox/debian-menu.xml</file>
     <file>menu.xml</file>
     <hideDelay>200</hideDelay>
     <!-- if a press-release lasts longer than this setting (in milliseconds), the
-     menu is hidden again -->
+       menu is hidden again -->
     <middle>no</middle>
     <!-- center submenus vertically about the parent entry -->
     <submenuShowDelay>100</submenuShowDelay>
     <!-- time to delay before showing a submenu after hovering over the parent
-     entry.
-     if this is a negative value, then the delay is infinite and the
-     submenu will not be shown until it is clicked on -->
+       entry.
+       if this is a negative value, then the delay is infinite and the
+       submenu will not be shown until it is clicked on -->
     <submenuHideDelay>400</submenuHideDelay>
     <!-- time to delay before hiding a submenu when selecting another
-     entry in parent menu
-     if this is a negative value, then the delay is infinite and the
-     submenu will not be hidden until a different submenu is opened -->
-    <applicationIcons>yes</applicationIcons>
-    <!-- Lubuntu specific : Show applications icons if openbox is build with this support -->
-    <manageDesktops>yes</manageDesktops>
-    <!-- show the manage desktops section in the client-list-(combined-)menu -->
+       entry in parent menu
+       if this is a negative value, then the delay is infinite and the
+       submenu will not be hidden until a different submenu is opened -->
     <showIcons>yes</showIcons>
     <!-- controls if icons appear in the client-list-(combined-)menu -->
+    <manageDesktops>yes</manageDesktops>
+    <!-- show the manage desktops section in the client-list-(combined-)menu -->
   </menu>
   <applications>
-    <application name="google-chrome">
-      <desktop>1</desktop>
-    </application>
-    <application name="Miner">
-      <desktop>2</desktop>
-    </application>
-    <application name="qterminal">
-      <desktop>3</desktop>
-    </application>
     <!--
   # this is an example with comments through out. use these to make your
   # own rules, but without the comments of course.
@@ -813,7 +728,7 @@
   # order that they appear in this list
 
 
-    # each rule element can be left out or set to 'default' to specify to not
+    # each rule element can be left out or set to 'default' to specify to not 
     # change that attribute of the window
 
     <decor>yes</decor>
@@ -879,19 +794,5 @@
 
   # end of the example
 -->
-    <!-- Option to maximize all normal window when launched-->
-    <!--
-  <application type="normal">
-    <maximized>true</maximized>
-  </application>
-  -->
-    <!--
-        Lubuntu specific :
-        Focus all applications launched
-        Usefull when launching applications, like terminal from pcmanfm
-  -->
-    <application class="*">
-      <focus>yes</focus>
-    </application>
   </applications>
 </openbox_config>
