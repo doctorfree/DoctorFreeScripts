@@ -1,0 +1,224 @@
+#!/opt/local/bin/perl
+
+# Get solar production data from Enphase Enlighten
+# and submit to http://pvoutput.org
+
+#################################################
+# Powered by Enphase Energy: http://enphase.com #
+#################################################
+
+########## NOTE NOTE NOTE ##########
+## pvoutput.org now supports querying the Enphase API directly,
+# with no need to grab this info from the Envoy box.  You should
+# consider this method instead.  Please see the pvoutput.org
+# documentation for details.
+####################################
+#
+# If Enlighten gets behind on data, this script will
+# "catch up" and submit as much new data it finds
+# when it runs (at least for the current day).
+# 
+# Ideally this should run on a cron job every 5 minutes
+#
+# For windows machines, see:
+# www.strawberryperl.com for a windows perl environment
+# and:
+# http://support.microsoft.com/kb/226795
+# for info on setting up a task to run every 5 minutes.
+#
+# If you use strawberry perl you may also need to install
+# a module with:
+# C:\> cpan DateTime::Format::W3CDTF
+# on a DOS prompt
+#
+# V1:
+#	Initial release
+# V2:
+#	HTTP proxy support
+#	Fix bootstrapping issue when pvoutput has no data yet
+#
+# Copyright Eric Sandeen <sandeen@sandeen.net> 2010
+# released under GNU GPL v3 or later
+
+use LWP::UserAgent;
+use HTTP::Request::Common qw(POST GET);
+use DateTime::Format::W3CDTF;
+use JSON;
+use POSIX;
+use strict;
+
+# set to 1 for some runtime debug output
+my $debug = 0;
+
+# ========== FILL IN THESE VALUES FOR YOUR ENLIGHTEN & PVOUTPUT ACCOUNTS ======
+# Enlighten system number and API key
+# System number can be found via your system's enlighten URL,
+# i.e. https://enlighten.enphaseenergy.com/systems/1234
+# where "1234" is the system id.
+my $enlighten_system_id="423390";
+my $enlighten_api_key="4d7a51344d7a49770a";
+# pvoutput.org system id and API key
+my $pvoutput_sysid = "31655";
+my $pvoutput_api_key = "a83b193c730d7e97fb13b2d0eac20d934ef4c8f3";
+# ============================================================================
+
+# ========= OPTIONAL PROXY CONFIGURATION ===========
+# Fill these in if you need to access the web through a proxy
+my $proxy_host="http://proxy.vmware.com:3128";
+my $proxy_user="";
+my $proxy_passwd="";
+# ==================================================
+
+# A few vars holding URLs we'll use.
+my $enphase_api_url="http://api.enphaseenergy.com/api";
+my $enlighten_stats_url = "$enphase_api_url/systems/$enlighten_system_id/stats?key=$enlighten_api_key";
+my $pvoutput_addstatus_url="http://pvoutput.org/service/r1/addbatchstatus.jsp";
+my $pvoutput_getstatus_url="http://pvoutput.org/service/r1/getstatus.jsp";
+
+my $enlighten_ua = LWP::UserAgent->new;
+my $pvoutput_ua = LWP::UserAgent->new;
+
+if ($proxy_host) {
+	$enlighten_ua->proxy(['http'] => $proxy_host);
+	$pvoutput_ua->proxy(['http'] => $proxy_host);
+}
+
+# Set up header values to communicate with pvoutput.org
+$pvoutput_ua->default_header(
+                "X-Pvoutput-Apikey" => $pvoutput_api_key,
+		"X-Pvoutput-SystemId" => $pvoutput_sysid,
+                "Content-Type" => "application/x-www-form-urlencoded");
+
+# First we need to see what the latest data is from pvoutput, so we
+# know where to start the update.
+my $request = GET $pvoutput_getstatus_url;
+$request->proxy_authorization_basic($proxy_user, $proxy_passwd) if $proxy_user;
+
+print "Getting last pvoutput data from $pvoutput_getstatus_url ...\n" if $debug;
+my $res = $pvoutput_ua->request($request);
+warn "Couldn't get data status from pvoutput.org:" . $res->status_line . "\n" if (! $res->is_success);
+
+# so, when -was- the last pvoutput update?
+# Convert the last update pvoutput knows about to DateTime format.
+my $last_pvoutput_dt;
+
+if ($res->is_success) {
+	my ($last_pvoutput_date, $last_pvoutput_time) = split(/,/, $res->content);
+
+	$last_pvoutput_dt  = DateTime->new(
+		year => substr($last_pvoutput_date, 0, 4),
+		month => substr($last_pvoutput_date, 4, 2),
+		day => substr($last_pvoutput_date, 6, 2),
+		hour => substr($last_pvoutput_time, 0, 2),
+		minute => substr($last_pvoutput_time, 3,2),
+	);
+} else {
+	# Assume no updates today, just set it to this morning.
+	$last_pvoutput_dt =  DateTime->now;
+	$last_pvoutput_dt->set( hour => 0, minute => 0, second => 0 );
+}
+
+# Ok, now get latest production data from Enlighten
+my $req = GET "$enlighten_stats_url";
+$req->proxy_authorization_basic($proxy_user, $proxy_passwd) if $proxy_user;
+
+print "Getting Enlighten stats at $enlighten_stats_url ...\n" if $debug;
+$res = $enlighten_ua->request($req);
+exit if (! $res->is_success);
+# die "Couldn't get to Enlighten: " . $res->status_line . "\n" if (! $res->is_success);
+
+# intervals from Enlighten will now be an array of hashes:
+my $json_values = from_json($res->content);
+# and $intervals is an array reference now
+my $intervals = $json_values->{ 'intervals' };
+# How many inverters?
+my $total_devices = $json_values->{ 'total_devices' };
+
+# Check the last interval returned from Enlighten,
+# to see if there is any update to send to pvoutput.
+
+# Scan back to find last interval with all devices reporting:
+my $index = -1;
+while (@$intervals[$index]->{ 'devices_reporting' } != $total_devices) {
+	print ("index $index only has @$intervals[$index]->{ 'devices_reporting' } devices reporting, skipping\n") if $debug;
+	if (@$intervals[$index] == @$intervals[0]) {
+		print "Found no intervals with all devices reporting\n" if $debug;
+		exit;
+	}
+	$index--;
+}
+
+print "all devices reporting at interval $index\n" if $debug;
+
+# this is the last interval with all devices present; it's valid
+# and won't be updated later, so we could submit it to pvoutput
+# if it's newer:
+my $interval = @$intervals[$index];
+
+# Enlighten uses an ISO8601 date format which this module can parse:
+my $w3c = DateTime::Format::W3CDTF->new;
+
+my $interval_date = $interval->{ 'end_date' };
+my $interval_dt = $w3c->parse_datetime($interval_date);;
+my $cmp = DateTime->compare($interval_dt, $last_pvoutput_dt);
+if ($cmp <= 0) {
+	print "no updates: pvoutput $last_pvoutput_dt enlighten $interval_dt \n" if $debug;
+	exit;
+}
+
+print "update: pvoutput $last_pvoutput_dt enlighten $interval_dt \n" if $debug;
+
+# Ok, there's at least one update to send.
+# Loop over all the intervals returned from Enlighten, and update
+# any that are missing from pvoutput via the batch update mechanism.
+# We sum up the total energy generated as we go.
+
+# (This assumes we're getting all production intervals since midnight
+# from the query... perhaps the first interval start time should be
+# tested to confirm this but the API should always do it...)
+
+my $daily_watthours = 0;	# used to sum energy over all intervals
+my $pvoutput_batch_data = "";	# Data string we'll submit to pvoutput for batch update
+my $pvoutput_batch_count = 0;	# Number of intervals we've found to update
+
+for $interval( @$intervals ) {
+	$daily_watthours += $interval->{ 'enwh' };
+	$interval_date = $interval->{ 'end_date' };
+	$interval_dt = $w3c->parse_datetime($interval_date);
+
+	my $cmp = DateTime->compare($interval_dt, $last_pvoutput_dt);
+	# Append any intervals which:
+	# * are after last pvoutput data
+	# * for which we have production, and
+	# * for which all devices are reporting
+	if ($cmp > 0 && $daily_watthours && ($interval->{ 'devices_reporting' } == $total_devices)) {
+		# Build up the submission string, in format:
+		# date, time, energy, power; date, time, energy, power; ...
+		$pvoutput_batch_data .= $interval_dt->ymd('') . ",";
+		$pvoutput_batch_data .= substr($interval_dt->hms(':'), 0, 5) . ",";
+		$pvoutput_batch_data .= $daily_watthours . ",";
+		$pvoutput_batch_data .= $interval->{ 'powr' } . ";";
+		$pvoutput_batch_count++;
+	}
+	# If we've maxed out the batch pvoutput will accept,
+	# or if it's the last interval from Enlighten, submit it.
+	if ($pvoutput_batch_count == 10 || $interval == @$intervals[-1]) {
+		if ($pvoutput_batch_count > 0) {
+			print "batch update data is $pvoutput_batch_data \n" if $debug;
+			my $request = POST $pvoutput_addstatus_url, [ data => $pvoutput_batch_data ];
+			$request->proxy_authorization_basic($proxy_user, $proxy_passwd) if $proxy_user;
+			my $res = $pvoutput_ua->request($request);
+			die "Couldn't submit data ($pvoutput_batch_data) to pvoutput.org:" . $res->status_line . "\n" if (! $res->is_success);
+		}
+		# Haven't reached the end of the Enlighten data yet?
+		if ($interval != @$intervals[-1]) {
+			# more to do - reset submission data, wait for pvoutput
+			# API access limits, and continue.
+			$pvoutput_batch_data = "";
+			$pvoutput_batch_count = 0;
+			sleep 1;
+		}
+	}
+}
+
+exit;

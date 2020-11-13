@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd /Volumes/My_Book_Studio/Movies/Work
+find . -type f ! -name \*\.mp4 | grep -v /Renders/ | grep -v /Orig/WMV/ | grep -v DS_Store
+
+#cd ~/Movies
+#find . -type f ! -name \*\.mp4 | grep -v "/Render Files/" | grep -v \.strings$ | grep -v DS_Store

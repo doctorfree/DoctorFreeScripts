@@ -1,0 +1,15 @@
+#!/bin/bash
+
+TRANS="/Users/rrecord/Music/Transcend"
+FLASH="/Volumes/Transcend"
+
+cd "$TRANS"
+for artist in *
+do
+    [ -d "$artist" ] && {
+        [ ! -d "$FLASH/$artist" ] && {
+            echo "Copying $artist $FLASH/$artist"
+            cp -R "$artist" "$FLASH/$artist"
+        }
+    }
+done

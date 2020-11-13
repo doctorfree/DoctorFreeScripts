@@ -26,7 +26,7 @@
 # out of or in connection with the Software or the use or other dealings in
 # the Software.
 
-BASE="/u/ronrecord.com/httpdocs/Themes/Chrome/Backgrounds"
+BASE="$HOME/Documents/My Documents/ronrecord.com/httpdocs/Themes/Chrome/Backgrounds"
 IMAG="Hyperbolic_Honeycomb.png"
 BACK="$BASE/$IMAG"
 OUTP="Icon"

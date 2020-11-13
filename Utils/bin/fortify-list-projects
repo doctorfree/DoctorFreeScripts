@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Detect the operating system type
+if [ `uname -s` != "Darwin" ]
+then
+    if [ `uname -m` != "x86_64" ]
+    then
+        OSDIR="lin32"
+    else
+        OSDIR="lin64"
+    fi
+else
+    OSDIR="mac32"
+fi
+
+USER=`id -n -u`
+
+FORTIFY_HOME="/build/toolchain/$OSDIR/fortify-ssc-3.9"
+FORT="${FORTIFY_HOME}/bin/fortifyclient"
+PATH="$FORTIFY_HOME/bin:$PATH"
+
+${FORT} -url https://fortify.eng.vmware.com:8180/ssc -user ${USER} listprojects

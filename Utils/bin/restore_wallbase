@@ -1,0 +1,46 @@
+#!/bin/bash
+
+LIB_TOP="/Volumes/My_Book_Studio/Pictures/Libraries"
+SYM_TOP="/Volumes/My_Book_Studio/Pictures/Work/Wallbase"
+
+[ -d ${SYM_TOP} ] || {
+    echo "${SYM_TOP} does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+MASTERS="${LIB_TOP}/Wallbase.photoslibrary/Masters"
+[ -d ${MASTERS} ] || {
+    echo "${MASTERS} does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+find ${MASTERS} -type f > /tmp/rest_sym$$
+
+cd ${SYM_TOP}
+for ALBUM in *
+do
+    SYM_DIR="${SYM_TOP}/${ALBUM}"
+    DL="${SYM_DIR}/downloaded.txt"
+
+    [ -r ${DL} ] || {
+        echo "${DL} does not exist or is not readable. Skipping."
+        continue
+    }
+
+    cd ${SYM_DIR}
+    while read num
+    do
+        pic="wallpaper-${num}.jpg"
+        [ -L ${pic} ] && {
+            echo "${SYM_DIR}/${pic} symlink already exists. Skipping."
+            continue
+        }
+        F=`grep ${pic} /tmp/rest_sym$$`
+        [ "$F" ] && {
+            echo "Linking ${pic}"
+            ln -s $F .
+        }
+    done < ${DL}
+done
+rm -f /tmp/rest_sym$$
+

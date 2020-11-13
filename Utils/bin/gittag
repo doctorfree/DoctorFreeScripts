@@ -1,0 +1,15 @@
+#!/bin/bash
+
+TAG="$1"
+shift
+
+if [ "$TAG" = "-n" ]
+then
+    TAG="$1"
+    shift
+    echo "git tag -a $TAG -m \"$*\""
+    echo "git push origin $TAG"
+else
+    git tag -a $TAG -m \"$*\"
+    git push origin $TAG
+fi

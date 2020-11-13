@@ -1,0 +1,21 @@
+#!/bin/bash
+
+VER="1.1.0.1"
+ONE="/Users/rrecord/OneDrive - VMware, Inc/vRA/CatalogManager/$VER"
+
+[ -d "$ONE" ] || mkdir -p "$ONE"
+cd "$ONE"
+for rpm in $HOME/Downloads/VMware_Adapter_*$VER-*.noarch.rpm
+do
+    [ "$rpm" = "VMware_Adapter_*$VER-*.noarch.rpm" ] && {
+        echo "No new RPM in Downloads. Exiting."
+        exit 1
+    }
+done
+[ -d Bak ] || mkdir Bak
+for i in VMware_Adapter_*$VER-*.noarch.rpm
+do
+    [ "$i" = "VMware_Adapter_*$VER-*.noarch.rpm" ] && continue
+    mv $i Bak
+done
+mv $HOME/Downloads/VMware_Adapter_*$VER-*.noarch.rpm .

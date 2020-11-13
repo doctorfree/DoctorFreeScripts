@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for i in *
+do
+    [ -d "$i" ] && {
+        [ -L "$i" ] || {
+            du -h -d 0 "$i" |  grep G
+        }
+    }
+done

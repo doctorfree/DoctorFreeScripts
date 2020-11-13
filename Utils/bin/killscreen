@@ -1,0 +1,10 @@
+#!/bin/bash
+
+scr_pids=`ps -ef | grep SCREEN | grep -v 'grep SCREEN'` | awk ' { print $2 } ' 
+
+[ "$scr_pids" ] && {
+    for p in $scr_pids
+    do
+        kill -9 $p
+    done
+}

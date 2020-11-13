@@ -1,0 +1,62 @@
+#!/bin/bash
+#
+# mkwpheader - create Wordpress blog logo using ImageMagick
+#
+
+BASE="$HOME/Logos"
+IMAG="background.png"
+BACK="$BASE/$IMAG"
+OUTP="Blog"
+SIZE="1440x300"
+PSIZ=72
+ALL=
+
+[ "$1" ] && {
+    if [ "$1" = "-a" ]
+    then
+        ALL=1
+    else
+        [ -f "$BASE/$1".png ] && {
+            IMAG="$1".png
+            OUTP="$1"
+        }
+    fi
+}
+BACK="$BASE/$IMAG"
+
+convert -size $SIZE canvas:none -font Georgia -pointsize $PSIZ \
+  -draw 'text 278,90 "The Bodaciously Excellent"' -channel RGBA -blur 0x6 \
+  -fill darkred -stroke magenta \
+  -draw 'text 275,87 "The Bodaciously Excellent"' logotop.png
+
+convert -size $SIZE canvas:none -font Georgia -pointsize $PSIZ \
+  -draw 'text 380,200 "Blog of Doctorwhen"' -channel RGBA -blur 0x6 \
+  -fill darkred -stroke magenta \
+  -draw 'text 377,197 "Blog of Doctorwhen"' logobot.png
+
+convert -size $SIZE -composite logobot.png logotop.png -geometry ${SIZE}+0+0 \
+        -depth 8 text320.png
+
+[ -f "$BACK" ] || convert -size $SIZE xc:#00000000 "$BACK"
+if [ "$ALL" ]
+then
+    for img in "${BASE}"/*.png
+    do
+        BACK="$img"
+        OUTF=`basename "$BACK"`
+        OUTP=`echo "$OUTF" | sed -e "s/.png//"`
+        echo "Creating $SIZE logo for $OUTP"
+        convert -size $SIZE -gravity center -composite "$BACK" \
+            text320.png -geometry $SIZE -depth 8 logo320.png
+        convert -geometry $SIZE\! logo320.png logo96.png
+        convert logo96.png -background none -gravity center \
+            -extent $SIZE ${OUTP}_$SIZE.png
+    done
+else
+    echo "Creating $SIZE logo for $OUTP"
+    convert -size $SIZE -gravity center -composite "$BACK" \
+        text320.png -geometry $SIZE -depth 8 logo320.png
+    convert -geometry $SIZE\! logo320.png logo96.png
+    convert logo96.png -background none -gravity center -extent $SIZE ${OUTP}_$SIZE.png
+fi
+rm -f logotop.png logobot.png text320.png logo320.png logo96.png

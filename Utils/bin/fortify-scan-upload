@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Detect the operating system type
+if [ `uname -s` != "Darwin" ]
+then
+    if [ `uname -m` != "x86_64" ]
+    then
+        OSDIR="lin32"
+    else
+        OSDIR="lin64"
+    fi
+else
+    OSDIR="mac32"
+fi
+
+FORTIFY_HOME="/build/toolchain/$OSDIR/fortify-ssc-3.9"
+PATH="$FORTIFY_HOME/bin:$PATH"
+
+mvn -Dfortify.sca.buildId=vCDAffinity \
+    -Dfortify.sca.toplevel.artifactId=vCDAffinity \
+    -Dfortify.sca.upload=true \
+    -Dfortify.sca.renderSources=true \
+    -Dfortify.f360.projectId=856 \
+    -Dfortify.f360.url=https://fortify.eng.vmware.com:8180/ssc \
+    -Dfortify.f360.authToken=e14f3014-7b84-4970-9d3a-b0521298d97b \
+    sca:translate
+
+mvn -Dfortify.sca.buildId=vCDAffinity \
+    -Dfortify.sca.toplevel.artifactId=vCDAffinity \
+    -Dfortify.sca.upload=true \
+    -Dfortify.sca.renderSources=true \
+    -Dfortify.f360.projectId=856 \
+    -Dfortify.f360.url=https://fortify.eng.vmware.com:8180/ssc \
+    -Dfortify.f360.authToken=e14f3014-7b84-4970-9d3a-b0521298d97b \
+    sca:scan
+

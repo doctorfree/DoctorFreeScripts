@@ -1,0 +1,24 @@
+#!/bin/bash
+
+W="`pwd`"
+SUMS="$W/SUMS"
+[ -d "$W" ] || {
+    echo "$W does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd "$W"
+
+# First, make sure the SUMS file is current
+updsums
+
+# Check for duplicates
+rm -f dups$$
+touch dups$$
+while read f
+do
+    sum=`echo "$f" | awk ' { print $1 " " $2 } '`
+    num=`grep "$sum" "$SUMS" | wc -l`
+    [ $num -gt 1 ] && echo "$f" >> dups$$
+done < "$SUMS"
+sort dups$$ > dups-sorted
+rm -f dups$$

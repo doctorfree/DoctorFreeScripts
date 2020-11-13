@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# git log -1 --format=%ai TAG
+#
+
+tag=$1
+
+if [ "$tag" = "all" ]
+then
+    git log --tags --simplify-by-decoration --pretty="format:%ci %d"
+else
+    git log -1 --format=%ai $tag
+fi

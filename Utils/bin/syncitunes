@@ -1,13 +1,17 @@
 #!/bin/bash
 #
 
-TOP="/u"
+#TOP="/u/pictures"
+TOP="/Volumes/WD_My_Passport_4TB"
+FLD="iTunes"
 HST="rrecord@10.0.1.44"
-ITUSRC="/Volumes/LaCie_4TB/iTunes"
+SRC="/Volumes/LaCie_4TB"
 
 [ -d $TOP ] || {
     echo "$TOP does not exist or is not a directory. Exiting."
     exit 1
 }
 cd $TOP
-rsync -qa --max-size=4G --delete $HST:$ITUSRC $TOP/
+[ -d $FLD ] || continue
+[ -L $FLD ] && continue
+sudo rsync -qka --max-size=4G $HST:$SRC/$FLD $TOP/

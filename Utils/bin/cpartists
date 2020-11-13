@@ -1,0 +1,51 @@
+#!/bin/bash
+
+ITS="/Volumes/LaCie_4TB/iTunes/Music"
+SRC="/Volumes/LaCie_8TB/Music/Transcend_16GB-Bak"
+DST="/Volumes/LaCie_8TB/Music/Transcend_16GB"
+TELL=
+
+[ "$1" == "-d" ] && {
+    TELL=1
+    shift
+}
+
+cd ${ITS}
+for artist in "Chris Cornell" "Chris Von Sneidern" \
+               "Chrissie Hynde" "Christina Aguilera"
+#for artist in "The Kinks" "The Cranberries" Smith "Songs For Moms" Slash \
+#             "Shania Twain" Renaissance "Patsy Cline" "Os Mutantes" \
+#             "Neneh Cherry" "Natalie Merchant" "Laurie Anderson" "Laura Love" \
+#             "Jesus Christ Superstar - The Original Studio Cast" \
+#             "Joan Osborne" "Jefferson Airplane" "Jason Falkner" "Fiona Apple" \
+#             "Father John Misty" Eurythmics Evanescence "Etta James" Enya \
+#             "Alicia Keys" "Alabama Shakes" "Ani DiFranco" "Aretha Franklin" \
+#             Alt-J "Blind Faith" "Blind Melon" "Britney Spears" \
+#             "Brewer & Shipley" "Brenda Lee" "Brandi Carlile" Cake \
+#             "Buena Vista Social Club" "Cage The Elephant" "Cat Stevens" \
+#             "Caradura de California" "Chris Cornell" "Christina Aguilera" \
+#             "Chrissie Hynde" "Counting Crows" "Chris Von Sneidern" "Count Five"
+
+do
+    if [ -d ${SRC}/"$artist" ]
+    then
+        echo "${SRC}/$artist exists. Skipping."
+    else
+        if [ "$TELL" ]
+        then
+            echo "cp -a $artist ${SRC}/$artist"
+        else
+            cp -a "$artist" ${SRC}/"$artist"
+        fi
+    fi
+    [ -d ${DST}/"$artist" ] && {
+        echo "${DST}/$artist exists! Skipping."
+        continue
+    }
+    if [ "$TELL" ]
+    then
+        echo "cp -a $artist ${DST}/$artist"
+    else
+        cp -a "$artist" ${DST}/"$artist"
+    fi
+done

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+FILE="$1"
+
+if [ -z "$1" ]
+then
+  echo "Document required. Exiting."
+  exit 1
+fi
+if [ -z "$2" ]
+then
+  echo "Page number required. Exiting."
+  exit 1
+fi
+
+PAGE=$2
+
+# ----------------------
+# Applescript below here
+# ----------------------
+
+osascript <<EOF
+
+set pageNumber to $PAGE
+set fileName to "$FILE"
+
+set posixFile to POSIX file fileName
+tell application "Finder" to open posixFile
+
+delay 2
+tell application "System Events"
+    keystroke "g" using {option down, command down}
+    keystroke pageNumber
+    delay 1
+    keystroke return
+end tell
+
+EOF

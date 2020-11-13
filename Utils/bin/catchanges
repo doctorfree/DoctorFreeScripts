@@ -1,0 +1,24 @@
+#!/bin/bash
+
+PROD="catalogmanager"
+HOST="perforce.eng.vmware.com"
+PORT=1666
+L=
+
+[ "$1" = "-l" ] && {
+    L="-l"
+    shift
+}
+
+[ $# = 0 ] && {
+    echo "catchanges [-l] [user1] [user2 ...]"
+    echo "Cat Man users are rrecord, csparer, abankovskii, and yshants"
+    exit 1
+}
+
+[ "$L" ] && p4 -p ${HOST}:${PORT} login
+
+for i in $*
+do
+    p4 -p ${HOST}:${PORT} changes -u $i
+done

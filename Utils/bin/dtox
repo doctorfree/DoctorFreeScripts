@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for i in $*
+do
+#    cat $i | sed -e 's/$//' > /tmp/dtox$$
+    tr -d '\015' <$i >/tmp/dtox$$
+    cp /tmp/dtox$$ $i
+    rm /tmp/dtox$$
+done
+

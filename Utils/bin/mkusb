@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo parted /dev/sdb  mklabel gpt
+sudo parted /dev/sdb  mkpart primary 0% 100%
+sudo mkfs.ext4 /dev/sdb1

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+email=`git config --global -l | grep user.email | awk -F "=" ' { print $2 } '`
+if [ "$email" == "gitlab@ronrecord.com" ]
+then
+    git config --global user.name "Moonlight Labs"
+    git config --global user.email "moonlightlaboratory@gmail.com"
+else
+    if [ "$email" == "moonlightlaboratory@gmail.com" ]
+    then
+        git config --global user.name "Ron Record"
+        git config --global user.email "gitlab@ronrecord.com"
+    else
+        echo "Neither git global email setting is currently set"
+        echo "One can be set using either the moongit or doctorgit scripts"
+        echo "or by issuing one of the following sets of commands:"
+        echo ""
+        echo "git config --global user.name \"Moonlight Labs\""
+        echo "git config --global user.email \"moonlightlaboratory@gmail.com\""
+        echo ""
+        echo "or"
+        echo ""
+        echo "git config --global user.name \"Ron Record\""
+        echo "git config --global user.email \"gitlab@ronrecord.com\""
+        exit 1
+    fi
+fi
+

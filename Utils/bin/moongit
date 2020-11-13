@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git config --global user.name "Moonlight Labs"
+git config --global user.email "moonlightlaboratory@gmail.com"
+

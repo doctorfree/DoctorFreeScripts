@@ -1,0 +1,7 @@
+#!/bin/bash
+
+TOP="/Volumes/My_Book_Studio/Pictures/Libraries"
+LIB="KindGirls"
+
+cd "${TOP}"
+sudo rsync -a "${TOP}"/${LIB}.photoslibrary "${TOP}"/${LIB}.photoslibrary.bak

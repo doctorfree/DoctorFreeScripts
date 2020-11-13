@@ -1,0 +1,17 @@
+#!/bin/bash
+
+TOP="$HOME/src/Viro"
+
+[ -d "$TOP" ] || mkdir -p "$TOP"
+cd "$TOP"
+
+[ "$1" ] || {
+    echo "Usage: mkviroproj <project-name>"
+    echo "No project name provided. Exiting."
+    exit 1
+}
+
+for proj in $*
+do
+    react-viro init "$proj" --verbose
+done

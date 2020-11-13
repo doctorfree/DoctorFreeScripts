@@ -1,0 +1,8 @@
+#!/bin/bash
+
+sudo launchctl unload /System/Library/LaunchDaemons/com.apple.automountd.plist
+sudo launchctl unload /System/Library/LaunchDaemons/com.apple.autofsd.plist
+sudo launchctl load /System/Library/LaunchDaemons/com.apple.autofsd.plist
+sudo launchctl load /System/Library/LaunchDaemons/com.apple.automountd.plist
+
+sudo automount -vc

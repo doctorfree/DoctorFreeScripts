@@ -1,0 +1,13 @@
+#!/bin/bash
+
+D=/opt/amdgpu-pro-20.40-1147286-ubuntu-20.04
+
+[ -d $D ] || {
+    echo "$D does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd $D
+
+sudo ./amdgpu-install --opencl=legacy,pal --headless --no-dkms
+

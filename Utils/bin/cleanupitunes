@@ -1,0 +1,36 @@
+#!/bin/bash
+
+NEW="/Volumes/WD_My_Passport_4TB/iTunes"
+OLD="$HOME/Music/iTunes/iTunes Media"
+
+for media in Music Podcasts
+do
+    MLD="$OLD/$media"
+    MEW="$NEW/$media"
+    [ -d "$MLD" ] || {
+        echo "$MLD does not exist or is not a directory. Exiting."
+        exit 1
+    }
+
+    cd "$MLD"
+    find . -type f | while read i
+    do
+        [ -f "$MEW"/"$i" ] && rm -f "$i"
+    done
+    for dir in */*
+    do
+        for song in "$dir"/* 
+        do
+            [ "$song" == "$dir/*" ] && [ -d "$dir" ] && rmdir "$dir"
+            break
+        done
+    done
+    for dir in *
+    do
+        for album in "$dir"/* 
+        do
+            [ "$album" == "$dir/*" ] && [ -d "$dir" ] && rmdir "$dir"
+            break
+        done
+    done
+done

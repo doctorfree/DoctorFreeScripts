@@ -1,0 +1,89 @@
+#!/bin/bash
+
+I="/Volumes/Lacie_Porsche_1TB/iTunes/Music"
+T="/Volumes/Transcend"
+# Size of the drive in Gigabytes minus 1GB
+SIZE=28
+TELL=
+FORCE=
+
+[ "$1" = "-t" ] && {
+    shift
+    T="$1"
+    shift
+}
+[ -d "$T" ] || {
+    echo "Flash drive must be mounted on $T. None detected, exiting."
+    exit 1
+}
+
+[ "$1" = "-f" ] && {
+    FORCE=1
+    shift
+}
+[ "$1" = "-d" ] && {
+    TELL=1
+    shift
+}
+[ "$1" = "-i" ] && {
+    df "$T"
+    exit 1
+}
+[ "$1" = "-u" ] && {
+    printf "Usage: cptoflash [-t mnt] [-d|-f|-i|-u] [artist ...] [artist/album ...]\n"
+    printf "Where:\n\t-d indicates tell me what you would do\n"
+    printf "\t-f indicates force copy (don't do disk usage check)\n"
+    printf "\t-i indicates tell me how much disk space is on the flash drive\n"
+    printf "\t-u displays this usage message\n"
+    printf "\t-d, -i, -u are mutually exclusive and must be the 1st argument\n"
+    printf "\t-t can precede these and specifies an alternate mount point\n"
+    exit 1
+}
+
+for i in "$@"
+do
+    [ -d "$I/$i" ] || {
+        echo "$I/$i is not a directory or does not exist. Skipping."
+        continue
+    }
+    [ "$FORCE" ] || {
+        DU=`du -h -d 0 "$T"`
+        echo $DU | grep '\.' > /dev/null
+        if [ $? -eq 0 ]
+        then
+            USED=`echo $DU | awk -F "." ' { print $1 } '`
+        else
+            USED=`echo $DU | awk ' { print $1 } ' | sed -e "s/K//" -e "s/M//" -e "s/G//"`
+        fi
+        [ $USED -ge $SIZE ] && {
+            echo "Drive near full at $USED : use -f to override. Exiting."
+            exit 1
+        }
+    }
+    [ -d "$T/$i" ] && {
+        if [ "$TELL" ]
+        then
+            echo "rm -rf $T/$i"
+        else
+            rm -rf "$T/$i"
+        fi
+    }
+    ARTIST=`dirname "$i"`
+    [ "$ARTIST" = "." ] || {
+        [ -d "$T/$ARTIST" ] || {
+            if [ "$TELL" ]
+            then
+                echo "mkdir $T/$ARTIST"
+            else
+                mkdir "$T/$ARTIST"
+            fi
+        }
+    }
+    if [ "$TELL" ]
+    then
+        echo "cp -pR $I/$i $T/$i"
+    else
+        echo "Copying $i"
+        cp -pR "$I/$i" "$T/$i"
+    fi
+done

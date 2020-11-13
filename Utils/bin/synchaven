@@ -1,0 +1,17 @@
+#!/bin/bash
+
+WORK="/Volumes/My_Book_Studio/Pictures/Work"
+SRCE="${WORK}/Wallhaven"
+DEST="/Volumes/Lacie_8TB/Pictures/Work"
+
+[ -d "${SRCE}" ] || {
+    echo "$SRCE does not exist or is not a directory. Exiting."
+    exit 1
+}
+[ -d "${DEST}" ] || {
+    echo "$DEST does not exist or is not a directory. Exiting."
+    exit 1
+}
+ 
+rsync -aL "${SRCE}" "${DEST}"
+

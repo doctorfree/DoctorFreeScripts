@@ -1,0 +1,46 @@
+#!/bin/bash
+
+TOP="/Volumes/LaCie_8TB/Music/Transcend_16GB"
+
+[ -d "$TOP" ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd "$TOP"
+
+find . -type d -print | while read folder
+do
+    cd "${folder}"
+    # Pick out the first MP3 in this directory
+    infile=
+    for file in *.mp3
+    do
+        [ "$file" == "*.mp3" ] && continue
+        infile="$file"
+        break
+    done
+    [ "$infile" ] || {
+        printf "\nNo MP3 in ${folder} - skipping."
+        cd "${TOP}"
+        continue
+    }
+    printf "\nChecking for pic & year in $infile of $folder ..."
+    [ -f cover.jpg ] || {
+        PIC=
+        id3info "${infile}" | grep PIC > /dev/null && PIC=1
+        [ "$PIC" ] && {
+            printf "\n\tCreating new cover image ..."
+            ffmpeg -nostdin -loglevel 0 -i "${infile}" cover.jpg
+        }
+    }
+    [ -f Year ] || {
+        YEAR=`id3info "${infile}" | grep TYER | awk -F ':' ' { print $2 } '`
+        YEAR=`echo $YEAR | xargs`
+        [ "$YEAR" ] && {
+            printf "\n\tCreating new year file ..."
+            echo "($YEAR)" > Year
+        }
+    }
+    cd "${TOP}"
+done
+printf "\n"

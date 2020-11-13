@@ -1,0 +1,14 @@
+#!/bin/bash
+
+NEW="/Volumes/WD_My_Passport_4TB/Time_Capsule"
+
+find . -type f | while read i
+do
+    [ -f "$NEW/$i" ] || continue
+    ck1=`cksum "$i" | awk ' { print $1 } '`
+    ck2=`cksum "$NEW/$i" | awk ' { print $1 } '`
+    [ "$ck1" == "$ck2" ] && {
+        echo "Removing $i"
+        rm -f "$i"
+    }
+done

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in "$@"
+do
+    j=`echo "$i" | sed -e "s/ /_/g"`
+    [ "$i" = "$j" ] || mv "$i" "$j"
+done

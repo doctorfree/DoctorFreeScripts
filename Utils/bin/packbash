@@ -1,0 +1,12 @@
+#!/bin/bash
+
+LIST=
+FILES=".bash_aliases .bash_profile .bashrc .dircolors"
+cd $HOME
+
+for i in $FILES
+do
+    [ -r $i ] && LIST="$LIST $i"
+done
+
+tar cf - $LIST | gzip -9 > bashrc.tar.gz

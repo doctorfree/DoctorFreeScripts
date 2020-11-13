@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git config --global user.name "Ron Record"
+git config --global user.email "rrecord@eloquentcloud.com"
+

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd ~/src
+
+git clone https://github.com/vmware/rbvmomi.git

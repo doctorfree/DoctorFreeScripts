@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+
+SRC="/Volumes/Seagate_8TB/Pictures/Work"
+TOP="/Volumes/Time Capsule"
+
+[ -d "$TOP" ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd "$TOP"
+rsync -qa --max-size=4G --delete "$SRC/" "$TOP"
+#rsync -qa --max-size=4G "$SRC/Wallhaven" "$TOP"
+#rsync -qa --max-size=4G "$SRC/X-Art" "$TOP"
+#rsync -qa --max-size=4G "$SRC/Tuigirls" "$TOP"
+#rsync -qa --max-size=4G "$SRC/Suicide_Girls" "$TOP"
+#rsync -qa --max-size=4G "$SRC/KindGirls" "$TOP"

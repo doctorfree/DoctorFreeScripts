@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# findandcp
+#
+
+SUF=$1
+
+find . -type f -name \*\.$SUF -print0 | xargs -0 tar cf - | (cd /Volumes/My_Book_Studio/Movies/Bak; tar xf -)

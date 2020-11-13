@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sftp -oPort=443 'rrecord@vmware.com'@sftp2.eng.vmware.com

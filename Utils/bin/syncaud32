@@ -1,0 +1,16 @@
+#!/bin/bash
+
+MNT="/Volumes/TRANSCEND32"
+AUD="/Volumes/My_Book_Studio/Audio/Imported"
+
+[ -d "$AUD" ] && {
+    cd "$AUD"
+    for i in *
+    do
+        [ "$i" = "*" ] && continue
+        [ -d "$i" ] && {
+            echo "Syncing $i to $MNT/$i"
+            rsync -aL -H --delete "$i"/ "$MNT"/"$i"
+        }
+    done
+}

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for ISO in *.iso
+do
+    [ -f ${ISO}.zip ] && {
+        echo "${ISO}.zip already exists. Skipping."
+        continue
+    }
+    zip ${ISO}.zip ${ISO}
+    rm -f ${ISO}
+done

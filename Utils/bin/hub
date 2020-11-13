@@ -1,0 +1,10 @@
+#!/bin/bash
+
+usage() {
+    node harmonyHubCli.js -h
+    exit 1
+}
+
+cd /usr/local/lib/harmonyHubCLI
+
+node harmonyHubCli.js -l 10.0.1.38 $*

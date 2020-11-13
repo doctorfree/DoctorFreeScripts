@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd ~/src/Helix/HelixAdapter
+vi ./conf/describe.xml \
+./src/com/vmware/vrops/helix/HelixAdapter.java

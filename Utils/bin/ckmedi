@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# ckmedi - diff the starting point of our Meditech Git repo with the current
+#          Perforce Meditech adapter source
+
+SRC=/Users/rrecord/src
+PERF=${SRC}/vrops/meditech/alive/Adapters-3/MeditechAdapter3
+OURS=${SRC}/Meditech-Initial
+
+diff -b -r ${PERF} ${OURS}

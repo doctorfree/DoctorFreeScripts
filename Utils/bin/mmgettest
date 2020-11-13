@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#curl -X GET http://10.0.1.67:8080/api/modules | jq .
+
+#curl -X GET http://10.0.1.67:8080/api/module/MMM-Remote-Control | jq .
+curl -X GET http://10.0.1.67:8080/api/module/newsfeed | jq .
+#curl -X GET http://10.0.1.67:8080/api/module/MMM-ModuleScheduler | jq .

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/src/vrops-service/vrops
+vi ngc/server/vcops-api-service/src/main/java/com/integrien/alive/common/adapter3/events/EventConstants.java

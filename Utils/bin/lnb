@@ -1,0 +1,14 @@
+#!/bin/bash
+
+[ -d /build ] || mkdir /build
+
+[ -d /bldmnt ] || {
+    echo "/bldmnt missing"
+    exit 1
+}
+
+cd /bldmnt
+for i in *
+do
+    ln -s /bldmnt/$i /build/$i
+done

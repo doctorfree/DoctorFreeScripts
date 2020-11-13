@@ -1,0 +1,19 @@
+#!/bin/bash
+
+git clone git@10.20.77.156:/opt/git/Vodafone.git Vodafone-super
+cd Vodafone-super
+gits prepare
+
+gits attach ^/opt/git/AffinityClient.git AffinityClient
+gits attach ^/opt/git/AffinityClientExample.git AffinityClientExample
+gits attach ^/opt/git/Credentials.git Credentials
+gits attach ^/opt/git/CredentialsClient.git CredentialsClient
+gits attach ^/opt/git/PerformanceClient.git PerformanceClient
+gits attach ^/opt/git/PerformanceClientExample.git PerformanceClientExample
+gits attach ^/opt/git/StatsFeeder.git StatsFeeder
+gits attach ^/opt/git/VCDAdapter.git VCDAdapter
+gits attach ^/opt/git/apache-cassandra.git apache-cassandra
+gits attach ^/opt/git/kairosdb.git kairosdb
+gits attach ^/opt/git/vCDAffinity.git vCDAffinity
+gits attach ^/opt/git/vCDEventTest.git vCDEventTest
+gits attach ^/opt/git/vCDPerformance.git vCDPerformance

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TM=/Users/rrecord/src/DeepSecurityAdapter
+O=/Users/rrecord/src/DeepSecurityAdapter-bak
+H=`pwd`
+I=`echo $H | sed -e "s/DeepSecurityAdapter-bak/DeepSecurityAdapter/"`
+
+for f in $*
+do
+    cp $f $I/$f
+done

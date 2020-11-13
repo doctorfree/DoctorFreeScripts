@@ -1,0 +1,25 @@
+#!/bin/bash
+
+IMPORT="/Volumes/My_Book_Studio/Audio/Imported"
+ITUNES="/Volumes/LaCie_4TB/iTunes/Music"
+
+[ -d "$IMPORT" ] || {
+    echo "$IMPORT does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd "$IMPORT"
+find . -name \*\.mp3 | while read broken
+do
+    filetype=`file "$broken" | awk -F ":" ' {  print $2 } '`
+    [ "$filetype" = " directory" ] && {
+        ADIR=`dirname "$broken" | sed -e  "s/\.\///"`
+        FNAM=`basename "$broken"`
+        [ -r "$ITUNES"/"$ADIR"/"$FNAM" ] && {
+            cd "$ADIR"
+            rm -f "$FNAM"
+            ln -s "$ITUNES"/"$ADIR"/"$FNAM" "$FNAM"
+            cd "$IMPORT"
+        }
+    }
+done

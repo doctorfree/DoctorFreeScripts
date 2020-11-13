@@ -1,0 +1,21 @@
+#!/bin/bash
+
+TOP="/Volumes/LaCie_8TB/Music/Transcend_16GB"
+
+[ -d "$TOP" ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd "$TOP"
+
+find . -name \*\.m4a -print | while read infile
+do
+    outfile=`echo "${infile}" | sed -e "s/\.m4a/\.mp3/"`
+    printf "\nConverting $infile to $outfile ..."
+    ffmpeg -nostdin -hide_banner -loglevel quiet -vn -i "${infile}" \
+              -acodec libmp3lame -qscale:a 0 -c:v copy "${outfile}"
+    printf " done."
+    printf "\nRemoving $infile ..."
+    rm -f "${infile}"
+    printf " done.\n"
+done

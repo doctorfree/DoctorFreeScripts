@@ -1,0 +1,3 @@
+#!/bin/bash
+#
+screen /dev/tty.usbserial-AFYJJWZK 115200 -L

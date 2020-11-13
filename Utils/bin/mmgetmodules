@@ -1,0 +1,8 @@
+#!/bin/bash
+
+action="installed"
+[ "$1" == "-a" ] && action="available"
+#[ "$1" == "-i" ] && action="installed"
+
+# Get a list of modules
+curl -X GET http://10.0.1.67:8080/api/modules/${action} | jq .

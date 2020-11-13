@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# git archive --format=tar --remote=[hostname]:[repo] [tag name] > version.tar
+#
+
+H=`pwd`
+PROJ=`basename $H`
+tag=$1
+out="../${PROJ}-${tag}.tar"
+
+[ -f ${out} ] && {
+    echo "$out exists. Exiting."
+    exit 1
+}
+
+git archive --format=tar ${tag} > ${out}

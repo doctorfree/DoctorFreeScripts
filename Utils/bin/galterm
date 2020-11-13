@@ -1,0 +1,6 @@
+#!/bin/bash
+#
+#screen /dev/tty.usbserial 115200 –L
+#screen /dev/tty.usbserial3 115200
+#screen /dev/cu.usbserial 115200
+screen /dev/cu.usbserial3 115200

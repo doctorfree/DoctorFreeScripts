@@ -1,0 +1,15 @@
+#!/bin/bash
+
+P="src/main/java/com/vmware/vra/catalogmanager"
+L=
+
+[ "$1" = "-l" ] && {
+    L="-l"
+    shift
+}
+
+for i in $*
+do
+    editfile $L $P/$i
+    L=
+done

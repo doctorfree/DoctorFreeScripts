@@ -1,0 +1,52 @@
+#!/bin/bash
+#
+
+[ "$1" ] || {
+    echo "Usage: ./mvyoni model_name [-l]"
+    exit
+}
+
+TOP="/Volumes/My_Book_Studio/Pictures/Work/Yonitale"
+MODEL="$1"
+[ "$2" = "-l" ] && TOP="${HOME}/Pictures/Work.local/Yonitale"
+DEST="${TOP}/${MODEL}"
+DOWN="${HOME}/Pictures/DownThemAll"
+
+[ -d ${DOWN} ] || {
+    echo "$DOWN does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+[ -d ${DEST} ] || mkdir -p ${DEST}
+
+cd "${DOWN}"
+rm -f extlink.png logo.png watch
+moved=0
+for i in *.jpg
+do
+    [ "$i" = "*.jpg" ] && {
+        echo "No pics. Exiting."
+        MOVNUM=`ls -1 "${DEST}" | wc -l`
+        [ ${MOVNUM} -gt 0 ] || rmdir "${DEST}"
+        exit 1
+    }
+    [ -r "${DEST}/$i" ] && {
+        echo "${DEST}/$i already exists. Skipping."
+        [ -d __Skipped__ ] || mkdir __Skipped__
+        mv "$i" __Skipped__
+        continue
+    }
+    # mv "$i" "${DEST}"
+    cp "$i" "${DEST}" && rm -f "$i"
+    moved=`expr $moved + 1`
+done
+rm -f *.png
+echo "Moved $moved pics to ${DEST}"
+
+NUM=`ls -1 | grep -v __Skipped__ | wc -l`
+
+[ ${NUM} -gt 1 ] && {
+    echo ""
+    echo "Additional pics: "
+    ls -1 | grep -v mvall | grep -v __Skipped__
+}

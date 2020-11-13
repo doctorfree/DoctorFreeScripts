@@ -1,0 +1,20 @@
+#!/bin/bash
+#
+# bldarduino - clone and build the Arduino IDE
+#
+
+BASE=$HOME/src/Arduino-$$
+if [ -d $BASE ]
+then
+    echo "$BASE already exists. Moving it aside to $BASE-$$"
+    [ -d $BASE-$$ ] && {
+        echo "Clobbering $BASE-$$"
+        rm -rf $BASE-$$
+    }
+    mv $BASE $BASE-$$
+fi
+mkdir -p $BASE
+cd $BASE
+git clone git://github.com/arduino/Arduino.git
+cd Arduino/build
+ant

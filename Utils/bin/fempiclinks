@@ -1,0 +1,42 @@
+#!/bin/bash
+
+F="/Volumes/My_Book_Studio/Pictures/Work/Femjoy"
+[ -d "$F" ] || {
+    echo "$F does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd "$F"
+for d in *
+do
+    [ -d $d ] && {
+        cd $d
+        [ -d All ] || mkdir All
+        NUMDIRS=`ls -1 | wc -l`
+        [ $NUMDIRS -eq 2 ] && {
+            rm -rf All
+            cd ..
+            continue
+        }
+        PICS=`echo */*`
+        cd All
+        for pic in $PICS
+        do
+            link=`basename $pic`
+            [ -L $link ] || ln -s ../$pic .
+        done
+        # Remove broken links
+        for i in *
+        do
+            [ "$i" = "*" ] && {
+                echo "Empty All directory for $d"
+                continue
+            }
+            [ -L "$i" ] && {
+                ls -lL "$i" > /dev/null 2>&1
+                [ $? -eq 0 ] || rm -f "$i"
+            }
+        done
+        cd ../..
+    }
+done

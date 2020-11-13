@@ -1,0 +1,10 @@
+#!/bin/bash
+
+BLOG="ronrecord.localhost"
+SITE="$HOME/Sites/$BLOG"
+DBNAME="ronrecord_wpblog"
+
+[ -d "$SITE" ] || mkdir -p "$SITE"
+cd "$SITE"
+
+wp core download && wp config create --dbname="$DBNAME" --dbuser=root --dbpass="Neil700w" --dbhost=127.0.0.1

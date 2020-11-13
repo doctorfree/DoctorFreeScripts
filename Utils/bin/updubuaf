@@ -1,0 +1,19 @@
+#!/bin/bash
+
+HOST=rr-ubuntu-dev.prom.eng.vmware.com
+USER=git
+
+[ $# = 0 ] && {
+    echo "You must supply the name of a Git source repository as argument"
+    exit 1
+}
+
+for i in $*
+do
+    [ -d $i ] || {
+        echo "No such directory $i"
+        continue
+    }
+    ssh $USER@$HOST "rm -rf /opt/git/$i"
+    scp -r $i $USER@$HOST:/opt/git
+done

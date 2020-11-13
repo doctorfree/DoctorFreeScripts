@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# gitarch - retrieve and create a tar archive of a git tag
+
+[ $# -eq 1 ] || {
+    echo "Usage: gitarch tag"
+    exit 1
+}
+
+H=`pwd`
+PROJ=`basename $H`
+TAG=$1
+
+# Check to see if the requested tag exists
+git tag | grep ${TAG} > /dev/null || {
+    echo "Requested tag ${TAG} does not exist. Exiting."
+    exit 2
+}
+
+OUT="../${PROJ}-${TAG}.tar.gz"
+printf "\nArchiving tag ${TAG} of project ${PROJ} as:\n\t${OUT}\n"
+git archive --format=tar ${TAG} | gzip -9 > ${OUT}
+echo "Done."

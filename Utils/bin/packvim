@@ -1,0 +1,13 @@
+#!/bin/bash
+
+LIST=
+FILES=".vimrc"
+cd $HOME
+
+for i in $FILES
+do
+    [ -r $i ] && LIST="$LIST $i"
+done
+[ -d .vim ] && LIST="$LIST .vim"
+
+tar cf - $LIST | gzip -9 > vimrc.tar.gz

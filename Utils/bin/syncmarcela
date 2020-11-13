@@ -1,0 +1,17 @@
+#!/bin/bash
+
+MNT="/Volumes/Transcend"
+AUD="/Volumes/LaCie_8TB/Music/For_Marcela_From_Ronnie"
+
+[ -d "$AUD" ] && {
+    cd "$AUD"
+#   for i in *
+#   do
+#       [ "$i" = "*" ] && continue
+#       [ -d "$i" ] && {
+#           echo "Syncing $i to $MNT/$i"
+#           rsync -aL -H --delete "$i"/ "$MNT"/"$i"
+#       }
+#   done
+    rsync -aL -H --delete "$AUD" "$MNT"
+}

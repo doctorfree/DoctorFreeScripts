@@ -1,0 +1,5 @@
+#!/bin/bash
+
+PROG="/Applications/XaoS.app/Contents/MacOS/XaoS"
+
+${PROG} $*

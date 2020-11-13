@@ -1,0 +1,18 @@
+#!/bin/bash
+
+W="/Volumes/My_Book_Studio/Pictures/Work"
+# The two directory hierarchies you wish to compare and clean
+R="$W/Domai"
+T="$W/Vintage"
+
+cd "$R"
+
+rm -f "$R/rmlist"
+touch "$R/rmlist"
+
+while read f
+do
+    sum=`echo "$f" | awk ' { print $1 " " $2 } '`
+    rem=`grep "$sum" "$T/SUMS" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+    [ "$rem" ] && echo "rm -f \"$R/$rem\"" >> "$R/rmlist"
+done < SUMS

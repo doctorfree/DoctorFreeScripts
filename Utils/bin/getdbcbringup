@@ -1,0 +1,8 @@
+#!/bin/bash
+
+TOPDIR=/dbc/pa-dbc1104/kulkarnir/vrack/src/calaveras-dev/glcm
+BUPDIR=$TOPDIR/bringup
+cd $HOME/src
+[ -d dbc ] || mkdir dbc
+cd dbc
+scp -r pa-dbc1104.eng.vmware.com:$BUPDIR bringup

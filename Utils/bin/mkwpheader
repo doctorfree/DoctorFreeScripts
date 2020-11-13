@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# mklogo - create logos using ImageMagick
+#
+# Written May 30, 2016 by Ronald Joe Record
+#
+# Copyright (c) 2016, Ronald Joe Record
+# All rights reserved.
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# The Software is provided "as is", without warranty of any kind, express or
+# implied, including but not limited to the warranties of merchantability,
+# fitness for a particular purpose and noninfringement. In no event shall the
+# authors or copyright holders be liable for any claim, damages or other
+# liability, whether in an action of contract, tort or otherwise, arising from,
+# out of or in connection with the Software or the use or other dealings in
+# the Software.
+
+BASE="$HOME/Logos"
+IMAG="background.png"
+BACK="$BASE/$IMAG"
+OUTP="Blog"
+SIZE="1200x280"
+PSIZ=72
+ALL=
+
+[ "$1" ] && {
+    if [ "$1" = "-a" ]
+    then
+        ALL=1
+    else
+        [ -f "$BASE/$1".png ] && {
+            IMAG="$1".png
+            OUTP="$1"
+        }
+    fi
+}
+BACK="$BASE/$IMAG"
+
+convert -size $SIZE canvas:none -font Georgia -pointsize $PSIZ \
+  -draw 'text 168,90 "The Bodaciously Excellent"' -channel RGBA -blur 0x6 -fill darkred \
+  -stroke magenta -draw 'text 165,87 "The Bodaciously Excellent"' logotop.png
+
+convert -size $SIZE canvas:none -font Georgia -pointsize $PSIZ \
+  -draw 'text 270,200 "Blog of Doctorwhen"' -channel RGBA -blur 0x6 -fill darkred \
+  -stroke magenta -draw 'text 267,197 "Blog of Doctorwhen"' logobot.png
+
+convert -size $SIZE -composite logobot.png logotop.png -geometry ${SIZE}+0+0 \
+        -depth 8 text320.png
+
+[ -f "$BACK" ] || convert -size $SIZE xc:#00000000 "$BACK"
+if [ "$ALL" ]
+then
+    for img in "${BASE}"/*.png
+    do
+        BACK="$img"
+        OUTF=`basename "$BACK"`
+        OUTP=`echo "$OUTF" | sed -e "s/.png//"`
+        echo "Creating $SIZE logo for $OUTP"
+        convert -size $SIZE -gravity center -composite "$BACK" \
+            text320.png -geometry $SIZE -depth 8 logo320.png
+        convert -geometry $SIZE\! logo320.png logo96.png
+        convert logo96.png -background none -gravity center \
+            -extent $SIZE ${OUTP}_$SIZE.png
+    done
+else
+    echo "Creating $SIZE logo for $OUTP"
+    convert -size $SIZE -gravity center -composite "$BACK" \
+        text320.png -geometry $SIZE -depth 8 logo320.png
+    convert -geometry $SIZE\! logo320.png logo96.png
+    convert logo96.png -background none -gravity center -extent $SIZE ${OUTP}_$SIZE.png
+fi
+rm -f logotop.png logobot.png text320.png logo320.png logo96.png

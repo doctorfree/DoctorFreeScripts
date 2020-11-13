@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# updrlinks - recursively update symbolic links in current directory
+#             to point to new volume
+#
+
+NEWDIR="/Volumes/LaCie_4TB/iTunes/Music"
+OLD="Lacie_Porsche_1TB"
+
+find . -type l -print0 | xargs -0 ls -1 | while read i
+do
+    ls -l "$i" | grep $OLD > /dev/null && {
+        found=
+        [ -f "$NEWDIR/$i" ] && {
+            found="$NEWDIR/$i"
+        }
+        # Replace any : with _
+        j=`echo "$i" | sed -e "s/:/_/g"`
+        [ -f "$NEWDIR/$j" ] && {
+            found="$NEWDIR/$j"
+        }
+        [ "$found" ] || {
+            # Check for file with track number added as prefix
+            artist1=`dirname "$i"`
+            artist2=`dirname "$j"`
+            artist="$artist1"
+            b1=`basename "$i"`
+            b2=`basename "$j"`
+            [ -d "$NEWDIR/$artist2" ] && artist="$artist2"
+            [ -d "$NEWDIR/$artist" ] && {
+                pushd "$NEWDIR/$artist" > /dev/null
+                for song in [0-9][0-9]*
+                do
+                    notrack=${song:3}
+                    if [ "$b" = "$notrack" ] || [ "$b2" = "$notrack" ]
+                    then
+                        found="$NEWDIR/$artist/$song"
+                        break
+                    fi
+                done
+                popd > /dev/null
+            }
+        }
+        [ "$found" ] && {
+            rm -f "$i"
+            ln -s "$found" "$i"
+        }
+    }
+done

@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+## @file mklink.sh
+## @brief Replace files with symbolic links
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2016, Ronald Joe Record, all rights reserved.
+## @date Written 17-Sep-2016
+## @version 1.0.1
+##
+
+HERE=`pwd`
+
+find . -type l | while read i
+do
+    target=`ls -l "$i" | awk ' { print $11 } '`
+#   rel=`echo $target | awk -F "/" ' { print $1 } '`
+#   [ "$rel" = ".." ] || {
+#       echo "$i target not relative: $target"
+#   }
+    [ "$target" ] || {
+        echo "Target for $i is empty. Skipping."
+        continue
+    }
+    [ -d "$target" ] && {
+        echo "Target for $i is a directory. Skipping."
+        continue
+    }
+    [ -L "$target" ] && {
+        echo "Target for $i is a symbolic link too. Skipping."
+        continue
+    }
+    rm -f "$i"
+    cp "$target" "$i"
+    rm -f "$target"
+    cd `dirname "$target"`
+    j=`echo "$i" | sed -e "s/\.\///"`
+    ln -s "${HERE}"/"$j" `basename "$target"`
+    cd "$HERE"
+done

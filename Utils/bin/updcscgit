@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git push vmname_git refs/*:refs/*
+git push vmname_git master

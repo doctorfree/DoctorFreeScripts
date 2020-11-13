@@ -1,0 +1,58 @@
+#!/bin/bash
+
+H="$HOME/Horizon/Helix/Status"
+ME=`basename $HOME`
+ST="$ME"
+DAY=`date "+%d"`
+MONTH=`date "+%m"`
+MNAM=`date "+%b"`
+YEAR=`date "+%Y"`
+STATUS="$ST-$YEAR-$MONTH-$DAY.txt"
+
+# [ -d $H/$YEAR ] || mkdir -p $H/$YEAR
+[ -d $H ] || mkdir -p $H
+cd $H
+
+[ -r $STATUS ] || {
+    # Try to figure out what last week's report was named
+    M=$MONTH
+    Y=$YEAR
+    D=`expr $DAY - 7`
+    [ $D -lt 1 ] && {
+        D=`expr 31 + $D`
+        M=`expr $MONTH - 1`
+        [ $M -lt 1 ] && {
+            M=12
+            Y=`expr $YEAR - 1`
+        }
+    }
+    [ $D -lt 10 ] && D="0$D"
+    LAST="$ST-$Y-$M-$D.txt"
+    LNAM=`date -v${M}m "+%b"`
+    if [ -r $LAST ]
+    then
+        cat $LAST | sed -e "s/$D-$LNAM-$Y/$DAY-$MNAM-$YEAR/" > $STATUS
+    else
+        D=`expr $D - 1`
+        LAST="$ST-$Y-$M-$D.txt"
+        if [ -r $LAST ]
+        then
+            cat $LAST | sed -e "s/$D-$LNAM-$Y/$DAY-$MNAM-$YEAR/" > $STATUS
+        else
+            D=`expr $D - 2`
+            LAST="$ST-$Y-$M-$D.txt"
+            [ -r $LAST ] && {
+                cat $LAST | sed -e "s/$D-$LNAM-$Y/$DAY-$MNAM-$YEAR/" > $STATUS
+            }
+        fi
+    fi
+}
+
+[ -r $STATUS ] || {
+    echo "Weekly status" > $STATUS
+    echo "$DAY-$MNAM-$YEAR" >> $STATUS
+    echo "$ME@vmware.com" >> $STATUS
+    echo "------------------" >> $STATUS
+}
+
+exec vi $STATUS

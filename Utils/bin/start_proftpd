@@ -1,0 +1,21 @@
+#!/bin/bash
+
+PFILE="/usr/local/var/proftpd.pid"
+FORCE=
+
+[ "$1" == "-f" ] && FORCE=1
+
+[ -f $PFILE ] && {
+    if [ "$FORCE" ]
+    then
+        sudo rm -f $PFILE
+    else
+        echo "$PFILE exists."
+        echo "You can stop the ProFTPD server with stop_proftpd."
+        echo "Or force startup with 'start_proftpd -f'"
+        echo "Exiting."
+        exit 0
+    fi
+}
+
+sudo /usr/local/sbin/proftpd

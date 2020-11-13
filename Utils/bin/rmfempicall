@@ -1,0 +1,18 @@
+#!/bin/bash
+
+F="/Volumes/My_Book_Studio/Pictures/Work/Femjoy"
+[ -d "$F" ] || {
+    echo "$F does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd "$F"
+for d in *
+do
+    [ -d $d ] && {
+        [ -d $d/All ] && {
+            rm -f $d/All/*
+            rmdir $d/All
+        }
+    }
+done

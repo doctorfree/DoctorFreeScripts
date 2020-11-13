@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# find . -type f -print0 | xargs -0 sudo chflags nouappnd,nouchg
+
+for file in $*
+do
+    sudo chmod -N $file        # Remove ACLs from file
+    sudo chmod ugo+rw $file    # Give everyone read-write permission to file
+    sudo chflags nouchg,noschg,nouappnd,nosappnd,noopaque,dump $file
+done

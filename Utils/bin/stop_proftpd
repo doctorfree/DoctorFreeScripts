@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PFILE="/usr/local/var/proftpd.pid"
+
+[ -f $PFILE ] || {
+    echo "$PFILE does not exist. Exiting."
+    exit 0
+}
+
+PID=`cat $PFILE`
+sudo kill -TERM $PID

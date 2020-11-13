@@ -1,0 +1,13 @@
+#!/bin/bash
+
+VTOP_DIR="$HOME/Documents/VMware_Doc/visualEsxtop"
+PROG=visualEsxtop.sh
+VTOP="$VTOP_DIR/$PROG"
+
+[ -x "$VTOP" ] || {
+    echo "$VTOP is not executable or does not exist. Exiting."
+    exit 1
+}
+
+cd "$VTOP_DIR"
+./$PROG $*

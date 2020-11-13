@@ -1,0 +1,15 @@
+#!/bin/bash
+
+hashcheckonly=
+
+[ "$1" == "-v" ] && hashcheckonly="--hash-check-only=true"
+cd ~/Games
+aria2c -x2 --out=\"[FILENAME]\" \
+           --user-agent=\"[USERAGENT]\" \
+           --referer=\"[REFERRER]\" \
+           --check-certificate=false \
+           --continue \
+           --load-cookies=[COOKIES] \
+           --force-sequential=true \
+           ${hashcheckonly} \
+           \"[URL]\"

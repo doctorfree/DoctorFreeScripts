@@ -1,0 +1,12 @@
+#!/bin/bash
+
+IDIR="/Volumes/LaCie_4TB/iTunes/Music"
+
+find . -type f -print | while read tune
+do
+    [ -f "${IDIR}"/"${tune}" ] && {
+        tune=`echo "${tune}" | sed -e "s/\.\///"`
+        rm -f "${tune}"
+        ln -s "${IDIR}"/"${tune}" "${tune}"
+    }
+done

@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# mvorigin - convenience script to move the origin repository from the old
+#    defunct ES Git server to a private repo on git.eng.vmware.com
+#
+
+HERE=`pwd`
+BASE=`basename $HERE`
+REPO="git.eng.vmware.com/private/rrecord"
+
+mvorigin() {
+    git remote rm origin
+    git remote add origin ssh://git@${REPO}/${BASE}.git
+    git push origin refs/*:refs/*
+    printf "\nNew remote repository configuration:\n"
+    git remote -v
+    echo ""
+}
+
+printf "\nIn $HERE with remote repository configuration:\n"
+git remote -v
+echo ""
+
+while true
+do
+    read -p "Do you want to move the origin to git.eng.vmware.com ? (y/n) " yn
+    case $yn in
+        [Yy]* ) mvorigin; break;;
+        [Nn]* ) printf "\nExiting.\n"; exit 1;;
+            * ) echo "Please answer yes or no.";;
+    esac
+done

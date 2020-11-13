@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git config --global user.name "Ronald Record"
+git config --global user.email "github@ronrecord.com"
+

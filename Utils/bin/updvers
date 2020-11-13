@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ~/src/Helix/HelixAdapter/conf
+vi describe.xml version.txt

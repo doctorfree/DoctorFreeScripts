@@ -1,0 +1,93 @@
+#!/bin/bash
+#
+## @file latest.sh
+## @brief List the top N newest files in a directory or directory hierarchy
+## @author Ronald Joe Record (rr at ronrecord dot com)
+## @copyright Copyright (c) 2014, Ronald Joe Record, all rights reserved.
+## @date Written November 1, 2013
+## @version 1.0.1
+##
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# The Software is provided "as is", without warranty of any kind, express or
+# implied, including but not limited to the warranties of merchantability,
+# fitness for a particular purpose and noninfringement. In no event shall the
+# authors or copyright holders be liable for any claim, damages or other
+# liability, whether in an action of contract, tort or otherwise, arising from,
+# out of or in connection with the Software or the use or other dealings in
+# the Software.
+#
+
+## @fn usage()
+## @brief Display command line usage options
+## @param none
+##
+## Exit the program after displaying the usage message and example invocations
+usage() {
+   printf "Usage: latest [-a] [-n] [-d directory] [-u] [num]\n"
+   printf "\nWhere:\n"
+   printf "\t-a specifies all directory entries, not just plain files\n"
+   printf "\t-n specifies no recursion, current dir or specified dir only\n"
+   printf "\t-d directory specifies the directory to use\n"
+   printf "\tnum specifies the number of files to list\n"
+   printf "\t-u prints this usage message and exits\n\n"
+   exit 1
+}
+
+DIR="."
+RECURSE=1
+NUM=10
+TYPE="-type f"
+
+while getopts d:anu flag; do
+   case $flag in
+      a)
+         TYPE="";
+         ;;
+      d)
+         DIR="$OPTARG";
+         ;;
+      n)
+         RECURSE=;
+         ;;
+      u)
+         usage;
+         ;;
+   esac
+done
+shift $(( OPTIND - 1 ));
+
+[ "$1" ] && {
+    #if expr "$1" : '[0-9]\+$' >/dev/null
+    test $1 -eq 0 2>/dev/null
+    if [ $? -eq 2 ]; then
+        echo "Unrecognized command line option $1"
+        usage
+    else
+        NUM=$1
+    fi
+}
+
+if [ "$RECURSE" ]
+then
+    find "$DIR" $TYPE -print0 | xargs -0 stat -f "%m %N" | sort -n | tail -$NUM | cut -f2- -d" "
+else
+    if [ "$TYPE" ]
+    then
+        ls -rt1 | while read foo
+        do
+            [ -f "$foo" ] && echo $foo
+        done | tail -n$NUM
+    else
+        ls -rt1 | tail -n$NUM
+    fi
+fi

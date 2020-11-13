@@ -30,7 +30,7 @@ IMAG="background.png"
 BACK="$BASE/$IMAG"
 OUTP="Logo"
 SIZE="896x256"
-PSIZ=90
+PSIZ=72
 ALL=
 
 [ "$1" ] && {
@@ -46,17 +46,25 @@ ALL=
 }
 BACK="$BASE/$IMAG"
 
-convert -size $SIZE canvas:none -font Bookman-DemiItalic -pointsize $PSIZ \
-  -draw 'text 168,90 "Santa Cruz"' -channel RGBA -blur 0x6 -fill darkred \
-  -stroke magenta -draw 'text 165,87 "Santa Cruz"' logotop.png
+#convert -size $SIZE canvas:none -font Optima -pointsize $PSIZ \
+#  -draw 'text 168,90 "Santa Cruz"' -channel RGBA -blur 0x6 -fill darkred \
+#  -stroke magenta -draw 'text 165,87 "Santa Cruz"' logotop.png
+
+convert -size $SIZE canvas:none -font Optima -pointsize $PSIZ \
+  -draw 'text 168,90 "SCO"' -channel RGBA -blur 0x6 -fill darkred \
+  -stroke magenta -draw 'text 165,87 "SCO"' logotop.png
 
 #convert -size $SIZE canvas:none -font Bookman-DemiItalic -pointsize $PSIZ \
 #  -draw 'text 60,200 "Heirloom Seeds"' -channel RGBA -blur 0x6 -fill darkred \
 #  -stroke magenta -draw 'text 57,197 "Heirloom Seeds"' logobot.png
 
-convert -size $SIZE canvas:none -font Bookman-DemiItalic -pointsize $PSIZ \
-  -draw 'text 300,200 "Seeds"' -channel RGBA -blur 0x6 -fill darkred \
-  -stroke magenta -draw 'text 297,197 "Seeds"' logobot.png
+#convert -size $SIZE canvas:none -font Optima -pointsize $PSIZ \
+#  -draw 'text 300,200 "Seeds"' -channel RGBA -blur 0x6 -fill darkred \
+#  -stroke magenta -draw 'text 297,197 "Seeds"' logobot.png
+
+convert -size $SIZE canvas:none -font Optima -pointsize $PSIZ \
+  -draw 'text 300,200 "Skunkware"' -channel RGBA -blur 0x6 -fill darkred \
+  -stroke magenta -draw 'text 297,197 "Skunkware"' logobot.png
 
 convert -size $SIZE -composite logobot.png logotop.png -geometry ${SIZE}+0+0 \
         -depth 8 text320.png

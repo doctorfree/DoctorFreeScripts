@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+DEF="CryptoCards"
+SRC="/home/doctor/src/erc721"
+HST="doctor@10.0.1.48"
+TOP="$HOME/Documents/MyDocuments/ronrecord.com/httpdocs"
+
+[ -d $TOP ] || {
+    echo "$TOP does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+if [ "$1" ]
+then
+    FLD="$1"
+else
+    FLD="$DEF"
+fi
+
+cd $TOP
+[ -d $FLD ] || {
+    echo "$TOP/$FLD does not exist or is not a directory. Exiting."
+    exit 1
+}
+rsync -qka --max-size=4G $HST:$SRC/$FLD $TOP/

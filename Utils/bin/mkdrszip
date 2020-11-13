@@ -1,0 +1,13 @@
+#!/bin/bash
+
+OUTD=/Volumes/LaCie_4TB/VMware/vCD_Extensions/DRS
+DRSD=vCD_DRS_Rules_Extension
+VERS=1.3.0.8
+INPD=${DRSD}-${VERS}
+
+[ -d ${INPD} ] || {
+    echo "$HOME/tmp/${INPD} does not exist or is not a directory. Exiting."
+    exit 1
+}
+cd $HOME/tmp
+sudo zip -r ${OUTD}/${VERS}/${INPD}.zip ${INPD}

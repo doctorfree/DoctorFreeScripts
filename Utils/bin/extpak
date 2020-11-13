@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# extpak.sh - extract vROps PAK file
+#
+# Written 27-Jun-2014 by Ronald Joe Record <rrecord@vmware.com>
+#
+# Usage: ./extpak.sh [-u] [-n] [Pak file1 [Pak file2 ...]]
+#    creates a subdirectory for each PAK file and extracts the
+#    PAK file in that subdir then extracts the adapters zip in a subdirectory.
+#    Uses unzip to extract the PAK file and adapters zip file.
+#
+#    If invoked with no arguments will attempt to extract all PAK files
+#    in the current directory.
+#
+
+usage() {
+    printf "\nUsage: extpak.sh [-u] [-n] [Pak file1 [Pak file2 ...]]\n"
+    printf "\tCreates subdirectories and extracts the PAK file(s) in those\n"
+    printf "\tsubdir(s) then extracts the adapters zip in a subdirectory.\n"
+    printf "\tUses unzip to extract the PAK file and adapters zip file.\n"
+    printf "\n\tIf invoked with no arguments will attempt to extract all PAK\n"
+    printf "\tfiles in the current directory.\n"
+    printf "\n\t-u displays this usage message\n"
+    printf "\t-n indicates tell me what you would do without doing anything\n\n"
+    exit 1
+}
+
+TELL=
+while getopts nu flag; do
+    case $flag in
+        n)
+            TELL=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+PACK_FILES="$*"
+
+[ "$PACK_FILES" ] || {
+    PACK_FILES=`echo *.pak`
+}
+[ "$PACK_FILES" = "*.pak" ] && {
+    echo "No PAK files specified or found in current directory. Exiting."
+    usage
+}
+
+type unzip >/dev/null 2>&1 || {
+    echo "PAK file extraction requires unzip but it's not installed."
+    echo "Exiting."
+    exit 2
+}
+
+for pak in $PACK_FILES
+do
+    dir=`echo $pak | sed -e "s/\.pak//"`
+    [ -d "$dir" ] && {
+        echo "$dir already exists. Skipping."
+        continue
+    }
+    [ "$TELL" ] && {
+        echo "Would extract PAK file $pak into $dir"
+        continue
+    }
+    mkdir "$dir"
+    cd "$dir"
+    unzip ../$pak
+    [ -f adapters.zip ] && {
+        mkdir adapters
+        cd adapters
+        unzip ../adapters.zip
+        cd ..
+    }
+    for rpm in *.rpm
+    do
+        [ "$rpm" = "*.rpm" ] && continue
+        type rpm2cpio >/dev/null 2>&1 || {
+            echo "RPM extraction requires rpm2cpio but it's not installed."
+            echo "Skipping RPM extraction of $rpm."
+            continue
+        }
+        rpmdir=`echo $rpm | sed -e "s/\.rpm//"`
+        [ -d "$rpmdir" ] && {
+            echo "$rpmdir already exists. Skipping."
+            continue
+        }
+        mkdir "$rpmdir"
+        cd "$rpmdir"
+        rpm2cpio ../$rpm | cpio -idvu
+    done
+done

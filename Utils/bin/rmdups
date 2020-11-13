@@ -1,0 +1,34 @@
+#!/bin/bash
+
+TELL=
+[ "$1" = "-i" ] && {
+    TELL=1
+    rm -f rmlist$$
+    touch rmlist$$
+}
+
+rm -f keep$$
+touch keep$$
+while read f
+do
+    sum=`echo "$f" | awk ' { print $1 " " $2 } '`
+    nam=`echo "$f" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+    num=`grep "$sum" keep$$`
+    if [ "$num" ]
+    then
+        if [ "$TELL" ]
+        then
+            echo "rm -f \"$nam\"" >> rmlist$$
+            echo "" >> rmlist$$
+        else
+            rm -f "$nam"
+        fi
+    else
+        if [ "$TELL" ]
+        then
+            echo "# Keeping \"$nam\"" >> rmlist$$
+        fi
+        echo "$f" >> keep$$
+    fi
+done < dups-sorted
+rm -f keep$$

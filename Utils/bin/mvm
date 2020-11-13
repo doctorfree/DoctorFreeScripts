@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in "$@"
+do
+    echo "Moving $i"
+    [ -e "$i" ] && mv "$i" "/Volumes/My_Book_Studio/Movies/Work"
+done

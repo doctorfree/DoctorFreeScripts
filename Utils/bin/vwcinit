@@ -1,0 +1,14 @@
+#!/bin/bash
+
+D=`pwd`
+B=`basename $D`
+
+git init
+git add .
+git commit -m "Initial $B git repository"
+git remote add origin git@10.20.77.156:/opt/git/$B.git
+git push origin master
+
+git tag -a working-version1 -m "Initial $B git repository"
+git push origin working-version1
+

@@ -1,0 +1,50 @@
+#!/bin/bash
+#
+OUT_TXT="MagicMirror-Welcome-Two.txt"
+OUT_AUD="MagicMirror-Welcome-Two.mp3"
+
+if [ "$1" == "ssml" ]
+then
+  OUT_TXT="MagicMirror-Welcome-SSML.txt"
+  OUT_AUD="MagicMirror-Welcome-SSML.mp3"
+  curl -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+  -H "Content-Type: application/json; charset=utf-8" --data "{
+    'input':{
+     'ssml':'<speak>Hi Ronnie.
+     It's good to see your <say-as interpret-as=\"expletive\">fucking</say-as> ass.
+     Welcome to your mother <say-as interpret-as=\"expletive\">fucking</say-as> Magic Mirror.
+     How can I help you get <say-as interpret-as=\"expletive\">fucking</say-as> started?
+     </speak>'
+    },
+    'voice':{
+      'languageCode':'en-au',
+      'name':'en-AU-Wavenet-C',
+      'ssmlGender':'FEMALE'
+    },
+    'audioConfig':{
+      'audioEncoding':'MP3'
+    }
+  }" "https://texttospeech.googleapis.com/v1/text:synthesize" > ${OUT_TXT}
+else
+  curl -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+  -H "Content-Type: application/json; charset=utf-8" \
+  --data "{
+    'input':{
+      'text':'Hi! Welcome to the Magic Mirror of Doctor When.
+              Wake me up by saying Hello Lucy. Command me with show and hide commands.
+              To see a list of commands, say show help.'
+    },
+    'voice':{
+      'languageCode':'en-au',
+      'name':'en-AU-Wavenet-C',
+      'ssmlGender':'FEMALE'
+    },
+    'audioConfig':{
+      'audioEncoding':'MP3'
+    }
+  }" "https://texttospeech.googleapis.com/v1/text:synthesize" > ${OUT_TXT}
+fi
+cat ${OUT_TXT} | grep 'audioContent' | \
+sed 's|audioContent| |' | tr -d '\n ":{},' > tmp.txt && \
+base64 tmp.txt --decode > ${OUT_AUD} && \
+rm tmp.txt

@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# evn2day - add the selected Evernote note to my Day One journal
+#
+# Usage: First select a note or notes in the Evernote application
+#        Then run this script
+#
+
+SCPT=$HOME/Scripts/Evernote2Dayone.scpt
+
+osascript "$SCPT"

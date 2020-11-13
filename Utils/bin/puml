@@ -1,0 +1,16 @@
+#!/bin/bash
+
+DIAG_DIR=${HOME}/Diagrams/src
+
+[ -d ${DIAG_DIR} ] || mkdir -p ${DIAG_DIR}
+[ -d ${DIAG_DIR}/../PNG ] || mkdir -p ${DIAG_DIR}/../PNG
+cd ${DIAG_DIR}
+
+for i in $*
+do
+    png=`echo $i | sed -e "s/.puml$/.png/" -e "s/.txt$/.png/"`
+    [ -f $png ] && rm -f $png
+    # plantuml -o ../PNG $i > /dev/null 2>&1
+    plantuml -o ../PNG $i 2>&1 | grep -v CoreText
+    # [ -f $png ] && mv $png ../PNG/$png
+done

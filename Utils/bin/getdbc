@@ -1,0 +1,19 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage: getdbc directory"
+    exit 1
+}
+
+TOPDIR=/dbc/pa-dbc1104/kulkarnir/vrack/src/calaveras-dev/glcm
+[ "$1" ] || usage
+SUBDIR="$1"
+[ "$1" = "scs" ] && SUBDIR="platform/services/scs"
+[ "$1" = "cassandra-watchdog" ] && SUBDIR="platform/services/cassandra-watchdog"
+DBCDIR=$TOPDIR/$SUBDIR
+cd $HOME/src
+[ -d dbc ] || mkdir dbc
+cd dbc
+DIRNAM=`dirname $SUBDIR`
+[ -d $DIRNAM ] || mkdir -p $DIRNAM
+scp -r pa-dbc1104.eng.vmware.com:$DBCDIR $DIRNAM

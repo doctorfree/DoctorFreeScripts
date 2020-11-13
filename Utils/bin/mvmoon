@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+
+TOPP="/Volumes/Seagate_8TB/Pictures/Work/Moon_Maison"
+TOPM="/Volumes/Seagate_8TB/Movies/Work/Moon_Maison"
+DOWN="${HOME}/Pictures/DownThemAll"
+
+[ -d ${DOWN} ] || {
+    echo "$DOWN does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+cd "${DOWN}"
+rm -f extlink.png watch *.png *.gif
+moved=0
+# Move jpeg files to jpg
+for i in *.jpeg
+do
+    j=`echo $i | sed -e "s/.jpeg/.jpg/"`
+    [ -f "$j" ] || mv "$i" "$j"
+done
+DEST="${TOPM}"
+for i in *.mp4
+do
+    [ "$i" = "*.mp4" ] && {
+        echo "No videos found."
+        continue
+    }
+    [ -r "${DEST}/$i" ] && {
+        echo "${DEST}/$i already exists. Skipping."
+        [ -d __Skipped__ ] || mkdir __Skipped__
+        mv "$i" __Skipped__
+        continue
+    }
+    cp "$i" "${DEST}" && rm -f "$i"
+    moved=`expr $moved + 1`
+done
+echo "Moved $moved videos to ${DEST}"
+moved=0
+DEST="${TOPP}"
+for i in *.jpg
+do
+    [ "$i" = "*.jpg" ] && {
+        echo "No pics found."
+        continue
+    }
+    [ -r "${DEST}/$i" ] && {
+        echo "${DEST}/$i already exists. Skipping."
+        [ -d __Skipped__ ] || mkdir __Skipped__
+        mv "$i" __Skipped__
+        continue
+    }
+    grep 40x40 "$i" > /dev/null && {
+        rm -f "$i"
+        continue
+    }
+    cp "$i" "${DEST}" && rm -f "$i"
+    moved=`expr $moved + 1`
+done
+echo "Moved $moved pics to ${DEST}"
+
+NUM=`ls -1 | grep -v __Skipped__ | wc -l`
+
+[ ${NUM} -gt 1 ] && {
+    echo ""
+    echo "Additional pics: "
+    ls -1 | grep -v mvall | grep -v __Skipped__
+}

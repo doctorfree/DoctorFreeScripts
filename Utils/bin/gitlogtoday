@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# gitlogtoday [-n #]
+#
+DAYS=1
+
+[ "$1" = "-n" ] && {
+    [ "$2" ] && DAYS=$2
+}
+
+git log --since=$DAYS.days

@@ -1,0 +1,68 @@
+#!/bin/bash
+# url-create from Superuser comment at
+# http://superuser.com/questions/689441/how-do-i-create-a-url-file-on-os-x
+#
+# Modified to use getopts and use default location for URL files
+#
+# Default location for URL files
+LINK_DIR="${HOME}/Links"
+LINK_URL=
+LINK_NAM=
+VERBOSE=
+USAGE=
+
+usage() {
+    echo
+    echo "Usage: $0 -n filename -l url -h linkdir [-uv]" 
+    echo
+    echo "Creates '<filename>.url'."
+    echo "Opening '<filename>.url' will open '<url>' in the default browser."
+    echo "This invocation would create:"
+    echo "    ${LINK_DIR}/${LINK_NAM} with URL ${LINK_URL}"
+    echo
+    echo "Exiting."
+    exit 1
+}
+
+while getopts h:l:n:uv flag; do
+    case $flag in
+        h)
+            LINK_DIR="$OPTARG"
+            ;;
+        l)
+            LINK_URL="$OPTARG"
+            ;;
+        n)
+            LINK_NAM="$OPTARG"
+            ;;
+        u)
+            USAGE=1
+            ;;
+        v)
+            VERBOSE=1
+            ;;
+    esac
+done
+[ "${LINK_NAM}" ] || {
+    echo "Link filename must be specified with -n <filename>."
+    USAGE=1
+}
+[ "${LINK_URL}" ] || {
+    echo "Link URL must be specified with -l <url>."
+    USAGE=1
+}
+LINK_FILE=${LINK_DIR}/${LINK_NAM}.url
+[ -f ${LINK_FILE} ] && {
+    echo "${LINK_FILE} already exists."
+    USAGE=1
+}
+[ "${USAGE}" ] && usage
+[ -d ${LINK_DIR} ] || mkdir -p ${LINK_DIR}
+
+[ "${VERBOSE}" ] && {
+    echo "Creating ${LINK_FILE} for URL=${LINK_URL}"
+}
+echo '[InternetShortcut]' > ${LINK_FILE}
+echo -n 'URL=' >> ${LINK_FILE}
+echo ${LINK_URL} >> ${LINK_FILE}
+echo 'IconIndex=0' >> ${LINK_FILE}

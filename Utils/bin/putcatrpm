@@ -1,0 +1,8 @@
+#!/bin/bash
+
+VER="1.1.0.1"
+ONE="/Users/rrecord/OneDrive - VMware, Inc/vRA/CatalogManager/$VER"
+
+[ -d "$ONE" ] || mkdir -p "$ONE"
+cd "$ONE"
+scp VMware_Adapter_*$VER-*.noarch.rpm root@10.24.229.162:/root

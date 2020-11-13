@@ -1,0 +1,16 @@
+#!/bin/bash
+
+ITUNE="/Users/rrecord/Music/iTunes/iTunes Media/Music"
+TRANS="/Users/rrecord/Music/Transcend"
+FLASH="/Users/rrecord/Music/Flash_One_32GB"
+
+cd "$ITUNE"
+for artist in *
+do
+    [ -d "$artist" ] && {
+        [ ! -d "$FLASH/$artist" ] && {
+            echo "Copying $artist $TRANS/$artist"
+            cp -R "$artist" "$TRANS/$artist"
+        }
+    }
+done

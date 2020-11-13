@@ -1,0 +1,78 @@
+#!/bin/bash
+#
+# Written 26-Nov-2013 by Ronald Joe Record (rrecord@vmware.com)
+#
+# bugattach bugzilla-id filename [file2 ...]
+#
+# Copy the specified file to the Bugzilla ID's attachments directory
+#
+
+[ $# -gt 1 ] || {
+    printf "\nUsage: bugattach bugzilla-id filename [file2 ...]\n"
+    printf "\n\tSpecifying a filename of 'get' will retrieve all attachments"
+    printf "\n\tof bugzilla-id to the current directory.\n"
+    printf "\n\tSpecifying a filename of 'list' will list the existing"
+    printf "\n\tattachments for that bug without doing anything.\n"
+    printf "\n\tSpecifying a filename of 'tellme' will echo the command that"
+    printf "\n\twould be issued without doing anything.\n"
+    printf "\n\tInvocation without the requisite 2 arguments will display."
+    printf "\n\tthis usage message.\n\n"
+    exit 1
+}
+
+DIR=/Volumes/bugs/files
+BUGN=$1
+FILE=$2
+SIZE=`echo -n $1 | wc -c`
+PAD=`expr 8 - $SIZE`
+
+while [ $PAD -gt 0 ]
+do
+    DIR=$DIR/0
+    PAD=`expr $PAD - 1`
+done
+
+PLACE=0
+while [ $PLACE -lt $SIZE ]
+do
+    DIR=$DIR/${BUGN:$PLACE:1}
+    PLACE=`expr $PLACE + 1`
+done
+
+[ -d $DIR ] || {
+    echo "$DIR does not exist."
+    while true; do
+       read -p "Do you want to create it ? (y/n) " yn
+        case $yn in
+            [Yy]* ) mkdir -p $DIR; break;;
+            [Nn]* ) echo "Exiting."; exit 2;;
+                * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
+[ "$FILE" = "get" ] && {
+    echo "Retrieving attachments from $DIR"
+    cp $DIR/* .
+    exit 0
+}
+
+[ "$FILE" = "list" ] && {
+    echo "Existing attachments for Bug $BUGN"
+    echo ""
+    echo "${DIR}:"
+    ls -1R $DIR
+    exit 0
+}
+
+[ "$FILE" = "tellme" ] && {
+    echo "Would execute the following: cp $FILE $DIR"
+    exit 0
+}
+
+[ -r $FILE ] || {
+    echo "$FILE either does not exist or is not readable. Exiting."
+    exit 3
+}
+shift
+cp $* $DIR

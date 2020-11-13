@@ -22,8 +22,6 @@ my $APPSDIR = "/usr/share/applications/ ~/.gnome/apps/ ~/.local/share/applicatio
 my %CFG =
     (
      "Application" => "collapse",
-     "GTK"         => "collapse",
-     "Local"       => "collapse",
     );
 
 ###############################################################################
@@ -48,7 +46,7 @@ print STDERR "Searching $APPSDIR\n";
 
 open (APPS, "find ".$APPSDIR." -name '*.desktop' |") || do
 {
-    print qq|<openbox_pipe_menu><item label="Error!" /></openbox_pipe_menu>\n|;
+    print qq|<menu><item label="Error!" /></menu>\n|;
     die "could not open $APPSDIR";
 };
 @FILES = <APPS>;
@@ -94,8 +92,6 @@ foreach $entry (@FILES)
 
 print STDERR "\n### Generating menu ###\n";
 
-print "<openbox_pipe_menu>\n";
-
 foreach $key (sort keys %cat)
 {
     print qq| <menu id="obam-$key" label="$key">\n|;
@@ -111,7 +107,6 @@ foreach $key (sort keys %cat)
     }
     print " </menu>";
 }
-print "</openbox_pipe_menu>\n";
 
 print STDERR "Done\n";
 

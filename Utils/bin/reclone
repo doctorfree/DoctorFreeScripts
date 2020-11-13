@@ -1,0 +1,10 @@
+#!/bin/bash
+
+[ $# -eq 0 ] && {
+    echo "Usage: reclone directory-name"
+    exit 1
+}
+
+[ -d $1 ] && mv $1 $1-bak
+
+git clone git@10.20.77.156:/opt/git/$1.git

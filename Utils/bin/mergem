@@ -1,0 +1,148 @@
+#!/bin/bash
+
+TOP="/Volumes/Seagate_8TB/Pictures/Work"
+ELITE="${TOP}/Elite_Babes"
+JPERO="${TOP}/JP_Erotica"
+REM=
+VER=
+DUP=
+
+checkdup() {
+    emodel="${ELITE}/$1"
+    jmodel="${JPERO}/$1"
+    found=0
+    [ -d "$emodel" ] && [ -d "$jmodel" ] && found=1
+    return $found
+}
+
+mergem() {
+    emodel="${ELITE}/$1"
+    jmodel="${JPERO}/$1"
+    cd "${emodel}"
+    for pic in *
+    do
+        [ -r ${jmodel}/$pic ] || {
+          if [ "$VER" ]
+          then
+            echo "cp $pic ${jmodel}/$pic"
+          else
+            cp $pic ${jmodel}/$pic
+          fi
+        }
+    done
+    cd "${jmodel}"
+    for pic in *
+    do
+        [ -r ${emodel}/$pic ] || {
+          if [ "$VER" ]
+          then
+            echo "cp $pic ${emodel}/$pic"
+          else
+            cp $pic ${emodel}/$pic
+          fi
+        }
+    done
+}
+
+findup() {
+    model=$1
+    found=0
+    [ -d "${model}" ] || continue
+    cd "${model}"
+    [ "$VER" ] && {
+        echo "Checking $model for duplicates ..."
+        echo "----------------------------------"
+    }
+    sums="/tmp/${model}-sums-$$"
+    nams="/tmp/${model}-nams-$$"
+    rm -f "$sums"
+    rm -f "$nams"
+    touch "$sums"
+    touch "$nams"
+    for pic in *
+    do
+        if [ -d "$pic" ]
+        then
+            for subpic in "$pic"/*
+            do
+                sum=`cksum "$subpic" | awk ' { print $1 } '`
+                echo "$sum" >> "$sums"
+                echo "$subpic $sum" >> "$nams"
+            done
+        else
+            sum=`cksum "$pic" | awk ' { print $1 } '`
+            echo "$sum" >> "$sums"
+            echo "$pic $sum" >> "$nams"
+        fi
+    done
+    numdups=`sort "$sums" | uniq -d | wc -l`
+    [ $numdups -eq 0 ] || found=1
+    sort "$sums" | uniq -d | while read dup
+    do
+        if [ "$REM" ]
+        then
+            first=1
+            grep $dup "$nams" | awk ' { print $1 } ' | while read name
+            do
+                if [ "$first" ]
+                then
+                    first=
+                else
+                    rm -f "$name"
+                fi
+            done
+        else
+            [ "$VER" ] && {
+                grep $dup "$nams" | awk ' { print $1 } ' | sed -e "s/^/$model\//"
+            }
+        fi
+#       [ "$REM" ] || echo ""
+    done
+    rm -f "$sums" "$nams"
+    cd ..
+    return $found
+}
+
+# Use -r or -v as first argument to specify "remove" or "verbose" but not both
+[ "$1" == "-r" ] && {
+    REM=1
+    shift
+}
+[ "$1" == "-v" ] && {
+    VER=1
+    shift
+}
+
+if [ $# -eq 0 ]
+then
+    for mod in *
+    do
+        checkdup $mod
+        [ $? -eq 1 ] && {
+            mergem $mod
+#           findup $mod
+#           [ $? -eq 1 ] && DUP="$DUP $mod"
+        }
+    done
+else
+    for mod in $*
+    do
+        checkdup $mod
+        [ $? -eq 1 ] && {
+            mergem $mod
+#           findup $mod
+#           [ $? -eq 1 ] && DUP="$DUP $mod"
+        }
+    done
+fi
+
+[ "$DUP" ] && {
+  [ "$REM" ] || {
+    printf "\nFound duplicates for the following models:\n"
+    for model in $DUP
+    do
+        printf "\n\t$model"
+    done
+    echo ""
+  }
+}

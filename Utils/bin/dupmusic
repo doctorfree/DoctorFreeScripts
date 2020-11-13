@@ -1,0 +1,14 @@
+#!/bin/bash
+
+TRANS="/Users/rrecord/Music/Transcend"
+FLASH="/Users/rrecord/Music/Flash_One_32GB"
+
+cd "$FLASH"
+for artist in *
+do
+    [ -d "$artist" ] && {
+        [ -d "$TRANS/$artist" ] && {
+            echo "Duplicate $FLASH/$artist $TRANS/$artist"
+        }
+    }
+done
