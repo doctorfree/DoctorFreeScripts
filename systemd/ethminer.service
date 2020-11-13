@@ -1,0 +1,11 @@
+[Unit]
+Description=ethminer service, starts the ethminer Ethereum miner
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/start_ethminer -d 30 -s
+ExecStop=/usr/local/bin/stop_ethminer
+
+[Install]
+WantedBy=multi-user.target

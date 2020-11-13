@@ -1,0 +1,86 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage: start_ethminer [-d delay] [-s] [-t] [-u]"
+    exit 1
+}
+
+# Exit if miner already running or miner disabled
+[ -x /usr/local/bin/check_miner ] && {
+    /usr/local/bin/check_miner -q
+    [ $? -gt 0 ] && {
+        exit 1
+    }
+}
+
+EWAL="0x765972c4E777096CF94AEE2432a81B9510DfE6e4"
+EPOOL="us2.ethermine.org:5555"
+FPOOL="us1.ethermine.org:5555"
+LOG="/var/run/miner.output"
+PORT=8080
+USER=`id -u -n`
+GRP=`id -g -n`
+WORKER=${USER}
+#
+# Use sequential DAG load if miner crashes during parallel load
+# 0=parallel, 1=sequential
+MODE="0"
+
+[ -f ~/.nominer ] && exit 1
+
+sudo touch $LOG
+sudo chown ${USER}:${GRP} $LOG
+delay=0
+silent=
+teelog=
+while getopts d:stu flag; do
+    case $flag in
+        d)
+            delay="$OPTARG"
+            ;;
+        s)
+            silent=1
+            ;;
+        t)
+            teelog=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+while [ $delay -gt 0 ]
+do
+    delay=`expr $delay - 1`
+    [ "$silent" ] || echo -e -n "Starting miner in $delay seconds  \r"
+    sleep 1
+done
+
+if [ "$teelog" ]
+then
+    sudo /usr/local/bin/ethminer \
+                        --dag-load-mode ${MODE} \
+                        --HWMON 1 \
+                        --opencl \
+                        --cl-nobin \
+                        --cl-noexit \
+                        --farm-recheck 2000 \
+                        --report-hashrate \
+                        -P stratum+ssl://${EWAL}.${WORKER}@${EPOOL} \
+                        -P stratum+ssl://${EWAL}.${WORKER}@${FPOOL} \
+                        2>&1 | /usr/bin/tee -a ${LOG}
+else
+    sudo /usr/local/bin/ethminer \
+                        --dag-load-mode ${MODE} \
+                        --HWMON 1 \
+                        --opencl \
+                        --cl-nobin \
+                        --cl-noexit \
+                        --farm-recheck 2000 \
+                        --report-hashrate \
+                        -P stratum+ssl://${EWAL}.${WORKER}@${EPOOL} \
+                        -P stratum+ssl://${EWAL}.${WORKER}@${FPOOL} \
+                        > ${LOG} 2>&1
+fi

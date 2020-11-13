@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Tail Miner
+Comment=Tail Ethereum Miner
+GenericName=Tail Miner for Linux
+Type=Application
+Exec=qterminal --name Miner --title Miner --execute="tail -f /var/run/miner.output"
+Icon=/usr/local/share/icons/start_miner.jpg
