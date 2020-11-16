@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SRCE="/Volumes/Seagate_8TB"
+DEST="/Volumes/Seagate_BPH_8TB/Seagate_8TB_Backup"
+
+[ -d "${SRCE}" ] || {
+    echo "$SRCE does not exist or is not a directory. Exiting."
+    exit 1
+}
+[ -d "${DEST}" ] || {
+    echo "$DEST does not exist or is not a directory. Exiting."
+    exit 1
+}
+ 
+echo "Executing: rsync -a -H --delete ${SRCE}/ ${DEST}"
+sudo rsync -a -H --delete "${SRCE}"/ "${DEST}"

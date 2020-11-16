@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SRCE="/Volumes/WD_My_Passport_4TB"
+DEST="/Volumes/WD_My_Backups/WD_My_Passport_4TB_Backup"
+
+[ -d "${SRCE}" ] || {
+    echo "$SRCE does not exist or is not a directory. Exiting."
+    exit 1
+}
+[ -d "${DEST}" ] || {
+    echo "$DEST does not exist or is not a directory. Exiting."
+    exit 1
+}
+ 
+echo "Executing: rsync -a -H --delete ${SRCE}/ ${DEST}"
+sudo rsync -a -H --delete "${SRCE}"/ "${DEST}"

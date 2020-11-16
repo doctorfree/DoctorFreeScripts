@@ -151,6 +151,10 @@ do
         get_search "${dir}" "bodypaint"
         get_search "${dir}" "body_painting"
         ;;
+    Brazilian)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Brazilian_Model"
+        ;;
     Camel_Toe)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "cameltoe"
@@ -281,6 +285,7 @@ do
         get_search "${dir}" "Annabell"
         get_search "${dir}" "Danica_A"
         get_search "${dir}" "Danica_Jewels"
+        get_search "${dir}" "Helly_von_Valentine"
         get_search "${dir}" "Natali_Nemtchinova"
         get_search "${dir}" "Natalya_Andreeva"
         get_search "${dir}" "Delilah_G"
@@ -323,10 +328,13 @@ do
     Ukrainian)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Ukraine"
+        get_search "${dir}" "Ukrainian"
+        get_search "${dir}" "Gloria_Sol"
         get_search "${dir}" "Jula"
         get_search "${dir}" "Kseniia_Kufeld"
         get_search "${dir}" "Li_Moon"
         get_search "${dir}" "Katie_Fey"
+        get_search "${dir}" "Viktoria_Yarova"
         ;;
     Vixen.com)
         get_search "${dir}" "${dir}"

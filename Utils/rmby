@@ -1,0 +1,6 @@
+#!/bin/bash
+
+BYPASS="/System/Library/Extensions/TMSafetyNet.kext/Contents/Helpers/bypass"
+BAK="$1"
+
+sudo "$BYPASS" rm -rf "$BAK"

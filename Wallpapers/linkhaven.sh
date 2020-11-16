@@ -9,8 +9,13 @@ PHO="$TOP/Photographers"
 SUI="$TOP/Suicide_Girls"
 
 # Largest top-level subdirs
-LTL="Ass Breasts Fantasy_Art Group_of_Women Legs Long_Hair \
-     Nature Panties Pubic_Hair Shaved Women_Outdoors"
+LTL="500px Anime Art Asian Ass Beach Body_Oil Boobs_on_Boobs \
+     Breasts Celebrity Ebony Fantasy_Art Femjoy Glasses Graphis.ne \
+     Group_of_Women Hands_On_Ass Hard_Nipples Hegre-Art Hentai \
+     Japanese Legs Lesbian Long_Hair Met-Art Monochrome Natural_Boobs \
+     Panties Photodromm Playboy Pubic_Hair Redheads Renders Sand \
+     See_Through Shaved Sideboob Spread_Legs Swimming_Pool Tanlines \
+     Tanned The_Gap Vulva Wet Women_Outdoors"
 
 PHD="../../Photographers"
 DIG="../../Digital_Desire"
@@ -63,6 +68,24 @@ usage() {
   exit 1
 }
 
+flatlink() {
+    destination=$1
+    target=$2
+    [ -d $target ] || return
+    [ -d $destination ] || return
+    printf "Flat linking in $target to $destination ..."
+    H=`pwd`
+    cd $target
+    for image in wallhaven*
+    do
+        [ -f ../$destination/$image ] && {
+            rm -f $image
+            ln -s ../$destination/$image .
+        }
+    done
+    cd $H
+}
+
 linkem() {
     printf "Linking in $SUB to $DES ..."
     cd $SUB
@@ -102,10 +125,10 @@ linkem() {
 }
 
 do_big() {
-    echo "Linking in largest top-level subdirs:"
+    # echo "Linking in largest top-level subdirs:"
     for ltl in $LTL
     do
-        echo "Linking in $ltl"
+        # echo "Linking in $ltl"
         cd $TOP/$ltl
         for pic in wall*
         do
@@ -233,6 +256,13 @@ then
     DES="$JAV"
     SUB="$JAP"
     linkem
+    for des in "Playboy"
+    do
+        for sub in "${des}_*"
+        do
+            flatlink ${des} ${sub}
+        done
+    done
     do_big
 else
     [ "$BIG" ] && do_big
