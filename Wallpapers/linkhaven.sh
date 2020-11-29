@@ -38,9 +38,10 @@ LN="ln -s"
 ALL=
 BIG=
 TELL=
+VERB=1
 
 usage() {
-  printf "\nUsage: linkhaven [-a] [-bBcCdD] [-f] [-h] [-j] [-m] [-n] [-pP] [-rsS] [-uU] [-wz]"
+  printf "\nUsage: linkhaven [-a] [-bBcCdD] [-f] [-h] [-j] [-m] [-n] [-pP] [-q] [-rsS] [-uU] [-wz]"
   printf "\nWhere:"
   printf "\n\t-a indicates use all combinations of subdirs and destinations"
   printf "\n\t-b indicates use Playboy destination dir"
@@ -56,6 +57,7 @@ usage() {
   printf "\n\t-n indicates tell me what you would do but don't do it"
   printf "\n\t-p indicates use Photographers subdir"
   printf "\n\t-P indicates use Photodromm destination dir"
+  printf "\n\t-q indicates silent execution"
   printf "\n\t-r indicates use Russian destination dir"
   printf "\n\t-s indicates use Stasy Q destination dir"
   printf "\n\t-S indicates use Suicide Girls subdir"
@@ -73,21 +75,21 @@ flatlink() {
     target=$2
     [ -d $target ] || return
     [ -d $destination ] || return
-    printf "Flat linking in $target to $destination ..."
+    [ "${VERB}" ] && printf "Flat linking in $target to $destination ..."
     H=`pwd`
     cd $target
     for image in wallhaven*
     do
         [ -f ../$destination/$image ] && {
             rm -f $image
-            ln -s ../$destination/$image .
+            ${LN} ../$destination/$image .
         }
     done
     cd $H
 }
 
 linkem() {
-    printf "Linking in $SUB to $DES ..."
+    [ "${VERB}" ] && printf "Linking in $SUB to $DES ..."
     cd $SUB
     for model in *
     do
@@ -113,15 +115,15 @@ linkem() {
             [ -f "$SRC/$i" ] || continue
             [ -L "$SRC/$i" ] && continue
             [ "$TELL" ] && {
-                echo "$LN $SRC/$i $model"
+                echo "${LN} $SRC/$i $model"
                 continue
             }
             rm -f $i
-            $LN $SRC/$i .
+            ${LN} $SRC/$i .
         done
         cd ..
     done
-    printf "\n"
+    [ "${VERB}" ] && printf "\n"
 }
 
 do_big() {
@@ -139,17 +141,17 @@ do_big() {
                 [ -f "../$dir/$pic" ] || continue
                 [ -L "../$dir/$pic" ] && continue
                 [ "$TELL" ] && {
-                    echo "$LN ../$dir/$pic $ltl"
+                    echo "${LN} ../$dir/$pic $ltl"
                 }
                 rm -f $pic
-                $LN ../$dir/$pic .
+                ${LN} ../$dir/$pic .
                 break
             done
         done
     done
 }
 
-while getopts abcdfhjnmprsBDPSwzUu flag; do
+while getopts abcdfhjnmpqrsBDPSwzUu flag; do
     case $flag in
         a)
             ALL=1
@@ -191,6 +193,9 @@ while getopts abcdfhjnmprsBDPSwzUu flag; do
         P)
             DES="$DRO"
             ;;
+        q)
+            VERB=
+            ;;
         r)
             DES="$RUS"
             ;;
@@ -216,7 +221,7 @@ while getopts abcdfhjnmprsBDPSwzUu flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
-printf "\n"
+[ "${VERB}" ] && printf "\n"
 
 # The destinations
 # PHD="../../Photographers"
