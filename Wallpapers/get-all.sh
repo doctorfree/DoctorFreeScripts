@@ -366,7 +366,7 @@ do
 done
 
 inst=`type -p linkhaven`
-[ "$inst" ] && linkhaven -a
+[ "$inst" ] && linkhaven -a -q
 [ -x ./clean ] && ./clean
 [ "$FIND" ] && {
   [ -x ./findups ] && {
