@@ -23,9 +23,9 @@
 ##
 
 # Root directory of your subfolders of image files to use as backgrounds/slideshows
-MAC_TOP=/u/pictures/Work
 LIN_TOP=/u/pictures
-SEA_TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
+MAC_TOP="/Volumes/Seagate_8TB/Pictures/Work"
+NFS_TOP=/u/pictures/Work
 #
 # Location of folder to copy selected images to
 MAC_OUT=$HOME/Pictures/Backgrounds
@@ -82,7 +82,7 @@ else
     fi
 fi
 [ -d "$TOP" ] || {
-    TOP="$SEA_TOP"
+    TOP="$NFS_TOP"
     [ -d "$TOP" ] || {
         echo "Cannot locate Work directory for pics. Exiting."
         exit 1
@@ -96,7 +96,7 @@ while getopts n:s:alSu flag; do
             ;;
         l)
 #           ls --color=auto -l $OUT | awk ' { print $NF } '
-            ls -l $OUT | awk ' { print $NF } '
+            ls -l $OUT | grep -v total | awk ' { print $NF } '
             exit 0
             ;;
         n)
@@ -179,37 +179,35 @@ cd $OUT
         echo "Cannot locate $TOP/$subdir/$bdir - exiting."
         exit 1
       }
-      TOP=$TOP/$subdir
-      foundirs=$TOP
+      TOP="$TOP/$subdir"
+      foundirs="$TOP"
     else
-      [ -d $TOP/$bdir ] || {
-       for subdir in Fractals Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
+      [ -d "$TOP/$bdir" ] || {
+       for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
        do
-         [ -d $TOP/$subdir/$bdir ] && {
-           sub=$TOP/$subdir
+         [ -d "$TOP/$subdir/$bdir" ] && {
+           sub="$TOP/$subdir"
            if [ "$all" ]
            then
              foundirs="$foundirs $sub"
            else
-             foundirs=$sub
+             foundirs="$sub"
              break
            fi
          }
        done
-       TOP=$sub
+       TOP="$sub"
       }
     fi
   fi
-  [ -d $TOP/$bdir ] || {
+  [ -d "$TOP/$bdir" ] || {
     echo "Cannot locate $TOP/$bdir - exiting."
     exit 1
   }
 
   numlinks=0
-  echo "Found folders in $foundirs"
   for dir in $foundirs
   do
-    echo "Looking for pics in $dir/$bdir"
     for pic in $dir/$bdir/*
     do
       [ "$pic" == "$dir/$bdir/*" ] && continue

@@ -1,32 +1,66 @@
 #!/bin/bash
 
-VERBOSE=
 TELL=
+VERB=
 
-[ "$1" == "-v" ] && VERBOSE=1
-[ "$1" == "-n" ] && TELL=1
+[ "$1" == "-n" ] && {
+    TELL=1
+    [ "$2" == "-v" ] && {
+        VERB=1
+    }
+}
 
-rm -f *.gif
-rm -f *.txt
+[ "$1" == "-v" ] && {
+    VERB=1
+    [ "$2" == "-n" ] && {
+        TELL=1
+    }
+}
+
+if [ "${TELL}" ]
+then
+    echo "rm -f *.gif"
+    echo "rm -f *.txt"
+else
+    rm -f *.gif
+    rm -f *.txt
+fi
 for i in *.jpg *.jpeg *.png
 do
     [ "$i" == "*.jpg" ] && continue
     [ "$i" == "*.jpeg" ] && continue
     [ "$i" == "*.png" ] && continue
-    [ "$VERBOSE" ] && echo "identify $i"
+    [ "${VERB}" ] && echo "Identifying $i"
     GEO=`identify "$i" | awk ' { print $(NF-6) } '`
     W=`echo $GEO | awk -F "x" ' { print $1 } '`
     # Remove if width not greater than 1000
     [ "$W" ] && [ $W -gt 1000 ] || {
-        rm -f "$i"
+        if [ "${TELL}" ]
+        then
+            echo "rm -f $i"
+        else
+            rm -f "$i"
+        fi
         continue
     }
     H=`echo $GEO | awk -F "x" ' { print $2 } '`
     # Remove if height not greater than 750
     [ "$H" ] && [ $H -gt 750 ] || {
-        rm -f "$i"
+        if [ "${TELL}" ]
+        then
+            echo "rm -f $i"
+        else
+            rm -f "$i"
+        fi
         continue
     }
     # Remove if width not greater than height
-    [ "$W" ] && [ "$H" ] && [ $W -gt $H ] || rm -f "$i"
+    [ "$W" ] && [ "$H" ] && [ $W -gt $H ] || {
+        if [ "${TELL}" ]
+        then
+            echo "rm -f $i"
+        else
+            rm -f "$i"
+        fi
+    }
 done
