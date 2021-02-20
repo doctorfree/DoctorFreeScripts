@@ -291,6 +291,7 @@ do
         get_search "${dir}" "Delilah_G"
         get_search "${dir}" "MonroQ"
         get_search "${dir}" "Katya_Sambuca"
+        get_search "${dir}" "Zu_Zu"
         ;;
     SexArt)
         get_search "${dir}" "${dir}"

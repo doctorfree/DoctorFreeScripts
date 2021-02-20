@@ -26,6 +26,7 @@
 LIN_TOP=/u/pictures
 MAC_TOP="/Volumes/Seagate_8TB/Pictures/Work"
 NFS_TOP=/u/pictures/Work
+PRE_TOP=$HOME/Pictures/Work/Backgrounds
 #
 # Location of folder to copy selected images to
 MAC_OUT=$HOME/Pictures/Backgrounds
@@ -47,13 +48,16 @@ osa=
 show=
 subdir=
 foundirs=
+updpre=
 name=`basename $0`
 plat=`uname -s`
 
 usage() {
-  printf "\nUsage: $name [-u] [-a] [-l] [-S] [-n numpics] [-s subdir] directory"
+  printf "\nUsage: $name [-u] [-a] [-l] [-pP] [-S] [-n numpics] [-s subdir] directory"
   printf "\nWhere\t-a indicates add to existing background/slide pics"
   printf "\n\t-l lists currently installed background/slide pics"
+  printf "\n\t-p indicates search for background pics in prepared folders"
+  printf "\n\t-P indicates search for background pics in prepared folders and update"
   printf "\n\t-n <numpics> sets maximum number of pics to be copied (default ${maxlinks})"
   printf "\n\t-s <subdir> searches in $TOP/<subdir> for specified folder"
   printf "\n\t-S indicates run a slideshow of pics\n\n"
@@ -88,8 +92,11 @@ fi
         exit 1
     }
 }
+
+# Set Model top dir before processing arguments
+MOD_TOP="$TOP/Wallhaven/Models"
   
-while getopts n:s:alSu flag; do
+while getopts pPn:s:alSu flag; do
     case $flag in
         a)
             add=1
@@ -101,6 +108,15 @@ while getopts n:s:alSu flag; do
             ;;
         n)
             maxlinks="$OPTARG"
+            ;;
+        p)
+            TOP=$PRE_TOP
+            foundirs="$TOP"
+            ;;
+        P)
+            TOP=$PRE_TOP
+            foundirs="$TOP"
+            updpre=1
             ;;
         s)
             case "$OPTARG" in
@@ -208,6 +224,29 @@ cd $OUT
   numlinks=0
   for dir in $foundirs
   do
+    [ "$updpre" ] && {
+      [ -d $MOD_TOP/$bdir ] && {
+        [ -d $TOP/$bdir ] || mkdir $TOP/$bdir
+        cd $TOP/$bdir
+        for orig in $MOD_TOP/$bdir/wallhaven*
+        do
+          [ "$orig" == "$MOD_TOP/$bdir/wallhaven*" ] && {
+            echo "No pics in $MOD_TOP/$bdir"
+            continue
+          }
+          bnam=`basename $orig`
+          [ -L $bnam ] && continue
+          cp $orig $bnam
+          rmportargs $bnam
+          [ -f $bnam ] && {
+            rm -f $bnam
+            echo "Adding $bnam to $bdir"
+            ln -s $orig .
+          }
+        done
+        cd $OUT
+      }
+    }
     for pic in $dir/$bdir/*
     do
       [ "$pic" == "$dir/$bdir/*" ] && continue

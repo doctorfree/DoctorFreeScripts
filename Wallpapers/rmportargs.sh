@@ -17,15 +17,7 @@ VERB=
     }
 }
 
-if [ "${TELL}" ]
-then
-    echo "rm -f *.gif"
-    echo "rm -f *.txt"
-else
-    rm -f *.gif
-    rm -f *.txt
-fi
-for i in *.jpg *.jpeg *.png
+for i in $*
 do
     [ "$i" == "*.jpg" ] && continue
     [ "$i" == "*.jpeg" ] && continue
