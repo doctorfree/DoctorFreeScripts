@@ -22,6 +22,8 @@ Contents:
 
 [**Scripts/MagicMirror**](MagicMirror/README.md) - Scripts to manage my MagicMirror (https://magicmirror.builders/)
 
+[**Scripts/Roon**](Roon/README.md) - Scripts to control my Roon audio system via the Roon API (https://pypi.org/project/roonapi/)
+
 [**Scripts/Utils**](Utils/README.md) - A few utility scripts
 
 [**Scripts/Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper
