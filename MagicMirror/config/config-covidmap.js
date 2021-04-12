@@ -67,8 +67,6 @@ var config = {
                       "https://ncov2019.live/map",
                       "https://healthweather.us/",
                       "https://ncov2019.live/tweets",
-                      "https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6",
-                      "https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61",
                      ],
                 updateInterval: 0.5 * 60 * 1000, // rotate URLs every 30 seconds
                 width: "1080", // width of iframe
