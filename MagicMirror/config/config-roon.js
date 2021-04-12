@@ -13,10 +13,18 @@ var config = {
     address: "0.0.0.0", // Address to listen on, can be:
     port: 8080,
     ipWhitelist: [
+        "0.0.0.0",
         "127.0.0.1",
-        "10.0.1.44", // Mac Mini
+        "10.0.1.88", // Mac Mini
         "10.0.1.51", // Mac Pro
+        "10.0.1.57", // Mac Pro
+        "10.0.8.130", // Mac Pro over Tunnelblick
+        "10.0.1.80", // Pi-hole
+        "10.0.1.81", // Roon Core
+        "10.0.1.82", // Mac Pro
+        "10.0.1.94", // Ropieee
         "10.0.1.67", // Raspberry Pi MagicMirror
+        "10.0.1.85", // Raspberry Pi MagicMirror
         "10.0.1.69", // iPad Air
         "10.0.1.76", // iPhone Max Xs
         "::ffff:127.0.0.1",
@@ -42,105 +50,30 @@ var config = {
             }
         },
         {
-            module: "clock",
-            position: "upper_third",
+            module: 'MMM-iFrame',
+            position: 'fullscreen_below',
             config: {
-                dateFormat: "dddd, LLL",
-                displayType: "analog",
-                analogFace: "face-009",
-                analogSize: "200px",
-                displaySeconds: "true",
-                secondsColor: "#BAA3DC",
-                timeFormat: "12",
-                showPeriod: "true",
-                showDate: "true",
-                clockBold: "false",
-                analogPlacement: "top",
-                analogShowDate: "top",
+                url: [ "http://10.0.1.81:9100/display/" ],
+                updateInterval: 30 * 60 * 1000, // rotate URLs every 30 minutes
+                width: "1080", // width of iframe
+                height: "756", // height of iframe
+                frameWidth: "1080"
             }
         },
         {
-            module: "calendar",
-            header: "Calendar Events",
-            position: "top_left",
+            module: 'MMM-SystemStats',
+            position: "bottom_left",
             config: {
-                colored: true,
-                maximumNumberOfDays: 10,
-                maximumEntries: 20,
-                showLocation: true,
-                tableClass: "medium",
-                timeFormat: "absolute",
-                nextDaysRelative: true,
-                displaySymbol: true,
-                defaultSymbol: "calendar-alt",
-                calendars: [
-                    {
-                        symbol: "calendar",
-                        color: '#73FF33',
-                        url: "http://localhost:8080/modules/default/calendar/calendars/home.ics"
-                    },
-                    {
-                        symbol: "calendar",
-                        color: '#BAA3DC',
-                        url: "http://localhost:8080/modules/default/calendar/calendars/14D7ECFB-D078-4696-9558-E422AE330A63.ics"
-                    },
-                ]
-            }
-        },
-        {
-            module: "currentweather",
-            position: "top_right",
-            config: {
-                location: "Santa Cruz",
-                locationID: "5393052",
-                units: "imperial",
-                appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
-            }
-        },
-        {
-            module: "weatherforecast",
-            position: "top_right",
-            header: "Weather Forecast",
-            config: {
-                location: "Santa Cruz",
-                locationID: "5393052",
-                units: "imperial",
-                showRainAmount: "true",
-                colored: "true",
-                appid: "xx_OpenWeather-App-ID_xxxxxxxxxx"
-            }
-        },
-        {
-            module: "newsfeed",
-            position: "top_bar",
-            config: {
-                feeds: [
-                    {
-                        title: "New York Times",
-                        url: "http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml"
-                    },
-                    {
-                        title: "Washington Post",
-                        url: "http://feeds.washingtonpost.com/rss/national"
-                    },
-                    {
-                        title: "Mercury News",
-                        url: "https://www.mercurynews.com/feed"
-                    },
-                    {
-                        title: "NBC Bay Area",
-                        url: "https://www.nbcbayarea.com/news/top-stories/?rss=y",
-                    }
-                ],
-                showSourceTitle: true,
-                showPublishDate: true,
-                broadcastNewsFeeds: true,
-                broadcastNewsUpdates: true
+                updateInterval: 10000, // every 10 seconds
+                align: 'right', // align labels
+                header: 'System Stats', // This is optional
+                units: 'imperial', // default, metric, imperial
+                view: 'textAndIcon',
             }
         },
         {
             module: 'MMM-Tools',
-            position: 'bottom_center',
+            position: 'bottom_left',
             config: {
               device : "RPI", // "RPI" is also available
               refresh_interval_ms : 10000,
@@ -163,32 +96,14 @@ var config = {
             }
         },
         {
-            module: 'MMM-SystemStats',
-            position: "bottom_right",
-            config: {
-                updateInterval: 10000, // every 10 seconds
-                align: 'right', // align labels
-                header: 'System Stats', // This is optional
-                units: 'imperial', // default, metric, imperial
-                view: 'textAndIcon',
-            }
-        },
-        {
-            module: 'MMM-stocks',
-            position: 'bottom_bar',
-            config: {
-              apiKey: 'xxxxx_Stocks-API-Key_xxxxxxxxxxxxx',
-              crypto: 'BATUSDT,ADAUSDT,ETHUSDT,POLYBNB,ZRXUSDT,MCOUSDT', // crypto symbols
-              separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
-              stocks: 'CGC,AAPL,HEXO,ACB,TLRY', // stock symbols
-              updateInterval: 1000000 // update interval in milliseconds (16:40)
-            }
-        },
-        {
             module: "mmm-hue-lights",
             position: "middle_center",
+            // position: "lower_third",
             config: {
                 bridgeIp: "10.0.1.20",
+                displayType: "grid",
+                minimalGrid: false,
+                updateInterval: 180000,
                 user: "xxxxxxxxxx_Hue-Hub-User_xxxxxxxxxxxxxxxx",
             }
         },
@@ -203,26 +118,8 @@ var config = {
             }
         },
         {
-            module: 'MMM-iFrame',
-            position: 'fullscreen_below',
-            config: {
-                url: [
-                      "https://www.youtube.com/embed/ZFBoN7yIMZw?autoplay=1&amp;controls=0&amp;start=40",
-                      "https://www.youtube.com/embed/95FxKgcgjN0?autoplay=1&amp;controls=0",
-                      "https://www.youtube.com/embed/jVD67pMdv9k?autoplay=1&amp;controls=0&amp;start=40",
-                      "https://www.youtube.com/embed/gdJjc6l6iII?autoplay=1&amp;controls=0&amp;start=40",
-                      "https://www.youtube.com/embed/t6jlhqNxRYk?autoplay=1&amp;controls=0&amp;start=40",
-                      "https://www.youtube.com/embed/zfgE_Bxears?autoplay=1&amp;controls=0",
-                     ],
-                updateInterval: 30 * 60 * 1000, // rotate URLs every 30 minutes
-                width: "1080", // width of iframe
-                height: "1580", // height of iframe
-                frameWidth: "1080"
-            }
-        },
-        {
             module: 'MMM-NetworkScanner',
-            position: "bottom_left",
+            position: "bottom_right",
             header: "",
             config: {
                 showLastSeen: "true",
@@ -320,18 +217,20 @@ var config = {
             },
         },
         {
-            module: "MMM-Volume",
-            position: "bottom_center", // It is meaningless. but you should set.
+            module: 'MMM-stocks',
+            position: 'bottom_bar',
             config: {
-              usePresetScript: "ALSA", // "ALSA" is supported by default.
-              volumeOnStart: 50,
+              apiKey: 'xxxxx_Stocks-API-Key_xxxxxxxxxxxxx',
+              crypto: 'FILUSDT,ADAUSDT,ETHUSDT,GRTUSDT,ZRXUSDT,AGIUSDT,XLMUSDT',
+              separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
+              stocks: 'CGC,AAPL,HEXO,ACB,TLRY', // stock symbols
+              updateInterval: 1000000 // update interval in milliseconds (16:40)
             }
         },
         {
             module: 'MMM-TelegramBot',
             config: {
               telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
-              // This is NOT the username of bot.
               allowedUser : ['Your-Telegram-Username'],
               adminChatId : Your-Telegram-Chat-ID,
               useWelcomeMessage: true,

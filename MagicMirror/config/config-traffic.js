@@ -60,24 +60,33 @@ var config = {
             }
         },
         {
-            module: 'MMM-BackgroundSlideshow',
-            position: 'fullscreen_below',
-            // classes: 'scheduler',
+		    module: "MMM-DateOnly",
+		    position: "top_bar",
+		    config: {
+                showWeek: false,
+                dateFormat: "dddd, LLL",
+		    }
+	    },
+        {
+            module: 'MMM-GoogleMapsTraffic',
+            position: 'top_center',
             config: {
-                imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/pics/fictional/',
+                key: 'xxxxxx_Your-GoogleMapsTraffic-Key_xxxxxxxxxxx',
+                lat: 36.970019,
+                lng: -122.042212,
+                height: '900px',
+                width: '800px',
+                styledMapType: "transparent",
+                disableDefaultUI: true,
+                backgroundColor: 'hsla(0, 0%, 0%, 0)',
+                markers: [
+                    {
+                        lat: 36.970019,
+                        lng: -122.042212,
+                        fillColor: '#9966ff'
+                    },
                 ],
-                slideshowSpeed: 15000, // 15 seconds
-                transitionImages: true,
-                randomizeImageOrder: true,
-                recursiveSubDirectories: true,
-                //backgroundSize: "contain",
-                // DISPLAY THE SLIDE SHOW BETWEEN 1PM and 6PM then again between 9PM and Midnight
-                //module_schedule: [
-                //  {from: '0 13 * * *', to:   '0 18 * * *'},
-                //  {from: '0 21 * * *', to:   '59 23 * * *'}
-                //]
-            }
+            },
         },
         {
             module: 'MMM-TelegramBot',

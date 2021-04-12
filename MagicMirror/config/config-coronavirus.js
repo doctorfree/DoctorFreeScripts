@@ -56,57 +56,48 @@ var config = {
         {
             module: 'MMM-Remote-Control',
             config: {
-                apiKey: 'MMM-Remote-Control_API_Key'
+                apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
             }
         },
         {
-            module: "MMM-News",
-            position: "top_center",
-            config: {
-              apiKey : "xxxxxxx_newsapi.org_xxxxxxxxxxx",
-              type: "vertical",
-              touchable: false,
-              telegramBotOrderOpenDetail : true,
-              query : [
-                {
-                  sources: "abc-news, bbc-news, cnn, google-news",
-                },
-                {
-                  country: "us",
-                  category: "health",
-                  q : "coronavirus"
-                },
-                {
-                  country: "uk",
-                  category: "health",
-                  q : "coronavirus"
-                }
-              ],
-            }
-        },
-        {
-            module: "MMM-COVID-19",
+            module: "MMM-COVID19",
             header: "Coronavirus Daily Update",
             position: "top_bar",
             config: {
-              debug:false,
+              updateInterval: 300000,
+              worldStats: true,
+              delta: true,
+              lastUpdateInfo: true,
+              showExtraInfo: true,
+              countries: [ "Mexico", "USA" ],
+              highlightCountry: "USA",
+              headerRowClass: "small",
+              rapidapiKey : "490e71fb36msh611ca8c5b1428c2p1ac6d6jsne235f7ea64b4"
+            }
+        },
+        // {
+        //     module: "MMM-COVID-19",
+        //     header: "Coronavirus Daily Update",
+        //     position: "top_bar",
+        //     config: {
+        //       debug:false,
 //            scanInterval: 1000 * 60 * 60 * 3,
-              scanInterval: 1000 * 60 * 60 * 12,
-              rotateInterval: 1000 * 5, // 0 means no rotate
+        //       scanInterval: 1000 * 60 * 60 * 12,
+        //       rotateInterval: 1000 * 5, // 0 means no rotate
 //            pinned: ["Mainland China", null],
 //            pinned: ["Others", "Diamond Princess cruise ship"],
 //            pinned: ["US", "Santa Clara, CA"],
-              pinned: ["World", "US Total", "California, US", "Italy", "Iran", "China Total", "Korea, South", "Canada Total", "Mexico"],
-              myPosition: {
-                  latitude: 36.970019,
-                  longitude: -122.042212,
-                  metric: "mile"
-              },
-              reportTimeFormat: "YYYY.MM.DD hh a",
-              drawGraph: true,
-              logTerritory: false
-            }
-        },
+        //       pinned: ["World", "US Total", "California, US", "Italy", "Iran", "China Total", "Korea, South", "Canada Total", "Mexico"],
+        //       myPosition: {
+        //           latitude: 36.970019,
+        //           longitude: -122.042212,
+        //           metric: "mile"
+        //       },
+        //       reportTimeFormat: "YYYY.MM.DD hh a",
+        //       drawGraph: true,
+        //       logTerritory: false
+        //     }
+        // },
         {
             module: "newsfeed",
             position: "bottom_bar",
@@ -154,7 +145,7 @@ var config = {
             module: 'MMM-pages',
             config: {
                 modules:
-                    [["MMM-COVID-19"], ["MMM-News", "newsfeed"], [ "MMM-iFrame"]],
+                    [["MMM-COVID19"], ["newsfeed"], [ "MMM-iFrame"]],
                 fixed:
                     ["alert", "updatenotification", "MMM-Remote-Control", "MMM-TelegramBot"],
                 rotationTime: 900000, // rotate page every 15 minutes = 15 * 60 * 1000
@@ -175,88 +166,17 @@ var config = {
               customCommands: [],
             }
         },
-        {
-            module: "MMM-AssistantMk2",
-            position: "fullscreen_above",
-            config: {
-              debug: false,
-              ui: "Fullscreen", // Classic2 or Classic
-              // if you want Google Home ui style
-              // set Fullscreen ui AND fullscreen_above position
-              assistantConfig: {
-                // Required to use gaction.
-                projectId: "Google_Assistant_Project_ID",
-                // (OPTIONAL for gaction)
-                modelId: "Google_Assistant_Model_ID",
-                // (OPTIONAL for gaction)
-                instanceId: "Mirror_of_Doctorwhen",
-                latitude: 36.970019,
-                longitude: -122.042212,
-              },
-              responseConfig: {
-                useHTML5: false, // sound render by HTML5
-                useScreenOutput: true,
-                useAudioOutput: true,
-                useChime: true,
-                timer: 5000,
-                myMagicWord: true,
-                //Your prefer sound play program.
-                //By example, if you are running this on OSX, `afplay` could be available.
-                //by default mpg321 play program is enabled
-                //if audio output cutting try with mpg123 or cvlc program
-                playProgram: "mpg321",
-                chime: {
-                  beep: "beep.mp3",
-                  error: "error.mp3",
-                  continue: "continue.mp3",
-                  open: "Google_beep_open.mp3",
-                  close: "Google_beep_close.mp3",
-                },
-                // false - animated icons,
-                // 'standby' - static icons only for standby state,
-                // true - all static icons
-                useStaticIcons: false
-              },
-              micConfig: { // put there configuration generated by auto-installer
-                recorder: "arecord",
-                device: "plughw:1",
-              },
-              customActionConfig: {
-                autoMakeAction: false,
-                // in RPI, gaction CLI might have some trouble.
-                // current version should be 2.2.4, but for linux-arm,
-                // Google haven't updated so leave this as false in RPI.
-                // I don't know it is solved or not.
-                autoUpdateAction: false,
-                // At this moment, multi-languages are not supported, sorry. Someday I'll work.
-                actionLocale: "en-US",
-              },
-              recipes: [ "with-MMM-Hotword.js",
-                         "with-MMM-TelegramBot.js",
-                         "mirror-script.js",
-                         "Reboot-Restart-Shutdown.js"],
-              profiles: {
-                "default": {
-                  profileFile: "default.json",
-                  lang: "en-US"
-                }
-              },
-              addons: true,
-            },
-        },
-        {
-            module: "MMM-Hotword",
-            position: "top_right",
-            config: {
-              useDisplay: false,
-              chimeOnFinish: "resources/ding.wav",
-              recipes: ["with-AMk2v3-noisy_smart-mirror.js"],
-              mic: {
-                recordProgram: "arecord",
-                device: "plughw:1",
-              },
-            },
-        },
+        // {
+        //     module: "MMM-GoogleAssistant",
+        //     position: "top_right",
+        //     config: {
+        //         maxWidth: "100%",
+        //         header: "",
+        //     publishKey: 'pub-c-206f354b-5d57-49aa-add5-be3a2356e921',
+        //     subscribeKey: 'sub-c-0400d566-538e-11eb-a233-facb2062b65c',
+        //     updateDelay: 500
+        //     }
+        // },
 	]
 };
 

@@ -13,10 +13,13 @@ var config = {
     address: "0.0.0.0", // Address to listen on, can be:
     port: 8080,
     ipWhitelist: [
+        "0.0.0.0",
         "127.0.0.1",
         "10.0.1.44", // Mac Mini
         "10.0.1.51", // Mac Pro
+        "10.0.1.82", // Mac Pro
         "10.0.1.67", // Raspberry Pi MagicMirror
+        "10.0.1.80", // Raspberry Pi MagicMirror
         "10.0.1.69", // iPad Air
         "10.0.1.76", // iPhone Max Xs
         "::ffff:127.0.0.1",
@@ -38,25 +41,7 @@ var config = {
         {
             module: 'MMM-Remote-Control',
             config: {
-                apiKey: 'MMM-Remote-Control_API_Key'
-            }
-        },
-        {
-            module: "clock",
-            position: "upper_third",
-            config: {
-                dateFormat: "dddd, LLL",
-                displayType: "analog",
-                analogFace: "face-009",
-                analogSize: "200px",
-                displaySeconds: "true",
-                secondsColor: "#BAA3DC",
-                timeFormat: "12",
-                showPeriod: "true",
-                showDate: "true",
-                clockBold: "false",
-                analogPlacement: "top",
-                analogShowDate: "top",
+                apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
             }
         },
         {
@@ -77,14 +62,32 @@ var config = {
                     {
                         symbol: "calendar",
                         color: '#73FF33',
-                        url: "http://localhost:8080/modules/calendars/home.ics"
+                        url: "http://localhost:8080/modules/default/calendar/calendars/home.ics"
                     },
                     {
                         symbol: "calendar",
                         color: '#BAA3DC',
-                        url: "http://localhost:8080/modules/calendars/14D7ECFB-D078-4696-9558-E422AE330A63.ics"
+                        url: "http://localhost:8080/modules/default/calendar/calendars/14D7ECFB-D078-4696-9558-E422AE330A63.ics"
                     },
                 ]
+            }
+        },
+        {
+            module: "clock",
+            position: "top_center",
+            config: {
+                dateFormat: "dddd, LLL",
+                displayType: "analog",
+                analogFace: "face-009",
+                analogSize: "200px",
+                displaySeconds: "true",
+                secondsColor: "#BAA3DC",
+                timeFormat: "12",
+                showPeriod: "true",
+                showDate: "true",
+                clockBold: "false",
+                analogPlacement: "top",
+                analogShowDate: "top",
             }
         },
         {
@@ -189,33 +192,41 @@ var config = {
                 dateFormat: "dddd, LLL",
 		    }
 	    },
-        {
-            module: "MMM-AVStock",
-            position: "bottom_bar", //"bottom_bar" is better for `mode:ticker`
-            config: {
-                apiKey : "xx_AVStock-API_x", // https://www.alphavantage.co/
-                timeFormat: "YYYY-MM-DD HH:mm:ss",
-                symbols : ["AAPL", "HEXO", "TLRY", "CGC", "ACB"],
-                alias: ["Apple", "Hexo", "Tilray", "Canopy", "Aurora"],
-                tickerDuration: 60, // Ticker will be cycled once per this second.
-                chartDays: 90, //For `mode:series`, how much daily data will be taken. (max. 90)
-                poolInterval : 1000*15, // (Changed in ver 1.1.0) - Only For Premium Account
-                mode : "ticker", // "table", "ticker", "series"
-                decimals: 4,
-                candleSticks : true, //show candle sticks if mode is Series
-                coloredCandles : true, //colored bars: red and green for negative and positive candles
-                premiumAccount: false,
-            }
-        },
+        // {
+        //     module: "MMM-AVStock",
+        //     position: "bottom_bar", //"bottom_bar" is better for `mode:ticker`
+        //     config: {
+        //         apiKey : "xx_AVStock-API_x", // https://www.alphavantage.co/
+        //         timeFormat: "YYYY-MM-DD HH:mm:ss",
+        //         symbols : ["AAPL", "HEXO", "TLRY", "CGC", "ACB"],
+        //         alias: ["Apple", "Hexo", "Tilray", "Canopy", "Aurora"],
+        //         tickerDuration: 60, // Ticker will be cycled once per this second.
+        //         chartDays: 90, //For `mode:series`, how much daily data will be taken. (max. 90)
+        //         poolInterval : 1000*15, // (Changed in ver 1.1.0) - Only For Premium Account
+        //         mode : "ticker", // "table", "ticker", "series"
+        //         decimals: 4,
+        //         candleSticks : true, //show candle sticks if mode is Series
+        //         coloredCandles : true, //colored bars: red and green for negative and positive candles
+        //         premiumAccount: false,
+        //     }
+        // },
         {
             module: 'MMM-stocks',
             position: 'bottom_bar',
             config: {
-              apiKey: 'xxxxx_Weather-API-Key_xxxxxxxxxxxxx',
+              apiKey: 'xxxxx_Stocks-API-Key_xxxxxxxxxxxxx',
               crypto: 'BATUSDT,ADAUSDT,ETHUSDT,POLYBNB,ZRXUSDT,MCOUSDT', // crypto symbols
               separator: '&nbsp;&nbsp;•&nbsp;&nbsp;', // separator between stocks
               stocks: 'CGC,AAPL,HEXO,ACB,TLRY', // stock symbols
               updateInterval: 1000000 // update interval in milliseconds (16:40)
+            }
+        },
+        {
+            module: "mmm-hue-lights",
+            position: "middle_center",
+            config: {
+                bridgeIp: "10.0.1.20",
+                user: "xxxxxxxxxx_Hue-Hub-User_xxxxxxxxxxxxxxxx",
             }
         },
         {
@@ -229,14 +240,6 @@ var config = {
             }
         },
         {
-            module: "mmm-hue-lights",
-            position: "lower_third",
-            config: {
-                bridgeIp: "10.0.1.2",
-                user: "xxxxxxxxxx_Hue-Hub-User_xxxxxxxxxxxxxxxx",
-            }
-        },
-        {
             module: 'MMM-NetworkScanner',
             position: "bottom_right",
             header: "",
@@ -244,7 +247,7 @@ var config = {
                 showLastSeen: "true",
                 colored: "true",
                 devices: [
-                    { macAddress: "d4:dc:cd:f3:20:4c",
+                    { macAddress: "98:10:e8:f1:77:6d",
                       name: "Mac Mini",
                       icon: "desktop",
                       color: "#00ff00"},
@@ -252,12 +255,44 @@ var config = {
                       name: "Mac Pro",
                       icon: "desktop",
                       color: "#ffff00"},
+                    { macAddress: "d4:90:9c:da:31:9e",
+                      name: "Homepod Max",
+                      icon: "music",
+                      color: "#26C6DA " },
+                    { macAddress: "58:d3:49:2a:9f:f7",
+                      name: "Homepod Mini Left",
+                      icon: "music",
+                      color: "#26C6DA " },
+                    { macAddress: "58:d3:49:0f:02:23",
+                      name: "Homepod Mini Right",
+                      icon: "music",
+                      color: "#26C6DA " },
                     { macAddress: "b0:6e:bf:2b:3a:f8",
-                      name: "Miner",
+                      name: "Miner (doctor)",
                       icon: "hammer",
                       color: "#ffff00"},
-                    { ipAddress: "10.0.1.67",
-                      name: "Raspberry Pi",
+                    { macAddress: "30:85:a9:8d:02:9d",
+                      name: "Miner (vivo)",
+                      icon: "hammer",
+                      color: "#ffff00"},
+                    { macAddress: "4c:cc:6a:27:be:6a",
+                      name: "Miner (ronnie)",
+                      icon: "hammer",
+                      color: "#ffff00"},
+                    { ipAddress: "10.0.1.80",
+                      name: "Raspberry Pi 400",
+                      icon: "signal",
+                      color: "#00ff00" },
+                    { ipAddress: "10.0.1.81",
+                      name: "Roon ROCK",
+                      icon: "music",
+                      color: "#00ff00" },
+                    { ipAddress: "10.0.1.94",
+                      name: "RPi Ropieee",
+                      icon: "signal",
+                      color: "#00ff00" },
+                    { ipAddress: "10.0.1.85",
+                      name: "RPi MagicMirror",
                       icon: "signal",
                       color: "#00ff00" },
                     { macAddress: "00:17:88:49:1a:cd",
@@ -268,34 +303,18 @@ var config = {
                       name: "Harmony Hub",
                       icon: "weight",
                       color: "#00ff00" },
-                    { ipAddress: "10.0.1.69",
-                      name: "iPad Air",
+                    { macAddress: "2E:0E:84:7B:ED:39",
+                      name: "Ronnie's iPad",
                       icon: "tablet",
                       color: "#FF8A65" },
-                    { ipAddress: "10.0.1.7",
+                    { macAddress: "C8:69:CD:84:EC:47",
                       name: "Apple TV",
                       icon: "tv",
                       color: "#26C6DA " },
-                    { ipAddress: "10.0.1.68",
-                      name: "Apple TV Gen 4",
-                      icon: "tv",
-                      color: "#26C6DA " },
-                    { ipAddress: "10.0.1.76",
-                      name: "iPhone Xs Max",
+                    { macAddress: "36:7F:9E:F1:78:5A",
+                      name: "iPhone 12 Mini",
                       icon: "mobile",
                       color: "#FF8A65" },
-                    { macAddress: "44:d8:84:6b:5f:b3",
-                      name: "AirPort Express",
-                      icon: "wifi",
-                      color: "#81C784" },
-                    { macAddress: "00:1f:f3:f4:52:47",
-                      name: "AirPort Express",
-                      icon: "wifi",
-                      color: "#81C784" },
-                    { macAddress: "24:a0:74:79:7f:9f",
-                      name: "AirPort Extreme",
-                      icon: "network-wired",
-                      color: "#81C784" },
                     { macAddress: "00:1d:c0:62:42:67",
                       name: "Enphase",
                       icon: "solar-panel",
@@ -308,6 +327,14 @@ var config = {
                       name: "Sony TV",
                       icon: "tv",
                       color: "#26C6DA " },
+                    // { macAddress: "44:d8:84:6b:5f:b3",
+                    //   name: "AirPort Express",
+                    //   icon: "wifi",
+                    //   color: "#81C784" },
+                    // { macAddress: "24:a0:74:79:7f:9f",
+                    //   name: "AirPort Extreme",
+                    //   icon: "network-wired",
+                    //   color: "#81C784" },
                 ],
             },
         },
@@ -333,10 +360,10 @@ var config = {
                       "https://ncov2019.live/map",
                       "https://healthweather.us/",
                       "https://ncov2019.live/tweets",
-                      "https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6",
-                      "https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61",
+                      // "https://gisanddata.maps.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6",
+                      // "https://www.arcgis.com/apps/opsdashboard/index.html#/85320e2ea5424dfaaa75ae62e5c06e61",
                       "https://windy.app/coronavirus_map",
-                      "https://experience.arcgis.com/experience/685d0ace521648f8a5beeeee1b9125cd",
+                      // "https://experience.arcgis.com/experience/685d0ace521648f8a5beeeee1b9125cd",
                      ],
                 updateInterval: 3 * 60 * 1000,  // rotate URLs every 3 minutes
                 width: "1080", // width of iframe
@@ -363,39 +390,39 @@ var config = {
               logTerritory: false
             }
         },
-        {
-            module: "MMM-News",
-            position: "top_center",
-            config: {
-              apiKey : "xxxxxxx_newsapi.org_xxxxxxxxxxx",
-              type: "vertical",
-              touchable: false,
-              telegramBotOrderOpenDetail : true,
-              query : [
-                {
-                  sources: "abc-news, bbc-news, cnn, google-news",
-                },
-                {
-                  country: "us",
-                  category: "general",
-                },
-                {
-                  country: "uk",
-                  category: "general",
-                },
-                {
-                  country: "us",
-                  category: "health",
-                  q : "coronavirus"
-                },
-                {
-                  country: "uk",
-                  category: "health",
-                  q : "coronavirus"
-                }
-              ],
-            }
-        },
+        // {
+        //     module: "MMM-News",
+        //     position: "top_center",
+        //     config: {
+        //       apiKey : "xxxxxxx_newsapi.org_xxxxxxxxxxx",
+        //       type: "vertical",
+        //       touchable: false,
+        //       telegramBotOrderOpenDetail : true,
+        //       query : [
+        //         {
+        //           sources: "abc-news, bbc-news, cnn, google-news",
+        //         },
+        //         {
+        //           country: "us",
+        //           category: "general",
+        //         },
+        //         {
+        //           country: "uk",
+        //           category: "general",
+        //         },
+        //         {
+        //           country: "us",
+        //           category: "health",
+        //           q : "coronavirus"
+        //         },
+        //         {
+        //           country: "uk",
+        //           category: "health",
+        //           q : "coronavirus"
+        //         }
+        //       ],
+        //     }
+        // },
         {
             module: 'MMM-RAIN-RADAR',
             position: 'top_center',
@@ -447,101 +474,30 @@ var config = {
             config: {
                 modules:
                     [
-                        ["clock", "calendar", "currentweather", "weatherforecast",
-                         "newsfeed", "MMM-SystemStats", "MMM-Tools", "MMM-AVStock",
+                        ["calendar", "newsfeed", "MMM-SystemStats", "MMM-Tools",
                          "MMM-Solar", "mmm-hue-lights", "MMM-NetworkScanner"],
-                        ["MMM-COVID-19", "MMM-News", "newsfeed", "MMM-DateOnly"],
-                        ["MMM-iFrame", "MMM-AVStock", "MMM-stocks", "MMM-DateOnly",
-                         "newsfeed", "MMM-News"],
+                        ["MMM-COVID-19", "newsfeed", "MMM-DateOnly"],
+                        ["MMM-iFrame", "MMM-stocks", "MMM-DateOnly",
+                         "newsfeed"],
                         ["MMM-RAIN-RADAR", "MMM-DarkSkyForecast", "MMM-DateOnly"],
                     ],
                 fixed:
-                    ["alert", "updatenotification", "MMM-Remote-Control", "MMM-TelegramBot"],
+                    ["alert", "clock", "currentweather", "weatherforecast",
+                     "updatenotification", "MMM-Remote-Control", "MMM-TelegramBot"],
                 rotationTime: 300000, // rotate page every 5 minutes = 5 * 60 * 1000
             }
         },
-        {
-            module: "MMM-AssistantMk2",
-            position: "fullscreen_above",
-            config: {
-              debug: false,
-              ui: "Fullscreen", // Classic2 or Classic
-              // if you want Google Home ui style
-              // set Fullscreen ui AND fullscreen_above position
-              assistantConfig: {
-                // Required to use gaction.
-                projectId: "Google_Assistant_Project_ID",
-                // (OPTIONAL for gaction)
-                modelId: "Google_Assistant_Model_ID",
-                // (OPTIONAL for gaction)
-                instanceId: "Mirror_of_Doctorwhen",
-                latitude: 36.970019,
-                longitude: -122.042212,
-              },
-              responseConfig: {
-                useHTML5: false, // sound render by HTML5
-                useScreenOutput: true,
-                useAudioOutput: true,
-                useChime: true,
-                timer: 5000,
-                myMagicWord: true,
-                //Your prefer sound play program.
-                //By example, if you are running this on OSX, `afplay` could be available.
-                //by default mpg321 play program is enabled
-                //if audio output cutting try with mpg123 or cvlc program
-                playProgram: "mpg321",
-                chime: {
-                  beep: "beep.mp3",
-                  error: "error.mp3",
-                  continue: "continue.mp3",
-                  open: "Google_beep_open.mp3",
-                  close: "Google_beep_close.mp3",
-                },
-                // false - animated icons,
-                // 'standby' - static icons only for standby state,
-                // true - all static icons
-                useStaticIcons: false
-              },
-              micConfig: { // put there configuration generated by auto-installer
-                recorder: "arecord",
-                device: "plughw:1",
-              },
-              customActionConfig: {
-                autoMakeAction: false,
-                // in RPI, gaction CLI might have some trouble.
-                // current version should be 2.2.4, but for linux-arm,
-                // Google haven't updated so leave this as false in RPI.
-                // I don't know it is solved or not.
-                autoUpdateAction: false,
-                // At this moment, multi-languages are not supported, sorry. Someday I'll work.
-                actionLocale: "en-US",
-              },
-              recipes: [ "with-MMM-Hotword.js",
-                         "with-MMM-TelegramBot.js",
-                         "mirror-script.js",
-                         "Reboot-Restart-Shutdown.js"],
-              profiles: {
-                "default": {
-                  profileFile: "default.json",
-                  lang: "en-US"
-                }
-              },
-              addons: true,
-            },
-        },
-        {
-            module: "MMM-Hotword",
-            position: "top_right",
-            config: {
-              useDisplay: false,
-              chimeOnFinish: "resources/ding.wav",
-              recipes: ["with-AMk2v3-noisy_smart-mirror.js"],
-              mic: {
-                recordProgram: "arecord",
-                device: "plughw:1",
-              },
-            },
-        },
+        // {
+        //     module: "MMM-GoogleAssistant",
+        //     position: "top_right",
+        //     config: {
+        //         maxWidth: "100%",
+        //         header: "",
+        //     publishKey: 'pub-c-206f354b-5d57-49aa-add5-be3a2356e921',
+        //     subscribeKey: 'sub-c-0400d566-538e-11eb-a233-facb2062b65c',
+        //     updateDelay: 500
+        //     }
+        // },
     ]
 };
 
