@@ -93,8 +93,9 @@ fi
     }
 }
 
-# Set Model top dir before processing arguments
+# Set Model and Photographer top dirs before processing arguments
 MOD_TOP="$TOP/Wallhaven/Models"
+PHO_TOP="$TOP/Wallhaven/Photographers"
   
 while getopts pPn:s:alSu flag; do
     case $flag in
@@ -104,6 +105,7 @@ while getopts pPn:s:alSu flag; do
         l)
 #           ls --color=auto -l $OUT | awk ' { print $NF } '
             ls -l $OUT | grep -v total | awk ' { print $NF } '
+            echo "Background images in $OUT"
             exit 0
             ;;
         n)
@@ -199,20 +201,21 @@ cd $OUT
       foundirs="$TOP"
     else
       [ -d "$TOP/$bdir" ] || {
-       for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
-       do
-         [ -d "$TOP/$subdir/$bdir" ] && {
-           sub="$TOP/$subdir"
-           if [ "$all" ]
-           then
-             foundirs="$foundirs $sub"
-           else
-             foundirs="$sub"
-             break
-           fi
-         }
-       done
-       TOP="$sub"
+        [ "$updpre" ] && mkdir "$TOP/$bdir"
+        for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
+        do
+          [ -d "$TOP/$subdir/$bdir" ] && {
+            sub="$TOP/$subdir"
+            if [ "$all" ]
+            then
+              foundirs="$foundirs $sub"
+            else
+              foundirs="$sub"
+              break
+            fi
+          }
+        done
+        #TOP="$sub"
       }
     fi
   fi
@@ -220,18 +223,29 @@ cd $OUT
     echo "Cannot locate $TOP/$bdir - exiting."
     exit 1
   }
+  echo "Using background pics in $TOP/$bdir"
 
   numlinks=0
   for dir in $foundirs
   do
     [ "$updpre" ] && {
-      [ -d $MOD_TOP/$bdir ] && {
+      updtop=
+      if [ -d $MOD_TOP/$bdir ]
+      then
+        updtop=$MOD_TOP
+      else
+        if [ -d $PHO_TOP/$bdir ]
+        then
+          updtop=$PHO_TOP
+        fi
+      fi
+      [ "$updtop" ] && {
         [ -d $TOP/$bdir ] || mkdir $TOP/$bdir
         cd $TOP/$bdir
-        for orig in $MOD_TOP/$bdir/wallhaven*
+        for orig in $updtop/$bdir/wallhaven*
         do
-          [ "$orig" == "$MOD_TOP/$bdir/wallhaven*" ] && {
-            echo "No pics in $MOD_TOP/$bdir"
+          [ "$orig" == "$updtop/$bdir/wallhaven*" ] && {
+            echo "No pics in $updtop/$bdir"
             continue
           }
           bnam=`basename $orig`

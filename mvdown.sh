@@ -86,7 +86,17 @@ then
 else
     DEST=`pwd`
 fi
-DOWN="${HOME}/Pictures/DownThemAll"
+if [ -d ${TOP}/DownThemAll ]
+then
+    DOWN="${TOP}/DownThemAll"
+else
+    if [ -d ${HOME}/Pictures/DownThemAll ] || [ -L ${HOME}/Pictures/DownThemAll ]
+    then
+        DOWN="${HOME}/Pictures/DownThemAll"
+    else
+        DOWN="${HOME}/Downloads/downthemall"
+    fi
+fi
 
 [ -d ${DOWN} ] || {
     echo "$DOWN does not exist or is not a directory. Exiting."

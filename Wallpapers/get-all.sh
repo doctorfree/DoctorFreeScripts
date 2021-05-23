@@ -162,6 +162,7 @@ do
         ;;
     Celebrity)
         get_search "${dir}" "${dir}"
+        get_search "${dir}" "Fake_Celeb"
         get_search "${dir}" "Fake_Nudes"
         get_search "${dir}" "celebrities"
         get_search "${dir}" "famous_people"
@@ -199,6 +200,7 @@ do
         ;;
     Fictional_Character)
         get_search "${dir}" "${dir}"
+        get_search "${dir}" "Game_Characters"
         get_search "${dir}" "Disharmonica"
         get_search "${dir}" "Triss_Merigold"
         get_search "${dir}" "Helly_von_Valentine"
