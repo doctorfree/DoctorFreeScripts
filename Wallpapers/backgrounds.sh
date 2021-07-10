@@ -32,14 +32,6 @@ PRE_TOP=$HOME/Pictures/Work/Backgrounds
 MAC_OUT=$HOME/Pictures/Backgrounds
 LIN_OUT=/usr/local/share/backgrounds
 #
-# Folders to search for model name or other subfolder of images to use
-# These are located under $TOP, defined below
-# Order is important, first in list coming first in search
-# If you want to combine images from several folders use the "-s all" option
-#
-SUBS="Fractals Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes \
-      JP_Erotica Met-Art KindGirls Wallbase"
-
 bak=/tmp/pic$$
 maxlinks=2048
 add=
