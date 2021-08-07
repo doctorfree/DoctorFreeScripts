@@ -30,6 +30,7 @@ playboy=
 photodromm=
 suicide=
 japanese=
+artist=
 photo=
 latest=
 numdown=
@@ -76,7 +77,7 @@ progress() {
 ## Exit the program after displaying the usage message and example invocations
 usage() {
     printf "\nUsage: %s [-n num] [-c cat] [-f filter] [-p page]" $0
-    printf " [-l subdir] [-s search] [-bdhLmPqu]"
+    printf " [-l subdir] [-s search] [-abdhLmPqu]"
     printf "\n\nWhere:\n\t-n num specifies the number of downloads"
     printf "\n\t-c cat specifies the category mask (001 - 111)"
     printf "\n\t-f filter specifies the filter mask (001 - 111)"
@@ -86,6 +87,7 @@ usage() {
     printf "\n\t-L indicates use symbolic links when finding duplicates"
     printf "\n\t-b indicates Playboy Model search, use Models/Playboy/<model_name> download dir"
     printf "\n\t-h indicates Photodromm Model search, use Models/Photodromm/<model_name> download dir"
+    printf "\n\t-a indicates Artist search, use Artists/<artist_name> download dir"
     printf "\n\t-m indicates Model search, use Models/<model_name> download dir"
     printf "\n\t-P indicates Photographer search, use Photographers/<name> download dir"
     printf "\n\t-R indicates retrieve most recent wallpapers for search term"
@@ -96,7 +98,7 @@ usage() {
     exit 1
 }
 
-while getopts l:n:c:f:p:s:bdhJLmPRSqu flag; do
+while getopts l:n:c:f:p:s:abdhJLmPRSqu flag; do
     case $flag in
         l)
             subdir=$OPTARG
@@ -124,6 +126,9 @@ while getopts l:n:c:f:p:s:bdhJLmPRSqu flag; do
             ;;
         h)
             photodromm=1
+            ;;
+        a)
+            artist=1
             ;;
         m)
             model=1

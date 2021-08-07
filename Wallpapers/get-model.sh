@@ -2,6 +2,19 @@
 
 DARG="-m"
 
+[ "$1" == "-u" ] && {
+   echo "Usage: get-model [-psjbhu] <model name>"
+   echo "Where:"
+   echo "   -p indicates use Photographers download directory"
+   echo "   -s indicates use Suicide Girls download directory"
+   echo "   -j indicates use JAV download directory"
+   echo "   -b indicates use Playboy download directory"
+   echo "   -h indicates use Photodromm download directory"
+   echo "   -u displays this usage message"
+   echo "Default download directory is Models"
+   exit 1
+}
+
 [ "$1" == "-p" ] && {
    DARG="-P"
    shift

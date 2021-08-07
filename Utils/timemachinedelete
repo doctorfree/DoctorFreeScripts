@@ -1,6 +1,7 @@
 #!/bin/bash
 
-BACKUPDB="/Volumes/Seagate_BPH_8TB/Backups.backupdb/Ronnies-Mac-Pro"
+VOLUME="/Volumes/WD_My_Backups"
+BACKUPDB="${VOLUME}/Backups.backupdb/Ronnies-Mac-Pro"
 TELLME=
 
 [ "$1" == "-n" ] && {
@@ -26,8 +27,10 @@ do
     }
     if [ "$TELLME" ]
     then
-        echo "sudo tmutil delete $BACKUPDB/$date"
+#       echo "sudo tmutil delete $BACKUPDB/$date"
+        echo "sudo tmutil delete -d ${VOLUME} -t ${date}"
     else
-        sudo tmutil delete "$BACKUPDB/$date"
+#       sudo tmutil delete "$BACKUPDB/$date"
+        sudo tmutil delete -d ${VOLUME} -t "${date}"
     fi
 done

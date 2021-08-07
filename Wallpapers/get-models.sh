@@ -331,6 +331,7 @@ get_model() {
         Krystal_Boyd)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anjelica"
+            get_search "${MODD}/${model}" "Ebbi"
             get_search "${MODD}/${model}" "Katherine_A."
             get_search "${MODD}/${model}" "Ksenia_Kondratyeva"
             ;;
@@ -404,6 +405,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Saloma"
             ;;
+        Meaghan_Stanfill)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Meg_Cyria"
+            ;;
         Melissa_Clarke)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Mellisa_Clarke"
@@ -473,6 +478,10 @@ get_model() {
             get_search "${MODD}/${model}" "FTV_Nina"
             get_search "${MODD}/${model}" "Nina_X."
             ;;
+        Octokuro)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Marina_Octokuro"
+            ;;
         Olesia_Levina)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Olesya_Levina"
@@ -507,6 +516,7 @@ get_model() {
         Photodromm)
             for photomodel in ${MODD}/Photodromm/*
             do
+              [ "${photomodel}" == "${MODD}/Photodromm/*" ] && continue
               [ -d "${photomodel}" ] || continue
               modelname=`basename ${photomodel}`
               get_search "${photomodel}" "${modelname}"
