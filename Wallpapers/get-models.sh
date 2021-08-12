@@ -206,6 +206,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Gabbie_\(FTV\)"
             ;;
+        Galina_A)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Cecelia"
+            ;;
         Georgia)
             get_search "${MODD}/${model}" "${model}_\(model\)"
             get_search "${MODD}/${model}" "${model}_\(MetArt\)"
@@ -223,10 +227,6 @@ get_model() {
         Hanna_Hilton)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Hannah_Hilton"
-            ;;
-        Heather_Vandeven)
-            get_search "${MODD}/${model}" "${model}"
-            get_search "${MODD}/${model}" "Heather_V"
             ;;
         Helga_Grey)
             get_search "${MODD}/${model}" "${model}"
@@ -538,16 +538,18 @@ get_model() {
                   get_search "${photomodel}" "Karola"
                   ;;
                 Rachel_Photodromm)
-                  get_search "${MODD}/${model}" "${model}"
-                  get_search "${MODD}/${model}" "Taliah"
-                  get_search "${MODD}/${model}" "Anna_D"
-                  get_search "${MODD}/${model}" "Bree_H"
-                  get_search "${MODD}/${model}" "Diana_Dulce"
-                  get_search "${MODD}/${model}" "Elina_Dee"
+                  get_search "${photomodel}" "Taliah"
+                  get_search "${photomodel}" "Anna_D"
+                  get_search "${photomodel}" "Bree_H"
+                  get_search "${photomodel}" "Diana_Dulce"
+                  get_search "${photomodel}" "Elina_Dee"
                   ;;
                 Yasmin_Photodromm)
-                  get_search "${MODD}/${model}" "${model}"
-                  get_search "${MODD}/${model}" "Yasmin"
+                  get_search "${photomodel}" "Yasmin"
+                  ;;
+                Yulia_Dimetra)
+                  get_search "${photomodel}" "Fabiana"
+                  get_search "${photomodel}" "Fabiana_\(PhotoDromm\)"
                   ;;
               esac
             done
@@ -780,13 +782,22 @@ get_model() {
                   get_search "${playboymodel}" "Yana_Wellis"
                   get_search "${playboymodel}" "Jane_G"
                   ;;
-                Yulia_Dimetra)
-                  get_search "${playboymodel}" "Fabiana"
-                  get_search "${playboymodel}" "Fabiana_\(PhotoDromm\)"
-                  ;;
                 Yulia_Zubova)
                   get_search "${playboymodel}" "Julia_Zubova"
                   get_search "${playboymodel}" "Julia_Zu"
+                  ;;
+              esac
+            done
+            ;;
+        Penthouse)
+            for penthousemodel in ${MODD}/Penthouse/*
+            do
+              [ -d "${penthousemodel}" ] || continue
+              modelname=`basename ${penthousemodel}`
+              get_search "${penthousemodel}" "${modelname}"
+              case "$modelname" in
+                Heather_Vandeven)
+                  get_search "${penthousemodel}" "Heather_V"
                   ;;
               esac
             done

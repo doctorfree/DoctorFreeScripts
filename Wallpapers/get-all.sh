@@ -16,12 +16,13 @@ get_search() {
 }
 
 usage() {
-    printf "\nUsage: get-all [-asu] [-n numdown] [-A] [-J] [-M] [-P] [-R] [-S]"
+    printf "\nUsage: get-all [-asu] [-n numdown] [-N] [-A] [-J] [-M] [-P] [-R] [-S]"
     printf "\nWhere:"
     printf "\n\t-a indicates find duplicates after downloading"
     printf "\n\t-n numdown specifies the number of downloads per search"
-    printf "\n\t-A indicates do not retrieve any Models or Photographers wallpapers"
-    printf "\n\t\t(equivalent to '-J -M -P -S')"
+    printf "\n\t-N indicates do not retrieve Artists, Models, or Photographers wallpapers"
+    printf "\n\t\t(equivalent to '-A -J -M -P -S')"
+    printf "\n\t-A indicates do not retrieve Artists wallpapers"
     printf "\n\t-J indicates do not retrieve JAV Idols wallpapers"
     printf "\n\t-M indicates do not retrieve Models wallpapers"
     printf "\n\t-P indicates do not retrieve Photographers wallpapers"
@@ -42,6 +43,7 @@ fi
 FIND=
 LAT=
 MLAT=
+ARTS=1
 JAVS=1
 MODS=1
 PHOT=1
@@ -49,13 +51,17 @@ SUIC=1
 UPD=1
 numdown=32
 
-while getopts AJMPRSan:su flag; do
+while getopts AJMNPRSan:su flag; do
     case $flag in
-        A)
+        N)
+            ARTS=
             JAVS=
             MODS=
             PHOT=
             SUIC=
+            ;;
+        A)
+            ARTS=
             ;;
         J)
             JAVS=
@@ -118,6 +124,9 @@ do
     [ "${dir}" = "People" ] && continue
     [ "${dir}" = "Top" ] && continue
     case "${dir}" in
+    Artists)
+        [ "$ARTS" ] && get-artists ${LAT} -S
+        ;;
     JAV_Idol)
         [ "$JAVS" ] && get-models ${MLAT} -n $numdown -j -S
         ;;

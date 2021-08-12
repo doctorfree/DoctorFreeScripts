@@ -55,10 +55,6 @@ do
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Fotoshi_Toshi"
             ;;
-        Ayya_Saparniyazova)
-            get_search "Photographers/${photographer}" "${photographer}"
-            get_search "Photographers/${photographer}" "AyyaSAP"
-            ;;
         Ethan_Malik_Planck)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Ethan_Planck"
@@ -100,10 +96,6 @@ do
         Vladimir_Stefanovich)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Wladimir_Stefanowitsch"
-            ;;
-        Zumi)
-            get_search "Photographers/${photographer}" "${photographer}"
-            get_search "Photographers/${photographer}" "zumidraws"
             ;;
         *)
             get_search "Photographers/${photographer}" "${photographer}"
