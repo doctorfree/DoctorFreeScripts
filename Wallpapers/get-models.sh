@@ -806,6 +806,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Polina_Pshenichnaya"
             ;;
+        Portia_Victoria)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Valis_Volkova"
+            ;;
         Penelope_G)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Rafaella"

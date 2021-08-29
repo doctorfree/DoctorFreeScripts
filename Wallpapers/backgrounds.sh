@@ -32,6 +32,9 @@ PRE_TOP=$HOME/Pictures/Work/Backgrounds
 MAC_OUT=$HOME/Pictures/Backgrounds
 LIN_OUT=/usr/local/share/backgrounds
 #
+# Location of prepared folders
+PRE_DIR=$HOME/Pictures/Work/Backgrounds
+#
 bak=/tmp/pic$$
 maxlinks=2048
 add=
@@ -96,8 +99,19 @@ while getopts pPn:s:alSu flag; do
             ;;
         l)
 #           ls --color=auto -l $OUT | awk ' { print $NF } '
+            numprep=`ls -1 $OUT | wc -l`
             ls -l $OUT | grep -v total | awk ' { print $NF } '
-            echo "Background images in $OUT"
+            echo "$numprep background images in $OUT"
+            echo ""
+            echo "Prepared folders in $PRE_DIR :"
+            for folder in $PRE_DIR/*
+            do
+                [ "$folder" == "$PRE_DIR/*" ] && continue
+                [ -d "$folder" ] && {
+                    prepmod=`basename "$folder"`
+                    echo "$prepmod"
+                }
+            done
             exit 0
             ;;
         n)
