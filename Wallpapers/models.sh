@@ -3,7 +3,11 @@
 WTOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
 JDIR="${WTOP}/JAV_Idol"
 MDIR="${WTOP}/Models"
+DDIR="${WTOP}/Models/Photodromm"
+BDIR="${WTOP}/Models/Playboy"
+HDIR="${WTOP}/Models/Penthouse"
 PDIR="${WTOP}/Photographers"
+ADIR="${WTOP}/Artists"
 SDIR="${WTOP}/Suicide_Girls"
 TYPE="models"
 ALL=
@@ -11,14 +15,19 @@ COUNT=
 NUM=
 
 ListModels() {
+    header=1
     UTYPE=`echo $2 | tr '[:lower:]' '[:upper:]'`
-    printf "\n${UTYPE} in $1:"
     for model in "$1/${model_prefix}"*
     do
         if [ "${model}" == "$1/${model_prefix}*" ]
         then
-            printf "\n\tNo $2 matching \"${model_prefix}\""
+#           printf "\n\tNo $2 matching \"${model_prefix}\""
+            continue
         else
+            [ ${header} ] && {
+                printf "\n${UTYPE} in $1:"
+                header=
+            }
             name=`basename ${model}`
             printf "\n\t${name}"
             [ "$COUNT" ] && {
@@ -27,7 +36,7 @@ ListModels() {
             }
         fi
     done
-    printf "\n"
+    [ ${header} ] || printf "\n"
 }
 
 [ "$1" == "-a" ] && {
@@ -47,6 +56,11 @@ ListModels() {
     TYPE="jav_idols"
     shift
 }
+[ "$1" == "-A" ] && {
+    MDIR="${ADIR}"
+    TYPE="artists"
+    shift
+}
 [ "$1" == "-p" ] && {
     MDIR="${PDIR}"
     TYPE="photographers"
@@ -60,7 +74,7 @@ ListModels() {
 
 [ "$NUM" ] || {
   [ $# -lt 1 ] && {
-    echo "Usage: models [-ajps] [-n model_id] model1 [model2] ..."
+    echo "Usage: models [-Aajps] [-n model_id] model1 [model2] ..."
     echo "Exiting."
     exit 1
   }
@@ -68,7 +82,7 @@ ListModels() {
 
 [ "$NUM" ] && {
     found=
-    for model_dir in $MDIR $JDIR $SDIR $PDIR
+    for model_dir in $MDIR $HDIR $BDIR $DDIR $JDIR $SDIR $PDIR $ADIR
     do
         for model in $model_dir/*
         do
@@ -104,11 +118,20 @@ do
   if [ "$ALL" ]
   then
       ListModels $MDIR models
+      ListModels $DDIR models
+      ListModels $BDIR models
+      ListModels $HDIR models
       ListModels $JDIR jav_idols
       ListModels $SDIR suicide_girls
       ListModels $PDIR photographers
+      ListModels $ADIR artists
   else
       ListModels $MDIR $TYPE
+      [ "$TYPE" == "models" ] && {
+        ListModels $DDIR $TYPE
+        ListModels $BDIR $TYPE
+        ListModels $HDIR $TYPE
+      }
   fi
   printf "\nModel prefix alternate names in get-models:\n"
   grep ${model_prefix} ${WTOP}/get-models | grep get_search
