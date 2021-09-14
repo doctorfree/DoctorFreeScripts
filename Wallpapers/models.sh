@@ -10,7 +10,7 @@ PDIR="${WTOP}/Photographers"
 ADIR="${WTOP}/Artists"
 SDIR="${WTOP}/Suicide_Girls"
 TYPE="models"
-ALL=
+ALL=1
 COUNT=
 NUM=
 
@@ -39,10 +39,6 @@ ListModels() {
     [ ${header} ] || printf "\n"
 }
 
-[ "$1" == "-a" ] && {
-    ALL=1
-    shift
-}
 [ "$1" == "-c" ] && {
     COUNT=1
     shift
@@ -53,21 +49,25 @@ ListModels() {
 }
 [ "$1" == "-j" ] && {
     MDIR="${JDIR}"
+    ALL=
     TYPE="jav_idols"
     shift
 }
 [ "$1" == "-A" ] && {
     MDIR="${ADIR}"
+    ALL=
     TYPE="artists"
     shift
 }
 [ "$1" == "-p" ] && {
     MDIR="${PDIR}"
+    ALL=
     TYPE="photographers"
     shift
 }
 [ "$1" == "-s" ] && {
     MDIR="${SDIR}"
+    ALL=
     TYPE="suicide_girls"
     shift
 }

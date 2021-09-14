@@ -643,6 +643,10 @@ get_model() {
                   get_search "${playboymodel}" "Eugenia_Dior"
                   get_search "${playboymodel}" "Yevgeniya_Diordiychuk"
                   ;;
+                Juniper_Hope)
+                  get_search "${playboymodel}" "Hopelesssofrantic_Suicide"
+                  get_search "${playboymodel}" "Hopelesssofrantic"
+                  ;;
                 Kateryna_Marchenko)
                   get_search "${playboymodel}" "Kate_Chromia"
                   ;;
@@ -1072,6 +1076,10 @@ get_suicide() {
         Sunnie_Jones)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Sunniejones"
+            ;;
+        Valeria_Yakisel)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Valerig_Suicide"
             ;;
         Valeriya)
             get_search "${SUGD}/${model}" "${model}"
