@@ -44,17 +44,19 @@ show=
 subdir=
 foundirs=
 updpre=
+xnview=
 name=`basename $0`
 plat=`uname -s`
 
 usage() {
-  printf "\nUsage: $name [-u] [-a] [-l] [-pP] [-S] [-n numpics] [-s subdir] directory"
+  printf "\nUsage: $name [-u] [-a] [-l] [-x] [-pP] [-S] [-n numpics] [-s subdir] directory"
   printf "\nWhere\t-a indicates add to existing background/slide pics"
   printf "\n\t-l lists currently installed background/slide pics"
   printf "\n\t-p indicates search for background pics in prepared folders"
   printf "\n\t-P indicates search for background pics in prepared folders and update"
   printf "\n\t-n <numpics> sets maximum number of pics to be copied (default ${maxlinks})"
   printf "\n\t-s <subdir> searches in $TOP/<subdir> for specified folder"
+  printf "\n\t-x indicates use XnViewMP for slideshow"
   printf "\n\t-S indicates run a slideshow of pics\n\n"
   exit 1
 }
@@ -92,7 +94,7 @@ fi
 MOD_TOP="$TOP/Wallhaven/Models"
 PHO_TOP="$TOP/Wallhaven/Photographers"
   
-while getopts pPn:s:alSu flag; do
+while getopts pPn:s:alxSu flag; do
     case $flag in
         a)
             add=1
@@ -145,6 +147,9 @@ while getopts pPn:s:alSu flag; do
               *) subdir="$OPTARG"
                 ;;
             esac
+            ;;
+        x)
+            xnview=1
             ;;
         S)
             show=1
@@ -315,17 +320,40 @@ cd $OUT
 [ "$show" ] && {
     if [ "$plat" == "Darwin" ]
     then
-        open -a Preview "$OUT"/*
+        if [ "$xnview" ]
+        then
+            open -a XnViewMP "$OUT"
+        else
+            open -a Preview "$OUT"/*
+        fi
         # ----------------------
         # Applescript below here
         # ----------------------
         [ "$osa" ] && {
+          if [ "$xnview" ]
+          then
+            osascript <<EOF
+            delay 5
+            tell application "System Events"
+                keystroke "a" using {command down}
+                delay 3
+                key code 36
+                delay 3
+                keystroke "s" using {option down, command down}
+                delay 3
+                key code 36
+                delay 3
+                keystroke "f" using {option down, command down}
+            end tell
+EOF
+          else
             osascript <<EOF
             delay 5
             tell application "System Events"
                 keystroke "F" using {shift down, command down}
             end tell
 EOF
+          fi
         }
     else
 #           variety-slideshow $HOME/.config/variety/Favorites 2> /dev/null
