@@ -26,7 +26,7 @@ Contents:
 
 [**Scripts/Utils**](Utils/README.md) - A few utility scripts
 
-[**Scripts/Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper
+[**Scripts/Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper and slideshows
 
 [**Scripts/binance**](binance/README.md) - Scripts to access the Binance API providing command line support for placing buy/sell trade orders and retrieving ticker or average prices for trading pairs
 

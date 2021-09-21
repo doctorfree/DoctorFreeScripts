@@ -114,3 +114,5 @@ Contents:
      script. See the Wallhaven convenience scripts in the Wallpapers dir
      for easy bulk downloading.
 
+[**xnvslides**](Wallpapers/xnvslides.sh) - Slideshows with XnView (requires AppleScript and osascript - Mac only). Multi-platform slideshows can be viewed using the [**backgrounds**](Wallpapers/backgrounds.sh) script invoked as 'slides' or 'slideshow'. 
+
