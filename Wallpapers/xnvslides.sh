@@ -53,7 +53,9 @@ usage() {
   printf "\n\t\tKeywords:\n\t\t\telite\n\t\t\tfractals"
   printf "\n\t\t\tjp\n\t\t\tkind\n\t\t\twhvn\n\t\t\txart"
   printf "\n\t-u displays this usage message and exits"
-  printf "\n\nNote: The specified slideshow folder must contain images, not subfolders of images\n\n"
+  printf "\n\nNote 1: The specified slideshow folder must contain images, not subfolders of images"
+  printf "\nNote 2: XnView keyboard shortcuts must be configured with Slideshow shortcut Ctrl-Alt-S"
+  printf "\n\tXnView -> Preferences -> Interface -> Shortcuts\n\n"
   exit 1
 }
 
