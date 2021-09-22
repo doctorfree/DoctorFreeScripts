@@ -43,6 +43,7 @@ has_subdir=false
 updpre=
 list=
 showprep=
+subsubdirs=
 
 usage() {
   printf "\nUsage: xnvslides [-u] [-lpP] [-s subdir] directory"
@@ -51,8 +52,10 @@ usage() {
   printf "\n\t-p indicates search for slideshow folder in desktop background folders"
   printf "\n\t-P indicates search for slideshow folder in desktop background folders and update"
   printf "\n\t-s <subdir> searches in $TOP/<subdir>"
-  printf "\n\t\tKeywords:\n\t\t\telite\n\t\t\tfractals\n\t\t\tfemjoy"
-  printf "\n\t\t\tjp\n\t\t\tkind\n\t\t\tmodels\n\t\t\twhvn\n\t\t\txart"
+  printf "\n\t\tKeywords:"
+  printf "\n\t\t\tdomai\n\t\t\telite\n\t\t\tfractals\n\t\t\tfap\n\t\t\tfemjoy\n\t\t\tjp"
+  printf "\n\t\t\tkind\n\t\t\tmetart\n\t\t\tmodels\n\t\t\tplayboy\n\t\t\ttuigirl"
+  printf "\n\t\t\twhvn\n\t\t\txart"
   printf "\n\t-u displays this usage message and exits"
   printf "\n\nNote 1: The specified slideshow folder must contain images, not subfolders of images"
   printf "\nNote 2: XnView keyboard shortcuts must be configured with Slideshow shortcut Ctrl-Alt-S and Show files in subfolder Ctrl-Alt-O"
@@ -80,7 +83,11 @@ while getopts lLpPs:u flag; do
             ;;
         s)
             case "$OPTARG" in
+              domai) subdir="Domai"
+                ;;
               elite) subdir="Elite_Babes"
+                ;;
+              fap) subdir="TheFappening2014"
                 ;;
               femjoy) subdir="Femjoy"
                 ;;
@@ -90,7 +97,14 @@ while getopts lLpPs:u flag; do
                 ;;
               kind) subdir="KindGirls"
                 ;;
+              metart) subdir="Met-Art"
+                ;;
               models) subdir="Wallhaven/Models"
+                      subsubdirs="Photodromm Penthouse Playboy"
+                ;;
+              playboy) subdir="Playboy"
+                ;;
+              tuigirl) subdir="Tuigirls"
                 ;;
               whvn) subdir="Wallhaven"
                 ;;
@@ -128,12 +142,26 @@ then
       then
         mdir=$newmdir
       else
-        if [ "$list" ]
+        foundit=
+        [ "$subsubdirs" ] && {
+          for subsub in $subsubdirs
+          do
+            [ -d "$TOP/$subdir/$subsub/$mdir" ] && {
+              foundit="$subsub/$mdir"
+            }
+          done
+        }
+        if [ "$foundit" ]
         then
-          echo "Cannot locate $TOP/$subdir/$mdir"
+          mdir="$foundit"
         else
-          echo "Cannot locate $TOP/$subdir/$mdir - exiting."
-          exit 1
+          if [ "$list" ]
+          then
+            echo "Cannot locate $TOP/$subdir/$mdir"
+          else
+            echo "Cannot locate $TOP/$subdir/$mdir - exiting."
+            exit 1
+          fi
         fi
       fi
     }
@@ -201,7 +229,7 @@ done
     exit 0
 }
 
-open -a XnViewMP ${PICD}
+open -a XnViewMP "${PICD}"
 osascript <<EOF
     delay 5
     tell application "System Events"
