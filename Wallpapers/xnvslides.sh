@@ -28,7 +28,7 @@
 # Set these to your default slideshow image folder and default model name
 TOP="/Volumes/Seagate_8TB/Pictures/Work"
 SUB="Wallhaven"
-DEF_MODEL="Carisha"
+DEF_MODEL="Models/Carisha"
 PICD="${TOP}/${SUB}/${DEF_MODEL}"
 
 # Set Model and Photographer top dirs before processing arguments
@@ -47,11 +47,11 @@ usage() {
   printf "\nUsage: xnvslides [-u] [-lpP] [-s subdir] directory"
   printf "\n\t-l indicates list files in specified slideshow folder"
   printf "\n\t-L indicates list files in specified slideshow folder and show prepared folders"
-  printf "\n\t-p indicates search for slideshow folder in prepared folders"
-  printf "\n\t-P indicates search for slideshow folder in prepared folders and update"
+  printf "\n\t-p indicates search for slideshow folder in desktop background folders"
+  printf "\n\t-P indicates search for slideshow folder in desktop background folders and update"
   printf "\n\t-s <subdir> searches in $TOP/<subdir>"
   printf "\n\t\tKeywords:\n\t\t\telite\n\t\t\tfractals"
-  printf "\n\t\t\tjp\n\t\t\tkind\n\t\t\twhvn\n\t\t\txart"
+  printf "\n\t\t\tjp\n\t\t\tkind\n\t\t\tmodels\n\t\t\twhvn\n\t\t\txart"
   printf "\n\t-u displays this usage message and exits"
   printf "\n\nNote 1: The specified slideshow folder must contain images, not subfolders of images"
   printf "\nNote 2: XnView keyboard shortcuts must be configured with Slideshow shortcut Ctrl-Alt-S"
@@ -87,7 +87,9 @@ while getopts lLpPs:u flag; do
                 ;;
               kind) subdir="KindGirls"
                 ;;
-              whvn) subdir="Wallhaven/Models"
+              models) subdir="Wallhaven/Models"
+                ;;
+              whvn) subdir="Wallhaven"
                 ;;
               xart) subdir="X-Art"
                 ;;
@@ -118,8 +120,13 @@ fi
 if [ "$subdir" ]
 then
     [ -d "$TOP/$subdir/$mdir" ] || {
+      if [ "$list" ]
+      then
+        echo "Cannot locate $TOP/$subdir/$mdir"
+      else
         echo "Cannot locate $TOP/$subdir/$mdir - exiting."
         exit 1
+      fi
     }
     TOP="$TOP/$subdir"
     foundirs="$TOP"
@@ -137,17 +144,22 @@ else
     }
 fi
 
+PICD="$TOP/$mdir"
 if [ -d "$TOP/$mdir" ]
 then
-    PICD="$TOP/$mdir"
     echo "Using slideshow folder $TOP/$mdir"
 else
-    echo "Cannot locate $TOP/$mdir - using default slideshow folder ${PICD}."
+    [ "$list" ] || exit 1
 fi
 
 [ "$list" ] && {
-    numprep=`ls -1 $PICD | wc -l`
-    ls -lL $PICD | grep -v 'total\|downloaded.txt\|SUMS.txt\|Description.txt\|todo' | awk ' { print $NF } '
+    if [ -d "$PICD" ]
+    then
+        numprep=`ls -1 $PICD | wc -l`
+        ls -lL $PICD | grep -v 'total\|downloaded.txt\|SUMS.txt\|Description.txt\|todo' | awk ' { print $NF } '
+    else
+        numprep=0
+    fi
     echo "$numprep files or directories in $PICD"
     echo ""
     for i in $PICD/*
@@ -164,15 +176,18 @@ fi
     [ "$showprep" ] || exit 0
 }
 [ "$showprep" ] && {
-    echo "Prepared folders in $PRE_TOP :"
-    for folder in $PRE_TOP/*
+    echo "Prepared folders in $TOP :"
+    echo ""
+    prepfolders=
+    for folder in $TOP/*
     do
-        [ "$folder" == "$PRE_TOP/*" ] && continue
+        [ "$folder" == "$TOP/*" ] && continue
         [ -d "$folder" ] && {
             prepmod=`basename "$folder"`
-            echo "$prepmod"
+            prepfolders="$prepfolders  $prepmod"
         }
     done
+    echo "$prepfolders" | sed -e "s/  //"
     exit 0
 }
 
