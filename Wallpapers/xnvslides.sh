@@ -28,7 +28,7 @@
 # Set these to your default slideshow image folder and default model name
 TOP="/Volumes/Seagate_8TB/Pictures/Work"
 SUB="Wallhaven"
-DEF_MODEL="Models/Carisha"
+DEF_MODEL="Models/Alisa_I"
 PICD="${TOP}/${SUB}/${DEF_MODEL}"
 
 # Set Model and Photographer top dirs before processing arguments
@@ -39,6 +39,7 @@ PRE_TOP=$HOME/Pictures/Work/Backgrounds
 osa=
 subdir=
 foundirs=
+has_subdir=false
 updpre=
 list=
 showprep=
@@ -50,11 +51,11 @@ usage() {
   printf "\n\t-p indicates search for slideshow folder in desktop background folders"
   printf "\n\t-P indicates search for slideshow folder in desktop background folders and update"
   printf "\n\t-s <subdir> searches in $TOP/<subdir>"
-  printf "\n\t\tKeywords:\n\t\t\telite\n\t\t\tfractals"
+  printf "\n\t\tKeywords:\n\t\t\telite\n\t\t\tfractals\n\t\t\tfemjoy"
   printf "\n\t\t\tjp\n\t\t\tkind\n\t\t\tmodels\n\t\t\twhvn\n\t\t\txart"
   printf "\n\t-u displays this usage message and exits"
   printf "\n\nNote 1: The specified slideshow folder must contain images, not subfolders of images"
-  printf "\nNote 2: XnView keyboard shortcuts must be configured with Slideshow shortcut Ctrl-Alt-S"
+  printf "\nNote 2: XnView keyboard shortcuts must be configured with Slideshow shortcut Ctrl-Alt-S and Show files in subfolder Ctrl-Alt-O"
   printf "\n\tXnView -> Preferences -> Interface -> Shortcuts\n\n"
   exit 1
 }
@@ -80,6 +81,8 @@ while getopts lLpPs:u flag; do
         s)
             case "$OPTARG" in
               elite) subdir="Elite_Babes"
+                ;;
+              femjoy) subdir="Femjoy"
                 ;;
               fractals) subdir="Fractals"
                 ;;
@@ -120,12 +123,18 @@ fi
 if [ "$subdir" ]
 then
     [ -d "$TOP/$subdir/$mdir" ] || {
-      if [ "$list" ]
+      newmdir=`basename $mdir`
+      if [ -d "$TOP/$subdir/$newmdir" ]
       then
-        echo "Cannot locate $TOP/$subdir/$mdir"
+        mdir=$newmdir
       else
-        echo "Cannot locate $TOP/$subdir/$mdir - exiting."
-        exit 1
+        if [ "$list" ]
+        then
+          echo "Cannot locate $TOP/$subdir/$mdir"
+        else
+          echo "Cannot locate $TOP/$subdir/$mdir - exiting."
+          exit 1
+        fi
       fi
     }
     TOP="$TOP/$subdir"
@@ -152,6 +161,18 @@ else
     [ "$list" ] || exit 1
 fi
 
+for i in $PICD/*
+do
+    [ -d "$i" ] && {
+#           echo "WARNING: Specified slideshow folder contains one or more subdirectories"
+#           echo "Subdirectories of images must be specified on the command line"
+#           j=`basename $i`
+#           echo "e.g. $mdir/$j"
+        has_subdir=true
+        break
+    }
+done
+
 [ "$list" ] && {
     if [ -d "$PICD" ]
     then
@@ -161,17 +182,6 @@ fi
         numprep=0
     fi
     echo "$numprep files or directories in $PICD"
-    echo ""
-    for i in $PICD/*
-    do
-        [ -d "$i" ] && {
-            echo "WARNING: Specified slideshow folder contains one or more subdirectories"
-            echo "Subdirectories of images must be specified on the command line"
-            j=`basename $i`
-            echo "e.g. $mdir/$j"
-            break
-        }
-    done
     echo ""
     [ "$showprep" ] || exit 0
 }
@@ -195,14 +205,18 @@ open -a XnViewMP ${PICD}
 osascript <<EOF
     delay 5
     tell application "System Events"
+        if $has_subdir then
+            keystroke "o" using {option down, command down}
+        end if
+        delay 3
         keystroke "a" using {command down}
-        delay 3
+        delay 2
         key code 36
-        delay 3
+        delay 2
         keystroke "s" using {option down, command down}
-        delay 3
+        delay 2
         key code 36
-        delay 3
+        delay 2
         keystroke "f" using {option down, command down}
     end tell
 EOF
