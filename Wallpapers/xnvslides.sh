@@ -27,6 +27,7 @@
 #
 # Set these to your default slideshow image folder and default model name
 TOP="/Volumes/Seagate_8TB/Pictures/Work"
+ALT_TOP="/Volumes/My_Book_Studio/Pictures/Work"
 SUB="Wallhaven"
 DEF_MODEL="Models/Alisa_I"
 PICD="${TOP}/${SUB}/${DEF_MODEL}"
@@ -53,13 +54,14 @@ usage() {
   printf "\n\t-P indicates search for slideshow folder in desktop background folders and update"
   printf "\n\t-s <subdir> searches in $TOP/<subdir>"
   printf "\n\t\tKeywords:"
-  printf "\n\t\t\tdomai\n\t\t\telite\n\t\t\tfractals\n\t\t\tfap\n\t\t\tfemjoy\n\t\t\tjp"
-  printf "\n\t\t\tkind\n\t\t\tmetart\n\t\t\tmodels\n\t\t\tplayboy\n\t\t\ttuigirl"
-  printf "\n\t\t\twhvn\n\t\t\txart"
+  printf "\n\t\t\tcameron\tdomai\telite\tfap\tfractals"
+  printf "\n\t\t\tfemjoy\tjp\tkind\tmetart\tmike"
+  printf "\n\t\t\tmodels\tplayboy\ttuigirl\twhvn\txart"
   printf "\n\t-u displays this usage message and exits"
-  printf "\n\nNote 1: The specified slideshow folder must contain images, not subfolders of images"
-  printf "\nNote 2: XnView keyboard shortcuts must be configured with Slideshow shortcut Ctrl-Alt-S and Show files in subfolder Ctrl-Alt-O"
-  printf "\n\tXnView -> Preferences -> Interface -> Shortcuts\n\n"
+  printf "\n\nNote: XnView keyboard shortcuts must be configured with"
+  printf "\n\tSlideshow shortcut Ctrl-Alt-S"
+  printf "\n\tShow files in subfolder shortcut Ctrl-Alt-O"
+  printf "\n\t\tXnView -> Preferences -> Interface -> Shortcuts\n\n"
   exit 1
 }
 
@@ -83,6 +85,9 @@ while getopts lLpPs:u flag; do
             ;;
         s)
             case "$OPTARG" in
+              cameron) subdir="Cameron_Davis"
+                       DEF_MODEL=
+                ;;
               domai) subdir="Domai"
                 ;;
               elite) subdir="Elite_Babes"
@@ -98,6 +103,10 @@ while getopts lLpPs:u flag; do
               kind) subdir="KindGirls"
                 ;;
               metart) subdir="Met-Art"
+                ;;
+              mike) subdir="Mike_Dowson"
+                    TOP="${ALT_TOP}"
+                    DEF_MODEL=
                 ;;
               models) subdir="Wallhaven/Models"
                       subsubdirs="Photodromm Penthouse Playboy"
@@ -137,7 +146,12 @@ fi
 if [ "$subdir" ]
 then
     [ -d "$TOP/$subdir/$mdir" ] || {
-      newmdir=`basename $mdir`
+      if [ "$mdir" ]
+      then
+        newmdir=`basename $mdir`
+      else
+        newmdir=
+      fi
       if [ -d "$TOP/$subdir/$newmdir" ]
       then
         mdir=$newmdir
