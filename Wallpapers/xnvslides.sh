@@ -184,7 +184,7 @@ then
 else
     [ -d "$TOP/$mdir" ] || {
         [ "$updpre" ] && mkdir "$TOP/$mdir"
-        for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
+        for subdir in Wallhaven Wallhaven/Models Wallhaven/Models/Playboy Wallhaven/Models/Penthouse Wallhaven/Models/Photodromm Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
         do
           [ -d "$TOP/$subdir/$mdir" ] && {
             foundirs="$TOP/$subdir"
@@ -206,10 +206,6 @@ fi
 for i in $PICD/*
 do
     [ -d "$i" ] && {
-#           echo "WARNING: Specified slideshow folder contains one or more subdirectories"
-#           echo "Subdirectories of images must be specified on the command line"
-#           j=`basename $i`
-#           echo "e.g. $mdir/$j"
         has_subdir=true
         break
     }
