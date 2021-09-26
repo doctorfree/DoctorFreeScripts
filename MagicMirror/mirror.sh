@@ -182,7 +182,15 @@ list_mods() {
             if [ "$1" == "configs" ]
             then
                 printf "\n${BOLD}Listing MagicMirror configuration files:${NORMAL}\n\n"
-                ls -1 *.js
+                ls config-*.js
+                [ -d Models ] && {
+                  printf "\n${BOLD}Listing MagicMirror Models configuration files:${NORMAL}\n\n"
+                  ls Models/config-*.js
+                }
+                [ -d JAV ] && {
+                  printf "\n${BOLD}Listing MagicMirror JAV configuration files:${NORMAL}\n\n"
+                  ls JAV/config-*.js
+                }
             else
                 printf "\nmirror list $1 is not an accepted 2nd argument."
                 printf "\nValid 2nd arguments to the list command are 'active', 'installed', and 'configs'"
@@ -600,7 +608,9 @@ get_info_type() {
                 break
                 ;;
             "list configurations",*|*,"list configurations")
+                printf "\n======================================================\n"
                 mirror list configs
+                printf "\n======================================================\n"
                 break
                 ;;
             "select configuration",*|*,"select configuration")
