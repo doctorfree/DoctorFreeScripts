@@ -430,8 +430,10 @@ setconf() {
     fi
     if [ "$subdir" ]
     then
+        echo "Setting MagicMirror configuration to ${subdir}/config-${conf}.js"
         ln -s $subdir/config-${conf}.js config.js
     else
+        echo "Setting MagicMirror configuration to config-${conf}.js"
         ln -s config-${conf}.js config.js
     fi
     npm run --silent config:check > /dev/null
@@ -459,6 +461,7 @@ set_config() {
         subdir=`dirname $mode`
         mode=`basename $mode`
     }
+    mode=`echo $mode | sed -e "s/\.js$//" -e "s/^config-//"`
     [ "$mode" == "waterfall" ] && mode="waterfalls"
     [ "$mode" == "fractal" ] && mode="fractals"
 
