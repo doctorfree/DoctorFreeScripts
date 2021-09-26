@@ -413,16 +413,27 @@ setb_usage() {
 
 setconf() {
     conf=$1
+    subdir=$2
     if [ -f config.js ]
     then
         mv config.js config-$$.js
     else
         rm -f config.js
     fi
-    ln -s config-${conf}.js config.js
+    if [ "$subdir" ]
+    then
+        ln -s $subdir/config-${conf}.js config.js
+    else
+        ln -s config-${conf}.js config.js
+    fi
     npm run --silent config:check > /dev/null
     [ $? -eq 0 ] || {
-        printf "\nMagicMirror configuration config-${conf}.js needs work."
+        if [ "$subdir" ]
+        then
+            printf "\nMagicMirror configuration $subdir/config-${conf}.js needs work."
+        else
+            printf "\nMagicMirror configuration config-${conf}.js needs work."
+        fi
         printf "\nTry again after you have addressed these issues:\n"
         npm run --silent config:check
         rm -f config.js
@@ -435,16 +446,31 @@ setconf() {
 
 set_config() {
     mode="$1"
-    [ "$1" == "waterfall" ] && mode="waterfalls"
-    [ "$1" == "fractal" ] && mode="fractals"
+    subdir="$2"
+    echo $mode | grep / > /dev/null && {
+        subdir=`dirname $mode`
+        mode=`basename $mode`
+    }
+    [ "$mode" == "waterfall" ] && mode="waterfalls"
+    [ "$mode" == "fractal" ] && mode="fractals"
 
     cd "${CONFDIR}"
     if [ -f config-${mode}.js ]
     then
         setconf ${mode}
     else
-        printf "\nNo configuration file config-${mode}.js found.\n\n"
-        usage
+        if [ -f ${subdir}/config-${mode}.js ]
+        then
+            setconf ${mode} ${subdir}
+        else
+            if [ "${subdir}" ]
+            then
+                printf "\nNo configuration file ${subdir}/config-${mode}.js found.\n\n"
+            else
+                printf "\nNo configuration file config-${mode}.js found.\n\n"
+            fi
+            usage
+        fi
     fi
 }
 
@@ -738,8 +764,8 @@ shift $(( OPTIND - 1 ))
     done
 
     cd "${CONFDIR}"
-    PS3="${BOLD}Enter your MagicMirror background choice (numeric or text): ${NORMAL}"
-    options=(ALL ${BACKS} quit)
+    PS3="${BOLD}Enter your MagicMirror model choice (numeric or text): ${NORMAL}"
+    options=(ALL ${BACKS} Jenya quit)
     select opt in "${options[@]}"
     do
         case "$opt,$REPLY" in
@@ -748,10 +774,10 @@ shift $(( OPTIND - 1 ))
                 exit 0
                 ;;
             "ALL",*|*,"ALL")
-                if [ -f config-models.js ]
+                if [ -f config-Models.js ]
                 then
-                    printf "\nInstalling config-models.js MagicMirror configuration file\n"
-                    setconf models
+                    printf "\nInstalling config-Models.js MagicMirror configuration file\n"
+                    setconf Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -762,7 +788,7 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-ali_rose.js ]
                 then
                     printf "\nInstalling config-ali_rose.js MagicMirror configuration file\n"
-                    setconf ali_rose
+                    setconf ali_rose Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -773,7 +799,7 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-alisa_i.js ]
                 then
                     printf "\nInstalling config-alisa_i.js MagicMirror configuration file\n"
-                    setconf alisa_i
+                    setconf alisa_i Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -784,7 +810,7 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-carisha.js ]
                 then
                     printf "\nInstalling config-carisha.js MagicMirror configuration file\n"
-                    setconf carisha
+                    setconf carisha Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -795,7 +821,7 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-corinna.js ]
                 then
                     printf "\nInstalling config-corinna.js MagicMirror configuration file\n"
-                    setconf corinna
+                    setconf corinna Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -806,7 +832,7 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-david.js ]
                 then
                     printf "\nInstalling config-david.js MagicMirror configuration file\n"
-                    setconf david
+                    setconf david Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -817,7 +843,18 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-dmitry.js ]
                 then
                     printf "\nInstalling config-dmitry.js MagicMirror configuration file\n"
-                    setconf dmitry
+                    setconf dmitry Models
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Heidi_Romanova",*|*,"Heidi_Romanova")
+                if [ -f config-heidi.js ]
+                then
+                    printf "\nInstalling config-heidi.js MagicMirror configuration file\n"
+                    setconf heidi Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -828,7 +865,7 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-helly.js ]
                 then
                     printf "\nInstalling config-helly.js MagicMirror configuration file\n"
-                    setconf helly
+                    setconf helly Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -839,18 +876,29 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-igor.js ]
                 then
                     printf "\nInstalling config-igor.js MagicMirror configuration file\n"
-                    setconf igor
+                    setconf igor Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
                     printf "\nEnter either a number or text of one of the menu entries\n"
                 fi
                 ;;
-            "Irina_Telicheva",*|*,"Irina_Telicheva")
-                if [ -f config-irina.js ]
+            "Jenya",*|*,"Jenya")
+                if [ -f config-jenya.js ]
                 then
-                    printf "\nInstalling config-irina.js MagicMirror configuration file\n"
-                    setconf irina
+                    printf "\nInstalling config-jenya.js MagicMirror configuration file\n"
+                    setconf jenya Models
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Li_Moon",*|*,"Li_Moon")
+                if [ -f config-li_moon.js ]
+                then
+                    printf "\nInstalling config-li_moon.js MagicMirror configuration file\n"
+                    setconf li_moon Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -861,7 +909,18 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-martina.js ]
                 then
                     printf "\nInstalling config-martina.js MagicMirror configuration file\n"
-                    setconf martina
+                    setconf martina Models
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Nata_Lee",*|*,"Nata_Lee")
+                if [ -f config-nata.js ]
+                then
+                    printf "\nInstalling config-nata.js MagicMirror configuration file\n"
+                    setconf nata Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -872,7 +931,7 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-natalia.js ]
                 then
                     printf "\nInstalling config-natalia.js MagicMirror configuration file\n"
-                    setconf natalia
+                    setconf natalia Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -883,7 +942,7 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-stefan.js ]
                 then
                     printf "\nInstalling config-stefan.js MagicMirror configuration file\n"
-                    setconf stefan
+                    setconf stefan Models
                     break
                 else
                     printf "\nInvalid entry. Please try again"
@@ -894,13 +953,323 @@ shift $(( OPTIND - 1 ))
                 if [ -f config-${opt}.js ]
                 then
                     printf "\nInstalling config-${opt}.js MagicMirror configuration file\n"
-                    setconf ${opt}
+                    setconf ${opt} Models
                     break
                 else
                     if [ -f config-${REPLY}.js ]
                     then
                         printf "\nInstalling config-${REPLY}.js MagicMirror configuration file\n"
-                        setconf ${REPLY}
+                        setconf ${REPLY} Models
+                        break
+                    else
+                        printf "\nInvalid entry. Please try again"
+                        printf "\nEnter either a number or text of one of the menu entries\n"
+                    fi
+                fi
+                ;;
+        esac
+    done
+    exit 0
+  else
+    echo "${SLISDIR}/backgrounds does not exist or is not a directory. Skipping."
+  fi
+}
+
+[ "$1" == "jav_idols" ] && {
+  if [ -d "${SLISDIR}/jav" ]
+  then
+    cd "${SLISDIR}/jav"
+    for i in *
+    do
+        [ "$i" == "*" ] && continue
+        JAVS="${JAVS} $i"
+    done
+
+    cd "${CONFDIR}"
+    PS3="${BOLD}Enter your MagicMirror JAV Idol choice (numeric or text): ${NORMAL}"
+    options=(ALL ${JAVS} quit)
+    select opt in "${options[@]}"
+    do
+        case "$opt,$REPLY" in
+            "quit",*|*,"quit")
+                printf "\nExiting\n"
+                exit 0
+                ;;
+            "ALL",*|*,"ALL")
+                if [ -f config-JAV.js ]
+                then
+                    printf "\nInstalling config-JAV.js MagicMirror configuration file\n"
+                    setconf JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Aika_Yumeno",*|*,"Aika_Yumeno")
+                if [ -f JAV/config-aika.js ]
+                then
+                    printf "\nInstalling JAV/config-aika.js MagicMirror configuration file\n"
+                    setconf aika JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Airi_Suzumura",*|*,"Airi_Suzumura")
+                if [ -f JAV/config-airi.js ]
+                then
+                    printf "\nInstalling JAV/config-airi.js MagicMirror configuration file\n"
+                    setconf airi JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Aoi",*|*,"Aoi")
+                if [ -f JAV/config-aoi.js ]
+                then
+                    printf "\nInstalling JAV/config-aoi.js MagicMirror configuration file\n"
+                    setconf aoi JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Asuna_Kawai",*|*,"Asuna_Kawai")
+                if [ -f JAV/config-asuna.js ]
+                then
+                    printf "\nInstalling JAV/config-asuna.js MagicMirror configuration file\n"
+                    setconf asuna JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Julia_Kyoka",*|*,"Julia_Kyoka")
+                if [ -f JAV/config-julia.js ]
+                then
+                    printf "\nInstalling JAV/config-julia.js MagicMirror configuration file\n"
+                    setconf julia JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Kana_Momonogi",*|*,"Kana_Momonogi")
+                if [ -f JAV/config-kana.js ]
+                then
+                    printf "\nInstalling JAV/config-kana.js MagicMirror configuration file\n"
+                    setconf kana JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Mana_Sakura",*|*,"Mana_Sakura")
+                if [ -f JAV/config-mana.js ]
+                then
+                    printf "\nInstalling JAV/config-mana.js MagicMirror configuration file\n"
+                    setconf mana JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Masami_Ichikawa",*|*,"Masami_Ichikawa")
+                if [ -f JAV/config-masami.js ]
+                then
+                    printf "\nInstalling JAV/config-masami.js MagicMirror configuration file\n"
+                    setconf masami JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Matsuri_Kiritani",*|*,"Matsuri_Kiritani")
+                if [ -f JAV/config-matsuri.js ]
+                then
+                    printf "\nInstalling JAV/config-matsuri.js MagicMirror configuration file\n"
+                    setconf matsuri JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Mayuki_Ito",*|*,"Mayuki_Ito")
+                if [ -f JAV/config-mayuki.js ]
+                then
+                    printf "\nInstalling JAV/config-mayuki.js MagicMirror configuration file\n"
+                    setconf mayuki JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Miharu_Usa",*|*,"Miharu_Usa")
+                if [ -f JAV/config-miharu.js ]
+                then
+                    printf "\nInstalling JAV/config-miharu.js MagicMirror configuration file\n"
+                    setconf miharu JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Minami_Hatsukawa",*|*,"Minami_Hatsukawa")
+                if [ -f JAV/config-minami.js ]
+                then
+                    printf "\nInstalling JAV/config-minami.js MagicMirror configuration file\n"
+                    setconf minami JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Minami_Kojima",*|*,"Minami_Kojima")
+                if [ -f JAV/config-minami2.js ]
+                then
+                    printf "\nInstalling JAV/config-minami2.js MagicMirror configuration file\n"
+                    setconf minami2 JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Moe_Amatsuka",*|*,"Moe_Amatsuka")
+                if [ -f JAV/config-moe.js ]
+                then
+                    printf "\nInstalling JAV/config-moe.js MagicMirror configuration file\n"
+                    setconf moe JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Momo_Sakura",*|*,"Momo_Sakura")
+                if [ -f JAV/config-momo.js ]
+                then
+                    printf "\nInstalling JAV/config-momo.js MagicMirror configuration file\n"
+                    setconf momo JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Nodoka_Sakuraha",*|*,"Nodoka_Sakuraha")
+                if [ -f JAV/config-nodoka.js ]
+                then
+                    printf "\nInstalling JAV/config-nodoka.js MagicMirror configuration file\n"
+                    setconf nodoka JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Shoko_Takahashi",*|*,"Shoko_Takahashi")
+                if [ -f JAV/config-shoko.js ]
+                then
+                    printf "\nInstalling JAV/config-shoko.js MagicMirror configuration file\n"
+                    setconf shoko JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Suzu_Honjo",*|*,"Suzu_Honjo")
+                if [ -f JAV/config-suzu.js ]
+                then
+                    printf "\nInstalling JAV/config-suzu.js MagicMirror configuration file\n"
+                    setconf suzu JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Syunka_Ayami",*|*,"Syunka_Ayami")
+                if [ -f JAV/config-syunka.js ]
+                then
+                    printf "\nInstalling JAV/config-syunka.js MagicMirror configuration file\n"
+                    setconf syunka JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Utsunomiya_Shion",*|*,"Utsunomiya_Shion")
+                if [ -f JAV/config-utsunomiya.js ]
+                then
+                    printf "\nInstalling JAV/config-utsunomiya.js MagicMirror configuration file\n"
+                    setconf utsunomiya JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Yua_Mikami",*|*,"Yua_Mikami")
+                if [ -f JAV/config-yua.js ]
+                then
+                    printf "\nInstalling JAV/config-yua.js MagicMirror configuration file\n"
+                    setconf yua JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Yuna_Ogura",*|*,"Yuna_Ogura")
+                if [ -f JAV/config-yuna.js ]
+                then
+                    printf "\nInstalling JAV/config-yuna.js MagicMirror configuration file\n"
+                    setconf yuna JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Yura_Kano",*|*,"Yura_Kano")
+                if [ -f JAV/config-yura.js ]
+                then
+                    printf "\nInstalling JAV/config-yura.js MagicMirror configuration file\n"
+                    setconf yura JAV
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            *)
+                if [ -f JAV/config-${opt}.js ]
+                then
+                    printf "\nInstalling JAV/config-${opt}.js MagicMirror configuration file\n"
+                    setconf ${opt} JAV
+                    break
+                else
+                    if [ -f JAV/config-${REPLY}.js ]
+                    then
+                        printf "\nInstalling JAV/config-${REPLY}.js MagicMirror configuration file\n"
+                        setconf ${REPLY} JAV
                         break
                     else
                         printf "\nInvalid entry. Please try again"
@@ -927,7 +1296,12 @@ shift $(( OPTIND - 1 ))
                 printf "\nExiting\n"
                 exit 0
                 ;;
-            "models",*|*,"models")
+            "JAV",*|*,"JAV")
+                printf "======================================================\n\n"
+                mirror jav_idols
+                break
+                ;;
+            "Models",*|*,"Models")
                 printf "======================================================\n\n"
                 mirror models_dir
                 break
