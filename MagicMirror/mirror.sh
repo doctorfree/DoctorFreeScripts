@@ -29,11 +29,9 @@
 # -----------------------------------------------------------------------
 # Set this to your MagicMirror installation directory
 MM="${HOME}/MagicMirror"
-# Set this to your MagicMirror module source directory
-MSRC="${HOME}/src/Scripts/MagicMirror/modules"
 # Set the IP and PORT to the values on your system
 # IP is the IP address of your MagicMirror Raspberry Pi
-IP="10.0.1.67"
+IP="10.0.1.85"
 # PORT is the port your MMM-Remote-Control module is running on
 PORT="8080"
 #
@@ -49,8 +47,9 @@ export DISPLAY=:0
 # -----------------------------------------------------------------------
 CONFDIR="${MM}/config"
 SLISDIR="${MM}/modules/MMM-BackgroundSlideshow/pics"
-WHVNDIR="Seagate_8TB/Pictures/Work/Wallhaven"
+WHVNDIR="Pictures/Seagate_8TB/Work/Wallhaven"
 CONFS=
+BACKS=
 INFO="all"
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
@@ -366,7 +365,7 @@ usage() {
     printf "\nWhere <command> can be one of the following:"
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
     printf " list <active|installed|configs>, rotate [right|left|normal],"
-    printf " select, restart, screen [on|off|info|status], start, stop,"
+    printf " models_dir, select, restart, screen [on|off|info|status], start, stop,"
     printf " status [all], dev, getb, setb <num>, wh <dir>, whrm <dir>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
@@ -728,6 +727,195 @@ while getopts b:Bc:di:Il:r:s:Sw:W:u flag; do
 done
 shift $(( OPTIND - 1 ))
 
+[ "$1" == "models_dir" ] && {
+  if [ -d "${SLISDIR}/backgrounds" ]
+  then
+    cd "${SLISDIR}/backgrounds"
+    for i in *
+    do
+        [ "$i" == "*" ] && continue
+        BACKS="${BACKS} $i"
+    done
+
+    cd "${CONFDIR}"
+    PS3="${BOLD}Enter your MagicMirror background choice (numeric or text): ${NORMAL}"
+    options=(ALL ${BACKS} quit)
+    select opt in "${options[@]}"
+    do
+        case "$opt,$REPLY" in
+            "quit",*|*,"quit")
+                printf "\nExiting\n"
+                exit 0
+                ;;
+            "ALL",*|*,"ALL")
+                if [ -f config-models.js ]
+                then
+                    printf "\nInstalling config-models.js MagicMirror configuration file\n"
+                    setconf models
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Ali_Rose",*|*,"Ali_Rose")
+                if [ -f config-ali_rose.js ]
+                then
+                    printf "\nInstalling config-ali_rose.js MagicMirror configuration file\n"
+                    setconf ali_rose
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Alisa_I",*|*,"Alisa_I")
+                if [ -f config-alisa_i.js ]
+                then
+                    printf "\nInstalling config-alisa_i.js MagicMirror configuration file\n"
+                    setconf alisa_i
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Carisha",*|*,"Carisha")
+                if [ -f config-carisha.js ]
+                then
+                    printf "\nInstalling config-carisha.js MagicMirror configuration file\n"
+                    setconf carisha
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Corinna",*|*,"Corinna")
+                if [ -f config-corinna.js ]
+                then
+                    printf "\nInstalling config-corinna.js MagicMirror configuration file\n"
+                    setconf corinna
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "David_Dubnitskiy",*|*,"David_Dubnitskiy")
+                if [ -f config-david.js ]
+                then
+                    printf "\nInstalling config-david.js MagicMirror configuration file\n"
+                    setconf david
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Dmitry_Borisov",*|*,"Dmitry_Borisov")
+                if [ -f config-dmitry.js ]
+                then
+                    printf "\nInstalling config-dmitry.js MagicMirror configuration file\n"
+                    setconf dmitry
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Helly_von_Valentine",*|*,"Helly_von_Valentine")
+                if [ -f config-helly.js ]
+                then
+                    printf "\nInstalling config-helly.js MagicMirror configuration file\n"
+                    setconf helly
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Igor_Viushkin",*|*,"Igor_Viushkin")
+                if [ -f config-igor.js ]
+                then
+                    printf "\nInstalling config-igor.js MagicMirror configuration file\n"
+                    setconf igor
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Irina_Telicheva",*|*,"Irina_Telicheva")
+                if [ -f config-irina.js ]
+                then
+                    printf "\nInstalling config-irina.js MagicMirror configuration file\n"
+                    setconf irina
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Martina_Mink",*|*,"Martina_Mink")
+                if [ -f config-martina.js ]
+                then
+                    printf "\nInstalling config-martina.js MagicMirror configuration file\n"
+                    setconf martina
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Natalia_Andreeva",*|*,"Natalia_Andreeva")
+                if [ -f config-natalia.js ]
+                then
+                    printf "\nInstalling config-natalia.js MagicMirror configuration file\n"
+                    setconf natalia
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            "Stefan_Soell",*|*,"Stefan_Soell")
+                if [ -f config-stefan.js ]
+                then
+                    printf "\nInstalling config-stefan.js MagicMirror configuration file\n"
+                    setconf stefan
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            *)
+                if [ -f config-${opt}.js ]
+                then
+                    printf "\nInstalling config-${opt}.js MagicMirror configuration file\n"
+                    setconf ${opt}
+                    break
+                else
+                    if [ -f config-${REPLY}.js ]
+                    then
+                        printf "\nInstalling config-${REPLY}.js MagicMirror configuration file\n"
+                        setconf ${REPLY}
+                        break
+                    else
+                        printf "\nInvalid entry. Please try again"
+                        printf "\nEnter either a number or text of one of the menu entries\n"
+                    fi
+                fi
+                ;;
+        esac
+    done
+    exit 0
+  else
+    echo "${SLISDIR}/backgrounds does not exist or is not a directory. Skipping."
+  fi
+}
+
 [ "$1" == "select" ] && {
     getconfs select
     PS3="${BOLD}Please enter your MagicMirror configuration choice (numeric or text): ${NORMAL}"
@@ -738,6 +926,11 @@ shift $(( OPTIND - 1 ))
             "quit",*|*,"quit")
                 printf "\nExiting\n"
                 exit 0
+                ;;
+            "models",*|*,"models")
+                printf "======================================================\n\n"
+                mirror models_dir
+                break
                 ;;
             *)
                 if [ -f config-${opt}.js ]
