@@ -48,6 +48,7 @@ export DISPLAY=:0
 CONFDIR="${MM}/config"
 SLISDIR="${MM}/modules/MMM-BackgroundSlideshow/pics"
 WHVNDIR="Pictures/Seagate_8TB/Work/Wallhaven"
+WH_TEMPLATE="Templates/config-wh-template.js"
 CONFS=
 BACKS=
 INFO="all"
@@ -343,7 +344,13 @@ wh_create() {
         fi
         cd "${CONFDIR}"
         [ -f "config-${PICDIR}.js" ] || {
-            cat config-wh-template.js | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+            if [ -f ${WH_TEMPLATE} ]
+            then
+                cat ${WH_TEMPLATE} | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+            else
+                echo "Wallhaven config template $WH_TEMPLATE not found"
+                exit 1
+            fi
         }
         mirror ${PICDIR}
     else
