@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for i in $*
+do
+    [ -d $i ] && {
+        echo "$i exists. skipping."
+        continue
+    }
+    mkdir $i
+    ./updlinks.sh $i
+done

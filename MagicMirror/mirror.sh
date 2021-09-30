@@ -47,7 +47,9 @@ export DISPLAY=:0
 # -----------------------------------------------------------------------
 CONFDIR="${MM}/config"
 SLISDIR="${MM}/modules/MMM-BackgroundSlideshow/pics"
-WHVNDIR="Pictures/Seagate_8TB/Work/Wallhaven"
+MODELDIR="Pictures/Models-ALL"
+MODEL_TEMPLATE="${CONFDIR}/Templates/config-model-template.js"
+WHVNDIR="Pictures/Wallhaven"
 WH_TEMPLATE="Templates/config-wh-template.js"
 CONFS=
 BACKS=
@@ -297,6 +299,59 @@ set_brightness() {
     fi
 }
 
+model_create() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    if [ -d "${HOME}/Pictures/Models/${PICDIR}" ]
+    then
+        # Already have a prepared folder for this model
+        printf "\nUsing existing config-${PICDIR}.js MagicMirror configuration file\n"
+        setconf ${PICDIR} Models
+    else
+      if [ -d "${HOME}/${MODELDIR}/${PICDIR}" ]
+      then
+        printf "\nCreating config file for ${MODELDIR}/${PICDIR}\n"
+        [ -d "${SLISDIR}/Models/${PICDIR}" ] || mkdir -p "${SLISDIR}/Models/${PICDIR}"
+        cd "${SLISDIR}/Models/${PICDIR}"
+        rm -f *.jpg
+        cp -L ${HOME}/${MODELDIR}/${PICDIR}/*.jpg .
+        cd "${CONFDIR}/Models"
+        [ -f "config-${PICDIR}.js" ] || {
+            if [ -f ${MODEL_TEMPLATE} ]
+            then
+                cat ${MODEL_TEMPLATE} | sed -e "s/MODEL_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+            else
+                echo "Model config template $MODEL_TEMPLATE not found"
+                exit 1
+            fi
+        }
+        cd "${CONFDIR}"
+        setconf ${PICDIR} Models
+      else
+        printf "\nFolder argument ${MODELDIR}/${PICDIR} does not exist or is not a directory."
+        usage
+      fi
+    fi
+}
+
+model_remove() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    [ -d "${SLISDIR}/${PICDIR}" ] && {
+        printf "\nRemoving config file and pic folder for ${MODELDIR}/${PICDIR}"
+        cd "${SLISDIR}"
+        rm -rf "${PICDIR}"
+    }
+    rm -f "${CONFDIR}/Models/config-${PICDIR}.js"
+    mirror default
+}
+
 wh_create() {
     [ "$1" ] || {
         printf "\nFolder argument required to specify Slideshow dir.\n"
@@ -309,7 +364,8 @@ wh_create() {
         [ -d "${SLISDIR}/${PICDIR}" ] || mkdir -p "${SLISDIR}/${PICDIR}"
         cd "${SLISDIR}/${PICDIR}"
         rm -f *.jpg
-        ln -s ../../../../../${WHVNDIR}/${PICDIR}/*.jpg .
+        # ln -s ../../../../../${WHVNDIR}/${PICDIR}/*.jpg .
+        cp -L ${HOME}/${WHVNDIR}/${PICDIR}/*.jpg .
         haveim=`type -p identify`
         if [ "$haveim" ]
         then
@@ -381,7 +437,7 @@ usage() {
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
     printf " list <active|installed|configs>, rotate [right|left|normal],"
     printf " models_dir, select, restart, screen [on|off|info|status], start, stop,"
-    printf " status [all], dev, getb, setb <num>, wh <dir>, whrm <dir>"
+    printf " status [all], dev, getb, setb <num>, mc <model>, mr <model>, wh <dir>, whrm <dir>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -429,6 +485,7 @@ setb_usage() {
 setconf() {
     conf=$1
     subdir=$2
+    cd "${CONFDIR}"
     if [ -f config.js ]
     then
         mv config.js config-$$.js
@@ -712,7 +769,7 @@ get_info_type() {
 # stop
 # status [all]
 
-while getopts b:Bc:di:Il:r:s:Sw:W:u flag; do
+while getopts b:Bc:di:Il:m:M:r:s:Sw:W:u flag; do
     case $flag in
         b)
           set_brightness ${OPTARG}
@@ -751,6 +808,12 @@ while getopts b:Bc:di:Il:r:s:Sw:W:u flag; do
                 ;;
             esac
             ;;
+        m)
+          model_create ${OPTARG}
+          ;;
+        M)
+          model_remove ${OPTARG}
+          ;;
         r)
           rotate_screen ${OPTARG}
           ;;
@@ -774,9 +837,9 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$1" == "models_dir" ] && {
-  if [ -d "${SLISDIR}/backgrounds" ]
+  if [ -d "${SLISDIR}/Models" ]
   then
-    cd "${SLISDIR}/backgrounds"
+    cd "${SLISDIR}/Models"
     for i in *
     do
         [ "$i" == "*" ] && continue
@@ -785,7 +848,7 @@ shift $(( OPTIND - 1 ))
 
     cd "${CONFDIR}"
     PS3="${BOLD}Enter your MagicMirror model choice (numeric or text): ${NORMAL}"
-    options=(ALL ${BACKS} Jenya quit)
+    options=(ALL ${BACKS} quit)
     select opt in "${options[@]}"
     do
         case "$opt,$REPLY" in
@@ -804,179 +867,14 @@ shift $(( OPTIND - 1 ))
                     printf "\nEnter either a number or text of one of the menu entries\n"
                 fi
                 ;;
-            "Ali_Rose",*|*,"Ali_Rose")
-                if [ -f config-ali_rose.js ]
-                then
-                    printf "\nInstalling config-ali_rose.js MagicMirror configuration file\n"
-                    setconf ali_rose Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Alisa_I",*|*,"Alisa_I")
-                if [ -f config-alisa_i.js ]
-                then
-                    printf "\nInstalling config-alisa_i.js MagicMirror configuration file\n"
-                    setconf alisa_i Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Carisha",*|*,"Carisha")
-                if [ -f config-carisha.js ]
-                then
-                    printf "\nInstalling config-carisha.js MagicMirror configuration file\n"
-                    setconf carisha Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Corinna",*|*,"Corinna")
-                if [ -f config-corinna.js ]
-                then
-                    printf "\nInstalling config-corinna.js MagicMirror configuration file\n"
-                    setconf corinna Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "David_Dubnitskiy",*|*,"David_Dubnitskiy")
-                if [ -f config-david.js ]
-                then
-                    printf "\nInstalling config-david.js MagicMirror configuration file\n"
-                    setconf david Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Dmitry_Borisov",*|*,"Dmitry_Borisov")
-                if [ -f config-dmitry.js ]
-                then
-                    printf "\nInstalling config-dmitry.js MagicMirror configuration file\n"
-                    setconf dmitry Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Heidi_Romanova",*|*,"Heidi_Romanova")
-                if [ -f config-heidi.js ]
-                then
-                    printf "\nInstalling config-heidi.js MagicMirror configuration file\n"
-                    setconf heidi Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Helly_von_Valentine",*|*,"Helly_von_Valentine")
-                if [ -f config-helly.js ]
-                then
-                    printf "\nInstalling config-helly.js MagicMirror configuration file\n"
-                    setconf helly Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Igor_Viushkin",*|*,"Igor_Viushkin")
-                if [ -f config-igor.js ]
-                then
-                    printf "\nInstalling config-igor.js MagicMirror configuration file\n"
-                    setconf igor Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Jenya",*|*,"Jenya")
-                if [ -f config-jenya.js ]
-                then
-                    printf "\nInstalling config-jenya.js MagicMirror configuration file\n"
-                    setconf jenya Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Li_Moon",*|*,"Li_Moon")
-                if [ -f config-li_moon.js ]
-                then
-                    printf "\nInstalling config-li_moon.js MagicMirror configuration file\n"
-                    setconf li_moon Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Martina_Mink",*|*,"Martina_Mink")
-                if [ -f config-martina.js ]
-                then
-                    printf "\nInstalling config-martina.js MagicMirror configuration file\n"
-                    setconf martina Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Nata_Lee",*|*,"Nata_Lee")
-                if [ -f config-nata.js ]
-                then
-                    printf "\nInstalling config-nata.js MagicMirror configuration file\n"
-                    setconf nata Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Natalia_Andreeva",*|*,"Natalia_Andreeva")
-                if [ -f config-natalia.js ]
-                then
-                    printf "\nInstalling config-natalia.js MagicMirror configuration file\n"
-                    setconf natalia Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
-            "Stefan_Soell",*|*,"Stefan_Soell")
-                if [ -f config-stefan.js ]
-                then
-                    printf "\nInstalling config-stefan.js MagicMirror configuration file\n"
-                    setconf stefan Models
-                    break
-                else
-                    printf "\nInvalid entry. Please try again"
-                    printf "\nEnter either a number or text of one of the menu entries\n"
-                fi
-                ;;
             *)
-                if [ -f config-${opt}.js ]
+                if [ -f Models/config-${opt}.js ]
                 then
                     printf "\nInstalling config-${opt}.js MagicMirror configuration file\n"
                     setconf ${opt} Models
                     break
                 else
-                    if [ -f config-${REPLY}.js ]
+                    if [ -f Models/config-${REPLY}.js ]
                     then
                         printf "\nInstalling config-${REPLY}.js MagicMirror configuration file\n"
                         setconf ${REPLY} Models
@@ -991,7 +889,7 @@ shift $(( OPTIND - 1 ))
     done
     exit 0
   else
-    echo "${SLISDIR}/backgrounds does not exist or is not a directory. Skipping."
+    echo "${SLISDIR}/Models does not exist or is not a directory. Skipping."
   fi
 }
 
@@ -1301,7 +1199,7 @@ shift $(( OPTIND - 1 ))
     done
     exit 0
   else
-    echo "${SLISDIR}/backgrounds does not exist or is not a directory. Skipping."
+    echo "${SLISDIR}/jav does not exist or is not a directory. Skipping."
   fi
 }
 
@@ -1414,6 +1312,16 @@ shift $(( OPTIND - 1 ))
 
 [ "$1" == "setb" ] && {
     set_brightness $2
+    exit 0
+}
+
+[ "$1" == "mc" ] && {
+    model_create $2
+    exit 0
+}
+
+[ "$1" == "mr" ] && {
+    model_remove $2
     exit 0
 }
 

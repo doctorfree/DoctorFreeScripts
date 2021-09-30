@@ -1,6 +1,7 @@
 #!/bin/bash
 
-TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
+#TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
+TOP="../Wallhaven"
 MOD="${TOP}/Models"
 ART="${TOP}/Artists"
 JAV="${TOP}/JAV_Idol"
@@ -8,7 +9,7 @@ PHO="${TOP}/Photographers"
 PLA="${MOD}/Playboy"
 PEN="${MOD}/Penthouse"
 DRO="${MOD}/Photodromm"
-KIND="/Volumes/Seagate_8TB/Pictures/Work/KindGirls"
+KIND="../KindGirls"
 HER=`pwd`
 
 isportrait() {
