@@ -48,7 +48,9 @@ export DISPLAY=:0
 CONFDIR="${MM}/config"
 SLISDIR="${MM}/modules/MMM-BackgroundSlideshow/pics"
 MODELDIR="Pictures/Models-ALL"
+PHOTODIR="Pictures/Photographers-ALL"
 MODEL_TEMPLATE="${CONFDIR}/Templates/config-model-template.js"
+PHOTO_TEMPLATE="${CONFDIR}/Templates/config-photo-template.js"
 WHVNDIR="Pictures/Wallhaven"
 WH_TEMPLATE="Templates/config-wh-template.js"
 CONFS=
@@ -356,6 +358,59 @@ model_remove() {
     mirror default
 }
 
+photo_create() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    if [ -d "${HOME}/Pictures/Photographers/${PICDIR}" ]
+    then
+        # Already have a prepared folder for this photographer
+        printf "\nUsing existing config-${PICDIR}.js MagicMirror configuration file\n"
+        setconf ${PICDIR} Photographers
+    else
+      if [ -d "${HOME}/${PHOTODIR}/${PICDIR}" ]
+      then
+        printf "\nCreating config file for ${PHOTODIR}/${PICDIR}\n"
+        [ -d "${SLISDIR}/Photographers/${PICDIR}" ] || mkdir -p "${SLISDIR}/Photographers/${PICDIR}"
+        cd "${SLISDIR}/Photographers/${PICDIR}"
+        rm -f *.jpg
+        cp -L ${HOME}/${PHOTODIR}/${PICDIR}/*.jpg .
+        cd "${CONFDIR}/Photographers"
+        [ -f "config-${PICDIR}.js" ] || {
+            if [ -f ${PHOTO_TEMPLATE} ]
+            then
+                cat ${PHOTO_TEMPLATE} | sed -e "s/PHOTO_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+            else
+                echo "Model config template $PHOTO_TEMPLATE not found"
+                exit 1
+            fi
+        }
+        cd "${CONFDIR}"
+        setconf ${PICDIR} Photographers
+      else
+        printf "\nFolder argument ${PHOTODIR}/${PICDIR} does not exist or is not a directory."
+        usage
+      fi
+    fi
+}
+
+photo_remove() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    [ -d "${SLISDIR}/${PICDIR}" ] && {
+        printf "\nRemoving config file and pic folder for ${PHOTODIR}/${PICDIR}"
+        cd "${SLISDIR}"
+        rm -rf "${PICDIR}"
+    }
+    rm -f "${CONFDIR}/Photographers/config-${PICDIR}.js"
+    mirror default
+}
+
 wh_create() {
     [ "$1" ] || {
         printf "\nFolder argument required to specify Slideshow dir.\n"
@@ -441,16 +496,18 @@ usage() {
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
     printf " list <active|installed|configs>, rotate [right|left|normal],"
     printf " models_dir, photogs_dir, select, restart, screen [on|off|info|status], start, stop,"
-    printf " status [all], dev, getb, setb <num>, mc <model>, mr <model>, wh <dir>, whrm <dir>"
-    printf "\nor specify a config file to use with one of:"
+    printf " status [all], dev, getb, setb <num>, mc <model>, mr <model>,"
+    printf " pc <photographer>, pr <photographer>, wh <dir>, whrm <dir>"
+    printf "\n\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
-    printf "\nor any other config file you have created in ${CONFDIR} of the form:"
+    printf "\n\nor any other config file you have created in ${CONFDIR} of the form:"
     printf "\n\tconfig-<name>.js"
-    printf "\nA config filename argument will be resolved into a config filename of the form:"
+    printf "\n\nA config filename argument will be resolved into a config filename of the form:"
     printf "\n\tconfig-\$argument.js"
     printf "\n\nArguments can also be specified as follows:"
     printf "\n\t-b <brightness>, -B, -c <config>, -d, -i <info>, -I, -l <list>,"
-    printf "\n\t-r <rotate>, -s <screen>, -S, -w <dir>, -W <dir>, -u"
+    printf "\n\t-r <rotate>, -s <screen>, -S, -m <model>, -M <model>,"
+    printf "\n\t-p <photographer>, -P <photographer>, -w <dir>, -W <dir>, -u"
     printf "\n\n${BOLD}Examples:${NORMAL}"
     printf "\n\tmirror\t\t# Invoked with no arguments the mirror command displays a command menu"
     printf "\n\tmirror list active\t\t# lists active modules"
@@ -773,7 +830,7 @@ get_info_type() {
 # stop
 # status [all]
 
-while getopts b:Bc:di:Il:m:M:r:s:Sw:W:u flag; do
+while getopts b:Bc:di:Il:m:M:p:P:r:s:Sw:W:u flag; do
     case $flag in
         b)
           set_brightness ${OPTARG}
@@ -817,6 +874,12 @@ while getopts b:Bc:di:Il:m:M:r:s:Sw:W:u flag; do
           ;;
         M)
           model_remove ${OPTARG}
+          ;;
+        p)
+          photo_create ${OPTARG}
+          ;;
+        P)
+          photo_remove ${OPTARG}
           ;;
         r)
           rotate_screen ${OPTARG}
@@ -1135,6 +1198,16 @@ shift $(( OPTIND - 1 ))
 
 [ "$1" == "mr" ] && {
     model_remove $2
+    exit 0
+}
+
+[ "$1" == "pc" ] && {
+    photo_create $2
+    exit 0
+}
+
+[ "$1" == "pr" ] && {
+    photo_remove $2
     exit 0
 }
 
