@@ -190,6 +190,10 @@ list_mods() {
                   printf "\n${BOLD}Listing MagicMirror Models configuration files:${NORMAL}\n\n"
                   ls Models/config-*.js
                 }
+                [ -d Photographers ] && {
+                  printf "\n${BOLD}Listing MagicMirror Photographers configuration files:${NORMAL}\n\n"
+                  ls Photographers/config-*.js
+                }
                 [ -d JAV ] && {
                   printf "\n${BOLD}Listing MagicMirror JAV configuration files:${NORMAL}\n\n"
                   ls JAV/config-*.js
@@ -436,7 +440,7 @@ usage() {
     printf "\nWhere <command> can be one of the following:"
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
     printf " list <active|installed|configs>, rotate [right|left|normal],"
-    printf " models_dir, select, restart, screen [on|off|info|status], start, stop,"
+    printf " models_dir, photogs_dir, select, restart, screen [on|off|info|status], start, stop,"
     printf " status [all], dev, getb, setb <num>, mc <model>, mr <model>, wh <dir>, whrm <dir>"
     printf "\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
@@ -893,6 +897,63 @@ shift $(( OPTIND - 1 ))
   fi
 }
 
+[ "$1" == "photogs_dir" ] && {
+  if [ -d "${SLISDIR}/Photographers" ]
+  then
+    cd "${SLISDIR}/Photographers"
+    for i in *
+    do
+        [ "$i" == "*" ] && continue
+        PHOTS="${PHOTS} $i"
+    done
+
+    cd "${CONFDIR}"
+    PS3="${BOLD}Enter your MagicMirror photographer choice (numeric or text): ${NORMAL}"
+    options=(ALL ${PHOTS} quit)
+    select opt in "${options[@]}"
+    do
+        case "$opt,$REPLY" in
+            "quit",*|*,"quit")
+                printf "\nExiting\n"
+                exit 0
+                ;;
+            "ALL",*|*,"ALL")
+                if [ -f config-Photographers.js ]
+                then
+                    printf "\nInstalling config-Photographers.js MagicMirror configuration file\n"
+                    setconf Photographers
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            *)
+                if [ -f Photographers/config-${opt}.js ]
+                then
+                    printf "\nInstalling config-${opt}.js MagicMirror configuration file\n"
+                    setconf ${opt} Photographers
+                    break
+                else
+                    if [ -f Photographers/config-${REPLY}.js ]
+                    then
+                        printf "\nInstalling config-${REPLY}.js MagicMirror configuration file\n"
+                        setconf ${REPLY} Photographers
+                        break
+                    else
+                        printf "\nInvalid entry. Please try again"
+                        printf "\nEnter either a number or text of one of the menu entries\n"
+                    fi
+                fi
+                ;;
+        esac
+    done
+    exit 0
+  else
+    echo "${SLISDIR}/Models does not exist or is not a directory. Skipping."
+  fi
+}
+
 [ "$1" == "jav_idols" ] && {
   if [ -d "${SLISDIR}/JAV" ]
   then
@@ -969,6 +1030,11 @@ shift $(( OPTIND - 1 ))
             "Models",*|*,"Models")
                 printf "======================================================\n\n"
                 mirror models_dir
+                break
+                ;;
+            "Photographers",*|*,"Photographers")
+                printf "======================================================\n\n"
+                mirror photogs_dir
                 break
                 ;;
             *)
