@@ -47,8 +47,10 @@ export DISPLAY=:0
 # -----------------------------------------------------------------------
 CONFDIR="${MM}/config"
 SLISDIR="${MM}/modules/MMM-BackgroundSlideshow/pics"
+ARTISTDIR="Pictures/Artists-ALL"
 MODELDIR="Pictures/Models-ALL"
 PHOTODIR="Pictures/Photographers-ALL"
+ARTIST_TEMPLATE="${CONFDIR}/Templates/config-artist-template.js"
 MODEL_TEMPLATE="${CONFDIR}/Templates/config-model-template.js"
 PHOTO_TEMPLATE="${CONFDIR}/Templates/config-photo-template.js"
 WHVNDIR="Pictures/Wallhaven"
@@ -311,29 +313,31 @@ model_create() {
         usage
     }
     PICDIR="$1"
+    # Create a configuration file for this model if one does not exist
+    printf "\nCreating config file ${CONFDIR}/Models/config-${PICDIR}.js\n"
+    cd "${CONFDIR}/Models"
+    [ -f "config-${PICDIR}.js" ] || {
+        if [ -f ${MODEL_TEMPLATE} ]
+        then
+            cat ${MODEL_TEMPLATE} | sed -e "s/MODEL_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+        else
+            echo "Model config template $MODEL_TEMPLATE not found"
+            exit 1
+        fi
+    }
     if [ -d "${HOME}/Pictures/Models/${PICDIR}" ]
     then
         # Already have a prepared folder for this model
-        printf "\nUsing existing config-${PICDIR}.js MagicMirror configuration file\n"
+        printf "\nUsing existing model folder pics\n"
         setconf ${PICDIR} Models
     else
       if [ -d "${HOME}/${MODELDIR}/${PICDIR}" ]
       then
-        printf "\nCreating config file for ${MODELDIR}/${PICDIR}\n"
+        printf "\nCreating image folder for ${SLISDIR}/Models/${PICDIR}\n"
         [ -d "${SLISDIR}/Models/${PICDIR}" ] || mkdir -p "${SLISDIR}/Models/${PICDIR}"
         cd "${SLISDIR}/Models/${PICDIR}"
         rm -f *.jpg
         cp -L ${HOME}/${MODELDIR}/${PICDIR}/*.jpg .
-        cd "${CONFDIR}/Models"
-        [ -f "config-${PICDIR}.js" ] || {
-            if [ -f ${MODEL_TEMPLATE} ]
-            then
-                cat ${MODEL_TEMPLATE} | sed -e "s/MODEL_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
-            else
-                echo "Model config template $MODEL_TEMPLATE not found"
-                exit 1
-            fi
-        }
         cd "${CONFDIR}"
         setconf ${PICDIR} Models
       else
@@ -358,35 +362,90 @@ model_remove() {
     mirror default
 }
 
+artist_create() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    printf "\nCreating config file ${CONFDIR}/Artists/config-${PICDIR}.js\n"
+    cd "${CONFDIR}/Artists"
+    [ -f "config-${PICDIR}.js" ] || {
+        if [ -f ${ARTIST_TEMPLATE} ]
+        then
+            cat ${ARTIST_TEMPLATE} | sed -e "s/ARTIST_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+        else
+            echo "Artist config template $ARTIST_TEMPLATE not found"
+            exit 1
+        fi
+    }
+    if [ -d "${HOME}/Pictures/Artists/${PICDIR}" ]
+    then
+        # Already have a prepared folder for this artist
+        printf "\nUsing existing ${PICDIR} image folder\n"
+        setconf ${PICDIR} Artists
+    else
+      if [ -d "${HOME}/${ARTISTDIR}/${PICDIR}" ]
+      then
+        printf "\nCreating image folder ${SLISDIR}/Artists/${PICDIR}\n"
+        [ -d "${SLISDIR}/Artists/${PICDIR}" ] || mkdir -p "${SLISDIR}/Artists/${PICDIR}"
+        cd "${SLISDIR}/Artists/${PICDIR}"
+        rm -f *.jpg
+        cp -L ${HOME}/${ARTISTDIR}/${PICDIR}/*.jpg .
+        cd "${CONFDIR}"
+        setconf ${PICDIR} Artists
+      else
+        printf "\nFolder argument ${ARTISTDIR}/${PICDIR} does not exist or is not a directory."
+        usage
+      fi
+    fi
+}
+
+artist_remove() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    [ -d "${SLISDIR}/${PICDIR}" ] && {
+        printf "\nRemoving config file and pic folder for ${ARTISTDIR}/${PICDIR}"
+        cd "${SLISDIR}"
+        rm -rf "${PICDIR}"
+    }
+    rm -f "${CONFDIR}/Artists/config-${PICDIR}.js"
+    mirror default
+}
+
 photo_create() {
     [ "$1" ] || {
         printf "\nFolder argument required to specify Slideshow dir.\n"
         usage
     }
     PICDIR="$1"
+    printf "\nCreating config file ${CONFDIR}/Photographers/config-${PICDIR}.js\n"
+    cd "${CONFDIR}/Photographers"
+    [ -f "config-${PICDIR}.js" ] || {
+        if [ -f ${PHOTO_TEMPLATE} ]
+        then
+            cat ${PHOTO_TEMPLATE} | sed -e "s/PHOTO_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+        else
+            echo "Photographer config template $PHOTO_TEMPLATE not found"
+            exit 1
+        fi
+    }
     if [ -d "${HOME}/Pictures/Photographers/${PICDIR}" ]
     then
         # Already have a prepared folder for this photographer
-        printf "\nUsing existing config-${PICDIR}.js MagicMirror configuration file\n"
+        printf "\nUsing existing ${PICDIR} image folder\n"
         setconf ${PICDIR} Photographers
     else
       if [ -d "${HOME}/${PHOTODIR}/${PICDIR}" ]
       then
-        printf "\nCreating config file for ${PHOTODIR}/${PICDIR}\n"
+        printf "\nCreating image folder ${SLISDIR}/Photographers/${PICDIR}\n"
         [ -d "${SLISDIR}/Photographers/${PICDIR}" ] || mkdir -p "${SLISDIR}/Photographers/${PICDIR}"
         cd "${SLISDIR}/Photographers/${PICDIR}"
         rm -f *.jpg
         cp -L ${HOME}/${PHOTODIR}/${PICDIR}/*.jpg .
-        cd "${CONFDIR}/Photographers"
-        [ -f "config-${PICDIR}.js" ] || {
-            if [ -f ${PHOTO_TEMPLATE} ]
-            then
-                cat ${PHOTO_TEMPLATE} | sed -e "s/PHOTO_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
-            else
-                echo "Model config template $PHOTO_TEMPLATE not found"
-                exit 1
-            fi
-        }
         cd "${CONFDIR}"
         setconf ${PICDIR} Photographers
       else
@@ -417,13 +476,23 @@ wh_create() {
         usage
     }
     PICDIR="$1"
+    cd "${CONFDIR}"
+    printf "\nCreating config file ${CONFDIR}/config-${PICDIR}.js\n"
+    [ -f "config-${PICDIR}.js" ] || {
+        if [ -f ${WH_TEMPLATE} ]
+        then
+            cat ${WH_TEMPLATE} | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+        else
+            echo "Wallhaven config template $WH_TEMPLATE not found"
+            exit 1
+        fi
+    }
     if [ -d "${HOME}/${WHVNDIR}/${PICDIR}" ]
     then
-        printf "\nCreating config file for ${WHVNDIR}/${PICDIR}"
+        printf "\nCreating image folder ${SLISDIR}/${PICDIR}"
         [ -d "${SLISDIR}/${PICDIR}" ] || mkdir -p "${SLISDIR}/${PICDIR}"
         cd "${SLISDIR}/${PICDIR}"
         rm -f *.jpg
-        # ln -s ../../../../../${WHVNDIR}/${PICDIR}/*.jpg .
         cp -L ${HOME}/${WHVNDIR}/${PICDIR}/*.jpg .
         haveim=`type -p identify`
         if [ "$haveim" ]
@@ -457,16 +526,6 @@ wh_create() {
           printf "\nCould not find identify command. Install ImageMagick"
           printf "\nSkipping removal of landscape photos\n"
         fi
-        cd "${CONFDIR}"
-        [ -f "config-${PICDIR}.js" ] || {
-            if [ -f ${WH_TEMPLATE} ]
-            then
-                cat ${WH_TEMPLATE} | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
-            else
-                echo "Wallhaven config template $WH_TEMPLATE not found"
-                exit 1
-            fi
-        }
         mirror ${PICDIR}
     else
         printf "\nFolder argument ${WHVNDIR}/${PICDIR} does not exist or is not a directory."
@@ -496,8 +555,8 @@ usage() {
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
     printf " list <active|installed|configs>, rotate [right|left|normal],"
     printf " models_dir, photogs_dir, select, restart, screen [on|off|info|status], start, stop,"
-    printf " status [all], dev, getb, setb <num>, mc <model>, mr <model>,"
-    printf " pc <photographer>, pr <photographer>, wh <dir>, whrm <dir>"
+    printf " status [all], dev, getb, setb <num>, ac <artist>, ar <artist>, mc <model>,"
+    printf " mr <model>, pc <photographer>, pr <photographer>, wh <dir>, whrm <dir>"
     printf "\n\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\n\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -505,8 +564,8 @@ usage() {
     printf "\n\nA config filename argument will be resolved into a config filename of the form:"
     printf "\n\tconfig-\$argument.js"
     printf "\n\nArguments can also be specified as follows:"
-    printf "\n\t-b <brightness>, -B, -c <config>, -d, -i <info>, -I, -l <list>,"
-    printf "\n\t-r <rotate>, -s <screen>, -S, -m <model>, -M <model>,"
+    printf "\n\t-a <artist>, -A <artist>, -b <brightness>, -B, -c <config>, -d, -i <info>,"
+    printf "\n\t-I, -l <list>, -r <rotate>, -s <screen>, -S, -m <model>, -M <model>,"
     printf "\n\t-p <photographer>, -P <photographer>, -w <dir>, -W <dir>, -u"
     printf "\n\n${BOLD}Examples:${NORMAL}"
     printf "\n\tmirror\t\t# Invoked with no arguments the mirror command displays a command menu"
@@ -830,8 +889,14 @@ get_info_type() {
 # stop
 # status [all]
 
-while getopts b:Bc:di:Il:m:M:p:P:r:s:Sw:W:u flag; do
+while getopts a:A:b:Bc:di:Il:m:M:p:P:r:s:Sw:W:u flag; do
     case $flag in
+        a)
+          artist_create ${OPTARG}
+          ;;
+        A)
+          artist_remove ${OPTARG}
+          ;;
         b)
           set_brightness ${OPTARG}
           ;;
@@ -1188,6 +1253,16 @@ shift $(( OPTIND - 1 ))
 
 [ "$1" == "setb" ] && {
     set_brightness $2
+    exit 0
+}
+
+[ "$1" == "ac" ] && {
+    artist_create $2
+    exit 0
+}
+
+[ "$1" == "ar" ] && {
+    artist_remove $2
     exit 0
 }
 
