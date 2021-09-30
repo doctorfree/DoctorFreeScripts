@@ -71,6 +71,10 @@ var config = {
                 transitionImages: true,
                 randomizeImageOrder: true,
                 recursiveSubDirectories: true,
+                resizeImages: true,
+                maxWidth: 1080,
+                maxHeight: 1920,
+                transitions: ['opacity', 'slideFromRight', 'slideFromLeft', 'slideFromTopLeft', 'slideFromTopRight', 'slideFromBottomLeft', 'slideFromBottomRight', 'flipX', 'flipY'],
                 //backgroundSize: "contain",
             }
         },
@@ -95,8 +99,8 @@ var config = {
         //     config: {
         //         maxWidth: "100%",
         //         header: "",
-        //     publishKey: 'pub-c-206f354b-5d57-49aa-add5-be3a2356e921',
-        //     subscribeKey: 'sub-c-0400d566-538e-11eb-a233-facb2062b65c',
+        //     publishKey: 'xxxxxx_Your-GoogleVoice-Pub-Key_xxxxxxxx',
+        //     subscribeKey: 'xxxxxx_Your-GoogleVoice-Sub-Key_xxxxxxxx',
         //     updateDelay: 500
         //     }
         // },

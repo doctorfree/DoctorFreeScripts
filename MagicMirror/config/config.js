@@ -56,7 +56,7 @@ var config = {
         {
             module: 'MMM-Remote-Control',
             config: {
-                apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
+                apiKey: 'd8d8947ad3da477288bcbe3c7353523b'
             }
         },
         {
@@ -65,35 +65,33 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/pics/boobs/',
+                    'modules/MMM-BackgroundSlideshow/pics/Artists/Zumi/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
                 transitionImages: true,
                 randomizeImageOrder: true,
                 recursiveSubDirectories: true,
-                //backgroundSize: "contain",
-                // DISPLAY THE SLIDE SHOW BETWEEN 1PM and 6PM then again between 9PM and Midnight
-                //module_schedule: [
-                //  {from: '0 13 * * *', to:   '0 18 * * *'},
-                //  {from: '0 21 * * *', to:   '59 23 * * *'}
-                //]
+                resizeImages: true,
+                maxWidth: 1080,
+                maxHeight: 1920,
+                transitions: ['opacity', 'slideFromRight', 'slideFromLeft', 'slideFromTopLeft', 'slideFromTopRight', 'slideFromBottomLeft', 'slideFromBottomRight', 'flipX', 'flipY'],
             }
         },
-        {
-            module: 'MMM-TelegramBot',
-            config: {
-              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
+        // {
+        //     module: 'MMM-TelegramBot',
+        //     config: {
+        //       telegramAPIKey : '1072742999:AAHn56XyKkr571YXA1iQ1NZc5Mexxbv2pJc',
               // This is NOT the username of bot.
-              allowedUser : ['Your-Telegram-Username'],
-              adminChatId : Your-Telegram-Chat-ID,
-              useWelcomeMessage: true,
-              verbose: false,
-              favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
-              screenshotScript: "scrot",
-              detailOption: {},
-              customCommands: [],
-            }
-        },
+        //       allowedUser : ['ronrecord'],
+        //       adminChatId : 1089756486,
+        //       useWelcomeMessage: true,
+        //       verbose: false,
+        //       favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
+        //       screenshotScript: "scrot",
+        //       detailOption: {},
+        //       customCommands: [],
+        //     }
+        // },
         // {
         //     module: "MMM-GoogleAssistant",
         //     position: "top_right",

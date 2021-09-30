@@ -65,13 +65,19 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/pics/original/',
-                    'modules/MMM-BackgroundSlideshow/pics/touhou/',
+                    'modules/MMM-BackgroundSlideshow/pics/JAV/Matsuri_Kiritani',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
+                resizeImages: true,
+                maxWidth: 1080,
+                maxHeight: 1920,
                 transitionImages: true,
                 randomizeImageOrder: true,
                 recursiveSubDirectories: true,
+                resizeImages: true,
+                maxWidth: 1080,
+                maxHeight: 1920,
+                transitions: ['opacity', 'slideFromRight', 'slideFromLeft', 'slideFromTopLeft', 'slideFromTopRight', 'slideFromBottomLeft', 'slideFromBottomRight', 'flipX', 'flipY'],
                 //backgroundSize: "contain",
                 // DISPLAY THE SLIDE SHOW BETWEEN 1PM and 6PM then again between 9PM and Midnight
                 //module_schedule: [
@@ -101,8 +107,8 @@ var config = {
         //     config: {
         //         maxWidth: "100%",
         //         header: "",
-        //     publishKey: 'pub-c-206f354b-5d57-49aa-add5-be3a2356e921',
-        //     subscribeKey: 'sub-c-0400d566-538e-11eb-a233-facb2062b65c',
+        //     publishKey: 'xxxxxx_Your-GoogleVoice-Pub-Key_xxxxxxxx',
+        //     subscribeKey: 'xxxxxx_Your-GoogleVoice-Sub-Key_xxxxxxxx',
         //     updateDelay: 500
         //     }
         // },

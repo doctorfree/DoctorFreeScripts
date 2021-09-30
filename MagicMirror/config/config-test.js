@@ -44,6 +44,18 @@ var config = {
                 apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
             }
         },
+        // {
+        //     module: "MMM-Coinbase-Pro",
+        //     position: "middle_center",
+        //     header: "Coinbase Pro", // optional
+        //         config: {
+        //             apiKey: "0844c1b293b7ab2fed5c96a7556b2146",
+        //             apiSecret: "Qrpnrl/8HOL6q9MZl7wWzVPm8yS2jj5zu9zpI+ocNcdpuv7qwi4sbLu+tmB0OyrrpYJSXRsXvlEDbVaEiO5g3g==",
+        //             wallet: ["FIL", "ZRX"], // list of currencies to display
+        //             icons: false, // currently only Ethereum and Bitcoin supported
+        //             label: true,  // shows currency labels (e.g. BTC, ETH and so on)
+        //         }
+        // },
     ]
 };
 
