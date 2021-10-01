@@ -666,6 +666,19 @@ set_config() {
             }
         done
     fi
+    # Try to find something that matches the first part of the specified name
+    for sub in ${subdir} Artists Models Photographers JAV
+    do
+        for confname in ${sub}/config-${mode}*.js
+        do
+            [ "${confname}" == "${sub}/config-${mode}*.js" ] && continue
+            [ -f ${confname} ] && {
+                foundmode=`basename ${confname} | sed -e "s/config-//" -e "s/.js//"`
+                setconf ${foundmode} ${sub}
+                return
+            }
+        done
+    done
     if [ "${subdir}" ]
     then
         printf "\nNo configuration file ${subdir}/config-${mode}.js found.\n\n"
