@@ -137,6 +137,9 @@ getconfs() {
             }
         }
     done
+    [ "$1" == "usage" ] || {
+        CONFS=`echo "${CONFS}" | tr ' ' '\n' | LC_ALL=C sort  | tr '\n' ' '`
+    }
 }
 
 list_mods() {
@@ -553,7 +556,7 @@ usage() {
     printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
-    printf " list <active|installed|configs>, rotate [right|left|normal],"
+    printf " list <active|installed|configs>, rotate [right|left|normal], artists_dir,"
     printf " models_dir, photogs_dir, select, restart, screen [on|off|info|status], start, stop,"
     printf " status [all], dev, getb, setb <num>, ac <artist>, ar <artist>, mc <model>,"
     printf " mr <model>, pc <photographer>, pr <photographer>, wh <dir>, whrm <dir>"
@@ -653,20 +656,23 @@ set_config() {
     if [ -f config-${mode}.js ]
     then
         setconf ${mode}
+        return
     else
-        if [ -f ${subdir}/config-${mode}.js ]
-        then
-            setconf ${mode} ${subdir}
-        else
-            if [ "${subdir}" ]
-            then
-                printf "\nNo configuration file ${subdir}/config-${mode}.js found.\n\n"
-            else
-                printf "\nNo configuration file config-${mode}.js found.\n\n"
-            fi
-            usage
-        fi
+        for sub in ${subdir} Artists Models Photographers JAV
+        do
+            [ -f ${sub}/config-${mode}.js ] && {
+                setconf ${mode} ${sub}
+                return
+            }
+        done
     fi
+    if [ "${subdir}" ]
+    then
+        printf "\nNo configuration file ${subdir}/config-${mode}.js found.\n\n"
+    else
+        printf "\nNo configuration file config-${mode}.js found.\n\n"
+    fi
+    usage
 }
 
 system_info() {
@@ -968,6 +974,63 @@ while getopts a:A:b:Bc:di:Il:m:M:p:P:r:s:Sw:W:u flag; do
 done
 shift $(( OPTIND - 1 ))
 
+[ "$1" == "artists_dir" ] && {
+  if [ -d "${SLISDIR}/Artists" ]
+  then
+    cd "${SLISDIR}/Artists"
+    for i in *
+    do
+        [ "$i" == "*" ] && continue
+        ARTS="${ARTS} $i"
+    done
+
+    cd "${CONFDIR}"
+    PS3="${BOLD}Enter your MagicMirror artist choice (numeric or text): ${NORMAL}"
+    options=(ALL ${ARTS} quit)
+    select opt in "${options[@]}"
+    do
+        case "$opt,$REPLY" in
+            "quit",*|*,"quit")
+                printf "\nExiting\n"
+                exit 0
+                ;;
+            "ALL",*|*,"ALL")
+                if [ -f config-Artists.js ]
+                then
+                    printf "\nInstalling config-Artists.js MagicMirror configuration file\n"
+                    setconf Artists
+                    break
+                else
+                    printf "\nInvalid entry. Please try again"
+                    printf "\nEnter either a number or text of one of the menu entries\n"
+                fi
+                ;;
+            *)
+                if [ -f Artists/config-${opt}.js ]
+                then
+                    printf "\nInstalling config-${opt}.js MagicMirror configuration file\n"
+                    setconf ${opt} Artists
+                    break
+                else
+                    if [ -f Artists/config-${REPLY}.js ]
+                    then
+                        printf "\nInstalling config-${REPLY}.js MagicMirror configuration file\n"
+                        setconf ${REPLY} Artists
+                        break
+                    else
+                        printf "\nInvalid entry. Please try again"
+                        printf "\nEnter either a number or text of one of the menu entries\n"
+                    fi
+                fi
+                ;;
+        esac
+    done
+    exit 0
+  else
+    echo "${SLISDIR}/Artists does not exist or is not a directory. Skipping."
+  fi
+}
+
 [ "$1" == "models_dir" ] && {
   if [ -d "${SLISDIR}/Models" ]
   then
@@ -1149,6 +1212,11 @@ shift $(( OPTIND - 1 ))
             "quit",*|*,"quit")
                 printf "\nExiting\n"
                 exit 0
+                ;;
+            "Artists",*|*,"Artists")
+                printf "======================================================\n\n"
+                mirror artists_dir
+                break
                 ;;
             "JAV",*|*,"JAV")
                 printf "======================================================\n\n"
