@@ -51,6 +51,7 @@ all=
 osa=
 var=
 pcman=
+paper=
 show=
 subdir=
 foundirs=
@@ -105,10 +106,13 @@ fi
 MOD_TOP="$TOP/Wallhaven/Models"
 PHO_TOP="$TOP/Wallhaven/Photographers"
   
-while getopts pPn:s:alxSu flag; do
+while getopts pPn:s:ab:lxSu flag; do
     case $flag in
         a)
             add=1
+            ;;
+        b)
+            paper="$OPTARG"
             ;;
         l)
 #           ls --color=auto -l $OUT | awk ' { print $NF } '
@@ -171,6 +175,41 @@ while getopts pPn:s:alxSu flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
+
+foundpaper=
+if [ "$paper" ]
+then
+#   echo "Checking for $paper"
+    if [ -f "$paper" ]
+    then
+      foundpaper=1
+    else
+#     echo "Checking $OUT"
+      if [ -f "${OUT}/$paper" ]
+      then
+          paper="${OUT}/$paper"
+          foundpaper=1
+      else
+#         echo "Checking $TOP"
+          if [ -f "${TOP}/$paper" ]
+          then
+              paper="${TOP}/$paper"
+              foundpaper=1
+          else
+#             echo "Checking $PRE_TOP"
+              if [ -f "${PRE_TOP}/$paper" ]
+              then
+                  paper="${PRE_TOP}/$paper"
+                  foundpaper=1
+              else
+                  echo "Cannot find specified background pic $paper"
+              fi
+          fi
+      fi
+    fi
+    # TODO: Set background on systems without pcmanfm
+    [ "$foundpaper" ] && DISPLAY=:0 pcmanfm --set-wallpaper=$paper
+fi
 
 [ "$show" ] && {
     if [ "$plat" == "Darwin" ]
