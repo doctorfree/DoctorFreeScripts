@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# Adapted from a posting on an LXQT forum at
+# https://www.pclinuxos.com/forum/index.php?topic=87784.0
 
 DIR=/usr/local/share/backgrounds
 FLOOR=1
