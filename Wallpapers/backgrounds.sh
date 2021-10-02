@@ -21,12 +21,21 @@
 ##
 ## You may wish to add the "Slideshow" icon to the Preview toolbar for ease of use
 ##
+# My MagicMirror is Linux with a different TOP and PRE
+mirror=
+[ -d ${HOME}/MagicMirror ] && mirror=1
 
 # Root directory of your subfolders of image files to use as backgrounds/slideshows
-LIN_TOP=/u/pictures
+if [ "$mirror" ]
+then
+    LIN_TOP=/mnt/transcend/Pictures
+    PRE_TOP=$HOME/Pictures/Backgrounds
+else
+    LIN_TOP=/u/pictures
+    PRE_TOP=$HOME/Pictures/Work/Backgrounds
+fi
 MAC_TOP="/Volumes/Seagate_8TB/Pictures/Work"
 NFS_TOP=/u/pictures/Work
-PRE_TOP=$HOME/Pictures/Work/Backgrounds
 #
 # Location of folder to copy selected images to
 MAC_OUT=$HOME/Pictures/Backgrounds
@@ -40,6 +49,8 @@ maxlinks=2048
 add=
 all=
 osa=
+var=
+pcman=
 show=
 subdir=
 foundirs=
@@ -169,6 +180,8 @@ shift $(( OPTIND - 1 ))
     else
         inst=`type -p variety-slideshow`
         [ "$inst" ] && var=1
+        inst=`type -p pcmanslideshow`
+        [ "$inst" ] && pcman=1
     fi
     [ "$inst" ] || {
         echo "$SLIDE_APP is not supported on this platform."
@@ -356,7 +369,17 @@ EOF
           fi
         }
     else
-#           variety-slideshow $HOME/.config/variety/Favorites 2> /dev/null
+#       variety-slideshow $HOME/.config/variety/Favorites 2> /dev/null
+        if [ "${var}" ]
+        then
             variety-slideshow "$OUT" 2> /dev/null
+        else
+            if [ "${pcman}" ]
+            then
+                DISPLAY=:0 pcmanslideshow
+            else
+                echo "No slideshow program found for this platform"
+            fi
+        fi
     fi
 }

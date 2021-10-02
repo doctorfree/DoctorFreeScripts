@@ -21,40 +21,53 @@
 ##
 ## You may wish to add the "Slideshow" icon to the Preview toolbar for ease of use
 ##
+# My MagicMirror is Linux with a different TOP and PRE
+mirror=
+[ -d ${HOME}/MagicMirror ] && mirror=1
 
 # Root directory of your subfolders of image files to use as backgrounds/slideshows
-MAC_TOP=/u/pictures/Work
-SEA_TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
-LIN_TOP=$HOME/Pictures
+if [ "$mirror" ]
+then
+    LIN_TOP=/mnt/transcend/Pictures
+    PRE_TOP=$HOME/Pictures/Backgrounds
+else
+    LIN_TOP=/u/pictures
+    PRE_TOP=$HOME/Pictures/Work/Backgrounds
+fi
+MAC_TOP="/Volumes/Seagate_8TB/Pictures/Work"
+NFS_TOP=/u/pictures/Work
 #
 # Location of folder to copy selected images to
 MAC_OUT=$HOME/Pictures/Backgrounds
 LIN_OUT=/usr/local/share/backgrounds
 #
-# Folders to search for model name or other subfolder of images to use
-# These are located under $TOP, defined below
-# Order is important, first in list coming first in search
-# If you want to combine images from several folders use the "-s all" option
+# Location of prepared folders
+PRE_DIR=$HOME/Pictures/Work/Backgrounds
 #
-SUBS="Fractals Waterfalls Nature"
-
 bak=/tmp/pic$$
 maxlinks=2048
 add=
 all=
 osa=
+var=
+pcman=
 show=
 subdir=
 foundirs=
+updpre=
+xnview=
 name=`basename $0`
 plat=`uname -s`
 
 usage() {
-  printf "\nUsage: $name [-u] [-a] [-l] [-S] [-n numpics] [-s subdir] directory"
+  printf "\nUsage: $name [-u] [-a] [-l] [-x] [-pP] [-S] [-n numpics] [-s subdir] directory"
   printf "\nWhere\t-a indicates add to existing background/slide pics"
   printf "\n\t-l lists currently installed background/slide pics"
+  printf "\n\t-p indicates search for background pics in prepared folders"
+  printf "\n\t-P indicates search for background pics in prepared folders and update"
   printf "\n\t-n <numpics> sets maximum number of pics to be copied (default ${maxlinks})"
   printf "\n\t-s <subdir> searches in $TOP/<subdir> for specified folder"
+  printf "\n\t-x indicates use XnViewMP for slideshow"
   printf "\n\t-S indicates run a slideshow of pics\n\n"
   exit 1
 }
@@ -81,25 +94,50 @@ else
     fi
 fi
 [ -d "$TOP" ] || {
-    TOP="$SEA_TOP"
+    TOP="$NFS_TOP"
     [ -d "$TOP" ] || {
         echo "Cannot locate Work directory for pics. Exiting."
         exit 1
     }
 }
+
+# Set Model and Photographer top dirs before processing arguments
+MOD_TOP="$TOP/Wallhaven/Models"
+PHO_TOP="$TOP/Wallhaven/Photographers"
   
-while getopts n:s:alSu flag; do
+while getopts pPn:s:alxSu flag; do
     case $flag in
         a)
             add=1
             ;;
         l)
 #           ls --color=auto -l $OUT | awk ' { print $NF } '
-            ls -l $OUT | awk ' { print $NF } '
+            numprep=`ls -1 $OUT | wc -l`
+            ls -l $OUT | grep -v total | awk ' { print $NF } '
+            echo "$numprep background images in $OUT"
+            echo ""
+            echo "Prepared folders in $PRE_DIR :"
+            for folder in $PRE_DIR/*
+            do
+                [ "$folder" == "$PRE_DIR/*" ] && continue
+                [ -d "$folder" ] && {
+                    prepmod=`basename "$folder"`
+                    echo "$prepmod"
+                }
+            done
             exit 0
             ;;
         n)
             maxlinks="$OPTARG"
+            ;;
+        p)
+            TOP=$PRE_TOP
+            foundirs="$TOP"
+            ;;
+        P)
+            TOP=$PRE_TOP
+            foundirs="$TOP"
+            updpre=1
             ;;
         s)
             case "$OPTARG" in
@@ -113,10 +151,6 @@ while getopts n:s:alSu flag; do
                 ;;
               kind) subdir="KindGirls"
                 ;;
-              nature) subdir="Nature"
-                ;;
-              waterfalls) subdir="Waterfalls"
-                ;;
               whvn) subdir="Wallhaven/Models"
                 ;;
               xart) subdir="X-Art"
@@ -124,6 +158,9 @@ while getopts n:s:alSu flag; do
               *) subdir="$OPTARG"
                 ;;
             esac
+            ;;
+        x)
+            xnview=1
             ;;
         S)
             show=1
@@ -143,6 +180,8 @@ shift $(( OPTIND - 1 ))
     else
         inst=`type -p variety-slideshow`
         [ "$inst" ] && var=1
+        inst=`type -p pcmanslideshow`
+        [ "$inst" ] && pcman=1
     fi
     [ "$inst" ] || {
         echo "$SLIDE_APP is not supported on this platform."
@@ -182,37 +221,70 @@ cd $OUT
         echo "Cannot locate $TOP/$subdir/$bdir - exiting."
         exit 1
       }
-      TOP=$TOP/$subdir
-      foundirs=$TOP
+      TOP="$TOP/$subdir"
+      foundirs="$TOP"
     else
-      [ -d $TOP/$bdir ] || {
-       for subdir in Fractals Waterfalls Nature
-       do
-         [ -d $TOP/$subdir/$bdir ] && {
-           sub=$TOP/$subdir
-           if [ "$all" ]
-           then
-             foundirs="$foundirs $sub"
-           else
-             foundirs=$sub
-             break
-           fi
-         }
-       done
-       TOP=$sub
+      [ -d "$TOP/$bdir" ] || {
+        [ "$updpre" ] && mkdir "$TOP/$bdir"
+        for subdir in Wallhaven Wallhaven/Models Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
+        do
+          [ -d "$TOP/$subdir/$bdir" ] && {
+            sub="$TOP/$subdir"
+            if [ "$all" ]
+            then
+              foundirs="$foundirs $sub"
+            else
+              foundirs="$sub"
+              break
+            fi
+          }
+        done
+        #TOP="$sub"
       }
     fi
   fi
-  [ -d $TOP/$bdir ] || {
+  [ -d "$TOP/$bdir" ] || {
     echo "Cannot locate $TOP/$bdir - exiting."
     exit 1
   }
+  echo "Using background pics in $TOP/$bdir"
 
   numlinks=0
-  echo "Found folders in $foundirs"
   for dir in $foundirs
   do
-    echo "Looking for pics in $dir/$bdir"
+    [ "$updpre" ] && {
+      updtop=
+      if [ -d $MOD_TOP/$bdir ]
+      then
+        updtop=$MOD_TOP
+      else
+        if [ -d $PHO_TOP/$bdir ]
+        then
+          updtop=$PHO_TOP
+        fi
+      fi
+      [ "$updtop" ] && {
+        [ -d $TOP/$bdir ] || mkdir $TOP/$bdir
+        cd $TOP/$bdir
+        for orig in $updtop/$bdir/wallhaven*
+        do
+          [ "$orig" == "$updtop/$bdir/wallhaven*" ] && {
+            echo "No pics in $updtop/$bdir"
+            continue
+          }
+          bnam=`basename $orig`
+          [ -L $bnam ] && continue
+          cp $orig $bnam
+          rmportargs $bnam
+          [ -f $bnam ] && {
+            rm -f $bnam
+            echo "Adding $bnam to $bdir"
+            ln -s $orig .
+          }
+        done
+        cd $OUT
+      }
+    }
     for pic in $dir/$bdir/*
     do
       [ "$pic" == "$dir/$bdir/*" ] && continue
@@ -229,7 +301,7 @@ cd $OUT
 #       bnam=`basename $subpic`
 #       [ -L $bnam ] && continue
 #       ln -s $subpic .
-          cp $subpic .
+          cp "$subpic" .
           numlinks=`expr $numlinks + 1`
           [ $numlinks -ge $maxlinks ] && break 2
         done
@@ -237,7 +309,7 @@ cd $OUT
 #     bnam=`basename $pic`
 #     [ -L $bnam ] && continue
 #     ln -s $pic .
-        cp $pic .
+        cp "$pic" .
         numlinks=`expr $numlinks + 1`
       fi
       [ $numlinks -ge $maxlinks ] && break 2
@@ -253,7 +325,7 @@ cd $OUT
       }
       continue
     }
-    file -L $j | grep ASCII > /dev/null && rm -f $j
+    file -L "$j" | grep ASCII > /dev/null && rm -f "$j"
   done
   [ "$add" ] || rm -rf $bak
 }
@@ -261,21 +333,53 @@ cd $OUT
 [ "$show" ] && {
     if [ "$plat" == "Darwin" ]
     then
-        open -a Preview "$OUT"/*
+        if [ "$xnview" ]
+        then
+            open -a XnViewMP "$OUT"
+        else
+            open -a Preview "$OUT"/*
+        fi
         # ----------------------
         # Applescript below here
         # ----------------------
         [ "$osa" ] && {
+          if [ "$xnview" ]
+          then
+            osascript <<EOF
+            delay 5
+            tell application "System Events"
+                keystroke "a" using {command down}
+                delay 3
+                key code 36
+                delay 3
+                keystroke "s" using {option down, command down}
+                delay 3
+                key code 36
+                delay 3
+                keystroke "f" using {option down, command down}
+            end tell
+EOF
+          else
             osascript <<EOF
             delay 5
             tell application "System Events"
                 keystroke "F" using {shift down, command down}
             end tell
 EOF
+          fi
         }
     else
-#           variety-slideshow $HOME/.config/variety/Favorites 2> /dev/null
-#           variety-slideshow "$OUT" 2> /dev/null
-            DISPLAY=:0 pcmanfm --set-wallpaper=$back
+#       variety-slideshow $HOME/.config/variety/Favorites 2> /dev/null
+        if [ "${var}" ]
+        then
+            variety-slideshow "$OUT" 2> /dev/null
+        else
+            if [ "${pcman}" ]
+            then
+                DISPLAY=:0 pcmanslideshow
+            else
+                echo "No slideshow program found for this platform"
+            fi
+        fi
     fi
 }
