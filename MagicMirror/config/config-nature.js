@@ -67,11 +67,11 @@ var config = {
                 imagePaths: [
                     'modules/MMM-BackgroundSlideshow/pics/gif/Nature/',
                 ],
-                slideshowSpeed: 15000, // 15 seconds
-                transitionImages: true,
+                slideshowSpeed: 30000, // 30 seconds
+                transitionImages: false,
                 randomizeImageOrder: true,
-                recursiveSubDirectories: true,
-                resizeImages: true,
+                recursiveSubDirectories: false,
+                resizeImages: false,
                 maxWidth: 1080,
                 maxHeight: 1920,
                 transitions: ['opacity', 'slideFromRight', 'slideFromLeft', 'slideFromTopLeft', 'slideFromTopRight', 'slideFromBottomLeft', 'slideFromBottomRight', 'flipX', 'flipY'],

@@ -67,11 +67,11 @@ var config = {
                 imagePaths: [
                     'modules/MMM-BackgroundSlideshow/pics/gif/Smoke/',
                 ],
-                slideshowSpeed: 15000, // 15 seconds
-                transitionImages: true,
+                slideshowSpeed: 30000, // 30 seconds
+                transitionImages: false,
                 randomizeImageOrder: true,
-                recursiveSubDirectories: true,
-                resizeImages: true,
+                recursiveSubDirectories: false,
+                resizeImages: false,
                 maxWidth: 1080,
                 maxHeight: 1920,
                 transitions: ['opacity', 'slideFromRight', 'slideFromLeft', 'slideFromTopLeft', 'slideFromTopRight', 'slideFromBottomLeft', 'slideFromBottomRight', 'flipX', 'flipY'],
@@ -83,21 +83,21 @@ var config = {
                 //]
             }
         },
-        {
-            module: 'MMM-TelegramBot',
-            config: {
-              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
+        // {
+        //     module: 'MMM-TelegramBot',
+        //     config: {
+        //       telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-              allowedUser : ['Your-Telegram-Username'],
-              adminChatId : Your-Telegram-Chat-ID,
-              useWelcomeMessage: true,
-              verbose: false,
-              favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
-              screenshotScript: "scrot",
-              detailOption: {},
-              customCommands: [],
-            }
-        },
+        //       allowedUser : ['Your-Telegram-Username'],
+        //       adminChatId : Your-Telegram-Chat-ID,
+        //       useWelcomeMessage: true,
+        //       verbose: false,
+        //       favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
+        //       screenshotScript: "scrot",
+        //       detailOption: {},
+        //       customCommands: [],
+        //     }
+        // },
         // {
         //     module: "MMM-GoogleAssistant",
         //     position: "top_right",

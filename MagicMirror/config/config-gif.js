@@ -56,7 +56,7 @@ var config = {
         {
             module: 'MMM-Remote-Control',
             config: {
-                apiKey: 'd8d8947ad3da477288bcbe3c7353523b'
+                apiKey: 'xxx_Remote-Control-API-Key_xxxxx'
             }
         },
         {
@@ -65,25 +65,34 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/pics/Artists/Zumi/',
+                    '/home/pi/Pictures/Gif/Nature',
+                    '/home/pi/Pictures/Gif/Portal',
+                    '/home/pi/Pictures/Gif/Smoke',
+                    '/home/pi/Pictures/Gif/Dream_of_Jeannie',
                 ],
-                slideshowSpeed: 15000, // 15 seconds
-                transitionImages: true,
+                slideshowSpeed: 30000, // 30 seconds
+                transitionImages: false,
                 randomizeImageOrder: true,
-                recursiveSubDirectories: true,
-                resizeImages: true,
+                recursiveSubDirectories: false,
+                resizeImages: false,
                 maxWidth: 1080,
                 maxHeight: 1920,
                 transitions: ['opacity', 'slideFromRight', 'slideFromLeft', 'slideFromTopLeft', 'slideFromTopRight', 'slideFromBottomLeft', 'slideFromBottomRight', 'flipX', 'flipY'],
+                //backgroundSize: "contain",
+                // DISPLAY THE SLIDE SHOW BETWEEN 1PM and 6PM then again between 9PM and Midnight
+                //module_schedule: [
+                //  {from: '0 13 * * *', to:   '0 18 * * *'},
+                //  {from: '0 21 * * *', to:   '59 23 * * *'}
+                //]
             }
         },
         // {
         //     module: 'MMM-TelegramBot',
         //     config: {
-        //       telegramAPIKey : '1072742999:AAHn56XyKkr571YXA1iQ1NZc5Mexxbv2pJc',
+        //       telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-        //       allowedUser : ['ronrecord'],
-        //       adminChatId : 1089756486,
+        //       allowedUser : ['Your-Telegram-Username'],
+        //       adminChatId : Your-Telegram-Chat-ID,
         //       useWelcomeMessage: true,
         //       verbose: false,
         //       favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
@@ -98,8 +107,8 @@ var config = {
         //     config: {
         //         maxWidth: "100%",
         //         header: "",
-        //     publishKey: 'pub-c-206f354b-5d57-49aa-add5-be3a2356e921',
-        //     subscribeKey: 'sub-c-0400d566-538e-11eb-a233-facb2062b65c',
+        //     publishKey: 'xxxxxx_Your-GoogleVoice-Pub-Key_xxxxxxxx',
+        //     subscribeKey: 'xxxxxx_Your-GoogleVoice-Sub-Key_xxxxxxxx',
         //     updateDelay: 500
         //     }
         // },
