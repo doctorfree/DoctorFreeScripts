@@ -144,25 +144,25 @@ var config = {
                 modules:
                     [["MMM-COVID19"], ["newsfeed"], [ "MMM-iFrame"]],
                 fixed:
-                    ["alert", "updatenotification", "MMM-Remote-Control", "MMM-TelegramBot"],
+                    ["alert", "updatenotification", "MMM-Remote-Control"],
                 rotationTime: 900000, // rotate page every 15 minutes = 15 * 60 * 1000
             }
         },
-        {
-            module: 'MMM-TelegramBot',
-            config: {
-              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
+        // {
+        //     module: 'MMM-TelegramBot',
+        //     config: {
+        //       telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-              allowedUser : ['Your-Telegram-Username'],
-              adminChatId : Your-Telegram-Chat-ID,
-              useWelcomeMessage: true,
-              verbose: false,
-              favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
-              screenshotScript: "scrot",
-              detailOption: {},
-              customCommands: [],
-            }
-        },
+        //       allowedUser : ['Your-Telegram-Username'],
+        //       adminChatId : Your-Telegram-Chat-ID,
+        //       useWelcomeMessage: true,
+        //       verbose: false,
+        //       favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
+        //       screenshotScript: "scrot",
+        //       detailOption: {},
+        //       customCommands: [],
+        //     }
+        // },
         // {
         //     module: "MMM-GoogleAssistant",
         //     position: "top_right",

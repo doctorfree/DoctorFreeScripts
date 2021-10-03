@@ -338,20 +338,20 @@ var config = {
                 ],
             },
         },
-        {
-            module: 'MMM-TelegramBot',
-            config: {
-              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
-              allowedUser : ['Your-Telegram-Username'],
-              adminChatId : Your-Telegram-Chat-ID,
-              useWelcomeMessage: true,
-              verbose: false,
-              favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
-              screenshotScript: "scrot",
-              detailOption: {},
-              customCommands: [],
-            }
-        },
+        // {
+        //     module: 'MMM-TelegramBot',
+        //     config: {
+        //       telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
+        //       allowedUser : ['Your-Telegram-Username'],
+        //       adminChatId : Your-Telegram-Chat-ID,
+        //       useWelcomeMessage: true,
+        //       verbose: false,
+        //       favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
+        //       screenshotScript: "scrot",
+        //       detailOption: {},
+        //       customCommands: [],
+        //     }
+        // },
         {
             module: 'MMM-iFrame',
             position: 'fullscreen_below',
@@ -480,7 +480,7 @@ var config = {
                     ],
                 fixed:
                     ["alert", "clock", "currentweather", "weatherforecast",
-                     "updatenotification", "MMM-Remote-Control", "MMM-TelegramBot"],
+                     "updatenotification", "MMM-Remote-Control"],
                 rotationTime: 300000, // rotate page every 5 minutes = 5 * 60 * 1000
             }
         },

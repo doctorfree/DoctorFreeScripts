@@ -38,7 +38,7 @@ PORT="8080"
 # Set you MMM-Remote-Control API Key here or leave blank if you have not configured one
 #
 # Replace "MMM-Remote-Control_API_Key" with your MMM-Remote-Control API Key
-apikey="MMM-Remote-Control_API_Key"
+apikey="d8d8947ad3da477288bcbe3c7353523b"
 # Uncomment this line if you have not configured an MMM-Remote-Control API Key
 # apikey=
 #
@@ -46,15 +46,20 @@ apikey="MMM-Remote-Control_API_Key"
 export DISPLAY=:0
 # -----------------------------------------------------------------------
 CONFDIR="${MM}/config"
+# MagicMirror configuration files organized into subdirectories listed here
+CONF_SUBDIRS="Artists JAV Models Photographers"
+#
 SLISDIR="${MM}/modules/MMM-BackgroundSlideshow/pics"
 ARTISTDIR="Pictures/Artists-ALL"
+JAVDIR="Pictures/JAV-ALL"
 MODELDIR="Pictures/Models-ALL"
 PHOTODIR="Pictures/Photographers-ALL"
 ARTIST_TEMPLATE="${CONFDIR}/Templates/config-artist-template.js"
+JAV_TEMPLATE="${CONFDIR}/Templates/config-jav-template.js"
 MODEL_TEMPLATE="${CONFDIR}/Templates/config-model-template.js"
 PHOTO_TEMPLATE="${CONFDIR}/Templates/config-photo-template.js"
+WHVN_TEMPLATE="${CONFDIR}/Templates/config-whvn-template.js"
 WHVNDIR="Pictures/Wallhaven"
-WH_TEMPLATE="Templates/config-wh-template.js"
 CONFS=
 BACKS=
 INFO="all"
@@ -193,18 +198,14 @@ list_mods() {
             then
                 printf "\n${BOLD}Listing MagicMirror configuration files:${NORMAL}\n\n"
                 ls config-*.js
-                [ -d Models ] && {
-                  printf "\n${BOLD}Listing MagicMirror Models configuration files:${NORMAL}\n\n"
-                  ls Models/config-*.js
-                }
-                [ -d Photographers ] && {
-                  printf "\n${BOLD}Listing MagicMirror Photographers configuration files:${NORMAL}\n\n"
-                  ls Photographers/config-*.js
-                }
-                [ -d JAV ] && {
-                  printf "\n${BOLD}Listing MagicMirror JAV configuration files:${NORMAL}\n\n"
-                  ls JAV/config-*.js
-                }
+                for confdir in __none__ ${CONF_SUBDIRS}
+                do
+                    [ "${confdir}" == "__none__" ] && continue
+                    [ -d ${confdir} ] && {
+                        printf "\n${BOLD}Listing MagicMirror ${confdir} configuration files:${NORMAL}\n\n"
+                        ls ${confdir}/config-*.js
+                    }
+                done
             else
                 printf "\nmirror list $1 is not an accepted 2nd argument."
                 printf "\nValid 2nd arguments to the list command are 'active', 'installed', and 'configs'"
@@ -419,6 +420,60 @@ artist_remove() {
     mirror default
 }
 
+jav_create() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    printf "\nCreating config file ${CONFDIR}/JAV/config-${PICDIR}.js\n"
+    cd "${CONFDIR}/JAV"
+    [ -f "config-${PICDIR}.js" ] || {
+        if [ -f ${JAV_TEMPLATE} ]
+        then
+            cat ${JAV_TEMPLATE} | sed -e "s/JAV_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+        else
+            echo "JAV config template $JAV_TEMPLATE not found"
+            exit 1
+        fi
+    }
+    if [ -d "${HOME}/Pictures/JAV/${PICDIR}" ]
+    then
+        # Already have a prepared folder for this photographer
+        printf "\nUsing existing ${PICDIR} image folder\n"
+        setconf ${PICDIR} JAV
+    else
+      if [ -d "${HOME}/${JAVDIR}/${PICDIR}" ]
+      then
+        printf "\nCreating image folder ${SLISDIR}/JAV/${PICDIR}\n"
+        [ -d "${SLISDIR}/JAV/${PICDIR}" ] || mkdir -p "${SLISDIR}/JAV/${PICDIR}"
+        cd "${SLISDIR}/JAV/${PICDIR}"
+        rm -f *.jpg
+        cp -L ${HOME}/${JAVDIR}/${PICDIR}/*.jpg .
+        cd "${CONFDIR}"
+        setconf ${PICDIR} JAV
+      else
+        printf "\nFolder argument ${JAVDIR}/${PICDIR} does not exist or is not a directory."
+        usage
+      fi
+    fi
+}
+
+jav_remove() {
+    [ "$1" ] || {
+        printf "\nFolder argument required to specify Slideshow dir.\n"
+        usage
+    }
+    PICDIR="$1"
+    [ -d "${SLISDIR}/${PICDIR}" ] && {
+        printf "\nRemoving config file and pic folder for ${JAVDIR}/${PICDIR}"
+        cd "${SLISDIR}"
+        rm -rf "${PICDIR}"
+    }
+    rm -f "${CONFDIR}/JAV/config-${PICDIR}.js"
+    mirror default
+}
+
 photo_create() {
     [ "$1" ] || {
         printf "\nFolder argument required to specify Slideshow dir.\n"
@@ -482,11 +537,11 @@ wh_create() {
     cd "${CONFDIR}"
     printf "\nCreating config file ${CONFDIR}/config-${PICDIR}.js\n"
     [ -f "config-${PICDIR}.js" ] || {
-        if [ -f ${WH_TEMPLATE} ]
+        if [ -f ${WHVN_TEMPLATE} ]
         then
-            cat ${WH_TEMPLATE} | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
+            cat ${WHVN_TEMPLATE} | sed -e "s/WH_DIR_HOLDER/${PICDIR}/" > "config-${PICDIR}.js"
         else
-            echo "Wallhaven config template $WH_TEMPLATE not found"
+            echo "Wallhaven config template $WHVN_TEMPLATE not found"
             exit 1
         fi
     }
@@ -555,11 +610,14 @@ usage() {
     getconfs usage
     printf "\n${BOLD}Usage:${NORMAL} mirror <command> [args]"
     printf "\nWhere <command> can be one of the following:"
+
     printf "\n\tinfo [temp|mem|disk|usb|net|wireless|screen],"
     printf " list <active|installed|configs>, rotate [right|left|normal], artists_dir,"
-    printf " models_dir, photogs_dir, select, restart, screen [on|off|info|status], start, stop,"
-    printf " status [all], dev, getb, setb <num>, ac <artist>, ar <artist>, mc <model>,"
-    printf " mr <model>, pc <photographer>, pr <photographer>, wh <dir>, whrm <dir>"
+    printf " models_dir, photogs_dir, select, restart, screen [on|off|info|status],"
+    printf " start, stop, status [all], dev, getb, setb <num>, ac <artist>, ar <artist>,"
+    printf " jc <idol>, jr <idol>, mc <model>, mr <model>, pc <photographer>,"
+    printf " pr <photographer>, wh <dir>, whrm <dir>"
+
     printf "\n\nor specify a config file to use with one of:"
     printf "\n\t${CONFS}"
     printf "\n\nor any other config file you have created in ${CONFDIR} of the form:"
@@ -653,12 +711,19 @@ set_config() {
     [ "$mode" == "fractal" ] && mode="fractals"
 
     cd "${CONFDIR}"
+    [ "${subdir}" ] && {
+        [ -f ${subdir}/config-${mode}.js ] && {
+            setconf ${mode} ${subdir}
+            return
+        }
+    }
     if [ -f config-${mode}.js ]
     then
         setconf ${mode}
         return
     else
-        for sub in ${subdir} Artists Models Photographers JAV
+        # for sub in ${subdir} Artists Models Photographers JAV
+        find . -type d | while read sub
         do
             [ -f ${sub}/config-${mode}.js ] && {
                 setconf ${mode} ${sub}
@@ -667,7 +732,8 @@ set_config() {
         done
     fi
     # Try to find something that matches the first part of the specified name
-    for sub in ${subdir} Artists Models Photographers JAV
+    # for sub in ${subdir} Artists Models Photographers JAV
+    find . -type d | while read sub
     do
         for confname in ${sub}/config-${mode}*.js
         do
@@ -908,7 +974,7 @@ get_info_type() {
 # stop
 # status [all]
 
-while getopts a:A:b:Bc:di:Il:m:M:p:P:r:s:Sw:W:u flag; do
+while getopts a:A:b:Bc:di:Ij:J:l:m:M:p:P:r:s:Sw:W:u flag; do
     case $flag in
         a)
           artist_create ${OPTARG}
@@ -943,6 +1009,12 @@ while getopts a:A:b:Bc:di:Il:m:M:p:P:r:s:Sw:W:u flag; do
                 ;;
             esac
             ;;
+        j)
+          jav_create ${OPTARG}
+          ;;
+        J)
+          jav_remove ${OPTARG}
+          ;;
         l)
             case ${OPTARG} in
               active|installed|configs)
@@ -1344,6 +1416,16 @@ shift $(( OPTIND - 1 ))
 
 [ "$1" == "ar" ] && {
     artist_remove $2
+    exit 0
+}
+
+[ "$1" == "jc" ] && {
+    jav_create $2
+    exit 0
+}
+
+[ "$1" == "jr" ] && {
+    jav_remove $2
     exit 0
 }
 

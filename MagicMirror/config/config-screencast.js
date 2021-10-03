@@ -71,21 +71,21 @@ var config = {
                 port: 8569,
 		    }
         },
-        {
-            module: 'MMM-TelegramBot',
-            config: {
-              telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
+        // {
+        //     module: 'MMM-TelegramBot',
+        //     config: {
+        //       telegramAPIKey : 'xxxxxx_Your-Telegram-API-Key_xxxxxxxxxxxxxxxxx',
               // This is NOT the username of bot.
-              allowedUser : ['Your-Telegram-Username'],
-              adminChatId : Your-Telegram-Chat-ID,
-              useWelcomeMessage: true,
-              verbose: false,
-              favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
-              screenshotScript: "scrot",
-              detailOption: {},
-              customCommands: [],
-            }
-        },
+        //       allowedUser : ['Your-Telegram-Username'],
+        //       adminChatId : Your-Telegram-Chat-ID,
+        //       useWelcomeMessage: true,
+        //       verbose: false,
+        //       favourites:["/hideall", "/showall", "/screenshot", "/shutdown"],
+        //       screenshotScript: "scrot",
+        //       detailOption: {},
+        //       customCommands: [],
+        //     }
+        // },
         // {
         //     module: "MMM-GoogleAssistant",
         //     position: "top_right",

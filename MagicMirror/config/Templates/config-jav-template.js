@@ -65,12 +65,9 @@ var config = {
             // classes: 'scheduler',
             config: {
                 imagePaths: [
-                    'modules/MMM-BackgroundSlideshow/pics/Photographers/Igor_Viushkin',
+                    'modules/MMM-BackgroundSlideshow/pics/JAV/JAV_DIR_HOLDER/',
                 ],
                 slideshowSpeed: 15000, // 15 seconds
-                resizeImages: true,
-                maxWidth: 1080,
-                maxHeight: 1920,
                 transitionImages: true,
                 randomizeImageOrder: true,
                 recursiveSubDirectories: true,
@@ -78,12 +75,6 @@ var config = {
                 maxWidth: 1080,
                 maxHeight: 1920,
                 transitions: ['opacity', 'slideFromRight', 'slideFromLeft', 'slideFromTopLeft', 'slideFromTopRight', 'slideFromBottomLeft', 'slideFromBottomRight', 'flipX', 'flipY'],
-                //backgroundSize: "contain",
-                // DISPLAY THE SLIDE SHOW BETWEEN 1PM and 6PM then again between 9PM and Midnight
-                //module_schedule: [
-                //  {from: '0 13 * * *', to:   '0 18 * * *'},
-                //  {from: '0 21 * * *', to:   '59 23 * * *'}
-                //]
             }
         },
         // {
