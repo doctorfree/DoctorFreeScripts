@@ -1,3 +1,0 @@
-- /home/pi/Seagate_8TB
-- /home/pi/WD_My_Passport_4TB
-- /home/pi/.cache

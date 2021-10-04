@@ -1,2 +1,0 @@
-/home/pi/Seagate_8TB -fstype=nfs,rw  10.0.1.51:/Volumes/Seagate_8TB
-/home/pi/WD_My_Passport_4TB -fstype=nfs,rw  10.0.1.51:/Volumes/WD_My_Passport_4TB
