@@ -6,11 +6,15 @@ Linux, OS X, and Cygwin. Includes some custom Bash and Vim startup scripts.
 
 To clone:
 
-    git clone https://gitlab.com/doctorfree/Scripts.git
+    `git clone https://gitlab.com/doctorfree/Scripts.git`
 
     or
 
-    git clone git@gitlab.com:doctorfree/Scripts.git
+    `git clone git@gitlab.com:doctorfree/Scripts.git`
+
+To clone the MagicMirror and Roon submodules as well:
+
+    `git clone --recurse-submodules https://gitlab.com/doctorfree/Scripts.git`
 
 Contents:
 --------
