@@ -11,6 +11,9 @@ OUT_DIR="dist/${PKG_NAME}_${PKG_VER}"
 
 SUBDIRS="Config IFTTT binance chrome-themes \
          clone coinmarketcap doc profittrailer systemd"
+DOT_FILES="bash_aliases bash_profile bashrc dircolors vimrc"
+IMG_FILES="Scripts-Logo.png Vertical.png"
+ETC_FILES="Doxyfile crontab-peakhours.in"
 
 [ -d "${SRC}" ] || {
     echo "$SRC does not exist or is not a directory. Exiting."
@@ -45,7 +48,7 @@ do
     sudo chown root:root ${OUT_DIR}/${dir}
 done
 
-for dir in bin etc ${SUBDIRS}
+for dir in bin etc share ${SUBDIRS}
 do
     [ -d ${OUT_DIR}/${DESTDIR}/${dir} ] && sudo rm -rf ${OUT_DIR}/${DESTDIR}/${dir}
 done
@@ -86,6 +89,14 @@ for dir in ${SUBDIRS}
 do
     sudo cp -a ${dir} ${OUT_DIR}/${DESTDIR}/${dir}
 done
+
+[ -d ${OUT_DIR}/${DESTDIR}/share ] || mkdir -p ${OUT_DIR}/${DESTDIR}/share
+[ -d ${OUT_DIR}/${DESTDIR}/share/bash ] || mkdir -p ${OUT_DIR}/${DESTDIR}/share/bash
+sudo cp ${DOT_FILES} ${OUT_DIR}/${DESTDIR}/share/bash
+[ -d ${OUT_DIR}/${DESTDIR}/share/images ] || mkdir -p ${OUT_DIR}/${DESTDIR}/share/images
+sudo cp ${IMG_FILES} ${OUT_DIR}/${DESTDIR}/share/images
+[ -d ${OUT_DIR}/${DESTDIR}/etc ] || mkdir -p ${OUT_DIR}/${DESTDIR}/etc
+sudo cp ${ETC_FILES} ${OUT_DIR}/${DESTDIR}/etc
 
 [ -f .gitignore ] && {
     while read ignore
