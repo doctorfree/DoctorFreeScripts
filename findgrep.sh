@@ -34,4 +34,4 @@ Usage() {
 
 [ $# -eq 0 ] && Usage
 
-find . -type f -o -type l -print0 | xargs -0 grep $*
+find -L . ! -type d -print0 | xargs -0 grep $*
