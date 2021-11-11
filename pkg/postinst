@@ -26,7 +26,15 @@ case "$1" in
         for command in /usr/local/DoctorFreeScripts/bin/*
         do
             b=`basename ${command}`
-            [ -f $b ] || ln -s ${command} .
+            if [ -f $b ]
+            then
+                diff $b ${command} > /dev/null && {
+                    rm -f $b
+                    ln -s ${command} .
+                }
+            else
+                ln -s ${command} .
+            fi
         done
     ;;
 
