@@ -90,12 +90,12 @@ do
     sudo cp -a ${dir} ${OUT_DIR}/${DESTDIR}/${dir}
 done
 
-[ -d ${OUT_DIR}/${DESTDIR}/share ] || mkdir -p ${OUT_DIR}/${DESTDIR}/share
-[ -d ${OUT_DIR}/${DESTDIR}/share/bash ] || mkdir -p ${OUT_DIR}/${DESTDIR}/share/bash
+[ -d ${OUT_DIR}/${DESTDIR}/share ] || sudo mkdir -p ${OUT_DIR}/${DESTDIR}/share
+[ -d ${OUT_DIR}/${DESTDIR}/share/bash ] || sudo mkdir -p ${OUT_DIR}/${DESTDIR}/share/bash
 sudo cp ${DOT_FILES} ${OUT_DIR}/${DESTDIR}/share/bash
-[ -d ${OUT_DIR}/${DESTDIR}/share/images ] || mkdir -p ${OUT_DIR}/${DESTDIR}/share/images
+[ -d ${OUT_DIR}/${DESTDIR}/share/images ] || sudo mkdir -p ${OUT_DIR}/${DESTDIR}/share/images
 sudo cp ${IMG_FILES} ${OUT_DIR}/${DESTDIR}/share/images
-[ -d ${OUT_DIR}/${DESTDIR}/etc ] || mkdir -p ${OUT_DIR}/${DESTDIR}/etc
+[ -d ${OUT_DIR}/${DESTDIR}/etc ] || sudo mkdir -p ${OUT_DIR}/${DESTDIR}/etc
 sudo cp ${ETC_FILES} ${OUT_DIR}/${DESTDIR}/etc
 
 [ -f .gitignore ] && {
