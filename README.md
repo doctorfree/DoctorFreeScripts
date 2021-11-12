@@ -1,23 +1,69 @@
-Scripts
-=======
+# Scripts
 
 Utility Bash shell scripts I've written - typically these will run on Unix,
 Linux, OS X, and Cygwin. Includes some custom Bash and Vim startup scripts.
 
 To clone:
 
-    `git clone https://gitlab.com/doctorfree/Scripts.git`
+```bash
+    git clone https://gitlab.com/doctorfree/Scripts.git
+```
 
     or
 
-    `git clone git@gitlab.com:doctorfree/Scripts.git`
+```bash
+    git clone git@gitlab.com:doctorfree/Scripts.git
+```
 
 To clone the MagicMirror and Roon submodules as well:
 
-    `git clone --recurse-submodules https://gitlab.com/doctorfree/Scripts.git`
+```bash
+    git clone --recurse-submodules https://gitlab.com/doctorfree/Scripts.git
+```
 
-Contents:
---------
+## Installation
+
+Scripts version 3.1 and later includes a Debian format package
+which can be used to install the Scripts utilities with the Apt
+package management system. To install:
+
+[Download the latest Debian package format release](https://gitlab.com/doctorfree/Scripts/-/releases)
+
+Install the package by executing the command
+```bash
+sudo apt install DoctorFreeScripts_<version>.deb
+```
+
+You can create your own custom Debian format package from the repository source.
+To do so, clone the Scripts repository:
+
+<code>git clone ssh://gitlab.com/doctorfree/Scripts.git</code>
+
+or
+
+<code>git clone `https://gitlab.com/doctorfree/Scripts.git`</code>
+
+Use the `mkpkg.sh` script to create a Debian format package on a system with
+the prerequisite packaging development environment.
+
+Alternately, for those who prefer to manually install and configure Scripts,
+compressed archives (zip and gzip) are provided for download.
+
+## Removal
+
+To remove/uninstall the DoctorFreeScripts package execute the command:
+
+```bash
+sudo apt remove doctorfree-scripts
+```
+
+**Note:** Removal will issue a warning about removing `/usr/local` and other
+folders within `/usr/local`. This is an artifact of the Debian packaging system.
+If you wish to silence that warning and prevent the Debian packaging system from
+trying to remove `/usr/local` then install the
+[core-custom-local Debian package](https://gitlab.com/doctorfree/core-custom-local/-/releases).
+
+## Contents
 
 [**LICENSE**](LICENSE) - Copyright and licensing, roughly the MIT license but without the heavy handed use of the caps lock key.
      for easy bulk downloading.
