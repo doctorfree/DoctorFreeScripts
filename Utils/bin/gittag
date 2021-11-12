@@ -10,6 +10,6 @@ then
     echo "git tag -a $TAG -m \"$*\""
     echo "git push origin $TAG"
 else
-    git tag -a $TAG -m \"$*\"
+    git tag -a $TAG -m "$*"
     git push origin $TAG
 fi
