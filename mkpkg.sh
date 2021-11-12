@@ -1,7 +1,7 @@
 #!/bin/bash
 PKG="doctorfree-scripts"
 PKG_NAME="DoctorFreeScripts"
-PKG_VER="1.0"
+PKG_VER="3.1"
 TOP="usr"
 LOCAL="${TOP}/local"
 DESTDIR="${LOCAL}/${PKG_NAME}"
