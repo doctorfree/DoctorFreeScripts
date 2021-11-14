@@ -23,8 +23,8 @@ run-build:
     - ./mkpkg.sh
 
   # This stage is only executed for new tags
-  # only:
-  #   - tags
+  only:
+    - tags
 
   # The files which are to be made available in GitLab
   artifacts:
