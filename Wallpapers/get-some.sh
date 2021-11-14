@@ -153,7 +153,7 @@ do
     esac
 done
 
-[ -x ./clean ] && ./clean
+[ -x ./wallclean ] && ./wallclean
 [ "$FIND" ] && {
   [ -x ./findups ] && {
     echo "Running ./findups"

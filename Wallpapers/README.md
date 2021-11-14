@@ -10,7 +10,7 @@ Contents:
 
 [**ckdown**](Wallpapers/ckdown.sh) - Check for missing files listed in downloaded.txt
 
-[**clean**](Wallpapers/clean.sh) - Cleanup an interrupted Wallhaven download folder
+[**wallclean**](Wallpapers/wallclean.sh) - Cleanup an interrupted Wallhaven download folder
 
 [**counts**](Wallpapers/counts.sh) - Prepare a table of number of pics & symbolic links in subdirectories
 

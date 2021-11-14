@@ -268,6 +268,7 @@ do
     Polish)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Polish_Women"
+        get_search "${dir}" "Polish_model"
         ;;
     Pubic_Hair)
         get_search "${dir}" "${dir}"
@@ -379,7 +380,7 @@ done
 
 inst=`type -p linkhaven`
 [ "$inst" ] && linkhaven -a -q
-[ -x ./clean ] && ./clean
+[ -x ./wallclean ] && ./wallclean
 [ "$FIND" ] && {
   [ -x ./findups ] && {
     # echo "Running ./findups"
