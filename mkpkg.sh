@@ -19,7 +19,7 @@ IMG_FILES="Scripts-Logo.png Vertical.png"
 ETC_FILES="Doxyfile crontab-peakhours.in"
 
 [ -d "${SRC}" ] || {
-  [ -f "/builds/doctorfree/Scripts" ] || {
+  [ -d "/builds/doctorfree/Scripts" ] || {
     echo "$SRC does not exist or is not a directory. Exiting."
     exit 1
   }
