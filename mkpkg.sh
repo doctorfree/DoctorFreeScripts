@@ -81,6 +81,13 @@ do
     }
 done
 
+for script in scripts/*.sh
+do
+    grep ${script} .gitignore > /dev/null || {
+        dest=`echo ${script} | sed -e "s/scripts\///" -e "s/\.sh//"`
+        ${SUDO} cp ${script} ${OUT_DIR}/${DESTDIR}/bin/${dest}
+    }
+done
 for script in *.sh
 do
     grep ${script} .gitignore > /dev/null || {

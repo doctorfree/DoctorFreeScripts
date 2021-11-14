@@ -155,7 +155,7 @@ while getopts adfinuw: flag; do
 done
 shift $(( OPTIND - 1 ))
 
-for i in * Utils/* Wallpapers/*.sh IFTTT/*
+for i in * Utils/* Wallpapers/*.sh IFTTT/* scripts/*
 do
     # Skip directories
     [ -d "$i" ] && continue
