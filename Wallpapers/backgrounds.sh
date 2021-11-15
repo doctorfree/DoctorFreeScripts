@@ -26,14 +26,18 @@ mirror=
 [ -d ${HOME}/MagicMirror ] && mirror=1
 
 # Root directory of your subfolders of image files to use as backgrounds/slideshows
+# Modify these image folder settings to reflect your image folder layout
 if [ "$mirror" ]
 then
+    # MagicMirror image folders
     LIN_TOP=/mnt/transcend/Pictures
     PRE_TOP=$HOME/Pictures/Backgrounds
 else
+    # Linux Desktop image folders
     LIN_TOP=/u/pictures
     PRE_TOP=$HOME/Pictures/Work/Backgrounds
 fi
+# Mac OS X image folders
 MAC_TOP="/Volumes/Seagate_8TB/Pictures/Work"
 NFS_TOP=/u/pictures/Work
 #
@@ -51,6 +55,7 @@ all=
 osa=
 var=
 pcman=
+paper=
 show=
 subdir=
 foundirs=
@@ -105,10 +110,13 @@ fi
 MOD_TOP="$TOP/Wallhaven/Models"
 PHO_TOP="$TOP/Wallhaven/Photographers"
   
-while getopts pPn:s:alxSu flag; do
+while getopts pPn:s:ab:lxSu flag; do
     case $flag in
         a)
             add=1
+            ;;
+        b)
+            paper="$OPTARG"
             ;;
         l)
 #           ls --color=auto -l $OUT | awk ' { print $NF } '
@@ -171,6 +179,41 @@ while getopts pPn:s:alxSu flag; do
     esac
 done
 shift $(( OPTIND - 1 ))
+
+foundpaper=
+if [ "$paper" ]
+then
+#   echo "Checking for $paper"
+    if [ -f "$paper" ]
+    then
+      foundpaper=1
+    else
+#     echo "Checking $OUT"
+      if [ -f "${OUT}/$paper" ]
+      then
+          paper="${OUT}/$paper"
+          foundpaper=1
+      else
+#         echo "Checking $TOP"
+          if [ -f "${TOP}/$paper" ]
+          then
+              paper="${TOP}/$paper"
+              foundpaper=1
+          else
+#             echo "Checking $PRE_TOP"
+              if [ -f "${PRE_TOP}/$paper" ]
+              then
+                  paper="${PRE_TOP}/$paper"
+                  foundpaper=1
+              else
+                  echo "Cannot find specified background pic $paper"
+              fi
+          fi
+      fi
+    fi
+    # TODO: Set background on systems without pcmanfm
+    [ "$foundpaper" ] && DISPLAY=:0 pcmanfm --set-wallpaper=$paper
+fi
 
 [ "$show" ] && {
     if [ "$plat" == "Darwin" ]
