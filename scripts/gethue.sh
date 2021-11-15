@@ -18,8 +18,8 @@
 #     /rules which contains all the rules
 #
 # Set the IP and User to use (see instructions in URL above to retrieve this info)
-IP=xx.x.x.x
-USER="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+IP="xxxxxxxxxx_Hue-Hub-IP_xxxxxxxxxxxxxxxx"
+USER="xxxxxxxxxx_Hue-Hub-User_xxxxxxxxxxxxxxxx"
 
 usage() {
     printf "\nUsage: gethue [lights|groups|config|schedules|scenes|sensors|rules]"
