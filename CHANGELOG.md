@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file.
 
+Mon Nov 15 14:28:16 2021 -0800 2d62dc1 :
+   Get version from VERSION
+Mon Nov 15 13:50:49 2021 -0800 33b93df :
+   Copy distribution packages into releases subdir
+Mon Nov 15 13:30:05 2021 -0800 36c139c :
+   export base scripts dir in maintenance scripts
+Mon Nov 15 11:39:08 2021 -0800 7aae0a2 :
+   Create and remove files in /usr/local/share in postinst and prerm
+Mon Nov 15 10:18:29 2021 -0800 5504898 :
+   Update gethue script with latest from MirrorCommandLine
+Mon Nov 15 10:00:41 2021 -0800 90d3bb2 :
+   Update Wallpapers/backgrounds.sh with latest from MirrorCommandLine development
+Mon Nov 15 09:13:48 2021 -0800 e46355f :
+   Move kv up with dot files
+Mon Nov 15 08:59:59 2021 -0800 efa30b3 :
+   Move utility scripts into bin subdir, move wallutils up with dot files
+Mon Nov 15 08:14:40 2021 -0800 e46cbed :
+   Resolve duplicates with MirrorCommandLine package
+Mon Nov 15 07:44:06 2021 -0800 a2673cc :
+   Begin resolving duplicates between packages, move mkpkg.sh to mkpkg
+Sun Nov 14 14:43:31 2021 -0800 6300761 :
+   Move toplevel scripts into scripts subdir
+Sun Nov 14 14:07:02 2021 -0800 bbf18b4 :
+   Move Wallpapers/clean.sh to wallclean.sh
+Sun Nov 14 13:55:50 2021 -0800 6332b40 :
+   Only run CI builds when there is a new tag
+Sun Nov 14 13:52:02 2021 -0800 2665d95 :
+   Fix check for Scripts dir in CI
+Sun Nov 14 13:48:15 2021 -0800 9bc23c3 :
+   Prepare for Gitlab continuous integration
+Thu Nov 11 16:57:36 2021 -0800 743376b :
+   Updated release archives with latest changes
+Thu Nov 11 16:52:00 2021 -0800 e0a0be9 :
+   Add sections on Installation and Removal
+Thu Nov 11 16:37:11 2021 -0800 163d1ae :
+   fix comment in quotes in gittag script
+Thu Nov 11 16:34:44 2021 -0800 e53df69 :
+   Add scripts to install/uninstall from Debian format package
+Thu Nov 11 16:11:53 2021 -0800 de6efc3 :
+   Add initial Debian format release
+Thu Nov 11 15:58:10 2021 -0800 cc3864e :
+   Post-install, if a command exists and is identical to that installed by this package then remove it and create a symbolic link
+Thu Nov 11 15:30:46 2021 -0800 132beae :
+   Use sudo to make directories in dist
+Thu Nov 11 15:24:21 2021 -0800 0b08b37 :
+   Copy additional files into dist for packaging
+Thu Nov 11 14:15:22 2021 -0800 620bb6f :
+   Merge branch 'master' of ssh://gitlab.com/doctorfree/Scripts
+Thu Nov 11 14:15:02 2021 -0800 ea7216c :
+   Create packaging scripts
+Thu Nov 11 14:13:51 2021 -0800 6995de3 :
+   Add AUTHORS and CHANGELOG, update LICENSE
 Thu Nov 11 13:28:01 2021 -0800 97a9e58 :
    Use -L option to find in order to follow symbolic links
 Thu Nov 11 12:10:36 2021 -0800 32fd6d0 :
