@@ -14,7 +14,7 @@ OUT_DIR="dist/${PKG_NAME}_${PKG_VER}"
 
 SUBDIRS="Config IFTTT binance chrome-themes \
          clone coinmarketcap doc profittrailer systemd"
-DOT_FILES="bash_aliases bash_profile bashrc dircolors vimrc"
+DOT_FILES="bash_aliases bash_profile bashrc dircolors vimrc wallutils"
 IMG_FILES="Scripts-Logo.png Vertical.png"
 ETC_FILES="Doxyfile crontab-peakhours.in"
 
@@ -63,15 +63,10 @@ for dir in bin etc share ${SUBDIRS}
 do
     [ -d ${OUT_DIR}/${DESTDIR}/${dir} ] && ${SUDO} rm -rf ${OUT_DIR}/${DESTDIR}/${dir}
 done
+[ -d ${OUT_DIR}/${DESTDIR} ] || ${SUDO} mkdir ${OUT_DIR}/${DESTDIR}
 
 ${SUDO} cp -a Utils/bin ${OUT_DIR}/${DESTDIR}/bin
-for util in Utils/*
-do
-    [ -d "${util}" ] && continue
-    b=`basename ${util}`
-    [ "$b" == "README.md" ] && continue
-    ${SUDO} cp ${util} ${OUT_DIR}/${DESTDIR}/bin/$b
-done
+
 for script in Wallpapers/*.sh
 do
     grep ${script} .gitignore > /dev/null || {

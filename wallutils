@@ -27,6 +27,7 @@ query=
 demo=
 model=
 playboy=
+penthouse=
 photodromm=
 suicide=
 japanese=
@@ -86,6 +87,7 @@ usage() {
     printf "\n\t-d indicates demo mode, tell me what you would do but don't do it"
     printf "\n\t-L indicates use symbolic links when finding duplicates"
     printf "\n\t-b indicates Playboy Model search, use Models/Playboy/<model_name> download dir"
+    printf "\n\t-e indicates Penthouse Model search, use Models/Penthouse/<model_name> download dir"
     printf "\n\t-h indicates Photodromm Model search, use Models/Photodromm/<model_name> download dir"
     printf "\n\t-a indicates Artist search, use Artists/<artist_name> download dir"
     printf "\n\t-m indicates Model search, use Models/<model_name> download dir"
@@ -98,7 +100,7 @@ usage() {
     exit 1
 }
 
-while getopts l:n:c:f:p:s:abdhJLmPRSqu flag; do
+while getopts l:n:c:f:p:s:abedhJLmPRSqu flag; do
     case $flag in
         l)
             subdir=$OPTARG
@@ -123,6 +125,9 @@ while getopts l:n:c:f:p:s:abdhJLmPRSqu flag; do
             ;;
         b)
             playboy=1
+            ;;
+        e)
+            penthouse=1
             ;;
         h)
             photodromm=1

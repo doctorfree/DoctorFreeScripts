@@ -74,7 +74,7 @@ trying to remove `/usr/local` then install the
 
 [**Scripts/Roon**](Roon/README.md) - Scripts to control my Roon audio system via the Roon API (https://pypi.org/project/roonapi/)
 
-[**Scripts/Utils**](Utils/README.md) - A few utility scripts
+[**Scripts/Utils/bin**](Utils/bin/README.md) - Utility scripts
 
 [**Scripts/Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper and slideshows
 
