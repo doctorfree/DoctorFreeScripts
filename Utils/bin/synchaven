@@ -1,8 +1,8 @@
 #!/bin/bash
 
-WORK="/Volumes/My_Book_Studio/Pictures/Work"
+WORK="/Volumes/Seagate_8TB/Pictures/Work"
 SRCE="${WORK}/Wallhaven"
-DEST="/Volumes/Lacie_8TB/Pictures/Work"
+DEST="/Volumes/Transcend/Pictures"
 
 [ -d "${SRCE}" ] || {
     echo "$SRCE does not exist or is not a directory. Exiting."
@@ -13,5 +13,5 @@ DEST="/Volumes/Lacie_8TB/Pictures/Work"
     exit 1
 }
  
-rsync -aL "${SRCE}" "${DEST}"
+rsync -a -H --delete "${SRCE}" "${DEST}"
 

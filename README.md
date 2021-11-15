@@ -143,7 +143,7 @@ trying to remove `/usr/local` then install the
 
     When invoked as chkhome it checks directories in $HOME
 
-[**chkinst**](chkinst.sh) - Check if installed versions of files in current directory are different in order to determine if git repository is up-to-date.
+[**chkinst**](chkinst) - Check if installed versions of files in current directory are different in order to determine if git repository is up-to-date.
 
 [**clndl**](clndl.sh) - Moves the most recently downloaded versions of files to their regular filename without the (#) in the name. By default, relies on the Mac OS X convention of inserting (#) in the name of newer version filenames.
 
