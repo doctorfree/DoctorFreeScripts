@@ -19,7 +19,7 @@ set -e
 
 case "$1" in
     remove|upgrade|deconfigure)
-        DFS="/usr/local/DoctorFreeScripts"
+        export DFS="/usr/local/DoctorFreeScripts"
         [ -d /usr/local/bin ] && {
             cd /usr/local/bin
             for command in ${DFS}/bin/*

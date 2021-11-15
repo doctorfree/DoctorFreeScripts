@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
     configure)
-        DFS="/usr/local/DoctorFreeScripts"
+        export DFS="/usr/local/DoctorFreeScripts"
         [ -d /usr/local ] || mkdir /usr/local
         [ -d /usr/local/bin ] || mkdir /usr/local/bin
         cd /usr/local/bin
