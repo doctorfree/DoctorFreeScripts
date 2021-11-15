@@ -20,7 +20,7 @@ deploy-job:
 run-build:  
   stage: build
   script:
-    - ./mkpkg.sh
+    - ./mkpkg
 
   # This stage is only executed for new tags
   only:

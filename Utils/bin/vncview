@@ -4,7 +4,7 @@
 # Note: the user needs to have SSH public/private keys setup to automatically
 #       authenticate and the user must have sudo privileges
 #
-IP=10.0.1.67
+IP=10.0.1.85
 USER=pi
 
 # Start VNC Server on MagicMirror

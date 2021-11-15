@@ -43,7 +43,7 @@ or
 
 <code>git clone `https://gitlab.com/doctorfree/Scripts.git`</code>
 
-Use the `mkpkg.sh` script to create a Debian format package on a system with
+Use the `mkpkg` script to create a Debian format package on a system with
 the prerequisite packaging development environment.
 
 Alternately, for those who prefer to manually install and configure Scripts,
