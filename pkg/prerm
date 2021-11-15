@@ -19,15 +19,43 @@ set -e
 
 case "$1" in
     remove|upgrade|deconfigure)
+        DFS="/usr/local/DoctorFreeScripts"
         [ -d /usr/local/bin ] && {
             cd /usr/local/bin
-            for command in /usr/local/DoctorFreeScripts/bin/*
+            for command in ${DFS}/bin/*
             do
+                [ "${command}" == "${DFS}/bin/*" ] && continue
                 b=`basename ${command}`
                 [ -L $b ] && {
-                    readlink $b | grep /usr/local/DoctorFreeScripts > /dev/null && rm -f $b
+                    readlink $b | grep ${DFS} > /dev/null && rm -f $b
                 }
             done
+        }
+        [ -d /usr/local/share/bash ] && {
+            cd /usr/local/share/bash
+            for script in ${DFS}/share/bash/*
+            do
+                [ "${script}" == "${DFS}/share/bash/*" ] && continue
+                b=`basename ${script}`
+                [ -L $b ] && {
+                    readlink $b | grep ${DFS} > /dev/null && rm -f $b
+                }
+            done
+            cd ..
+            rmdir --ignore-fail-on-non-empty bash
+        }
+        [ -d /usr/local/share/images ] && {
+            cd /usr/local/share/images
+            for image in ${DFS}/share/images/*
+            do
+                [ "${image}" == "${DFS}/share/images/*" ] && continue
+                b=`basename ${image}`
+                [ -L $b ] && {
+                    readlink $b | grep ${DFS} > /dev/null && rm -f $b
+                }
+            done
+            cd ..
+            rmdir --ignore-fail-on-non-empty images
         }
     ;;
 
