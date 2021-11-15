@@ -115,4 +115,8 @@ tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-dist.tar.gz
 [ "${GCI}" ] || {
     echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
     zip -q -r ../${PKG_NAME}_${PKG_VER}-dist.zip usr
+    cd ..
+    [ -d ../releases ] || mkdir ../releases
+    [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
+    ${SUDO} cp *.deb *.gz *.zip ../releases/${PKG_VER}
 }
