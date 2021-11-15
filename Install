@@ -2,8 +2,17 @@
 
 PKG_NAME="DoctorFreeScripts"
 PKG_DIR="Scripts"
-PKG_VER="3.1"
 SRC="${HOME}/src"
+
+[ -f "${SRC}/${PKG_DIR}/VERSION" ] || {
+  echo "Missing VERSION file: ${SRC}/${PKG_DIR}/VERSION"
+  echo "Exiting"
+  exit 1
+}
+
+. "${SRC}/${PKG_DIR}/VERSION"
+PKG_VER=${VERSION}
+
 DEB="${SRC}/${PKG_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}.deb"
 
 [ -f "${DEB}" ] || {

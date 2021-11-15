@@ -1,13 +1,26 @@
 #!/bin/bash
 PKG="doctorfree-scripts"
 PKG_NAME="DoctorFreeScripts"
-PKG_VER="3.1"
 TOP="usr"
 LOCAL="${TOP}/local"
 DESTDIR="${LOCAL}/${PKG_NAME}"
-SRC=${HOME}/src/Scripts
+SRC_NAME="Scripts"
+SRC=${HOME}/src/${SRC_NAME}
 SUDO=sudo
 GCI=
+
+[ -f "${SRC}/VERSION" ] || {
+  [ -f "/builds/doctorfree/${SRC_NAME}/VERSION" ] || {
+    echo "$SRC/VERSION does not exist. Exiting."
+    exit 1
+  }
+  SRC="/builds/doctorfree/${SRC_NAME}"
+  SUDO=
+  GCI=1
+}
+
+. "${SRC}/VERSION"
+PKG_VER=${VERSION}
 
 # Subdirectory in which to create the distribution files
 OUT_DIR="dist/${PKG_NAME}_${PKG_VER}"
@@ -17,16 +30,6 @@ SUBDIRS="Config IFTTT binance chrome-themes \
 DOT_FILES="bash_aliases bash_profile bashrc dircolors kv vimrc wallutils"
 IMG_FILES="Scripts-Logo.png Vertical.png"
 ETC_FILES="Doxyfile crontab-peakhours.in"
-
-[ -d "${SRC}" ] || {
-  [ -d "/builds/doctorfree/Scripts" ] || {
-    echo "$SRC does not exist or is not a directory. Exiting."
-    exit 1
-  }
-  SRC="/builds/doctorfree/Scripts"
-  SUDO=
-  GCI=1
-}
 
 cd "${SRC}"
 ${SUDO} rm -rf dist
