@@ -14,7 +14,7 @@ OUT_DIR="dist/${PKG_NAME}_${PKG_VER}"
 
 SUBDIRS="Config IFTTT binance chrome-themes \
          clone coinmarketcap doc profittrailer systemd"
-DOT_FILES="bash_aliases bash_profile bashrc dircolors vimrc wallutils"
+DOT_FILES="bash_aliases bash_profile bashrc dircolors kv vimrc wallutils"
 IMG_FILES="Scripts-Logo.png Vertical.png"
 ETC_FILES="Doxyfile crontab-peakhours.in"
 
@@ -59,12 +59,6 @@ do
     ${SUDO} chown root:root ${OUT_DIR}/${dir}
 done
 
-for dir in bin etc share ${SUBDIRS}
-do
-    [ -d ${OUT_DIR}/${DESTDIR}/${dir} ] && ${SUDO} rm -rf ${OUT_DIR}/${DESTDIR}/${dir}
-done
-[ -d ${OUT_DIR}/${DESTDIR} ] || ${SUDO} mkdir ${OUT_DIR}/${DESTDIR}
-
 ${SUDO} cp -a Utils/bin ${OUT_DIR}/${DESTDIR}/bin
 
 for script in Wallpapers/*.sh
@@ -80,13 +74,6 @@ for script in scripts/*.sh
 do
     grep ${script} .gitignore > /dev/null || {
         dest=`echo ${script} | sed -e "s/scripts\///" -e "s/\.sh//"`
-        ${SUDO} cp ${script} ${OUT_DIR}/${DESTDIR}/bin/${dest}
-    }
-done
-for script in *.sh
-do
-    grep ${script} .gitignore > /dev/null || {
-        dest=`echo ${script} | sed -e "s/\.sh//"`
         ${SUDO} cp ${script} ${OUT_DIR}/${DESTDIR}/bin/${dest}
     }
 done
