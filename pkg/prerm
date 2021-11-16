@@ -20,9 +20,9 @@ set -e
 case "$1" in
     remove|upgrade|deconfigure)
         DFS="/usr/local/DoctorFreeScripts"
-        ANY="ape2m4a ape2mp4 avi2mp4 cap2m4v cap2mp4 f4v2mp4 \
-             flv2mp4 m4a2mp3 m4v2mp4 mkv2mp4 mov2mp4 mp42m4v \
-             mpg2mp4 png2jpg wma2m4a wmv2m4v wmv2mp4"
+        ANY="ape2m4a ape2mp4 avi2mp4 f4v2mp4 flv2mp4 \
+             m4a2mp3 m4v2mp4 mkv2mp4 mov2mp4 mp42m4v \
+             mpg2mp4 png2jpg wma2m4a wmv2m4v wmv2mp4 cap2m4v cap2mp4"
         [ -d /usr/local/bin ] && {
             cd /usr/local/bin
             for command in ${DFS}/bin/*
