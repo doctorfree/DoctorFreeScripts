@@ -20,7 +20,10 @@ set -e
 
 case "$1" in
     configure)
-        export DFS="/usr/local/DoctorFreeScripts"
+        DFS="/usr/local/DoctorFreeScripts"
+        ANY="ape2m4a ape2mp4 avi2mp4 cap2m4v cap2mp4 f4v2mp4 \
+             flv2mp4 m4a2mp3 m4v2mp4 mkv2mp4 mov2mp4 mp42m4v \
+             mpg2mp4 png2jpg wma2m4a wmv2m4v wmv2mp4"
         [ -d /usr/local ] || mkdir /usr/local
         [ -d /usr/local/bin ] || mkdir /usr/local/bin
         cd /usr/local/bin
@@ -36,6 +39,19 @@ case "$1" in
                 }
             else
                 ln -s ${command} .
+            fi
+        done
+        any2any=${DFS}/bin/any2any
+        for any in ${ANY}
+        do
+            if [ -f ${any} ]
+            then
+                diff ${any} ${any2any} > /dev/null && {
+                    rm -f ${any}
+                    ln -s ${any2any} ${any}
+                }
+            else
+                ln -s ${any2any} ${any}
             fi
         done
         [ -d /usr/local/share ] || mkdir /usr/local/share

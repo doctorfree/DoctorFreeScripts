@@ -1,9 +1,0 @@
-#!/bin/bash
-
-for i in *.png
-do
-    [ "$i" = "*.png" ] && exit
-    j=`echo $i | sed -e "s/\.png/.jpg/"`
-    [ -f "$j" ] && continue
-    convert "$i" "$j"
-done
