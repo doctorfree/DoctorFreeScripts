@@ -1,0 +1,6 @@
+
+For job ref 1785... and job name 'run-build'
+
+Browse artifacts
+
+https://gitlab.com/doctorfree/Scripts/-/jobs/1785412658/artifacts/browse?job=run-build
