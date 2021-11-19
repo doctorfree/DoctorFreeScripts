@@ -1,7 +1,6 @@
 #!/bin/bash
 
 DOM="http://www.fmwconcepts.com/imagemagick"
-#    http://www.fmwconcepts.com/imagemagick/index.php
 
 LIC1="Copyright © Fred Weinhaus"
 LIC2="My scripts are available free of charge for non-commercial (non-profit) use, ONLY."
