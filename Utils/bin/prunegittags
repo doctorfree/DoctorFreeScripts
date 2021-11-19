@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# If a tag is deleted on the remote it still remains locally.
+# This convenience script will prune the local tags
+# and fetch tags from the remote.
+
+git fetch --prune origin +refs/tags/*:refs/tags/*
