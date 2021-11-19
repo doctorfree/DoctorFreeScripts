@@ -1,3 +1,0 @@
-#!/bin/bash
-
-ssh -l root -6 fe80::250:56ff:feb3:f313

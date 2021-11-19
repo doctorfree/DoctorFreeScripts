@@ -1,0 +1,68 @@
+#!/bin/bash
+
+DOM="http://www.fmwconcepts.com/imagemagick"
+#    http://www.fmwconcepts.com/imagemagick/index.php
+
+LIC1="Copyright © Fred Weinhaus"
+LIC2="My scripts are available free of charge for non-commercial (non-profit) use, ONLY."
+LIC3="For use of my scripts in commercial (for-profit) environments or non-free
+applications, please contact me (Fred Weinhaus) for licensing arrangements.
+My email address is fmw at alink dot net."
+LIC4="If you: 1) redistribute, 2) incorporate any of these scripts into other
+free applications or 3) reprogram them in another scripting language, then you
+must contact me for permission, especially if the result might be used in a
+commercial or for-profit environment."
+LIC5="Usage, whether stated or not in the script, is restricted to the above licensing
+arrangements. It is also subject, in a subordinate manner, to the ImageMagick
+license, which can be found at: http://www.imagemagick.org/script/license.php"
+
+echo "Several of Fred's ImageMagick Scripts can be incorporated into this installation."
+echo "These scripts are subject to stricter licensing terms than those included"
+echo "in the DoctorFreeScripts distribution. Prior to installing"
+echo "Fred's ImageMagick Scripts you must agree to the following license:"
+echo ""
+echo "${LIC1}"
+echo ""
+echo "${LIC2}"
+echo ""
+echo "${LIC3}"
+echo ""
+echo "${LIC4}"
+echo ""
+echo "${LIC5}"
+echo ""
+
+INSTALL=1
+while true
+do
+    read -p "Do you agree to these licensing terms? ('Y'/'N'): " yn
+    case $yn in
+        [Yy]*)
+            break
+            ;;
+        [Nn]*)
+            INSTALL=
+            break
+            ;;
+        * )
+            echo "Please answer yes or no."
+            ;;
+    esac
+done
+
+[ "${INSTALL}" ] && {
+  for EXE in edgefx edges juliaset mesmerize sketch sketching
+  do
+    SCR="downloadcounter.php?scriptname=${EXE}&dirname=${EXE}"
+    OUT=/usr/local/bin/${EXE}
+    if [ -f ${OUT} ]
+    then
+        echo "${OUT} already exists. Skipping download."
+    else
+        echo "Downloading ${EXE} ..."
+        sudo curl -o ${OUT} ${DOM}/${SCR}
+        sudo chmod 755 ${OUT}
+        echo "Done"
+    fi
+  done
+}

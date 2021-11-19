@@ -1,6 +1,12 @@
 dotfiles-desktop
 Wallpapers/wallhaven.sh
 doc/html/
+ImageMagick/edgefx
+ImageMagick/edges
+ImageMagick/juliaset
+ImageMagick/mesmerize
+ImageMagick/sketch
+ImageMagick/sketching
 MagicMirror/dot-wireless-home.txt
 MagicMirror/hide_keys.sh
 MagicMirror/show_keys.sh
@@ -11,3 +17,5 @@ MagicMirror/config/config-crypto.js
 MagicMirror/modules/MMM-AssistantMk2/deviceInstance.json
 MagicMirror/modules/MMM-AssistantMk2/profiles/default.json
 MagicMirror/modules/MMM-Hotword/trainer/trainer-withtoken.sh
+Utils/bin/daedalus-rewards
+tmp/*

@@ -64,6 +64,14 @@ done
 
 ${SUDO} cp -a Utils/bin ${OUT_DIR}/${DESTDIR}/bin
 
+for script in ImageMagick/*
+do
+    grep ${script} .gitignore > /dev/null || {
+        b=`basename ${script}`
+        ${SUDO} cp ${script} ${OUT_DIR}/${DESTDIR}/bin/${b}
+    }
+done
+
 for script in Wallpapers/*.sh
 do
     grep ${script} .gitignore > /dev/null || {

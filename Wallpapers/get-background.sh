@@ -1,7 +1,7 @@
 #!/bin/bash
 
-BDIR="$HOME/.config/pcmanfm/lubuntu"
-FAVS="$HOME/Pictures/Backgrounds/Misc/Favs"
+BDIR="$HOME/.config/pcmanfm/LXDE-pi"
+FAVS="$HOME/Pictures/Backgrounds"
 
 [ -d "$BDIR" ] || {
     echo "$BDIR does not exist or is not a directory. Exiting."
@@ -16,10 +16,15 @@ do
     BG=`echo $BGPATH | awk -F "=" ' { print $2 } '`
     BG_NAM=`basename ${BG}`
     IMG=`basename ${BG_NAM}`
-    if [ -L ${FAVS}/${IMG} ]
-    then
-        echo "Symbolic link for ${BG_NAM} already exists."
-    else
-        echo "${BG_NAM} not in Favs"
-    fi
+    foundit=
+    for favdir in ${FAVS}/*
+    do
+        [ "${favdir}" == "${FAVS}/*" ] && continue
+        [ -f ${favdir}/${IMG} ] && {
+            echo "${BG_NAM} already exists in $favdir"
+            foundit=1
+            break
+        }
+    done
+    [ "${foundit}" ] || echo "${BG_NAM} not in Backgrounds"
 done

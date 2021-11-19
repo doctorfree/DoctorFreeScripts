@@ -11,6 +11,4 @@ DEB="$1"
     exit 1
 }
 
-#sudo dpkg -i $DEB
-#sudo apt-get-ubuntu install -f
 sudo apt-get purge $(dpkg -I $DEB | awk -F: '/Package/ {print $2}')

@@ -20,27 +20,45 @@ set -e
 
 case "$1" in
     configure)
+        export PATH=/usr/local/bin:$PATH
+        # Scripts for which links will be made in /usr/local/bin
+        EXPORTS="any2any aptsearch audlinks backgrounds build-sgminer cap2any \
+                 catinfo check_ethminer chk chkall chkrel ckdown ckdups clndl \
+                 convm4a counts cpBackups cptoflash create_speech createswapfile \
+                 cron.bash dltor dtox ethos2local favrotate fdups fempiclinks \
+                 femzip filenuminc filenumset findabslinks findbroken findempty \
+                 findgrep findups findupthumbs fixabslinks fixlinks get-all \
+                 get-anime get-artists get-background getcounts get-favorites \
+                 get-general getgittag gethue get-label get-latest get-list \
+                 get-missing get-model get-model-latest get-models get-number \
+                 get-people get-photographers getpyethereum getsaver get-search \
+                 get-sizes gettagdate get-top gitarch gitbranch gitdiff githubgit \
+                 githubinit gitinit gitlog gitlogtoday gitshow gittag hangup \
+                 imfonts.pl installamdgpu install-to-project-repo.py instdeb \
+                 keybinds-pipemenu killscreen latest lgitinit linkhaven listgit \
+                 mandelhist mkcomps mkdiffs"
         DFS="/usr/local/DoctorFreeScripts"
         ANY="ape2m4a ape2mp4 avi2mp4 f4v2mp4 flv2mp4 \
              m4a2mp3 m4v2mp4 mkv2mp4 mov2mp4 mp42m4v \
              mpg2mp4 png2jpg wma2m4a wmv2m4v wmv2mp4"
         CAP="cap2m4v cap2mp4"
+        CHK="chkaplibs chkitunes chkpicdir chkmovdir chkauddir chkhome"
         [ -d /usr/local ] || mkdir /usr/local
         [ -d /usr/local/bin ] || mkdir /usr/local/bin
         cd /usr/local/bin
-        for command in ${DFS}/bin/*
+        for command in ${EXPORTS}
         do
-            [ "${command}" ==  "${DFS}/bin/*" ] && continue
-            b=`basename ${command}`
-            if [ -f $b ]
-            then
-                diff $b ${command} > /dev/null && {
-                    rm -f $b
-                    ln -s ${command} .
-                }
-            else
-                ln -s ${command} .
-            fi
+            [ -f ${DFS}/bin/${command} ] && {
+                if [ -f ${command} ]
+                then
+                    diff ${DFS}/bin/${command} ${command} > /dev/null && {
+                        rm -f ${command}
+                        ln -s ${DFS}/bin/${command} .
+                    }
+                else
+                    ln -s ${DFS}/bin/${command} .
+                fi
+            }
         done
         any2any=${DFS}/bin/any2any
         for any in ${ANY}
@@ -66,6 +84,19 @@ case "$1" in
                 }
             else
                 ln -s ${cap2any} ${cap}
+            fi
+        done
+        chk=${DFS}/bin/chk
+        for lnk in ${CHK}
+        do
+            if [ -f ${lnk} ]
+            then
+                diff ${lnk} ${chk} > /dev/null && {
+                    rm -f ${lnk}
+                    ln -s ${chk} ${lnk}
+                }
+            else
+                ln -s ${chk} ${lnk}
             fi
         done
         [ -d /usr/local/share ] || mkdir /usr/local/share
@@ -101,6 +132,7 @@ case "$1" in
                 ln -s ${image} .
             fi
         done
+        [ -x ${DFS}/bin/dl_fred_scripts ] && ${DFS}/bin/dl_fred_scripts
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
