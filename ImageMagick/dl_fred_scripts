@@ -15,6 +15,7 @@ LIC5="Usage, whether stated or not in the script, is restricted to the above lic
 arrangements. It is also subject, in a subordinate manner, to the ImageMagick
 license, which can be found at: http://www.imagemagick.org/script/license.php"
 
+echo ""
 echo "Several of Fred's ImageMagick Scripts can be incorporated into this installation."
 echo "These scripts are subject to stricter licensing terms than those included"
 echo "in the DoctorFreeScripts distribution. Prior to installing"
@@ -59,7 +60,7 @@ done
         echo "${OUT} already exists. Skipping download."
     else
         echo "Downloading ${EXE} ..."
-        sudo curl -o ${OUT} ${DOM}/${SCR}
+        sudo curl -o ${OUT} ${DOM}/${SCR} > /dev/null 2>&1
         sudo chmod 755 ${OUT}
         echo "Done"
     fi
