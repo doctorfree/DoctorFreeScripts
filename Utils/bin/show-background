@@ -1,6 +1,7 @@
 #!/bin/bash
 
-BDIR="$HOME/.config/pcmanfm/lubuntu"
+# Set this to the LXDE profile in use
+BDIR="$HOME/.config/pcmanfm/LXDE-pi"
 
 [ -d "$BDIR" ] || {
     echo "$BDIR does not exist or is not a directory. Exiting."

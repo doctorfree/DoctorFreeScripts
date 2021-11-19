@@ -2,6 +2,15 @@
 
 DIAG_DIR=${HOME}/Diagrams/src
 
+inst=`type -p plantuml`
+[ "${inst}" ] || {
+    echo "Cannot locate required application 'plantuml'."
+    echo "The plantuml application can be downloaded at"
+    echo "https://plantuml.com/download"
+    echo "Exiting."
+    exit 1
+}
+
 [ -d ${DIAG_DIR} ] || mkdir -p ${DIAG_DIR}
 [ -d ${DIAG_DIR}/../PNG ] || mkdir -p ${DIAG_DIR}/../PNG
 cd ${DIAG_DIR}

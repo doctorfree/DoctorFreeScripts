@@ -1,9 +1,17 @@
 #!/bin/bash
 
-/usr/bin/variety --quit
+inst=`type -p variety`
+[ "${inst}" ] || {
+    echo "The variety application cannot be located in your execution PATH."
+    echo "To install variety, see https://peterlevi.com/variety/how-to-install/"
+    echo "Exiting."
+    exit 1
+}
+
+variety --quit
 
 sleep 2
-echo "/home/ronnie/.config/variety/" > ~/.variety-profile
+echo "${HOME}/.config/variety/" > ~/.variety-profile
 
-/usr/bin/variety --profile \
-    /home/ronnie/.config/variety/ > /dev/null 2>&1 &
+variety --profile \
+    ${HOME}/.config/variety/ > /dev/null 2>&1 &

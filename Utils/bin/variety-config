@@ -1,7 +1,15 @@
 #!/bin/bash
 
-PROF="/home/ronnie/.config/variety"
+inst=`type -p variety`
+[ "${inst}" ] || {
+    echo "The variety application cannot be located in your execution PATH."
+    echo "To install variety, see https://peterlevi.com/variety/how-to-install/"
+    echo "Exiting."
+    exit 1
+}
+
+PROF="${HOME}/.config/variety"
 
 [ -f ~/.variety-profile ] && PROF=`cat ~/.variety-profile`
 
-/usr/bin/variety --profile "$PROF" $*
+variety --profile "$PROF" $*
