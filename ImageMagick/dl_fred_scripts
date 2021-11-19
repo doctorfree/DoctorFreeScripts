@@ -50,7 +50,7 @@ do
 done
 
 [ "${INSTALL}" ] && {
-  for EXE in edgefx edges juliaset mesmerize sketch sketching
+  for EXE in edgefx edges juliaset mandelbrot mesmerize sketch sketching
   do
     SCR="downloadcounter.php?scriptname=${EXE}&dirname=${EXE}"
     OUT=/usr/local/bin/${EXE}
