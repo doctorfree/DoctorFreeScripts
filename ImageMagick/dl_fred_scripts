@@ -15,22 +15,15 @@ LIC5="Usage, whether stated or not in the script, is restricted to the above lic
 arrangements. It is also subject, in a subordinate manner, to the ImageMagick
 license, which can be found at: http://www.imagemagick.org/script/license.php"
 
-echo ""
-echo "Several of Fred's ImageMagick Scripts can be incorporated into this installation."
-echo "These scripts are subject to stricter licensing terms than those included"
-echo "in the DoctorFreeScripts distribution. Prior to installing"
-echo "Fred's ImageMagick Scripts you must agree to the following license:"
-echo ""
-echo "${LIC1}"
-echo ""
-echo "${LIC2}"
-echo ""
-echo "${LIC3}"
-echo ""
-echo "${LIC4}"
-echo ""
-echo "${LIC5}"
-echo ""
+printf "\n\nSeveral of Fred's ImageMagick Scripts can be incorporated into this"
+printf "\ninstallation. These scripts are subject to stricter licensing terms than"
+printf "\nthose included in the DoctorFreeScripts distribution. Prior to installing"
+printf "\nFred's ImageMagick Scripts you must agree to the following license:"
+printf "\n\n${LIC1}"
+printf "\n\n${LIC2}"
+printf "\n\n${LIC3}"
+printf "\n\n${LIC4}"
+printf "\n\n${LIC5}\n"
 
 INSTALL=1
 while true
@@ -59,10 +52,10 @@ done
     then
         echo "${OUT} already exists. Skipping download."
     else
-        echo "Downloading ${EXE} ..."
+        printf "\nDownloading ${EXE} ..."
         sudo curl -o ${OUT} ${DOM}/${SCR} > /dev/null 2>&1
         sudo chmod 755 ${OUT}
-        echo "Done"
+        printf " Done\n"
     fi
   done
 }
