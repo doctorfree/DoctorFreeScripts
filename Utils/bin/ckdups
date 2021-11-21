@@ -1,7 +1,7 @@
 #!/bin/bash
 
 W="`pwd`"
-SUMS="$W/SUMS"
+SUMS="$W/SUMS.txt"
 [ -d "$W" ] || {
     echo "$W does not exist or is not a directory. Exiting."
     exit 1

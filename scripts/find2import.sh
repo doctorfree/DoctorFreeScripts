@@ -35,5 +35,5 @@ done
 cd "$MOVS"
 printf "\n\nThe following movies can be imported from\n${MOVS}:\n\n"
 find . -type f | grep -v /bin/ | grep -v mvnew | grep -v getnew | \
-                 grep -v cknew | grep -v Katlyn_Stripping_Source | grep -v SUMS
+                 grep -v cknew | grep -v Katlyn_Stripping_Source | grep -v SUMS.txt
 printf "\n\n"

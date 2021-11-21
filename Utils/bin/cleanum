@@ -13,6 +13,6 @@ touch "$R/rmlist"
 while read f
 do
     sum=`echo "$f" | awk ' { print $1 " " $2 } '`
-    rem=`grep "$sum" "$T/SUMS" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+    rem=`grep "$sum" "$T/SUMS.txt" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
     [ "$rem" ] && echo "rm -f \"$R/$rem\"" >> "$R/rmlist"
-done < SUMS
+done < SUMS.txt

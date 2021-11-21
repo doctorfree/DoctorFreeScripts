@@ -38,6 +38,7 @@ LIBS="${PHOROOT}/Libraries"
 TELL=
 PICS=
 QUICK=
+SUMS="SUMS.txt"
 
 ## @fn usage()
 ## @brief Display command line usage options
@@ -79,10 +80,10 @@ FindAndLink() {
             continue
         else
             b=`basename "$i"`
-            [ "$b" = "SUMS" ] && continue
+            [ "$b" = "${SUMS}" ] && continue
             # Backslash the brackets in any filenames so grep doesn't choke
             fixed=`echo "$i" | sed -e "s/\[/\\\\\[/g" -e "s/\]/\\\\\]/g"`
-            ck1=`grep "$fixed" SUMS | awk ' { print $1 } '`
+            ck1=`grep "$fixed" ${SUMS} | awk ' { print $1 } '`
             [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
             # Could be in multiple Aperture, migrated Aperture, or Photos
             # libraries, use the first one we find searching Photos then
@@ -90,7 +91,7 @@ FindAndLink() {
             for lib in "$LIBS"/*.photoslibrary/Masters "$LIBS"/*.aplibrary/Masters "$LIBS"/*.migratedaplibrary/Masters
             do
                 [ -d "$lib" ] && {
-                    b=`grep "$ck1" "$lib/SUMS" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
+                    b=`grep "$ck1" "$lib/${SUMS}" | awk ' { for(i=3;i<NF;i++) printf "%s",$i OFS; if (NF) printf "%s",$NF; printf ORS}'`
                     ck2=`echo $b | sed -e "s/\.\///"`
                     [ "$ck2" ] || continue
                     remlink "$lib/$ck2" "$i"
@@ -178,7 +179,7 @@ if [ -d "$W" ]
 then
     cd "$W"
     [ "$QUICK" ] || {
-        printf "\nUpdating $W/SUMS\n"
+        printf "\nUpdating $W/${SUMS}\n"
         [ "$TELL" ] || updsums
     }
     printf "\nFinding and symlinking duplicate files in $W ...\n"
@@ -191,7 +192,7 @@ fi
     then
         cd "$P"
         [ "$QUICK" ] || {
-            printf "\nUpdating $P/SUMS\n"
+            printf "\nUpdating $P/${SUMS}\n"
             [ "$TELL" ] || updsums
         }
         printf "\nFinding and symlinking duplicate files in $P ...\n"

@@ -41,6 +41,7 @@ MUSE=
 BOOK=
 USE_SUM=
 TELL=
+SUMS="SUMS.txt"
 
 ## @fn usage()
 ## @brief Display command line usage options
@@ -105,9 +106,9 @@ FindAndLink() {
             }
             e=`dirname "$d"`
             artist=`basename "$e"`
-            [ "$b" = "SUMS" ] && continue
+            [ "$b" = "${SUMS}" ] && continue
             [ "$USE_SUM" ] && {
-                ck1=`grep "$i" SUMS | awk ' { print $1 } '`
+                ck1=`grep "$i" ${SUMS} | awk ' { print $1 } '`
                 [ "$ck1" ] || ck1=`cksum "$i" | awk ' { print $1 } '`
             }
             [ -f "$T/$artist/$title/$b" ] && found="$b"
@@ -130,7 +131,7 @@ FindAndLink() {
             [ "$found" ] && {
                 if [ "$USE_SUM" ]
                 then
-                    ck2 =`grep "$found" "$T/SUMS" | awk ' { print $1 } '`
+                    ck2 =`grep "$found" "$T/${SUMS}" | awk ' { print $1 } '`
                     [ "$ck2" ] || ck2=`cksum "$T/$artist/$title/$found" | awk ' { print $1 } '`
                     [ $ck1 -eq $ck2 ] && {
                         remlink "$T/$artist/$title/$found" "$i"
@@ -209,10 +210,10 @@ shift $(( OPTIND - 1 ))
     exit 1
 }
 
-ISUMS="$I"/SUMS
+ISUMS="$I"/${SUMS}
 # Not using this yet
-WSUMS="$W"/SUMS
-MSUMS="$M"/SUMS
+WSUMS="$W"/${SUMS}
+MSUMS="$M"/${SUMS}
 
 # Update the iTunes SUMS file first
 [ "$USE_SUM" ] && {
@@ -228,7 +229,7 @@ MSUMS="$M"/SUMS
     cd "$W"
     # Update the SUMS file if we are using cksums
     [ "$USE_SUM" ] && {
-        printf "\nUpdating $W/SUMS\n"
+        printf "\nUpdating $W/${SUMS}\n"
         [ "$TELL" ] || updsums
     }
     printf "\nFinding and symlinking duplicate files in $W ...\n"
@@ -244,7 +245,7 @@ MSUMS="$M"/SUMS
     cd "$B"
     # Update the SUMS file if we are using cksums
     [ "$USE_SUM" ] && {
-        printf "\nUpdating $M/SUMS\n"
+        printf "\nUpdating $M/${SUMS}\n"
         [ "$TELL" ] || updsums
     }
     printf "\nFinding and symlinking duplicate files in $B ...\n"
@@ -260,7 +261,7 @@ MSUMS="$M"/SUMS
     cd "$M"
     # Update the SUMS file if we are using cksums
     [ "$USE_SUM" ] && {
-        printf "\nUpdating $M/SUMS\n"
+        printf "\nUpdating $M/${SUMS}\n"
         [ "$TELL" ] || updsums
     }
     printf "\nFinding and symlinking duplicate files in $M ...\n"

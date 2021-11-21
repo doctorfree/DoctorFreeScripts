@@ -28,7 +28,7 @@
 #
 
 W="`pwd`"
-SUMS="$W/SUMS"
+SUMS="$W/SUMS.txt"
 TELLME=
 FORCE=
 
