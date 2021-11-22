@@ -44,7 +44,7 @@ echo "Package: ${PKG}
 Version: ${PKG_VER}
 Section: misc
 Priority: optional
-Architecture: armhf
+Architecture: all
 Depends: qterminal (>= 0.14.1)
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Build-Depends: debhelper (>= 11)
