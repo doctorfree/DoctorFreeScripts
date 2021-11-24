@@ -1,0 +1,105 @@
+#
+# drfree - function to make it easy for me to move around in my projects
+# usage: drfree <action> <project>
+#    where <action> is one of "clone", "cd"
+#    and <project> is the name of a project or one of the shortcuts
+#    "images", "instagram", "mirror", "roon", "scenes", "scripts", or "telegram"
+#
+# Dot this file in to your .bashrc or other shell startup
+# e.g. in $HOME/.bashrc add the following lines:
+#
+#   if [ -f /usr/local/share/bash/drfree ]; then
+#     . /usr/local/share/bash/drfree
+#   fi
+
+drfree() {
+  if [ "$#" -ne 2 ]
+  then
+    echo '
+usage: drfree <action> <project>
+   where <action> is one of "clone", "cd"
+   and <project> is the name of a project or one of the shortcuts
+   "images", "instagram", "mirror", "roon", "scenes", "scripts", or "telegram"
+'
+  else
+    case "$2" in
+      images)
+        PROJECT="MirrorImagesPortrait"
+        ;;
+      instagram)
+        PROJECT="MMM-InstagramView"
+        ;;
+      mirror)
+        PROJECT="MirrorCommandLine"
+        ;;
+      roon)
+        PROJECT="RoonCommandLine"
+        ;;
+      scenes)
+        PROJECT="MMM-Scenes"
+        ;;
+      scripts)
+        PROJECT="Scripts"
+        ;;
+      telegram)
+        PROJECT="MMM-TelegramCommands"
+        ;;
+      *)
+        PROJECT="$2"
+        ;;
+    esac
+
+    case "$1" in
+      clone)
+        cd ${HOME}/src
+        if [ -x ./clone-${PROJECT}.sh ]
+        then
+            ./clone-${PROJECT}.sh
+        else
+            git clone https://gitlab.com/doctorfree/${PROJECT}.git
+        fi
+        cd ${PROJECT}
+        ;;
+      cd)
+        if [ -d ${HOME}/src/${PROJECT} ]
+        then
+            cd ${HOME}/src/${PROJECT}
+        else
+            [ -d ${HOME}/src ] || mkdir ${HOME}/src
+            cd ${HOME}/src
+            git clone https://gitlab.com/doctorfree/${PROJECT}.git
+            cd ${PROJECT}
+        fi
+        ;;
+      delete)
+        if [ -d ${HOME}/src/${PROJECT} ]
+        then
+            delete=
+            while true
+            do
+              read -p "Delete ${HOME}/src/${PROJECT} ? ('Y'/'N'): " yn
+              case $yn in
+                [Yy]*)
+                    delete=1
+                    break
+                    ;;
+                [Nn]*)
+                    delete=
+                    break
+                    ;;
+                * )
+                    echo "Please answer yes or no."
+                    ;;
+              esac
+            done
+            [ "${delete}" ] && rm -rf ${HOME}/src/${PROJECT}
+        else
+           echo "No directory ${HOME}/src/${PROJECT}"
+        fi
+        ;;
+      *)
+        echo "Unknown action: $1"
+        ;;
+    esac
+  fi
+}

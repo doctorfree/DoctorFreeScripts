@@ -27,7 +27,7 @@ OUT_DIR="dist/${PKG_NAME}_${PKG_VER}"
 
 SUBDIRS="Config IFTTT binance chrome-themes \
          clone coinmarketcap doc profittrailer systemd"
-DOT_FILES="bash_aliases bash_profile bashrc dircolors kv vimrc wallutils"
+DOT_FILES="bash_aliases bash_profile bashrc dircolors drfree kv vimrc wallutils"
 IMG_FILES="Scripts-Logo.png Vertical.png"
 ETC_FILES="Doxyfile crontab-peakhours.in"
 
