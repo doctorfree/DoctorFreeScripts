@@ -1,4 +1,4 @@
-# Scripts
+# DoctorFreeScripts
 
 Utility Bash shell scripts I've written - typically these will run on Unix,
 Linux, OS X, and Cygwin. Includes some custom Bash and Vim startup scripts.
@@ -6,28 +6,28 @@ Linux, OS X, and Cygwin. Includes some custom Bash and Vim startup scripts.
 To clone:
 
 ```bash
-    git clone https://gitlab.com/doctorfree/Scripts.git
+    git clone https://gitlab.com/doctorfree/DoctorFreeScripts.git
 ```
 
     or
 
 ```bash
-    git clone git@gitlab.com:doctorfree/Scripts.git
+    git clone git@gitlab.com:doctorfree/DoctorFreeScripts.git
 ```
 
 To clone the MagicMirror and Roon submodules as well:
 
 ```bash
-    git clone --recurse-submodules https://gitlab.com/doctorfree/Scripts.git
+    git clone --recurse-submodules https://gitlab.com/doctorfree/DoctorFreeScripts.git
 ```
 
 ## Installation
 
-Scripts version 3.1 and later includes a Debian format package
-which can be used to install the Scripts utilities with the Apt
+DoctorFreeScripts version 3.1 and later includes a Debian format package
+which can be used to install the DoctorFreeScripts utilities with the Apt
 package management system. To install:
 
-[Download the latest Debian package format release](https://gitlab.com/doctorfree/Scripts/-/releases)
+[Download the latest Debian package format release](https://gitlab.com/doctorfree/DoctorFreeScripts/-/releases)
 
 Install the package by executing the command
 ```bash
@@ -35,18 +35,18 @@ sudo apt install DoctorFreeScripts_<version>.deb
 ```
 
 You can create your own custom Debian format package from the repository source.
-To do so, clone the Scripts repository:
+To do so, clone the DoctorFreeScripts repository:
 
-<code>git clone ssh://gitlab.com/doctorfree/Scripts.git</code>
+<code>git clone ssh://gitlab.com/doctorfree/DoctorFreeScripts.git</code>
 
 or
 
-<code>git clone `https://gitlab.com/doctorfree/Scripts.git`</code>
+<code>git clone `https://gitlab.com/doctorfree/DoctorFreeScripts.git`</code>
 
 Use the `mkpkg` script to create a Debian format package on a system with
 the prerequisite packaging development environment.
 
-Alternately, for those who prefer to manually install and configure Scripts,
+Alternately, for those who prefer to manually install and configure DoctorFreeScripts,
 compressed archives (zip and gzip) are provided for download.
 
 ## Removal
@@ -68,23 +68,23 @@ trying to remove `/usr/local` then install the
 [**LICENSE**](LICENSE) - Copyright and licensing, roughly the MIT license but without the heavy handed use of the caps lock key.
      for easy bulk downloading.
 
-[**Scripts/IFTTT**](IFTTT/README.md) - Scripts to invoke IFTTT applets I've configured. These include scripts to manage my lights and devices like my AppleTV, Bluray player, and TV.
+[**DoctorFreeScripts/IFTTT**](IFTTT/README.md) - Scripts to invoke IFTTT applets I've configured. These include scripts to manage my lights and devices like my AppleTV, Bluray player, and TV.
 
-[**Scripts/MagicMirror**](https://gitlab.com/doctorfree/MirrorCommandLine) - Scripts to manage my MagicMirror (https://magicmirror.builders/)
+[**DoctorFreeScripts/MagicMirror**](https://gitlab.com/doctorfree/MirrorCommandLine) - Scripts to manage my MagicMirror (https://magicmirror.builders/)
 
-[**Scripts/Roon**](https://gitlab.com/doctorfree/RoonCommandLine) - Scripts to control my Roon audio system via the Roon API (https://pypi.org/project/roonapi/)
+[**DoctorFreeScripts/Roon**](https://gitlab.com/doctorfree/RoonCommandLine) - Scripts to control my Roon audio system via the Roon API (https://pypi.org/project/roonapi/)
 
-[**Scripts/Utils/bin**](Utils/bin/README.md) - Utility scripts
+[**DoctorFreeScripts/Utils/bin**](Utils/bin/README.md) - Utility scripts
 
-[**Scripts/Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper and slideshows
+[**DoctorFreeScripts/Wallpapers**](Wallpapers/README.md) - Scripts to manage pics used for desktop wallpaper and slideshows
 
-[**Scripts/binance**](binance/README.md) - Scripts to access the Binance API providing command line support for placing buy/sell trade orders and retrieving ticker or average prices for trading pairs
+[**DoctorFreeScripts/binance**](binance/README.md) - Scripts to access the Binance API providing command line support for placing buy/sell trade orders and retrieving ticker or average prices for trading pairs
 
-[**Scripts/chrome-themes**](chrome-themes/README.md) - Scripts to create and manage themes for the Chrome browser including themes I have created
+[**DoctorFreeScripts/chrome-themes**](chrome-themes/README.md) - Scripts to create and manage themes for the Chrome browser including themes I have created
 
-[**Scripts/coinmarketcap**](coinmarketcap/README.md) - Scripts to access the Coinmarketcap API providing command line support for retrieving market info on specified cryptocurrency coins and tokens
+[**DoctorFreeScripts/coinmarketcap**](coinmarketcap/README.md) - Scripts to access the Coinmarketcap API providing command line support for retrieving market info on specified cryptocurrency coins and tokens
 
-[**Scripts/profittrailer**](profittrailer/README.md) - Scripts to access the ProfitTrailer API providing command line support for listing, loading, managing, switching ProfitTrailer configurations including trading strategies
+[**DoctorFreeScripts/profittrailer**](profittrailer/README.md) - Scripts to access the ProfitTrailer API providing command line support for listing, loading, managing, switching ProfitTrailer configurations including trading strategies
 
 [**add2itunes**](scripts/add2itunes.sh) - Add the media files provided as arguments to the iTunes library. Uses OS X osascript to execute AppleScript.
 

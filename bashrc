@@ -120,3 +120,8 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
+
+# My drfree function
+if [ -f /usr/local/share/bash/drfree ]; then
+    . /usr/local/share/bash/drfree
+fi

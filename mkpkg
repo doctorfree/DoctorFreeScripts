@@ -4,7 +4,7 @@ PKG_NAME="DoctorFreeScripts"
 TOP="usr"
 LOCAL="${TOP}/local"
 DESTDIR="${LOCAL}/${PKG_NAME}"
-SRC_NAME="Scripts"
+SRC_NAME="DoctorFreeScripts"
 SRC=${HOME}/src/${SRC_NAME}
 SUDO=sudo
 GCI=
@@ -49,7 +49,7 @@ Depends: qterminal (>= 0.14.1)
 Maintainer: ${DEBFULLNAME} <${DEBEMAIL}>
 Build-Depends: debhelper (>= 11)
 Standards-Version: 4.1.3
-Homepage: https://gitlab.com/doctorfree/Scripts
+Homepage: https://gitlab.com/doctorfree/DoctorFreeScripts
 Description: General Purpose Command Line Tools
  Manage your system from the command line" > ${OUT_DIR}/DEBIAN/control
 

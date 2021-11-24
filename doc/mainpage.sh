@@ -14,11 +14,11 @@
 ## 
 ## To clone:
 ## 
-##    git clone https://gitlab.com/doctorfree/Scripts.git
+##    git clone https://gitlab.com/doctorfree/DoctorFreeScripts.git
 ##
 ##    or
 ##
-##    git clone git@gitlab.com:doctorfree/Scripts.git
+##    git clone git@gitlab.com:doctorfree/DoctorFreeScripts.git
 ##
 ## @section contents Contents
 ##

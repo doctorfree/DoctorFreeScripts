@@ -51,7 +51,7 @@ usage: drfree <action> <project>
         BUILD="MM"
         ;;
       scripts)
-        PROJECT="Scripts"
+        PROJECT="DoctorFreeScripts"
         ;;
       telegram)
         PROJECT="MMM-TelegramCommands"

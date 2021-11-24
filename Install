@@ -1,25 +1,25 @@
 #!/bin/bash
 
 PKG_NAME="DoctorFreeScripts"
-PKG_DIR="Scripts"
+SRC_DIR="DoctorFreeScripts"
 SRC="${HOME}/src"
 
-[ -f "${SRC}/${PKG_DIR}/VERSION" ] || {
-  echo "Missing VERSION file: ${SRC}/${PKG_DIR}/VERSION"
+[ -f "${SRC}/${SRC_DIR}/VERSION" ] || {
+  echo "Missing VERSION file: ${SRC}/${SRC_DIR}/VERSION"
   echo "Exiting"
   exit 1
 }
 
-. "${SRC}/${PKG_DIR}/VERSION"
+. "${SRC}/${SRC_DIR}/VERSION"
 PKG_VER=${VERSION}
 
-DEB="${SRC}/${PKG_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}.deb"
+DEB="${SRC}/${SRC_DIR}/releases/${PKG_VER}/${PKG_NAME}_${PKG_VER}.deb"
 
 [ -f "${DEB}" ] || {
     echo "$DEB not found."
-    for debs in ${SRC}/${PKG_DIR}/releases/*/${PKG_NAME}_*.deb
+    for debs in ${SRC}/${SRC_DIR}/releases/*/${PKG_NAME}_*.deb
     do
-      [ "${debs}" == "${SRC}/${PKG_DIR}/releases/*/${PKG_NAME}_*.deb" ] || {
+      [ "${debs}" == "${SRC}/${SRC_DIR}/releases/*/${PKG_NAME}_*.deb" ] || {
         echo "Found existing packages:"
         echo "${debs}"
       }
