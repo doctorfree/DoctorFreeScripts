@@ -1,7 +1,7 @@
 #
 # drfree - function to make it easy for me to move around in my projects
 # usage: drfree <action> <project>
-#    where <action> is one of "clone", "cd"
+#    where <action> is one of "build", "clone", "cd", "delete"
 #    and <project> is the name of a project or one of the shortcuts
 #    "images", "instagram", "mirror", "roon", "scenes", "scripts", or "telegram"
 #
@@ -17,17 +17,28 @@ drfree() {
   then
     echo '
 usage: drfree <action> <project>
-   where <action> is one of "clone", "cd"
+   where <action> is one of "build", "clone", "cd", or "delete"
    and <project> is the name of a project or one of the shortcuts
    "images", "instagram", "mirror", "roon", "scenes", "scripts", or "telegram"
 '
   else
+    # The default build script is named "mkpkg"
+    # If a project has a front-end build script named anything different
+    # then set BUILD="whatever" below in that project's case statement
+    # The BUILD keyword "MM" is used to signify a MagicMirror build which will
+    # do a "git pull" and then "npm install" in the project directory.
+    BUILD="mkpkg"
     case "$2" in
       images)
         PROJECT="MirrorImagesPortrait"
         ;;
       instagram)
         PROJECT="MMM-InstagramView"
+        BUILD="MM"
+        ;;
+      macscan*|macaddress*)
+        PROJECT="MMM-MacAddressScan"
+        BUILD="MM"
         ;;
       mirror)
         PROJECT="MirrorCommandLine"
@@ -37,12 +48,18 @@ usage: drfree <action> <project>
         ;;
       scenes)
         PROJECT="MMM-Scenes"
+        BUILD="MM"
         ;;
       scripts)
         PROJECT="Scripts"
         ;;
       telegram)
         PROJECT="MMM-TelegramCommands"
+        BUILD="MM"
+        ;;
+      youtube*|webview*)
+        PROJECT="MMM-YouTubeWebView"
+        BUILD="MM"
         ;;
       *)
         PROJECT="$2"
@@ -50,15 +67,54 @@ usage: drfree <action> <project>
     esac
 
     case "$1" in
-      clone)
-        cd ${HOME}/src
-        if [ -x ./clone-${PROJECT}.sh ]
+      build)
+        if [ -d ${HOME}/src/${PROJECT} ]
         then
-            ./clone-${PROJECT}.sh
+            cd ${HOME}/src/${PROJECT}
+            git pull
         else
+            [ -d ${HOME}/src ] || mkdir ${HOME}/src
+            cd ${HOME}/src
             git clone https://gitlab.com/doctorfree/${PROJECT}.git
+            cd ${PROJECT}
         fi
-        cd ${PROJECT}
+        if [ -x ./${BUILD} ]
+        then
+            ./${BUILD}
+        else
+            if [ "${BUILD}" == "MM" ]
+            then
+                git pull
+                npm_inst=`type -p npm`
+                if [ "${npm_inst}" ]
+                then
+                    npm install
+                else
+                    echo "Could not locate npm in PATH"
+                    echo "Skipping 'npm install' in ${PROJECT}"
+                fi
+            else
+                echo "Missing or non-executable ${BUILD} in ${PROJECT} project"
+            fi
+        fi
+        ;;
+      clone)
+        [ -d ${HOME}/src ] || mkdir ${HOME}/src
+        cd ${HOME}/src
+        if [ -d ${PROJECT}/.git ]
+        then
+            cd ${PROJECT}
+            echo "Pulling in existing project directory ${PROJECT}"
+            git pull
+        else
+            if [ -x ./clone-${PROJECT}.sh ]
+            then
+                ./clone-${PROJECT}.sh
+            else
+                git clone https://gitlab.com/doctorfree/${PROJECT}.git
+            fi
+            cd ${PROJECT}
+        fi
         ;;
       cd)
         if [ -d ${HOME}/src/${PROJECT} ]
