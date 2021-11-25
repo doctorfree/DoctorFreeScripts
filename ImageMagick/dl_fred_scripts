@@ -52,7 +52,7 @@ done
     then
         echo "${OUT} already exists. Skipping download."
     else
-        printf "\nDownloading ${EXE} ..."
+        printf "Downloading ${EXE} ..."
         sudo curl -o ${OUT} ${DOM}/${SCR} > /dev/null 2>&1
         sudo chmod 755 ${OUT}
         printf " Done\n"
