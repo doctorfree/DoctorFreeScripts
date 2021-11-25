@@ -20,4 +20,6 @@ MagicMirror/modules/MMM-AssistantMk2/profiles/default.json
 MagicMirror/modules/MMM-Hotword/trainer/trainer-withtoken.sh
 Utils/bin/daedalus-rewards
 Utils/bin/vmware/*
+dist/*
+releases/*
 tmp/*

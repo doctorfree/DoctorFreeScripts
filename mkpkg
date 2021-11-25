@@ -55,7 +55,8 @@ Description: General Purpose Command Line Tools
 
 chmod 644 ${OUT_DIR}/DEBIAN/control
 
-for dir in "${TOP}" "${LOCAL}" "${DESTDIR}" "${TOP}/share" "${TOP}/share/applications" \
+for dir in "${TOP}" "${LOCAL}" "${DESTDIR}" "${TOP}/share" \
+           "${DESTDIR}/share" "${DESTDIR}/share/applications" \
             "${TOP}/share/doc" "${TOP}/share/doc/${PKG}"
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
@@ -89,7 +90,7 @@ do
     }
 done
 
-${SUDO} cp Config/autostart/*.desktop "${OUT_DIR}/${TOP}/share/applications"
+${SUDO} cp Config/autostart/*.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
 ${SUDO} cp AUTHORS ${OUT_DIR}/${TOP}/share/doc/${PKG}/AUTHORS
 ${SUDO} cp LICENSE ${OUT_DIR}/${TOP}/share/doc/${PKG}/copyright
 ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${TOP}/share/doc/${PKG}/changelog
