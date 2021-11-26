@@ -133,10 +133,15 @@ tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}-dist.tar.gz
     ${SUDO} cp *.deb *.gz *.zip ../releases/${PKG_VER}
 }
 
-# Experimental RPM distribution build
+# RPM distribution build
 cd "${SRC}"
 [ -d pkg/rpm ] && cp -a pkg/rpm ${OUT_DIR}/rpm
 [ -d ${OUT_DIR}/rpm ] || mkdir ${OUT_DIR}/rpm
+
+have_rpm=`type -p rpmbuild`
+[ "${have_rpm}" ] || {
+  ${SUDO} apt install rpm -y
+}
 
 rpmbuild -ba --build-in-place \
    --define "_topdir ${OUT_DIR}" \
@@ -145,6 +150,8 @@ rpmbuild -ba --build-in-place \
    --define "_release ${PKG_REL}" \
    --buildroot ${SRC}/${OUT_DIR}/BUILDROOT \
    ${OUT_DIR}/rpm/${PKG_NAME}.spec
+
+${SUDO} cp dist/${PKG_NAME}_${PKG_VER}/RPMS/*/*.rpm dist
 
 [ "${GCI}" ] || {
     [ -d releases ] || mkdir releases
