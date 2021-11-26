@@ -12,5 +12,4 @@ DOC=${LOCAL}/share/doc
 sudo rm -rf ${DEST}
 sudo rm -rf ${DOC}/${PKG}
 
-echo ""
 echo "${PKG} uninstalled"

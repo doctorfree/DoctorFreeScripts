@@ -1,8 +1,7 @@
 #!/bin/bash
 
 PKG="DoctorFreeScripts"
-TOP="/usr"
-DESTDIR="${TOP}/local"
+DESTDIR="/usr/local"
 DEST="${DESTDIR}/${PKG}"
 SRC=${HOME}/src
 SRC_NAME="DoctorFreeScripts"
@@ -43,12 +42,12 @@ export PATH=/usr/local/bin:/usr/bin:$PATH
 [ -d /usr/local/bin ] || ${SUDO} mkdir /usr/local/bin
 [ -d ${DEST} ] || ${SUDO} mkdir ${DEST}
 
-for dir in "${TOP}" "${LOCAL}" "${DESTDIR}" "${TOP}/share" \
-           "${DESTDIR}/share" "${DESTDIR}/share/applications" \
-            "${TOP}/share/doc" "${TOP}/share/doc/${PKG}"
+for dir in "${DESTDIR}" "${DESTDIR}/share" \
+           "${DESTDIR}/share/applications" \
+           "${DESTDIR}/share/doc" "${DESTDIR}/share/doc/${PKG}" \
+           "${DEST}"/bin "${DEST}"/etc
 do
     [ -d ${dir} ] || ${SUDO} mkdir ${dir}
-    ${SUDO} chown root:wheel ${dir}
 done
 
 for script in Wallpapers/*.sh
@@ -56,7 +55,16 @@ do
     grep ${script} .gitignore > /dev/null || {
         b=`basename ${script}`
         dest=`echo ${b} | sed -e "s/\.sh//"`
-        ${SUDO} cp ${script} ${DESTDIR}/bin/${dest}
+        ${SUDO} cp ${script} ${DEST}/bin/${dest}
+    }
+done
+
+for util in Utils/bin/*
+do
+    [ -d ${util} ] && continue
+    grep ${util} .gitignore > /dev/null || {
+        dest=`basename ${util}`
+        ${SUDO} cp ${util} ${DEST}/bin/${dest}
     }
 done
 
@@ -64,20 +72,20 @@ for script in scripts/*.sh
 do
     grep ${script} .gitignore > /dev/null || {
         dest=`echo ${script} | sed -e "s/scripts\///" -e "s/\.sh//"`
-        ${SUDO} cp ${script} ${DESTDIR}/bin/${dest}
+        ${SUDO} cp ${script} ${DEST}/bin/${dest}
     }
 done
 
 ${SUDO} cp Config/autostart/*.desktop "${DESTDIR}/share/applications"
-${SUDO} cp AUTHORS ${TOP}/share/doc/${PKG}/AUTHORS
-${SUDO} cp LICENSE ${TOP}/share/doc/${PKG}/copyright
-${SUDO} cp CHANGELOG.md ${TOP}/share/doc/${PKG}/changelog
-${SUDO} cp README.md ${TOP}/share/doc/${PKG}/README
-${SUDO} gzip -9 ${TOP}/share/doc/${PKG}/changelog
+${SUDO} cp AUTHORS ${DESTDIR}/share/doc/${PKG}/AUTHORS
+${SUDO} cp LICENSE ${DESTDIR}/share/doc/${PKG}/copyright
+${SUDO} cp CHANGELOG.md ${DESTDIR}/share/doc/${PKG}/changelog
+${SUDO} cp README.md ${DESTDIR}/share/doc/${PKG}/README
+${SUDO} gzip -9 ${DESTDIR}/share/doc/${PKG}/changelog
 
 for dir in ${SUBDIRS}
 do
-    ${SUDO} cp -a ${dir} ${DESTDIR}/${dir}
+    ${SUDO} cp -a ${dir} ${DEST}/${dir}
 done
 
 [ -d ${DESTDIR}/share ] || ${SUDO} mkdir -p ${DESTDIR}/share
@@ -85,17 +93,17 @@ done
 ${SUDO} cp ${DOT_FILES} ${DESTDIR}/share/bash
 [ -d ${DESTDIR}/share/images ] || ${SUDO} mkdir -p ${DESTDIR}/share/images
 ${SUDO} cp ${IMG_FILES} ${DESTDIR}/share/images
-[ -d ${DESTDIR}/etc ] || ${SUDO} mkdir -p ${DESTDIR}/etc
-${SUDO} cp etc/* ${DESTDIR}/etc
+[ -d ${DEST}/etc ] || ${SUDO} mkdir -p ${DEST}/etc
+${SUDO} cp etc/* ${DEST}/etc
 
 [ -f .gitignore ] && {
     while read ignore
     do
-        ${SUDO} rm -f ${DESTDIR}/${ignore}
+        ${SUDO} rm -f ${DEST}/${ignore}
     done < .gitignore
 }
 
-${SUDO} chmod 755 ${DESTDIR}/bin/*
+${SUDO} chmod 755 ${DEST}/bin/*
 ${SUDO} chown -R root:wheel ${DEST}
 
 [ -x /usr/local/DoctorFreeScripts/etc/postinstall ] && {
