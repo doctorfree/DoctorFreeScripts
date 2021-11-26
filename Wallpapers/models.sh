@@ -134,10 +134,10 @@ do
       }
   fi
   printf "\nModel prefix alternate names in get-models:\n"
-  grep ${model_prefix} ${WTOP}/get-models | grep get_search
+  grep ${model_prefix} /usr/local/bin/get-models | grep get_search
   [ "${ALL}" ] || [ "${TYPE}" == "photographers" ] && {
       printf "\nPhotographer prefix alternate names in get-photographers:\n"
-      grep ${model_prefix} ${WTOP}/get-photographers | grep get_search
+      grep ${model_prefix} /usr/local/bin/get-photographers | grep get_search
   }
 done
 printf "\n"
