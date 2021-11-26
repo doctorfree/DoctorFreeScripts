@@ -23,41 +23,104 @@ To clone the MagicMirror and Roon submodules as well:
 
 ## Installation
 
-DoctorFreeScripts version 3.1 and later includes a Debian format package
-which can be used to install the DoctorFreeScripts utilities with the Apt
-package management system. To install:
+DoctorFreeScripts version 3.1 and later includes both Debian and RPM format
+packages which can be used to install the DoctorFreeScripts utilities with
+either the Apt Package Management system or the Red Hat Package Management
+system. Support is also included for installing on Mac OS X. Other systems
+will require a manual installation described below. The Mac OS X installation
+procedure may also work under Microsoft's Windows Subsystem for Linux but
+it is as yet untested.
 
-[Download the latest Debian package format release](https://gitlab.com/doctorfree/DoctorFreeScripts/-/releases)
+### Debian Package installation
 
-Install the package by executing the command
+Many Linux distributions, most notably Ubuntu and its derivatives, use the
+Debian packaging system.
+
+To tell if a Linux system is Debian based it is usually sufficient to
+check for the existence of the file `/etc/debian_version` and/or examine the
+contents of the file `/etc/os-release`.
+
+To install on a Debian based Linux system, download the latest Debian format
+package from the
+[DoctorFreeScripts Releases](https://gitlab.com/doctorfree/DoctorFreeScripts/-/releases).
+
+Install the DoctorFreeScripts package by executing the command
+
 ```bash
-sudo apt install DoctorFreeScripts_<version>.deb
+sudo apt install ./DoctorFreeScripts_<version>-<release>.deb
+```
+or
+```bash
+sudo dpkg -i ./DoctorFreeScripts_<version>-<release>.deb
 ```
 
-You can create your own custom Debian format package from the repository source.
-To do so, clone the DoctorFreeScripts repository:
+### RPM Package installation
 
-<code>git clone ssh://gitlab.com/doctorfree/DoctorFreeScripts.git</code>
+Red Hat Linux, SUSE Linux, and their derivatives use the RPM packaging
+format. RPM based Linux distributions include Fedora, AlmaLinux, CentOS,
+openSUSE, OpenMandriva, Mandrake Linux, Red Hat Linux, and Oracle Linux.
 
+To install on an RPM based Linux system, download the latest RPM format
+package from the
+[DoctorFreeScripts Releases](https://gitlab.com/doctorfree/DoctorFreeScripts/-/releases).
+
+Install the DoctorFreeScripts package by executing the command
+
+```bash
+sudo yum localinstall ./DoctorFreeScripts_<version>-<release>.rpm
+```
 or
+```bash
+sudo rpm -i ./DoctorFreeScripts_<version>-<release>.rpm
+```
 
-<code>git clone `https://gitlab.com/doctorfree/DoctorFreeScripts.git`</code>
+### Mac OS X installation
 
-Use the `mkpkg` script to create a Debian format package on a system with
-the prerequisite packaging development environment.
+Installation of DoctorFreeScripts on Mac OS X systems can be accomplished by
+cloning the DoctorFreeScripts repository and executing the `Install` script:
 
-Alternately, for those who prefer to manually install and configure DoctorFreeScripts,
-compressed archives (zip and gzip) are provided for download.
+```bash
+    git clone `https://gitlab.com/doctorfree/DoctorFreeScripts.git`
+    cd DoctorFreeScripts
+    ./Install
+```
 
 ## Removal
 
-To remove/uninstall the DoctorFreeScripts package execute the command:
+On Debian based Linux systems where the DoctorFreeScripts package was installed
+using the DoctorFreeScripts Debian format package, remove the DoctorFreeScripts
+package by executing the command:
 
 ```bash
-sudo apt remove doctorfree-scripts
+    sudo apt remove doctorfree-scripts
+```
+or
+```bash
+    sudo dpkg -r doctorfree-scripts
 ```
 
-**Note:** Removal will issue a warning about removing `/usr/local` and other
+On RPM based Linux systems where the DoctorFreeScripts package was installed
+using the DoctorFreeScripts RPM format package, remove the DoctorFreeScripts
+package by executing the command:
+
+```bash
+    sudo yum remove DoctorFreeScripts
+```
+or
+```bash
+    sudo rpm -e DoctorFreeScripts
+```
+
+On Mac OS X systems, the DoctorFreeScripts package can be removed by executing
+the "Uninstall" script in the DoctorFreeScripts source directory:
+
+```bash
+    git clone git@gitlab.com:doctorfree/DoctorFreeScripts.git
+    cd DoctorFreeScripts
+    ./Uninstall
+```
+
+**Note:** Removal may issue a warning about removing `/usr/local` and other
 folders within `/usr/local`. This is an artifact of the Debian packaging system.
 If you wish to silence that warning and prevent the Debian packaging system from
 trying to remove `/usr/local` then install the
