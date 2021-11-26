@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file.
 
+Fri Nov 26 09:18:28 2021 -0800 c9b636a :
+   Set version to 4.0 in preparation for new release
+Fri Nov 26 08:34:51 2021 -0800 c12c196 :
+   Add Mac OS X installation and removal support, move postinstall and preremove out into etc
+Fri Nov 26 06:31:18 2021 -0800 fd5db82 :
+   Add sections on RPM installation and removal
+Thu Nov 25 20:35:59 2021 -0800 eea3092 :
+   Merge branch 'master' of ssh://gitlab.com/doctorfree/DoctorFreeScripts RPM integrated into Install/Uninstall
+Thu Nov 25 20:35:27 2021 -0800 5602482 :
+   Install/Uninstall now supports RPM, Debian, and Mac
+Thu Nov 25 17:13:50 2021 -0800 c6a70bb :
+   Add release to VERSION, enable RPM Packaging
+Wed Nov 24 17:43:43 2021 -0800 5aa863a :
+   Minor formatting of Fred Scripts download
+Wed Nov 24 17:31:59 2021 -0800 c23805d :
+   Move desktop files to /usr/local/...
+Wed Nov 24 13:09:36 2021 -0800 9d28099 :
+   Change name of repository to DoctorFreeScripts
+Wed Nov 24 12:41:54 2021 -0800 f54f7cf :
+   Added build action to drfree function, added checks
+Wed Nov 24 12:16:50 2021 -0800 578a757 :
+   Add drfree function
+Mon Nov 22 11:34:42 2021 -0800 5ee498b :
+   Set Architecture to 'all' in control file
+Sat Nov 20 18:36:28 2021 -0800 528876c :
+   Rename SUMS files as SUMS.txt
+Fri Nov 19 16:09:36 2021 -0800 4f35a7c :
+   Format Fred script download screen
+Fri Nov 19 15:02:33 2021 -0800 5371240 :
+   Silence curl download output
+Fri Nov 19 14:46:29 2021 -0800 6dcd18c :
+   Added mandelbrot script
+Fri Nov 19 14:27:35 2021 -0800 8abf5ec :
+   Added convenience script to prune local tags
+Fri Nov 19 14:15:08 2021 -0800 4345845 :
+   Update script locations in README
+Fri Nov 19 13:40:42 2021 -0800 8ad5664 :
+   Last pass at filtering commands for linking into /usr/local/bin, moving and deleting scripts
+Fri Nov 19 10:57:08 2021 -0800 c19d79f :
+   Additional deletions and renaming to prep for release
+Fri Nov 19 10:03:09 2021 -0800 9b56b33 :
+   Cleanup a bit
+Fri Nov 19 09:56:13 2021 -0800 cf4688a :
+   First round of culling out scripts not to be linked in /usr/local/bin, renaming and moving scripts, add ImageMagick subdir
+Tue Nov 16 08:23:34 2021 -0800 1b1f209 :
+   Link cap2any files
+Tue Nov 16 07:55:42 2021 -0800 01f162e :
+   Create symbolic links for the formats any2any can handle
+Mon Nov 15 16:32:06 2021 -0800 71e36a6 :
+   Remove old release artifacts
+Mon Nov 15 15:11:33 2021 -0800 efad813 :
+   Update Changelog in preparation for version 3.2 tag
 Mon Nov 15 14:28:16 2021 -0800 2d62dc1 :
    Get version from VERSION
 Mon Nov 15 13:50:49 2021 -0800 33b93df :

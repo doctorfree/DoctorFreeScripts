@@ -98,17 +98,6 @@ ${SUDO} cp etc/* ${DESTDIR}/etc
 ${SUDO} chmod 755 ${DESTDIR}/bin/*
 ${SUDO} chown -R root:wheel ${DEST}
 
-cd /usr/local/bin
-for command in ${DEST}/bin/*
-do
-    b=`basename ${command}`
-    if [ -f ${b} ]
-    then
-        diff ${command} ${b} > /dev/null && {
-            ${SUDO} rm -f ${b}
-            ${SUDO} ln -s ${command} .
-        }
-    else
-        ${SUDO} ln -s ${command} .
-    fi
-done
+[ -x /usr/local/DoctorFreeScripts/etc/postinstall ] && {
+    sudo /usr/local/DoctorFreeScripts/etc/postinstall
+}

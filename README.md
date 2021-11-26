@@ -1,7 +1,34 @@
+> **"The cosmic operating system uses a command line interface. It runs on
+> something like a teletype, with lots of noise and heat; punched-out bits
+> flutter down into its hopper like drifting stars. The demiurge sits at his
+> teletype, pounding out one command line after another, specifying the values
+> of fundamental constants of physics:**
+>
+> `universe -G 6.672e-11 -e 1.602e-19 -h 6.626e-34 -protonmass 1.673e-27`
+>
+> **and when he’s finished typing out the command line, his right pinky hesitates
+> above the enter key for an aeon or two, wondering what’s going to happen;
+> then down it comes—and the whack you hear is another Big Bang."**
+>
+> ― Neal Stephenson, In the Beginning...Was the Command Line
+
 # DoctorFreeScripts
 
 Utility Bash shell scripts I've written - typically these will run on Unix,
-Linux, OS X, and Cygwin. Includes some custom Bash and Vim startup scripts.
+Linux, OS X, and Cygwin. Includes over 175 useful or convenient commands I've
+developed over my decades of work on Unix and Linux operating system environments.
+
+## Table of Contents
+
+1. [Clone the Source](#clone-the-source)
+1. [Installation](#installation)
+    1. [Debian Package installation](#debian-package-installation)
+    1. [RPM Package installation](#rpm-package-installation)
+    1. [Mac OS X installation](#mac-os-x-installation)
+1. [Removal](#removal)
+1. [Contents](#contents)
+
+## Clone the Source
 
 To clone:
 
