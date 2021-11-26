@@ -140,7 +140,8 @@ cd "${SRC}"
 
 have_rpm=`type -p rpmbuild`
 [ "${have_rpm}" ] || {
-  ${SUDO} apt install rpm -y
+  ${SUDO} apt-get update
+  ${SUDO} apt-get install rpm -y
 }
 
 rpmbuild -ba --build-in-place \
