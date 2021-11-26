@@ -42,12 +42,6 @@ To clone:
     git clone git@gitlab.com:doctorfree/DoctorFreeScripts.git
 ```
 
-To clone the MagicMirror and Roon submodules as well:
-
-```bash
-    git clone --recurse-submodules https://gitlab.com/doctorfree/DoctorFreeScripts.git
-```
-
 ## Installation
 
 DoctorFreeScripts version 3.1 and later includes both Debian and RPM format
