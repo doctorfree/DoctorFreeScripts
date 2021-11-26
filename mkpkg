@@ -21,6 +21,7 @@ GCI=
 
 . "${SRC}/VERSION"
 PKG_VER=${VERSION}
+PKG_REL=${RELEASE}
 
 # Subdirectory in which to create the distribution files
 OUT_DIR="dist/${PKG_NAME}_${PKG_VER}"
@@ -120,15 +121,34 @@ ${SUDO} cp ${ETC_FILES} ${OUT_DIR}/${DESTDIR}/etc
 ${SUDO} chmod 755 ${OUT_DIR}/${DESTDIR}/bin/*
 
 cd dist
-${SUDO} dpkg-deb --build ${PKG_NAME}_${PKG_VER}
+${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.deb
 cd ${PKG_NAME}_${PKG_VER}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-dist.tar.gz
+tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}-dist.tar.gz
 [ "${GCI}" ] || {
     echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
-    zip -q -r ../${PKG_NAME}_${PKG_VER}-dist.zip usr
+    zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}-dist.zip usr
     cd ..
     [ -d ../releases ] || mkdir ../releases
     [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
     ${SUDO} cp *.deb *.gz *.zip ../releases/${PKG_VER}
+}
+
+# Experimental RPM distribution build
+cd "${SRC}"
+[ -d pkg/rpm ] && cp -a pkg/rpm ${OUT_DIR}/rpm
+[ -d ${OUT_DIR}/rpm ] || mkdir ${OUT_DIR}/rpm
+
+rpmbuild -ba --build-in-place \
+   --define "_topdir ${OUT_DIR}" \
+   --define "_sourcedir ${OUT_DIR}" \
+   --define "_version ${PKG_VER}" \
+   --define "_release ${PKG_REL}" \
+   --buildroot ${SRC}/${OUT_DIR}/BUILDROOT \
+   ${OUT_DIR}/rpm/${PKG_NAME}.spec
+
+[ "${GCI}" ] || {
+    [ -d releases ] || mkdir releases
+    [ -d releases/${PKG_VER} ] || mkdir releases/${PKG_VER}
+    ${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm releases/${PKG_VER}
 }
