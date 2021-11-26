@@ -1,4 +1,0 @@
-[submodule "MagicMirror"]
-	path = MagicMirror
-	url = git@gitlab.com:doctorfree/MirrorCommandLine
-	branch = master
