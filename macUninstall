@@ -1,0 +1,16 @@
+#!/bin/bash
+
+PKG=DoctorFreeScripts
+LOCAL="/usr/local"
+DEST=${LOCAL}/${PKG}
+DOC=${LOCAL}/share/doc
+
+[ -x /usr/local/DoctorFreeScripts/etc/preremove ] && {
+    sudo /usr/local/DoctorFreeScripts/etc/preremove
+}
+
+sudo rm -rf ${DEST}
+sudo rm -rf ${DOC}/${PKG}
+
+echo ""
+echo "${PKG} uninstalled"

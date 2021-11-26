@@ -1,0 +1,114 @@
+#!/bin/bash
+
+PKG="DoctorFreeScripts"
+TOP="/usr"
+DESTDIR="${TOP}/local"
+DEST="${DESTDIR}/${PKG}"
+SRC=${HOME}/src
+SRC_NAME="DoctorFreeScripts"
+SUDO=sudo
+
+[ -f "${SRC}/${SRC_NAME}/VERSION" ] || {
+    echo "$SRC/$SRC_NAME/VERSION does not exist. Exiting."
+    exit 1
+}
+
+. "${SRC}/${SRC_NAME}/VERSION"
+PKG_VER=${VERSION}
+PKG_REL=${RELEASE}
+
+SUBDIRS="Config IFTTT binance chrome-themes \
+         clone coinmarketcap doc profittrailer systemd"
+DOT_FILES="bash_aliases bash_profile bashrc dircolors drfree kv vimrc wallutils"
+IMG_FILES="Scripts-Logo.png Vertical.png"
+
+while true
+do
+  read -p "Install ${SRC_NAME} version ${PKG_VER}-${PKG_REL} ? ('Y'/'N'): " yn
+  case $yn in
+      [Yy]*)
+          break
+          ;;
+      [Nn]*)
+          exit 0
+          ;;
+      * )
+          echo "Please answer yes or no."
+          ;;
+  esac
+done
+
+export PATH=/usr/local/bin:/usr/bin:$PATH
+[ -d /usr/local ] || ${SUDO} mkdir /usr/local
+[ -d /usr/local/bin ] || ${SUDO} mkdir /usr/local/bin
+[ -d ${DEST} ] || ${SUDO} mkdir ${DEST}
+
+for dir in "${TOP}" "${LOCAL}" "${DESTDIR}" "${TOP}/share" \
+           "${DESTDIR}/share" "${DESTDIR}/share/applications" \
+            "${TOP}/share/doc" "${TOP}/share/doc/${PKG}"
+do
+    [ -d ${dir} ] || ${SUDO} mkdir ${dir}
+    ${SUDO} chown root:wheel ${dir}
+done
+
+for script in Wallpapers/*.sh
+do
+    grep ${script} .gitignore > /dev/null || {
+        b=`basename ${script}`
+        dest=`echo ${b} | sed -e "s/\.sh//"`
+        ${SUDO} cp ${script} ${DESTDIR}/bin/${dest}
+    }
+done
+
+for script in scripts/*.sh
+do
+    grep ${script} .gitignore > /dev/null || {
+        dest=`echo ${script} | sed -e "s/scripts\///" -e "s/\.sh//"`
+        ${SUDO} cp ${script} ${DESTDIR}/bin/${dest}
+    }
+done
+
+${SUDO} cp Config/autostart/*.desktop "${DESTDIR}/share/applications"
+${SUDO} cp AUTHORS ${TOP}/share/doc/${PKG}/AUTHORS
+${SUDO} cp LICENSE ${TOP}/share/doc/${PKG}/copyright
+${SUDO} cp CHANGELOG.md ${TOP}/share/doc/${PKG}/changelog
+${SUDO} cp README.md ${TOP}/share/doc/${PKG}/README
+${SUDO} gzip -9 ${TOP}/share/doc/${PKG}/changelog
+
+for dir in ${SUBDIRS}
+do
+    ${SUDO} cp -a ${dir} ${DESTDIR}/${dir}
+done
+
+[ -d ${DESTDIR}/share ] || ${SUDO} mkdir -p ${DESTDIR}/share
+[ -d ${DESTDIR}/share/bash ] || ${SUDO} mkdir -p ${DESTDIR}/share/bash
+${SUDO} cp ${DOT_FILES} ${DESTDIR}/share/bash
+[ -d ${DESTDIR}/share/images ] || ${SUDO} mkdir -p ${DESTDIR}/share/images
+${SUDO} cp ${IMG_FILES} ${DESTDIR}/share/images
+[ -d ${DESTDIR}/etc ] || ${SUDO} mkdir -p ${DESTDIR}/etc
+${SUDO} cp etc/* ${DESTDIR}/etc
+
+[ -f .gitignore ] && {
+    while read ignore
+    do
+        ${SUDO} rm -f ${DESTDIR}/${ignore}
+    done < .gitignore
+}
+
+${SUDO} chmod 755 ${DESTDIR}/bin/*
+${SUDO} chown -R root:wheel ${DEST}
+
+cd /usr/local/bin
+for command in ${DEST}/bin/*
+do
+    b=`basename ${command}`
+    if [ -f ${b} ]
+    then
+        diff ${command} ${b} > /dev/null && {
+            ${SUDO} rm -f ${b}
+            ${SUDO} ln -s ${command} .
+        }
+    else
+        ${SUDO} ln -s ${command} .
+    fi
+done

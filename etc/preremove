@@ -1,0 +1,59 @@
+#!/bin/bash
+# preremove script for DoctorFreeScripts
+#
+
+set -e
+
+DFS="/usr/local/DoctorFreeScripts"
+LNK="ape2m4a ape2mp4 avi2mp4 f4v2mp4 flv2mp4 \
+     m4a2mp3 m4v2mp4 mkv2mp4 mov2mp4 mp42m4v \
+     mpg2mp4 png2jpg wma2m4a wmv2m4v wmv2mp4 \
+     cap2m4v cap2mp4 slides slideshow chkaplibs \
+     updaplibs updphotoslibs upditunes updpicdir \
+     updmovdir updauddir updhome chkitunes \
+     chkpicdir chkmovdir chkauddir chkhome"
+[ -d /usr/local/bin ] && {
+    cd /usr/local/bin
+    for command in ${DFS}/bin/*
+    do
+        [ "${command}" == "${DFS}/bin/*" ] && continue
+        b=`basename ${command}`
+        [ -L $b ] && {
+            readlink $b | grep ${DFS} > /dev/null && rm -f $b
+        }
+    done
+    for lnk in ${LNK}
+    do
+        [ -L ${lnk} ] && {
+            readlink ${lnk} | grep ${DFS} > /dev/null && rm -f ${lnk}
+        }
+    done
+}
+[ -d /usr/local/share/bash ] && {
+    cd /usr/local/share/bash
+    for script in ${DFS}/share/bash/*
+    do
+        [ "${script}" == "${DFS}/share/bash/*" ] && continue
+        b=`basename ${script}`
+        [ -L $b ] && {
+            readlink $b | grep ${DFS} > /dev/null && rm -f $b
+        }
+    done
+    cd ..
+    rmdir --ignore-fail-on-non-empty bash
+}
+[ -d /usr/local/share/images ] && {
+    cd /usr/local/share/images
+    for image in ${DFS}/share/images/*
+    do
+        [ "${image}" == "${DFS}/share/images/*" ] && continue
+        b=`basename ${image}`
+        [ -L $b ] && {
+            readlink $b | grep ${DFS} > /dev/null && rm -f $b
+        }
+    done
+    cd ..
+    rmdir --ignore-fail-on-non-empty images
+}
+
+exit 0

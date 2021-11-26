@@ -30,7 +30,6 @@ SUBDIRS="Config IFTTT binance chrome-themes \
          clone coinmarketcap doc profittrailer systemd"
 DOT_FILES="bash_aliases bash_profile bashrc dircolors drfree kv vimrc wallutils"
 IMG_FILES="Scripts-Logo.png Vertical.png"
-ETC_FILES="Doxyfile crontab-peakhours.in"
 
 cd "${SRC}"
 ${SUDO} rm -rf dist
@@ -109,7 +108,7 @@ ${SUDO} cp ${DOT_FILES} ${OUT_DIR}/${DESTDIR}/share/bash
 [ -d ${OUT_DIR}/${DESTDIR}/share/images ] || ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/images
 ${SUDO} cp ${IMG_FILES} ${OUT_DIR}/${DESTDIR}/share/images
 [ -d ${OUT_DIR}/${DESTDIR}/etc ] || ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/etc
-${SUDO} cp ${ETC_FILES} ${OUT_DIR}/${DESTDIR}/etc
+${SUDO} cp etc/* ${OUT_DIR}/${DESTDIR}/etc
 
 [ -f .gitignore ] && {
     while read ignore
