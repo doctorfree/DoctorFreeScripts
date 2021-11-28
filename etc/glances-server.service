@@ -1,0 +1,18 @@
+# Glances server
+# Install this service file in /etc/systemd/system/
+# Enable the service with
+# sudo systemctl enable glances-server.service
+# Start this service with
+# sudo systemctl start glances-web-server.service
+
+[Unit]
+Description=Glances
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/glances -s
+Restart=on-abort
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
