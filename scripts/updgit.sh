@@ -111,5 +111,23 @@ fi
         git commit $ADD
     fi
 }
-echo "git push origin master"
-[ "$TELL" ] || git push origin master
+
+# One of the actual changes that came about as a result of the
+# many protests in the aftermath of the murder of George Floyd
+# during his arrest by Minneapolis police officers on May 25, 2020
+# was GitHub and GitLab changing the name of the default branch
+# from "master" to "main". It will be left as an exercise for the
+# reader to determine if this change addressed the problem of
+# systemic racism in the United States and around the world.
+
+# Try to figure out the name of the branch to push to
+branch="master"
+[ -f ./.git/config ] && {
+    confbranch=`cat ./.git/config | grep ^\\\[branch |
+                awk ' { print $2 } ' |
+                sed -e "s/\"//g" -e "s/\]//"`
+}
+[ "${confbranch}" ] && branch="${confbranch}"
+
+echo "git push origin ${branch}"
+[ "$TELL" ] || git push origin ${branch}
