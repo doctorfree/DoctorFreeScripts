@@ -755,6 +755,7 @@ get_model() {
                   ;;
                 Niemira)
                   get_search "${playboymodel}" "Nonna_Y."
+                  get_search "${playboymodel}" "Niemira_Foxx"
                   ;;
                 Roxanna_Dunlop)
                   get_search "${playboymodel}" "Roxanna_June"
@@ -931,6 +932,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Tabitha"
             get_search "${MODD}/${model}" "Lynne_\(Hegre\)"
+            ;;
+        Yara_Eggiman)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Yara_\(Hegre-Art\)"
             ;;
         Yulia_Liepa)
             get_search "${MODD}/${model}" "${model}"
