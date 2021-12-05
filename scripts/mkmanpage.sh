@@ -10,6 +10,10 @@
 #
 
 MANDIR=${HOME}/src/doc
+OUTDIR=${MANDIR}
+INPDIR=${MANDIR}
+USAGE=
+HERE=`pwd`
 DATE=`date +'%B %d, %Y'`
 NAME=`git config --global --get user.name`
 EMAIL=`git config --global --get user.email`
@@ -18,7 +22,7 @@ EMAIL=`git config --global --get user.email`
 
 # Default command name, version, and man section
 comname="COMMAND"
-version="1.0.0"
+VERSION="1.0.0"
 section="1"
 
 usage() {
@@ -28,7 +32,8 @@ usage() {
     printf "\n\t\t-n command-name specifies the name of the command (without section)"
     printf "\n\t\t-s man-section specifies the specifies the man page section number"
     printf "\n\t\t-v command-version specifies the version of the command"
-    printf "\n\tMarkdown input and Man page output are located in ${MANDIR}"
+    printf "\n\tMarkdown input located in ${INPDIR}"
+    printf "\n\tMan page output located in ${OUTDIR}"
     printf "\n\tAuthor Name and Email are retrieved from git global config variables"
     printf "\n\t(Currently using Name=${NAME} and Email=${EMAIL})"
     printf "\nSummary:\n\tmkmanpage uses markdown input and pandoc"
@@ -42,6 +47,8 @@ usage() {
     exit 1
 }
 
+[ -f VERSION ] && . ./VERSION
+
 while getopts n:s:v:u flag; do
     case $flag in
         n)
@@ -51,10 +58,10 @@ while getopts n:s:v:u flag; do
             section="$OPTARG"
             ;;
         v)
-            version="$OPTARG"
+            VERSION="$OPTARG"
             ;;
         u)
-            usage
+            USAGE=1
             ;;
 	esac
 done
@@ -65,12 +72,25 @@ capcomm=`echo "${comname}" | awk 'BEGIN { getline; print toupper($0) }'`
 # Use tr for compatibility with earlier versions of Bash
 capfirst="$(tr '[:lower:]' '[:upper:]' <<< ${comname:0:1})${comname:1}"
 
-[ -f "${MANDIR}/${comname}.${section}.md" ] || {
+# Check for markdown and man subdirs in current directory
+# If both directories exist then set MANDIR and OUTPUT dirs
+[ -d markdown ] && [ -d man ] && {
+    INPDIR=${HERE}/markdown
+    MANDIR=${HERE}/man
+    OUTDIR=${MANDIR}/man${section}
+}
+
+[ "${USAGE}" ] && usage
+
+[ -d "${INPDIR}" ] || mkdir -p "${INPDIR}"
+[ -d "${OUTDIR}" ] || mkdir -p "${OUTDIR}"
+
+[ -f "${INPDIR}/${comname}.${section}.md" ] || {
 echo "---
 title: ${capcomm}
 section: ${section}
 header: User Manual
-footer: ${comname} ${version}
+footer: ${comname} ${VERSION}
 date: ${DATE}
 ---
 # NAME
@@ -110,18 +130,53 @@ Submit bug reports online at: &lt;https://gitlab.com/doctorfree/PROJECT/issues&g
 
 # SEE ALSO
 Full documentation and sources at: &lt;https://gitlab.com/doctorfree/PROJECT&gt;
-" > "${MANDIR}/${comname}.${section}.md"
+" > "${INPDIR}/${comname}.${section}.md"
 }
 
 inst_pandoc=`type -p pandoc`
 
 [ "${inst_pandoc}" ] || {
+    plat=`uname -s`
+    if [ "$plat" == "Darwin" ]
+    then
+      INSTCOMM="brew install pandoc"
+    else
+      debian=
+      [ "${ID_LIKE}" == "debian" ] && debian=1
+      [ "${debian}" ] || [ -f /etc/debian_version ] && debian=1
+      if [ "${debian}" ]
+      then
+          INSTCOMM="sudo apt install pandoc"
+      else
+          INSTCOMM="sudo yum install pandoc"
+      fi
+    fi
     echo "Cannot locate pandoc in the execution PATH."
-    echo "Install pandoc with 'sudo apt install pandoc'"
-    echo "Exiting."
-    exit 1
+    echo "Install pandoc with the command:"
+    printf "\n\t${INSTCOMM}\n\n"
+    while true
+    do
+      read -p "Do you wish to install pandoc now ? ('Y'/'N'): " yn
+      case $yn in
+          [Yy]*)
+              ${INSTCOMM}
+              break
+              ;;
+          [Nn]*)
+              echo "Exiting."
+              exit 1
+              break
+              ;;
+          * )
+              echo "Please answer yes or no."
+              ;;
+      esac
+    done
 }
 
-cd "${MANDIR}"
+echo "Using ${INPDIR}/${comname}.${section}.md as markdown input"
+echo "Using ${OUTDIR}/${comname}.${section} as man page output"
 
-pandoc ${comname}.${section}.md -s -t man -o ${comname}.${section}
+# Use Github flavored markdown as input, Man page format as output
+pandoc -f gfm -s -t man -o ${OUTDIR}/${comname}.${section} \
+                           ${INPDIR}/${comname}.${section}.md 
