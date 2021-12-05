@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# mkmanpage - uses markdown input and pandoc to generate man pages
-#    mkmanpage generates a markdown template for input (if none exists)
+# md2man - Uses Github flavored markdown input and pandoc to generate man pages
+#    md2man generates a markdown template for input (if none exists)
 #    with sections and as much info as it can derive from command line arguments.
 #
 #    See https://pandoc.org/ for Pandoc info
@@ -9,6 +9,7 @@
 # Author: Ron Record <gitlab@ronrecord.com>
 #
 
+# Default input/output directory
 MANDIR=${HOME}/src/doc
 OUTDIR=${MANDIR}
 INPDIR=${MANDIR}
@@ -26,7 +27,7 @@ VERSION="1.0.0"
 section="1"
 
 usage() {
-    printf "\nUsage:\n\tmkmanpage [-n command-name] [-s man-section] "
+    printf "\nUsage:\n\tmd2man [-n command-name] [-s man-section] "
     printf "[-v command-version] [-u]"
     printf "\n\tWhere:\n\t\t-u displays this usage message"
     printf "\n\t\t-n command-name specifies the name of the command (without section)"
@@ -36,9 +37,9 @@ usage() {
     printf "\n\tMan page output located in ${OUTDIR}"
     printf "\n\tAuthor Name and Email are retrieved from git global config variables"
     printf "\n\t(Currently using Name=${NAME} and Email=${EMAIL})"
-    printf "\nSummary:\n\tmkmanpage uses markdown input and pandoc"
+    printf "\nSummary:\n\tmd2man uses markdown input and pandoc"
     printf " to generate man pages"
-    printf "\nExample:\n\tmkmanpage -n foo -s 3 -v 2.0.1"
+    printf "\nExample:\n\tmd2man -n foo -s 3 -v 2.0.1"
     printf "\nDescription:\n\tGenerates a markdown template for input (if none exists)"
     printf "\n\twith command name, sections, version, and as much info"
     printf "\n\tas it can derive from command line arguments and git config."
@@ -134,9 +135,9 @@ Full documentation and sources at: &lt;https://gitlab.com/doctorfree/PROJECT&gt;
 }
 
 inst_pandoc=`type -p pandoc`
+plat=`uname -s`
 
 [ "${inst_pandoc}" ] || {
-    plat=`uname -s`
     if [ "$plat" == "Darwin" ]
     then
       INSTCOMM="brew install pandoc"
@@ -180,3 +181,25 @@ echo "Using ${OUTDIR}/${comname}.${section} as man page output"
 # Use Github flavored markdown as input, Man page format as output
 pandoc -f gfm -s -t man -o ${OUTDIR}/${comname}.${section} \
                            ${INPDIR}/${comname}.${section}.md 
+
+while true
+do
+  read -p "Do you wish to view the generated ${comname}.${section} man page ? ('Y'/'N'): " yn
+  case $yn in
+      [Yy]*)
+          if [ "$plat" == "Darwin" ]
+          then
+              man -M `dirname ${OUTDIR}` ${comname}
+          else
+              man -l ${OUTDIR}/${comname}.${section}
+          fi
+          break
+          ;;
+      [Nn]*)
+          break
+          ;;
+      * )
+          echo "Please answer yes or no."
+          ;;
+  esac
+done

@@ -265,7 +265,7 @@ trying to remove `/usr/local` then install the
 
 [**mkcomps**](scripts/mkcomps.sh) - Join 2 or 3 images then split the resulting composite in half. Uses ImageMagick.
 
-[**mkmanpage**](scripts/mkmanpage.sh) - Generate man pages from markdown using pandoc
+[**md2man**](scripts/md2man.sh) - Generate man pages from markdown using pandoc
 
 [**mkreadme**](scripts/mkreadme.sh) - Creates a Readme.html in all subdirectories.
 Assumes a directory and file structure of Artist/Album/Tracks. A quick way to
