@@ -13,6 +13,7 @@
 MANDIR=${HOME}/src/doc
 OUTDIR=${MANDIR}
 INPDIR=${MANDIR}
+ALL=
 USAGE=
 QUIET=
 HERE=`pwd`
@@ -45,8 +46,9 @@ section="1"
 
 usage() {
     printf "\nUsage:\n\tmd2man [-n command-name] [-s man-section] "
-    printf "[-v command-version] [-qu]"
+    printf "[-v command-version] [-aqu]"
     printf "\n\tWhere:\n\t\t-u displays this usage message"
+    printf "\n\t\t-a indicates generate all man pages from markdown found in ./markdown"
     printf "\n\t\t-q indicates quiet execution, no messages or prompts"
     printf "\n\t\t-n command-name specifies the name of the command (without section)"
     printf "\n\t\t-s man-section specifies the specifies the man page section number"
@@ -66,10 +68,105 @@ usage() {
     exit 1
 }
 
+mkmanfrom() {
+    command_name="$1"
+    command_sect="$2"
+    # Use awk to get Unicode support
+    capcomm=`echo "${command_name}" | awk 'BEGIN { getline; print toupper($0) }'`
+    # Use tr for compatibility with earlier versions of Bash
+    capfirst="$(tr '[:lower:]' '[:upper:]' <<< ${command_name:0:1})${command_name:1}"
+
+    [ -f "${INPDIR}/${command_name}.${command_sect}.md" ] || {
+        echo "---
+title: ${capcomm}
+section: ${command_sect}
+header: User Manual
+footer: ${command_name} ${VERSION}
+date: ${DATE}
+---
+# NAME
+${command_name} - PLACE BRIEF SUMMARY HERE
+
+# SYNOPSIS
+**${command_name}** [*OPTION*]...
+
+# DESCRIPTION
+**${command_name}** PLACE DESCRIPTION HERE
+
+# COMMAND LINE OPTIONS
+**-u**
+: display usage message
+
+**-n**
+: ADDITIONAL OPTIONS
+
+# CONFIGURATION
+CONFIGURATION INFO
+
+# EXAMPLES
+**${command_name} -n Arg**
+: EXAMPLE DESCRIPTION GOES HERE
+
+# AUTHORS
+Written by ${NAME} &lt;${EMAIL}&gt;
+
+# LICENSING
+${capfirst} is distributed under an Open Source license.
+See the file "LICENSE" in the ${capfirst} source distribution
+for information on terms &amp; conditions for accessing and
+otherwise using ${capfirst} and for a DISCLAIMER OF ALL WARRANTIES.
+
+# BUGS
+Submit bug reports online at: &lt;https://${GIT_HOST}/${GIT_USER}/${PROJECT}/issues&gt;
+
+# SEE ALSO
+Full documentation and sources at: &lt;https://${GIT_HOST}/${GIT_USER}/${PROJECT}&gt;
+" > "${INPDIR}/${command_name}.${command_sect}.md"
+    }
+
+    [ "${QUIET}" ] || {
+        echo "Using ${INPDIR}/${command_name}.${command_sect}.md as markdown input"
+        echo "Using ${OUTDIR}/${command_name}.${command_sect} as man page output"
+    }
+
+    # Use Github flavored markdown as input, Man page format as output
+    pandoc -f gfm+definition_lists -s -t man \
+           -o ${OUTDIR}/${command_name}.${command_sect} \
+              ${INPDIR}/${command_name}.${command_sect}.md 
+
+    [ "${QUIET}" ] || {
+      while true
+      do
+        read -p "Do you wish to view the generated ${command_name}.${command_sect} man page ? ('Y'/'N'): " yn
+        case $yn in
+          [Yy]*)
+              if [ "$plat" == "Darwin" ]
+              then
+                  man -M `dirname ${OUTDIR}` ${command_name}
+              else
+                  man -l ${OUTDIR}/${command_name}.${command_sect}
+              fi
+              break
+              ;;
+          [Nn]*)
+              break
+              ;;
+          * )
+              echo "Please answer yes or no."
+              ;;
+        esac
+      done
+    }
+}
+
 [ -f VERSION ] && . ./VERSION
 
-while getopts n:s:v:qu flag; do
+while getopts an:s:v:qu flag; do
     case $flag in
+        a)
+            ALL=1
+            QUIET=1
+            ;;
         n)
             comname="$OPTARG"
             ;;
@@ -89,11 +186,6 @@ while getopts n:s:v:qu flag; do
 done
 shift $(( OPTIND - 1 ))
 
-# Use awk to get Unicode support
-capcomm=`echo "${comname}" | awk 'BEGIN { getline; print toupper($0) }'`
-# Use tr for compatibility with earlier versions of Bash
-capfirst="$(tr '[:lower:]' '[:upper:]' <<< ${comname:0:1})${comname:1}"
-
 # Check for markdown and man subdirs in current directory
 # If both directories exist then set MANDIR and OUTPUT dirs
 [ -d markdown ] && [ -d man ] && {
@@ -106,54 +198,6 @@ capfirst="$(tr '[:lower:]' '[:upper:]' <<< ${comname:0:1})${comname:1}"
 
 [ -d "${INPDIR}" ] || mkdir -p "${INPDIR}"
 [ -d "${OUTDIR}" ] || mkdir -p "${OUTDIR}"
-
-[ -f "${INPDIR}/${comname}.${section}.md" ] || {
-echo "---
-title: ${capcomm}
-section: ${section}
-header: User Manual
-footer: ${comname} ${VERSION}
-date: ${DATE}
----
-# NAME
-${comname} - PLACE BRIEF SUMMARY HERE
-
-# SYNOPSIS
-**${comname}** [*OPTION*]...
-
-# DESCRIPTION
-**${comname}** PLACE DESCRIPTION HERE
-
-# COMMAND LINE OPTIONS
-**-u**
-: display usage message
-
-**-n**
-: ADDITIONAL OPTIONS
-
-# CONFIGURATION
-CONFIGURATION INFO
-
-# EXAMPLES
-**${comname} -n Arg**
-: EXAMPLE DESCRIPTION GOES HERE
-
-# AUTHORS
-Written by ${NAME} &lt;${EMAIL}&gt;
-
-# LICENSING
-${capfirst} is distributed under an Open Source license.
-See the file "LICENSE" in the ${capfirst} source distribution
-for information on terms &amp; conditions for accessing and
-otherwise using ${capfirst} and for a DISCLAIMER OF ALL WARRANTIES.
-
-# BUGS
-Submit bug reports online at: &lt;https://${GIT_HOST}/${GIT_USER}/${PROJECT}/issues&gt;
-
-# SEE ALSO
-Full documentation and sources at: &lt;https://${GIT_HOST}/${GIT_USER}/${PROJECT}&gt;
-" > "${INPDIR}/${comname}.${section}.md"
-}
 
 inst_pandoc=`type -p pandoc`
 plat=`uname -s`
@@ -196,35 +240,25 @@ plat=`uname -s`
     done
 }
 
-[ "${QUIET}" ] || {
-    echo "Using ${INPDIR}/${comname}.${section}.md as markdown input"
-    echo "Using ${OUTDIR}/${comname}.${section} as man page output"
-}
-
-# Use Github flavored markdown as input, Man page format as output
-pandoc -f gfm+definition_lists -s -t man -o ${OUTDIR}/${comname}.${section} \
-                           ${INPDIR}/${comname}.${section}.md 
-
-[ "${QUIET}" ] || {
-  while true
+[ "${ALL}" ] && {
+  # Check to see if there are any markdown files to process
+  for mdf in markdown/*.md
   do
-    read -p "Do you wish to view the generated ${comname}.${section} man page ? ('Y'/'N'): " yn
-    case $yn in
-      [Yy]*)
-          if [ "$plat" == "Darwin" ]
-          then
-              man -M `dirname ${OUTDIR}` ${comname}
-          else
-              man -l ${OUTDIR}/${comname}.${section}
-          fi
-          break
-          ;;
-      [Nn]*)
-          break
-          ;;
-      * )
-          echo "Please answer yes or no."
-          ;;
-    esac
+    [ "${mdf}" == "markdown/*.md" ] && ALL=
   done
 }
+
+if [ "${ALL}" ]
+then
+  for mdf in markdown/*.md
+  do
+    [ "${mdf}" == "markdown/*.md" ] && continue
+    [ "${mdf}" == "markdown/README.md" ] && continue
+    comname=`basename ${mdf} | awk -F '.' ' { print $1 } '`
+    comsect=`basename ${mdf} | awk -F '.' ' { print $2 } '`
+    echo "Processing ${comname}.${comsect}"
+    mkmanfrom ${comname} ${comsect}
+  done
+else
+    mkmanfrom ${comname} ${section}
+fi
