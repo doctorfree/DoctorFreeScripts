@@ -14,10 +14,27 @@ MANDIR=${HOME}/src/doc
 OUTDIR=${MANDIR}
 INPDIR=${MANDIR}
 USAGE=
+QUIET=
 HERE=`pwd`
 DATE=`date +'%B %d, %Y'`
-NAME=`git config --global --get user.name`
-EMAIL=`git config --global --get user.email`
+
+# Are we in a git repository with remote origin url?
+# If so then this should return something of the form
+# ssh://gitlab.com/doctorfree/DoctorFreeScripts.git
+URL=`git config --get remote.origin.url`
+if [ "${URL}" ]
+then
+  GIT_HOST=`echo ${URL} | awk -F '/' ' { print $3 } '`
+  GIT_USER=`echo ${URL} | awk -F '/' ' { print $4 } '`
+  PROJECT=`echo ${URL} | awk -F '/' ' { print $5 } ' | sed -e "s/\.git//"`
+else
+  GIT_HOST="GIT_HOST"
+  GIT_USER="GIT_USERNAME"
+  PROJECT="PROJECT"
+fi
+
+NAME=`git config --get user.name`
+EMAIL=`git config --get user.email`
 [ "${NAME}" ] || NAME="YOUR NAME"
 [ "${EMAIL}" ] || EMAIL="YOUR EMAIL"
 
@@ -28,8 +45,9 @@ section="1"
 
 usage() {
     printf "\nUsage:\n\tmd2man [-n command-name] [-s man-section] "
-    printf "[-v command-version] [-u]"
+    printf "[-v command-version] [-qu]"
     printf "\n\tWhere:\n\t\t-u displays this usage message"
+    printf "\n\t\t-q indicates quiet execution, no messages or prompts"
     printf "\n\t\t-n command-name specifies the name of the command (without section)"
     printf "\n\t\t-s man-section specifies the specifies the man page section number"
     printf "\n\t\t-v command-version specifies the version of the command"
@@ -44,13 +62,13 @@ usage() {
     printf "\n\twith command name, sections, version, and as much info"
     printf "\n\tas it can derive from command line arguments and git config."
     printf "\n\tSee https://pandoc.org/ for Pandoc info."
-    printf "\nAuthor:\n\tRon Record <gitlab@ronrecord.com>\n\n"
+    printf "\nAuthor:\n\t${NAME} <${EMAIL}>\n\n"
     exit 1
 }
 
 [ -f VERSION ] && . ./VERSION
 
-while getopts n:s:v:u flag; do
+while getopts n:s:v:qu flag; do
     case $flag in
         n)
             comname="$OPTARG"
@@ -60,6 +78,9 @@ while getopts n:s:v:u flag; do
             ;;
         v)
             VERSION="$OPTARG"
+            ;;
+        q)
+            QUIET=1
             ;;
         u)
             USAGE=1
@@ -127,10 +148,10 @@ for information on terms &amp; conditions for accessing and
 otherwise using ${capfirst} and for a DISCLAIMER OF ALL WARRANTIES.
 
 # BUGS
-Submit bug reports online at: &lt;https://gitlab.com/doctorfree/PROJECT/issues&gt;
+Submit bug reports online at: &lt;https://${GIT_HOST}/${GIT_USER}/${PROJECT}/issues&gt;
 
 # SEE ALSO
-Full documentation and sources at: &lt;https://gitlab.com/doctorfree/PROJECT&gt;
+Full documentation and sources at: &lt;https://${GIT_HOST}/${GIT_USER}/${PROJECT}&gt;
 " > "${INPDIR}/${comname}.${section}.md"
 }
 
@@ -175,17 +196,20 @@ plat=`uname -s`
     done
 }
 
-echo "Using ${INPDIR}/${comname}.${section}.md as markdown input"
-echo "Using ${OUTDIR}/${comname}.${section} as man page output"
+[ "${QUIET}" ] || {
+    echo "Using ${INPDIR}/${comname}.${section}.md as markdown input"
+    echo "Using ${OUTDIR}/${comname}.${section} as man page output"
+}
 
 # Use Github flavored markdown as input, Man page format as output
-pandoc -f gfm -s -t man -o ${OUTDIR}/${comname}.${section} \
+pandoc -f gfm+definition_lists -s -t man -o ${OUTDIR}/${comname}.${section} \
                            ${INPDIR}/${comname}.${section}.md 
 
-while true
-do
-  read -p "Do you wish to view the generated ${comname}.${section} man page ? ('Y'/'N'): " yn
-  case $yn in
+[ "${QUIET}" ] || {
+  while true
+  do
+    read -p "Do you wish to view the generated ${comname}.${section} man page ? ('Y'/'N'): " yn
+    case $yn in
       [Yy]*)
           if [ "$plat" == "Darwin" ]
           then
@@ -201,5 +225,6 @@ do
       * )
           echo "Please answer yes or no."
           ;;
-  esac
-done
+    esac
+  done
+}
