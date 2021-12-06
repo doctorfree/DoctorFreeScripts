@@ -96,6 +96,9 @@ ${SUDO} cp LICENSE ${OUT_DIR}/${TOP}/share/doc/${PKG}/copyright
 ${SUDO} cp CHANGELOG.md ${OUT_DIR}/${TOP}/share/doc/${PKG}/changelog
 ${SUDO} cp README.md ${OUT_DIR}/${TOP}/share/doc/${PKG}/README
 ${SUDO} gzip -9 ${OUT_DIR}/${TOP}/share/doc/${PKG}/changelog
+${SUDO} cp -a markdown "${OUT_DIR}/${TOP}/share/doc/${PKG}/markdown"
+${SUDO} cp -a man "${OUT_DIR}/${TOP}/share/doc/${PKG}/man"
+${SUDO} cp -a man "${OUT_DIR}/${TOP}/share/man"
 
 for dir in ${SUBDIRS}
 do

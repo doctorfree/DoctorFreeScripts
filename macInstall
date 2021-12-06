@@ -83,6 +83,8 @@ ${SUDO} cp CHANGELOG.md ${DESTDIR}/share/doc/${PKG}/changelog
 ${SUDO} cp README.md ${DESTDIR}/share/doc/${PKG}/README
 ${SUDO} gzip -9 ${DESTDIR}/share/doc/${PKG}/changelog
 
+${SUDO} cp -a man ${DESTDIR}/share/man
+
 for dir in ${SUBDIRS}
 do
     ${SUDO} cp -a ${dir} ${DEST}/${dir}
