@@ -13,3 +13,5 @@ For example, the man page output for the `any2any` command would be found at
 ## Contents
 
 - [**any2any.1.md**](any2any.1.md) - Markdown input for auto-generation of the *any2any* man page
+- [**backgrounds.1.md**](backgrounds.1.md) - Markdown input for auto-generation of the *backgrounds* man page
+- [**cap2any.1.md**](cap2any.1.md) - Markdown input for auto-generation of the *cap2any* man page

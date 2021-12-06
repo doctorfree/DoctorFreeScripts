@@ -9,10 +9,10 @@ date: December 05, 2021
 any2any - Convert any format media file to any other format media file
 
 # SYNOPSIS
-**any2any** **[-a** audio codec**]** **[-v** video codec**]** **[-c** codec**]** **[-p** preset**]** **[-i** input format (lower case)**]** **[-o** output format (lower case)**]** **[-q** scale**]** **[-r** rate**]** **[-b** audio bitrate**]** **[-z** video bitrate**]** **[-s** size**]** **[-t** threads**]** **[-I]** **[-d]** **[-y]** **[-u]** file1 **[**file2 ...**]**
+**any2any** [ **-a** audio codec ] [ **-v** video codec ] [ **-c** codec ] [ **-p** preset ] [ **-i** input format (lower case) ] [ **-o** output format (lower case) ] [ **-q** scale ] [ **-r** rate ] [ **-b** audio bitrate ] [ **-z** video bitrate ] [ **-s** size ] [ **-t** threads ] [ **-I** ] [ **-d** ] [ **-y** ] [ **-u** ] file1 [file2 ...]
 
 # DESCRIPTION
-**any2any** Converts audio and video media file formats. Input and output formats can be specified on the command line. Convenience links can be created to simplify conversion between formats. When invoked as the link *xxx2yyy*, **any2any** converts from media format *XXX* to media format *YYY*.
+Converts audio and video media files from one format to another format. Input and output formats can be specified on the command line. Convenience links can be created to simplify conversion between formats. When invoked as the link *xxx2yyy*, **any2any** converts from media format *XXX* to media format *YYY*.
 
 The convenience links to *any2any* that are installed by default are:
 
@@ -133,14 +133,16 @@ This command is basically a wrapper script for **ffmpeg**. To install
 Written by Ronald Record &lt;github@ronrecord.com&gt;
 
 # LICENSING
-Any2any is distributed under an Open Source license.
-See the file LICENSE in the Any2any source distribution
+ANY2ANY is distributed under an Open Source license.
+See the file LICENSE in the ANY2ANY source distribution
 for information on terms &amp; conditions for accessing and
-otherwise using Any2any and for a DISCLAIMER OF ALL WARRANTIES.
+otherwise using ANY2ANY and for a DISCLAIMER OF ALL WARRANTIES.
 
 # BUGS
 Submit bug reports online at: &lt;https://gitlab.com/doctorfree/DoctorFreeScripts/issues&gt;
 
 # SEE ALSO
+**ape2m4a**(1), **ape2mp4**(1), **avi2mp4**(1), **f4v2mp4**(1), **flv2mp4**(1), **m4a2mp3**(1), **m4v2mp4**(1), **mkv2mp4**(1), **mov2mp4**(1), **mp42m4v**(1), **mpg2mp4**(1), **png2jpg**(1), **wma2m4a**(1), **wmv2m4v**(1), **wmv2mp4**(1)
+
 Full documentation and sources at: &lt;https://gitlab.com/doctorfree/DoctorFreeScripts&gt;
 

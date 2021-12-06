@@ -40,7 +40,7 @@ EMAIL=`git config --get user.email`
 [ "${EMAIL}" ] || EMAIL="YOUR EMAIL"
 
 # Default command name, version, and man section
-comname="COMMAND"
+comname=""
 VERSION="1.0.0"
 section="1"
 
@@ -73,8 +73,6 @@ mkmanfrom() {
     command_sect="$2"
     # Use awk to get Unicode support
     capcomm=`echo "${command_name}" | awk 'BEGIN { getline; print toupper($0) }'`
-    # Use tr for compatibility with earlier versions of Bash
-    capfirst="$(tr '[:lower:]' '[:upper:]' <<< ${command_name:0:1})${command_name:1}"
 
     [ -f "${INPDIR}/${command_name}.${command_sect}.md" ] || {
         echo "---
@@ -85,13 +83,13 @@ footer: ${command_name} ${VERSION}
 date: ${DATE}
 ---
 # NAME
-${command_name} - PLACE BRIEF SUMMARY HERE
+**${command_name}** - PLACE BRIEF SUMMARY HERE
 
 # SYNOPSIS
-**${command_name}** [*OPTION*]...
+**${command_name}** [ **OPTION** ARG ]
 
 # DESCRIPTION
-**${command_name}** PLACE DESCRIPTION HERE
+PLACE DESCRIPTION HERE
 
 # COMMAND LINE OPTIONS
 **-u**
@@ -99,9 +97,6 @@ ${command_name} - PLACE BRIEF SUMMARY HERE
 
 **-n**
 : ADDITIONAL OPTIONS
-
-# CONFIGURATION
-CONFIGURATION INFO
 
 # EXAMPLES
 **${command_name} -n Arg**
@@ -111,10 +106,10 @@ CONFIGURATION INFO
 Written by ${NAME} &lt;${EMAIL}&gt;
 
 # LICENSING
-${capfirst} is distributed under an Open Source license.
-See the file "LICENSE" in the ${capfirst} source distribution
+${capcomm} is distributed under an Open Source license.
+See the file "LICENSE" in the ${capcomm} source distribution
 for information on terms &amp; conditions for accessing and
-otherwise using ${capfirst} and for a DISCLAIMER OF ALL WARRANTIES.
+otherwise using ${capcomm} and for a DISCLAIMER OF ALL WARRANTIES.
 
 # BUGS
 Submit bug reports online at: &lt;https://${GIT_HOST}/${GIT_USER}/${PROJECT}/issues&gt;
@@ -125,8 +120,12 @@ Full documentation and sources at: &lt;https://${GIT_HOST}/${GIT_USER}/${PROJECT
     }
 
     [ "${QUIET}" ] || {
-        echo "Using ${INPDIR}/${command_name}.${command_sect}.md as markdown input"
-        echo "Using ${OUTDIR}/${command_name}.${command_sect} as man page output"
+        echo "Using ${INPDIR}/${command_name}.${command_sect}.md"
+        echo "as markdown input"
+        echo ""
+        echo "Using ${OUTDIR}/${command_name}.${command_sect}"
+        echo "as man page output"
+        echo ""
     }
 
     # Use Github flavored markdown as input, Man page format as output
@@ -260,5 +259,17 @@ then
     mkmanfrom ${comname} ${comsect}
   done
 else
-    mkmanfrom ${comname} ${section}
+  [ "${comname}" ] || {
+    if [ "$1" ]
+    then
+      comname=$*
+    else
+      echo "No command name provided. Using 'COMMAND' as command name."
+      comname="COMMAND"
+    fi
+  }
+  for mdf in ${comname}
+  do
+    mkmanfrom ${mdf} ${section}
+  done
 fi

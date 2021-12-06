@@ -791,8 +791,7 @@ get_model() {
                 Ulyana_Orsk)
                   get_search "${playboymodel}" "Adelina_Dey"
                   get_search "${playboymodel}" "Jordonna"
-                  get_search "${playboymodel}" "Nicolette"
-                  get_search "${playboymodel}" "Yuki"
+                  # get_search "${playboymodel}" "Nicolette"
                   ;;
                 Uma_Jolie)
                   get_search "${playboymodel}" "Belicia_Segura"
