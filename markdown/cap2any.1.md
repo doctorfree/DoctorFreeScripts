@@ -58,7 +58,7 @@ sudo ln -s /usr/local/DoctorFreeScript/bin/cap2any cap2avi
 **-c codec**
 : specifies the output codec
 
-**-I **
+**-I**
 : indicates add the captured file to Apple Music
 
 **-p preset**

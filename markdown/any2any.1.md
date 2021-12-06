@@ -46,45 +46,45 @@ sudo ln -s /usr/local/DoctorFreeScript/bin/any2any wma2mp3
 **-d**
 : indicates tell me what you would do
 
-**-i**
-: input format specifies the 3 letter lower case input format
+**-i** input-format
+: specifies the 3 letter lower case input format
 
-**-o**
-: output format specifies the 3 letter lower case output format
+**-o** output-format
+: specifies the 3 letter lower case output format
 
-**-a**
-: audio codec specifies the output audio codec
+**-a** audio-codec
+: specifies the output audio codec
 
-**-v**
-: video codec specifies the output video codec
+**-v** video-codec
+: specifies the output video codec
 
-**-s**
-: size specifies the output video size (widthxheight)
+**-s** size
+: specifies the output video size (widthxheight)
 
-**-c**
-: codec specifies the output codec
+**-c** codec
+: specifies the output codec
 
 **-I**
 : indicates add the converted file to Apple Music
 
-**-p**
-: preset specifies the ffmpeg preset to use
+**-p** preset
+: specifies the ffmpeg preset to use
 	 Useful presets:
 	 ultrafast superfast veryfast faster fast medium slow
 	 slower veryslow. Default preset is 'slow'
 
-**-q**
-: scale specifies the qscale variable bit rate quality
+**-q** scale
+: specifies the qscale variable bit rate quality
 
-**-r**
-: rate specifies the rate for Constant Rate Factor (CRF)
+**-r** rate
+: specifies the rate for Constant Rate Factor (CRF)
 	encoding. Use "-r 0" to disable for formats other than x264
 
-**-b**
-: bitrate specifies the bitrate (default 128k)
+**-b** bitrate
+: specifies the bitrate (default 128k)
 
-**-t**
-: threads specifies the number of threads to use
+**-t** threads
+: specifies the number of threads to use
 
 **-y**
 : indicates overwrite output files without asking

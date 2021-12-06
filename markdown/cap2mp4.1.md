@@ -44,7 +44,7 @@ Captures, converts, and saves audio and video from a media device to MP4 video f
 **-c codec**
 : specifies the output codec
 
-**-I **
+**-I**
 : indicates add the captured file to Apple Music
 
 **-p preset**
