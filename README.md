@@ -26,6 +26,7 @@ developed over my decades of work on Unix and Linux operating system environment
     1. [RPM Package installation](#rpm-package-installation)
     1. [Mac OS X installation](#mac-os-x-installation)
 1. [Removal](#removal)
+1. [Documentation](#documentation)
 1. [Contents](#contents)
 
 ## Clone the Source
@@ -146,6 +147,44 @@ folders within `/usr/local`. This is an artifact of the Debian packaging system.
 If you wish to silence that warning and prevent the Debian packaging system from
 trying to remove `/usr/local` then install the
 [core-custom-local Debian package](https://gitlab.com/doctorfree/core-custom-local/-/releases).
+
+## Documentation
+
+Many DoctorFreeScripts commands have manual pages. Execute `man <command-name>`
+to view the manual page for a command. Most commands also have
+help/usage messages that can be viewed with the **-u** argument option,
+e.g. `any2any -u`.
+
+Manual pages for these DoctorFreeScripts commands can be viewed by
+issueing the following commands:
+
+- `man any2any`
+- `man ape2m4a`
+- `man ape2mp4`
+- `man avi2mp4`
+- `man backgrounds`
+- `man cap2any`
+- `man cap2m4v`
+- `man cap2mp4`
+- `man f4v2mp4`
+- `man flv2mp4`
+- `man m4a2mp3`
+- `man m4v2mp4`
+- `man mkv2mp4`
+- `man mov2mp4`
+- `man mp42m4v`
+- `man mpg2mp4`
+- `man png2jpg`
+- `man saver`
+- `man sdbackup`
+- `man sderase`
+- `man sdrestore`
+- `man setwall`
+- `man updgit`
+- `man wma2m4a`
+- `man wmv2m4v`
+- `man wmv2mp4`
+- `man xnvslides`
 
 ## Contents
 
