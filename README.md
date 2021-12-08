@@ -158,33 +158,33 @@ e.g. `any2any -u`.
 Manual pages for these DoctorFreeScripts commands can be viewed by
 issueing the following commands:
 
-- `man any2any`
-- `man ape2m4a`
-- `man ape2mp4`
-- `man avi2mp4`
-- `man backgrounds`
-- `man cap2any`
-- `man cap2m4v`
-- `man cap2mp4`
-- `man f4v2mp4`
-- `man flv2mp4`
-- `man m4a2mp3`
-- `man m4v2mp4`
-- `man mkv2mp4`
-- `man mov2mp4`
-- `man mp42m4v`
-- `man mpg2mp4`
-- `man png2jpg`
-- `man saver`
-- `man sdbackup`
-- `man sderase`
-- `man sdrestore`
-- `man setwall`
-- `man updgit`
-- `man wma2m4a`
-- `man wmv2m4v`
-- `man wmv2mp4`
-- `man xnvslides`
+- [man any2any](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/any2any.1.md)
+- [man ape2m4a](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/ape2m4a.1.md)
+- [man ape2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/ape2mp4.1.md)
+- [man avi2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/avi2mp4.1.md)
+- [man backgrounds](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/backgrounds.1.md)
+- [man cap2any](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/cap2any.1.md)
+- [man cap2m4v](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/cap2m4v.1.md)
+- [man cap2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/cap2mp4.1.md)
+- [man f4v2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/f4v2mp4.1.md)
+- [man flv2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/flv2mp4.1.md)
+- [man m4a2mp3](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/m4a2mp3.1.md)
+- [man m4v2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/m4v2mp4.1.md)
+- [man mkv2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/mkv2mp4.1.md)
+- [man mov2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/mov2mp4.1.md)
+- [man mp42m4v](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/mp42m4v.1.md)
+- [man mpg2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/mpg2mp4.1.md)
+- [man png2jpg](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/png2jpg.1.md)
+- [man saver](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/saver.1.md)
+- [man sdbackup](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/sdbackup.1.md)
+- [man sderase](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/sderase.1.md)
+- [man sdrestore](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/sdrestore.1.md)
+- [man setwall](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/setwall.1.md)
+- [man updgit](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/updgit.1.md)
+- [man wma2m4a](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/wma2m4a.1.md)
+- [man wmv2m4v](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/wmv2m4v.1.md)
+- [man wmv2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/wmv2mp4.1.md)
+- [man xnvslides](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/xnvslides.1.md)
 
 ## Contents
 
