@@ -27,6 +27,7 @@ developed over my decades of work on Unix and Linux operating system environment
     1. [Mac OS X installation](#mac-os-x-installation)
 1. [Removal](#removal)
 1. [Documentation](#documentation)
+1. [Introduction to Using the Command Line](#introduction-to-using-the-command-line)
 1. [Contents](#contents)
 
 ## Clone the Source
@@ -185,6 +186,20 @@ issueing the following commands:
 - [man wmv2m4v](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/wmv2m4v.1.md)
 - [man wmv2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/wmv2mp4.1.md)
 - [man xnvslides](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/xnvslides.1.md)
+
+## Introduction to Using the Command Line
+The command line has a long and storied history in computing. Read some of that
+history, learn how to open a command line terminal window on various systems,
+how to get started using the command line, and see some examples of why the command
+line interface is so powerful by reading the DoctorFreeScripts wiki article
+[Introduction to Using the Command Line](https://gitlab.com/doctorfree/DoctorFreeScripts/-/wikis/Introduction-to-Using-the-Command-Line).
+
+This introduction to the command line includes three example use cases of automation
+using the command line:
+
+- How to [automate resizing of multiple images](https://gitlab.com/doctorfree/DoctorFreeScripts/-/wikis/Introduction-to-Using-the-Command-Line#resize-images-example)
+- How to [automate timed restaurant menu display](https://gitlab.com/doctorfree/DoctorFreeScripts/-/wikis/Introduction-to-Using-the-Command-Line#magicmirror-timed-menu-display-example)
+- How to [automate timed playback of Roon playlists](https://gitlab.com/doctorfree/DoctorFreeScripts/-/wikis/Introduction-to-Using-the-Command-Line#roon-timed-zone-playback-example) in specified Roon zones
 
 ## Contents
 
