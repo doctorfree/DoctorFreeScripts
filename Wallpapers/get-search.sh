@@ -65,6 +65,7 @@ then
 else
     QDIR=`echo ${query} | sed -e "s/ /_/g" -e "s/+/_/g" -e "s/\%2B/_/g"`
 fi
+[ "$artist" ] && QDIR="Artists/${QDIR}"
 [ "$model" ] && QDIR="Models/${QDIR}"
 [ "$playboy" ] && QDIR="Models/Playboy/${QDIR}"
 [ "$photodromm" ] && QDIR="Models/Photodromm/${QDIR}"

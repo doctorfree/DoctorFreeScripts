@@ -33,8 +33,8 @@ DEF_MODEL="Models/Alisa_I"
 PICD="${TOP}/${SUB}/${DEF_MODEL}"
 
 # Set Model and Photographer top dirs before processing arguments
-MOD_TOP="${TOP}/Wallhaven/Models"
-PHO_TOP="${TOP}/Wallhaven/Photographers"
+MOD_TOP="${TOP}/${SUB}/Models"
+PHO_TOP="${TOP}/${SUB}/Photographers"
 PRE_TOP=$HOME/Pictures/Work/Backgrounds
   
 osa=
@@ -108,14 +108,14 @@ while getopts lLpPs:u flag; do
                     TOP="${ALT_TOP}"
                     DEF_MODEL=
                 ;;
-              models) subdir="Wallhaven/Models"
+              models) subdir="${SUB}/Models"
                       subsubdirs="Photodromm Penthouse Playboy"
                 ;;
               playboy) subdir="Playboy"
                 ;;
               tuigirl) subdir="Tuigirls"
                 ;;
-              whvn) subdir="Wallhaven"
+              whvn) subdir="${SUB}"
                 ;;
               xart) subdir="X-Art"
                 ;;
@@ -184,7 +184,7 @@ then
 else
     [ -d "$TOP/$mdir" ] || {
         [ "$updpre" ] && mkdir "$TOP/$mdir"
-        for subdir in Wallhaven Wallhaven/Models Wallhaven/Models/Playboy Wallhaven/Models/Penthouse Wallhaven/Models/Photodromm Wallhaven/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
+        for subdir in ${SUB} ${SUB}/Models ${SUB}/Models/Playboy ${SUB}/Models/Penthouse ${SUB}/Models/Photodromm ${SUB}/Photographers X-Art Elite_Babes JP_Erotica Met-Art KindGirls Wallbase
         do
           [ -d "$TOP/$subdir/$mdir" ] && {
             foundirs="$TOP/$subdir"
