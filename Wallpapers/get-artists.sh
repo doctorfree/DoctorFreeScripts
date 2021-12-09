@@ -36,8 +36,8 @@ do
     cd "${HERE}"
     case "${artist}" in
         Ayya_Saparniyazova)
-            get_search "Photographers/${artist}" "${artist}"
-            get_search "Photographers/${artist}" "AyyaSAP"
+            get_search "Artists/${artist}" "${artist}"
+            get_search "Artists/${artist}" "AyyaSAP"
             ;;
         Zumi)
             get_search "Artists/${artist}" "${artist}"
