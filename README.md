@@ -15,8 +15,9 @@
 # DoctorFreeScripts
 
 Utility Bash shell scripts I've written - typically these will run on Unix,
-Linux, OS X, and Cygwin. Includes over 175 useful or convenient commands I've
-developed over my decades of work on Unix and Linux operating system environments.
+Linux, OS X, and possibly under Cygwin or the Windows Subsystem for Linux.
+Includes over 175 useful or convenient commands I've developed over decades
+of work on Unix and Linux operating system environments.
 
 ## Table of Contents
 
