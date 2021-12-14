@@ -1,0 +1,18 @@
+#!/bin/bash
+
+PKG="$1"
+
+[ "${PKG}" ] || {
+    echo "Argument required. Exiting."
+    exit 1
+}
+
+for i in /var/lib/dpkg/info/${PKG}.*
+do
+    [ "${i}" == "/var/lib/dpkg/info/${PKG}.*" ] && {
+        echo "No package files found for package ${PKG}"
+        exit 1
+    }
+    sudo mv /var/lib/dpkg/info/${PKG}.* /tmp
+    sudo dpkg --remove --force-remove-reinstreq %{PKG}
+done
