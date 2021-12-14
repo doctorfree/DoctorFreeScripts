@@ -14,5 +14,5 @@ do
         exit 1
     }
     sudo mv /var/lib/dpkg/info/${PKG}.* /tmp
-    sudo dpkg --remove --force-remove-reinstreq %{PKG}
+    sudo dpkg --remove --force-remove-reinstreq ${PKG}
 done
