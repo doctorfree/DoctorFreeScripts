@@ -550,8 +550,9 @@ get_model() {
                 Isabelle_Photodromm)
                   get_search "${photomodel}" "Isabelle"
                   ;;
-                Justyna_Photodromm)
+                Justyna_Dabkowska)
                   get_search "${photomodel}" "Justyna"
+                  get_search "${photomodel}" "Justyna_Photodromm"
                   ;;
                 Karola_Photodromm)
                   get_search "${photomodel}" "Karola"
@@ -1023,6 +1024,11 @@ get_suicide() {
         Ela_Savanas)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Ela_Photodromm"
+            ;;
+        Elisa_Rose)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "ElisaRose"
+            get_search "${SUGD}/${model}" "Elisa_Suicide"
             ;;
         Ellie_Suicide)
             get_search "${SUGD}/${model}" "${model}"
