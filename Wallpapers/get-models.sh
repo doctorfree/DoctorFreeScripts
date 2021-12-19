@@ -646,10 +646,6 @@ get_model() {
                   get_search "${playboymodel}" "Adel_O"
                   get_search "${playboymodel}" "Adel_C."
                   ;;
-                Hilary_C)
-                  get_search "${playboymodel}" "Viktoriia_Aliko"
-                  get_search "${playboymodel}" "Paula_U"
-                  ;;
                 Isabella)
                   get_search "${playboymodel}" "Isabella_\(famegirls\)"
                   ;;
@@ -915,6 +911,16 @@ get_model() {
         Vika_A)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alisa_G"
+            ;;
+        Viktoriia_Aliko)
+            get_search "${MODD}/${model}" "Paula_U"
+            get_search "${MODD}/${model}" "Aksana_K"
+            get_search "${MODD}/${model}" "Hilary_C"
+            get_search "${MODD}/${model}" "Hilary_C."
+            get_search "${MODD}/${model}" "Hilary_C_\(Met_Art\)"
+            get_search "${MODD}/${model}" "Hillary_Chacier"
+            get_search "${MODD}/${model}" "Victoria_Aliko"
+            get_search "${MODD}/${model}" "Viktoria_Aliko"
             ;;
         Viola_Bailey)
             get_search "${MODD}/${model}" "${model}"
