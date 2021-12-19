@@ -155,6 +155,18 @@ do
         ln -s ${image} .
     fi
 done
+
+# Set the IP in synergyctl, assuming this is the Synergy server
+SYNCTL="${DFS}/bin/synergyctl"
+[ -f ${SYNCTL} ] && {
+  IP=`hostname -I | awk ' { print $1 } '`
+  [ "${IP}" ] && {
+    cat ${SYNCTL} | sed -e "s/XX.X.X.XX/${IP}/" > /tmp/syn$$
+    cp /tmp/syn$$ ${SYNCTL}
+    rm -f /tmp/syn$$
+  }
+}
+
 [ -x ${DFS}/bin/dl_fred_scripts ] && ${DFS}/bin/dl_fred_scripts
 
 exit 0
