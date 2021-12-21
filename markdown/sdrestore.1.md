@@ -55,5 +55,7 @@ otherwise using SDRESTORE and for a DISCLAIMER OF ALL WARRANTIES.
 Submit bug reports online at: &lt;https://gitlab.com/doctorfree/DoctorFreeScripts/issues&gt;
 
 # SEE ALSO
+**sdbackup**(1), **sderase**(1), **sdwrite**(1)
+
 Full documentation and sources at: &lt;https://gitlab.com/doctorfree/DoctorFreeScripts&gt;
 
