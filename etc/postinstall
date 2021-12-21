@@ -25,7 +25,7 @@ EXPORT2="mklink md2man mkreadme mkseamless mkusb mkwmv models mp3topic mvBackups
          mvdown myterm nouchg obam.pl only packaud pcmanslideshow piclinks \
          playkeynote progress_bar puml randback randmodel reget remdeb \
          revlink ripvcr rmBackups rmdups rmlandscape rmportargs rmportrait \
-         rpm2cpio saver sdbackup sderase sdrestore show-background showmem \
+         rpm2cpio saver sdbackup sderase sdrestore sdwrite show-background showmem \
          sndprobe synchaven syncitunes synergyctl timemachinedelete upd updflash \
          updgit updsums updtranscend updtz url-create variety-beauty \
          variety-config variety-favorite variety-fractals variety-get \
