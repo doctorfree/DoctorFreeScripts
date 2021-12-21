@@ -2,6 +2,84 @@
 
 All notable changes to this project will be documented in this file.
 
+Tue Dec 21 10:26:02 2021 -0800 8c3a636 :
+   Add all my clone and build scripts
+Tue Dec 21 09:43:04 2021 -0800 d625a49 :
+   Check and set location of Synergy client binary and system tools in Synergy startup control script
+Tue Dec 21 09:14:43 2021 -0800 7a101e1 :
+   Add man page for sdwrite, add SEE ALSO pages to all SD card commands
+Tue Dec 21 08:40:29 2021 -0800 58b2dfc :
+   Move sdwrite from MirrorCommandLine package to here
+Sat Dec 18 17:18:51 2021 -0800 148f60a :
+   Set synergyctl IP in postinstall
+Sat Dec 18 16:39:57 2021 -0800 a8df6ce :
+   Add synergyctl script to control Synergy start/stop
+Fri Dec 17 07:15:45 2021 -0800 30fd5e5 :
+   New model aliases
+Mon Dec 13 21:11:37 2021 -0800 2c51ae3 :
+   Fix typo in rmbrokenpkg
+Mon Dec 13 20:18:02 2021 -0800 e5436b5 :
+   Add rmbrokenpkg
+Sun Dec 12 13:40:26 2021 -0800 2a4714d :
+   Add note about Windows System for Linux
+Sat Dec 11 16:06:57 2021 -0800 cfc4a78 :
+   Removed vncview, it is in the MirrorCommandLine package only
+Thu Dec 9 09:23:23 2021 -0800 8630226 :
+   Move all artists to Artists
+Thu Dec 9 09:00:12 2021 -0800 0fb7682 :
+   Add Artists to preconfigured download search dirs
+Wed Dec 8 16:55:28 2021 -0800 3852c64 :
+   Add section on introduction to using command line
+Wed Dec 8 15:10:06 2021 -0800 baaad35 :
+   Links to markdown for man commands
+Tue Dec 7 12:53:19 2021 -0800 0378a74 :
+   Add man pages for slideshow commands
+Tue Dec 7 08:50:57 2021 -0800 82167ed :
+   Add Documentation section to README
+Mon Dec 6 18:40:25 2021 -0800 c9019c8 :
+   Man pages for updgit and xnvslides
+Mon Dec 6 17:38:36 2021 -0800 7712ff1 :
+   Created man pages for SD card backup and restore utilities
+Mon Dec 6 14:28:54 2021 -0800 863e321 :
+   Update and add more man pages
+Mon Dec 6 12:29:32 2021 -0800 6e306c8 :
+   Add man pages to packaging
+Mon Dec 6 12:24:27 2021 -0800 da82d5a :
+   New man pages from markdown, improved md2man
+Sun Dec 5 19:48:27 2021 -0800 fcb14cb :
+   Start manual page generation, any2any markdown and man page
+Sun Dec 5 19:00:15 2021 -0800 effa7b7 :
+   Add browse-artifacts.txt
+Sun Dec 5 13:16:11 2021 -0800 4662607 :
+   Add -a option to md2man to generate man pages for all markdown files in ./markdown dir
+Sun Dec 5 11:04:41 2021 -0800 14377f0 :
+   Get Git config settings if available for user name, project, url, and add definition_lists extension to pandoc
+Sun Dec 5 06:57:23 2021 -0800 7a54d50 :
+   Rename mkmanpage as md2man, prompt for viewing after generating new man page
+Sun Dec 5 06:40:46 2021 -0800 55f7b60 :
+   Check for markdown and man subdirs in cwd, automate pandoc install, get version from VERSION
+Sat Dec 4 11:42:52 2021 -0800 99a5291 :
+   Add mkmanpage to scripts
+Thu Dec 2 12:22:22 2021 -0800 59d4744 :
+   Figure out the name of the branch being used to push to
+Sun Nov 28 11:32:49 2021 -0800 c1e5d51 :
+   Add Glance systemd service files
+Fri Nov 26 15:52:21 2021 -0800 26c5c36 :
+   New location for get-models and get-photographers
+Fri Nov 26 12:04:06 2021 -0800 7f48c82 :
+   Fix Mac install/uninstall scripts
+Fri Nov 26 11:01:50 2021 -0800 f566f48 :
+   Try apt-get update to see if that finds the rpm package in CI
+Fri Nov 26 10:51:08 2021 -0800 bb5e4c0 :
+   Install rpmbuild if not present, add rpms to CI artifacts
+Fri Nov 26 10:12:24 2021 -0800 be32087 :
+   Removed reference to submodules
+Fri Nov 26 10:10:26 2021 -0800 dd2e5c8 :
+   Delete MagicMirror submodule
+Fri Nov 26 10:08:06 2021 -0800 0650a86 :
+   Deleted Roon submodule
+Fri Nov 26 09:35:36 2021 -0800 7796722 :
+   Update CHANGELOG in preparation for 4.0 release
 Fri Nov 26 09:18:28 2021 -0800 c9b636a :
    Set version to 4.0 in preparation for new release
 Fri Nov 26 08:34:51 2021 -0800 c12c196 :
