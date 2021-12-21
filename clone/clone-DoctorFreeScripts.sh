@@ -7,6 +7,7 @@ patch="${project}-patch.tgz"
     rm -rf ${project}
 }
 
-git clone ssh://gitlab.com/doctorfree/${project}.git
+# git clone --recurse-submodules ssh://gitlab.com/doctorfree/Scripts.git
+git clone ssh://gitlab.com/doctorfree/DoctorFreeScripts.git
 
 [ -r ${patch} ] && tar xzvf ${patch}
