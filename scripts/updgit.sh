@@ -122,10 +122,13 @@ fi
 
 # Try to figure out the name of the branch to push to
 branch="master"
-[ -f ./.git/config ] && {
-    confbranch=`cat ./.git/config | grep ^\\\[branch |
-                awk ' { print $2 } ' |
-                sed -e "s/\"//g" -e "s/\]//"`
+# [ -f ./.git/config ] && {
+#     confbranch=`cat ./.git/config | grep ^\\\[branch |
+#                 awk ' { print $2 } ' |
+#                 sed -e "s/\"//g" -e "s/\]//"`
+# }
+[ -f ./.git/HEAD ] && {
+    confbranch=`cat ./.git/HEAD | grep ^ref: | awk -F '/' ' { print $3 } '`
 }
 [ "${confbranch}" ] && branch="${confbranch}"
 
