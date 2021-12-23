@@ -513,6 +513,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Olga_Maria_Kaminska"
             ;;
+        Olga_Rudik)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Mariposa"
+            ;;
 #       Pammie_Lee)
 #           get_search "${MODD}/${model}" "${model}"
 #           get_search "${MODD}/${model}" "Anastasiya Platonova"

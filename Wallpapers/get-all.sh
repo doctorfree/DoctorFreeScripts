@@ -343,6 +343,7 @@ do
         get_search "${dir}" "Ukraine"
         get_search "${dir}" "Ukrainian"
         get_search "${dir}" "Gloria_Sol"
+        get_search "${dir}" "Mila_Azul"
         get_search "${dir}" "Jula"
         get_search "${dir}" "Kseniia_Kufeld"
         get_search "${dir}" "Li_Moon"
