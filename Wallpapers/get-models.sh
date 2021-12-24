@@ -258,7 +258,8 @@ get_model() {
         Irina_Telicheva)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anna_Telysheva"
-            get_search "${MODD}/${model}" "Tasha"
+            get_search "${MODD}/${model}" "Tasha_\(Hegre-Art\)"
+            get_search "${MODD}/${model}" "Tasha\(Hegre\)"
             ;;
         Isabella_Star)
             get_search "${MODD}/${model}" "${model}"
