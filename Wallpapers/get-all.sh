@@ -180,6 +180,14 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Collar"
         ;;
+    Colombian)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Colombian_Model"
+        get_search "${dir}" "Colombian_Women"
+        get_search "${dir}" "Sara_Calixto"
+        get_search "${dir}" "Valery_Ponce"
+        get_search "${dir}" "Hinata_Suicide"
+        ;;
     Czech)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Czech_women"
