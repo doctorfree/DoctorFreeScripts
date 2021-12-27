@@ -288,6 +288,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Jenny_Gregg"
             ;;
+        Jia_Lissa)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Sherice"
+            ;;
         Josephine_B)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Josephine_Jackson"

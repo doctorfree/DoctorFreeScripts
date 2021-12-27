@@ -71,6 +71,8 @@ usage() {
 mkmanfrom() {
     command_name="$1"
     command_sect="$2"
+    OUTDIR=${MANDIR}/man${command_sect}
+    [ -d "${OUTDIR}" ] || mkdir -p "${OUTDIR}"
     # Use awk to get Unicode support
     capcomm=`echo "${command_name}" | awk 'BEGIN { getline; print toupper($0) }'`
 
