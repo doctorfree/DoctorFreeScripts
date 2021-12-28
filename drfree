@@ -41,7 +41,7 @@ usage: drfree <action> <project>
         BUILD="MM"
         ;;
       mirror)
-        PROJECT="MirrorCommandLine"
+        PROJECT="MirrorCommand"
         ;;
       roon)
         PROJECT="RoonCommandLine"

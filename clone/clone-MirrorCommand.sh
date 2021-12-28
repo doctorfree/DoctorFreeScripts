@@ -1,12 +1,12 @@
 #!/bin/bash
 
-project="MirrorCommandLine.wiki"
+project="MirrorCommand"
 patch="${project}-patch.tgz"
 
 [ -d ${project} ] && {
     rm -rf ${project}
 }
 
-git clone https://gitlab.com/doctorfree/${project}.git
+git clone ssh://gitlab.com/doctorfree/${project}.git
 
 [ -r ${patch} ] && tar xzvf ${patch}

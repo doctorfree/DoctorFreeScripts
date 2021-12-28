@@ -210,7 +210,7 @@ using the command line:
 
 [**DoctorFreeScripts/IFTTT**](IFTTT/README.md) - Scripts to invoke IFTTT applets I've configured. These include scripts to manage my lights and devices like my AppleTV, Bluray player, and TV.
 
-[**DoctorFreeScripts/MagicMirror**](https://gitlab.com/doctorfree/MirrorCommandLine) - Scripts to manage my MagicMirror (https://magicmirror.builders/)
+[**DoctorFreeScripts/MagicMirror**](https://gitlab.com/doctorfree/MirrorCommand) - Scripts to manage my MagicMirror (https://magicmirror.builders/)
 
 [**DoctorFreeScripts/Roon**](https://gitlab.com/doctorfree/RoonCommandLine) - Scripts to control my Roon audio system via the Roon API (https://pypi.org/project/roonapi/)
 
