@@ -744,6 +744,9 @@ get_model() {
                 Mila_Azul)
                   get_search "${playboymodel}" "Ekaterina_Volkova"
                   ;;
+                Miluniel_Louis)
+                  get_search "${playboymodel}" "Melanie_Nizette"
+                  ;;
                 Natalia_Andreeva)
                   get_search "${playboymodel}" "Annabell"
                   get_search "${playboymodel}" "Danica_A"
