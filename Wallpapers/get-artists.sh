@@ -39,6 +39,10 @@ do
             get_search "Artists/${artist}" "${artist}"
             get_search "Artists/${artist}" "AyyaSAP"
             ;;
+        Mirco_Cabbia)
+            get_search "Artists/${artist}" "${artist}"
+            get_search "Artists/${artist}" "Sciamano240"
+            ;;
         Zumi)
             get_search "Artists/${artist}" "${artist}"
             get_search "Artists/${artist}" "zumidraws"
