@@ -1,13 +1,54 @@
 #!/bin/bash
 #
+GHOM=${HOME}/.gdrive
 GDOPTS="--no-header --absolute --max 100 --name-width 0"
+
+[ -f ${GHOM}/gdhome ] || {
+    HERE=`pwd`
+    while true
+    do
+        read -p "Initializing gdrive home to ${HERE}. Ok ? ('Y'/'N'): " yn
+        case $yn in
+            [Yy]*)
+                [ -d ${GHOM} ] || mkdir -p ${GHOM}
+                echo "GDHOME=${HERE}" > ${GHOM}/gdhome
+                break
+                ;;
+            [Nn]*)
+                read -p "Enter your gdrive home: " gdhome
+                case ${gdhome} in
+                    *)
+                        echo "GDHOME=${gdhome}" > ${GHOM}/gdhome
+                        ;;
+                esac
+                break
+                ;;
+            * )
+                echo "Please answer yes or no."
+                ;;
+        esac
+    done
+}
+
+. ${GHOM}/gdhome
+[ -d ${GDHOME} ] || {
+    echo "Cannot locate gdrive home ${GDHOME}"
+    echo "Edit ${GHOM}/gdhome and set your local gdrive home"
+    exit 1
+}
+cd ${GDHOME}
 
 TELL=
 splitpath=1
 recursive=
 
 usage() {
-  printf "\nUsage: gdrm [-n] [-r] [-s] [-u] path/to/fileorfolder [file2 ...]\n"
+  printf "\nUsage: gdrm [-n] [-r] [-s] [-u] path/to/fileorfolder [file2 ...]"
+  printf "\nWhere:\n\t-n indicates tell me what you would do but don't do it"
+  printf "\n\t-r indicates remove directory and its contents recursively"
+  printf "\n\t-s indicates do not split path to identify name"
+  printf "\n\t\t(useful when there is a slash in the filename)"
+  printf "\n\t-u displays this usage message\n"
   exit 1
 }
 
@@ -31,7 +72,7 @@ shift $(( OPTIND - 1 ))
 
 [ "$1" ] || {
   echo "rmfile requires at least one argument specifying folder or file to remove"
-  exit 1
+  usage
 }
 
 for file in $*
@@ -39,16 +80,21 @@ do
   base=${file}
   dir=
   parentid=
-  parentquery=
+  [ -f .folderid ] && parentid=`cat .folderid`
   [ "${splitpath}" ] && {
     echo ${file} | grep '/' > /dev/null && {
       base=`basename ${file}`
       dir=`dirname ${file}`
       [ -f ${dir}/.folderid ] && {
         parentid=`cat ${dir}/.folderid`
-        parentquery="and parents in '${parentid}'"
       }
     }
+  }
+  [ "${parentid}" ] || {
+    echo "Cannot locate parent id"
+    echo "Run 'getfileids' to populate folders with folder ids"
+    echo "Exiting without sync"
+    exit 1
   }
 
   while read match
@@ -56,12 +102,23 @@ do
     name=`echo ${match} | awk ' { print $2 } '`
     [ "${name}" == "${file}" ] && {
       fid=`echo ${match} | awk ' { print $1 } '`
+      typ=`echo ${match} | awk ' { print $3 } '`
+      [ "${typ}" == "dir" ] && {
+        [ "${recursive}" ] || {
+          echo "${file} is a directory but no -r flag was provided."
+          echo "To remove a directory, use 'gdrm -r ...' to recursively delete"
+          echo "the directory and its contents."
+          echo "Skipping removal of ${file}."
+          continue
+        }
+      }
       if [ "${TELL}" ]
       then
-        echo "Would remove ${file} with id=${fid}"
+        echo "Would remove ${file} with id=${fid} with command:"
+        echo "gdrive delete ${recursive} ${fid}"
       else
         gdrive delete ${recursive} ${fid}
       fi
     }
-  done <<< `gdrive list ${GDOPTS} --query " name = '${base}' ${parentquery}"`
+  done <<< `gdrive list ${GDOPTS} --query " name = '${base}' and parents in '${parentid}'"`
 done

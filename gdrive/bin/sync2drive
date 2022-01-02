@@ -37,41 +37,111 @@ GHOM=${HOME}/.gdrive
 }
 cd ${GDHOME}
 
-FOLDER="$1"
-[ "${FOLDER}" ] || {
+TELL=
+splitpath=1
+
+usage() {
+  printf "\nUsage: sync2drive [-m maxfiles] [-n] [-s] [-u] folder | path/to/folder"
+  printf "\nWhere:\n\t-m 'maxfiles' specifies maximum number of file ids to return"
+  printf "\n\t\t(default: 100)"
+  printf "\n\t-n indicates tell me what you would do but don't do it"
+  printf "\n\t-s indicates do not split path to identify name"
+  printf "\n\t\t(useful when there is a slash in the folder name)"
+  printf "\n\t-u displays this usage message\n"
+  exit 1
+}
+
+maxfiles=100
+while getopts "m:nsu" flag; do
+    case $flag in
+        m)
+            maxfiles=${OPTARG}
+            ;;
+        n)
+            TELL=1
+            ;;
+        s)
+            splitpath=
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+GDOPTS="--no-header --absolute --max ${maxfiles} --name-width 0"
+
+folder="$1"
+[ "${folder}" ] || {
     echo "sync2drive requires a folder name as argument"
-    echo "Exiting"
-    exit 1
+    usage
 }
-[ -d "${FOLDER}" ] || {
+[ -d "${folder}" ] || {
     echo "sync2drive requires an existing local folder"
-    echo "No folder ${FOLDER} found. Exiting"
-    exit 1
+    echo "No folder ${folder} found. Exiting"
+    usage
 }
 
-# Does this folder already exist?
-
-useparent=
-echo "${FOLDER}" | grep '/' > /dev/null && {
+base=${folder}
+pdir=
+parentid=
+[ -f .folderid ] && parentid=`cat .folderid`
+echo "${folder}" | grep '/' > /dev/null && {
     # Get the parent folder ID
-    pdir=`dirname ${FOLDER}`
+    pdir=`dirname ${folder}`
     [ -f ${pdir}/.folderid ] || {
         echo "Cannot locate ${pdir}/.folderid"
         echo "Run 'getfileids' to populate folders with folder ids"
         echo "Exiting without sync"
         exit 1
     }
-    useparent=1
-    PARENTID=`cat ${pdir}/.folderid`
+    base=`basename ${folder}`
+    parentid=`cat ${pdir}/.folderid`
+}
+[ "${parentid}" ] || {
+    echo "Could not establish parent id."
+    echo "Run 'getfileids' to populate folders with folder ids"
+    echo "Exiting without sync"
+    exit 1
 }
 
-# Create directory on drive
-if [ "${useparent}" ]
-then
-    FID=`gdrive mkdir --parent ${PARENTID} ${FOLDER} | awk ' { print $2 } '`
-else
-    FID=`gdrive mkdir ${FOLDER} | awk ' { print $2 } '`
-fi
+# Does this folder already exist?
+exists=
+while read match
+do
+    name=`echo ${match} | awk ' { print $2 } '`
+    [ "${name}" == "${folder}" ] && {
+      exists=`echo ${match} | awk ' { print $1 } '`
+    }
+done <<< `gdrive list ${GDOPTS} --query " name = '${base}' and parents in '${parentid}'"`
+
+[ "${exists}" ] || {
+  [ "${TELL}" ] && echo "Would create new folder ${folder} in Google Drive"
+  # Create directory on drive
+  if [ "${parentid}" ]
+  then
+      if [ "${TELL}" ]
+      then
+        echo "gdrive mkdir --parent ${parentid} ${folder} | awk ' { print FID } '"
+      else
+        FID=`gdrive mkdir --parent ${parentid} ${folder} | awk ' { print $2 } '`
+      fi
+  else
+      if [ "${TELL}" ]
+      then
+        echo "gdrive mkdir ${folder} | awk ' { print FID } '"
+      else
+        FID=`gdrive mkdir ${folder} | awk ' { print $2 } '`
+      fi
+  fi
+}
 
 # Sync to drive
-gdrive sync upload ${FOLDER} ${FID}
+if [ "${TELL}" ]
+then
+    echo "Would sync new folder ${folder} in Google Drive"
+    echo "gdrive sync upload ${folder} FID"
+else
+    gdrive sync upload ${folder} ${FID}
+fi

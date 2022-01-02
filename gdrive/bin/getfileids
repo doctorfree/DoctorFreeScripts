@@ -35,21 +35,30 @@ GHOM=${HOME}/.gdrive
     echo "Edit ${GHOM}/gdhome and set your local gdrive home"
     exit 1
 }
-TOP=${GDHOME}
 cd ${GDHOME}
-ID_DIR="${TOP}/drive_ids"
-BU_DIR="${TOP}/Bak/drive_ids"
+ID_DIR="${GDHOME}/drive_ids"
+BU_DIR="${GDHOME}/Bak/drive_ids"
 FIDLIST="${ID_DIR}/mirror_file_ids.txt"
 DIRLIST="${ID_DIR}/mirror_folder_ids.txt"
 FIDBULIST="${BU_DIR}/mirror_file_ids.txt"
 DIRBULIST="${BU_DIR}/mirror_folder_ids.txt"
 GDOPTS="--no-header --absolute --max 50 --name-width 0"
 
-# MagicMirror folder ID
-MMID='1ZAvsixgtwH14ejxEUxpkZnRPYFFInBJe'
+# Get top folder ID by creating a directory, getting its parent id, then remove it
+tmpfolder="__tmpfolder__$$"
+TMPFID=`gdrive mkdir ${tmpfolder} | awk ' { print $2 } '`
+GDID=`gdrive info ${TMPFID} | grep Parents: | awk ' { print $2 } '`
+echo "Retrieved top level folder ID = ${GDID}"
+gdrive delete --recursive ${TMPFID}
+[ "${GDID}" ] || {
+  echo "Could not retrieve top-level drive ID"
+  echo "Using previously created setting for top-level ID"
+  # Replace this ID with the ID of the top level of your Google Drive
+  # that you wish to use with the gdrive command line utility
+  GDID='0AHIaKKQ-Wu1RUk9PVA'
+}
 
-[ -d ${TOP} ] || mkdir -p ${TOP}
-[ -d ${TOP}/MagicMirror ] || mkdir -p ${TOP}/MagicMirror
+[ -d ${GDHOME}/MagicMirror ] || mkdir -p ${GDHOME}/MagicMirror
 [ -d ${ID_DIR} ] || mkdir -p ${ID_DIR}
 [ -d ${BU_DIR} ] || mkdir -p ${BU_DIR}
 [ -f ${FIDLIST} ] && mv ${FIDLIST} ${FIDBULIST}$$
@@ -57,9 +66,7 @@ touch ${FIDLIST}
 [ -f ${DIRLIST} ] && mv ${DIRLIST} ${DIRBULIST}$$
 touch ${DIRLIST}
 
-cd ${TOP}
-echo "MagicMirror=${MMID}" >> ${DIRLIST}
-echo "${MMID}" > MagicMirror/.folderid
+echo "${GDID}" > .folderid
 
 getids() {
   while read entry
@@ -81,9 +88,9 @@ getids() {
 }
 
 subdirIDs=
-# Start at MagicMirror folder
+# Start at top folder
 # Recursion would be nice
-getids ${MMID}
+getids ${GDID}
 [ "${subdirIDs}" ] && {
   for folderID in ${subdirIDs}
   do
@@ -99,6 +106,13 @@ getids ${MMID}
           do
             subdirIDs=
             getids ${subSubFolderID}
+            [ "${subdirIDs}" ] && {
+              for finalFolderID in ${subdirIDs}
+              do
+                subdirIDs=
+                getids ${finalFolderID}
+              done
+            }
           done
         }
       done

@@ -1,6 +1,7 @@
 dotfiles-desktop
-Wallpapers/wallhaven.sh
 doc/html/
+gdrive/*/.folderid
+gdrive/.folderid
 ImageMagick/edgefx
 ImageMagick/edges
 ImageMagick/juliaset
@@ -19,6 +20,7 @@ MagicMirror/modules/MMM-AssistantMk2/profiles/default.json
 MagicMirror/modules/MMM-Hotword/trainer/trainer-withtoken.sh
 Utils/bin/daedalus-rewards
 Utils/bin/vmware/*
+Wallpapers/wallhaven.sh
 dist/*
 releases/*
 tmp/*

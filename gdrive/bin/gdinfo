@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+GHOM=${HOME}/.gdrive
+GDOPTS="--no-header --absolute --max 100 --name-width 0"
+
+[ -f ${GHOM}/gdhome ] || {
+  HERE=`pwd`
+  while true
+  do
+    read -p "Initializing gdrive home to ${HERE}. Ok ? ('Y'/'N'): " yn
+    case $yn in
+        [Yy]*)
+            [ -d ${GHOM} ] || mkdir -p ${GHOM}
+            echo "GDHOME=${HERE}" > ${GHOM}/gdhome
+            break
+            ;;
+        [Nn]*)
+            read -p "Enter your gdrive home: " gdhome
+            case ${gdhome} in
+                *)
+                    echo "GDHOME=${gdhome}" > ${GHOM}/gdhome
+                    ;;
+            esac
+            break
+            ;;
+        * )
+            echo "Please answer yes or no."
+            ;;
+    esac
+  done
+}
+
+. ${GHOM}/gdhome
+[ -d ${GDHOME} ] || {
+    echo "Cannot locate gdrive home ${GDHOME}"
+    echo "Edit ${GHOM}/gdhome and set your local gdrive home"
+    exit 1
+}
+cd ${GDHOME}
+
+usage() {
+    printf "\nUsage: gdinfo filename|foldername [file2|folder2 ...]\n"
+    exit 1
+}
+
+if [ $# -eq 0 ]
+then
+  usage
+else
+  for name in $*
+  do
+    fid=
+    folder=`dirname ${name}`
+    [ -f ${folder}/.folderid ] || continue
+    parentid=`cat ${folder}/.folderid`
+    base=`basename ${name}`
+    while read match
+    do
+      gdname=`echo ${match} | awk ' { print $2 } '`
+      [ "${gdname}" == "${name}" ] && {
+        fid=`echo ${match} | awk ' { print $1 } '`
+      }
+    done <<< `gdrive list ${GDOPTS} --query " name = '${base}' and parents in '${parentid}'"`
+    [ "${fid}" ] && gdrive info ${fid}
+  done
+fi
