@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+GHOM=${HOME}/.gdrive
+
+[ -f ${GHOM}/gdhome ] || {
+    HERE=`pwd`
+    while true
+    do
+        read -p "Initializing gdrive home to ${HERE}. Ok ? ('Y'/'N'): " yn
+        case $yn in
+            [Yy]*)
+                [ -d ${GHOM} ] || mkdir -p ${GHOM}
+                echo "GDHOME=${HERE}" > ${GHOM}/gdhome
+                break
+                ;;
+            [Nn]*)
+                read -p "Enter your gdrive home: " gdhome
+                case ${gdhome} in
+                    *)
+                        echo "GDHOME=${gdhome}" > ${GHOM}/gdhome
+                        ;;
+                esac
+                break
+                ;;
+            * )
+                echo "Please answer yes or no."
+                ;;
+        esac
+    done
+}
+
+. ${GHOM}/gdhome
+[ -d ${GDHOME} ] || {
+    echo "Cannot locate gdrive home ${GDHOME}"
+    echo "Edit ${GHOM}/gdhome and set your local gdrive home"
+    exit 1
+}
+cd ${GDHOME}
+for file in $*
+do
+    [ -f ${file} ] || {
+        echo "$file does not exist in local sync directory. Skipping."
+        continue
+    }
+    gdrive upload ${file}
+done

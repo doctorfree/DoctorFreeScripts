@@ -1,0 +1,114 @@
+#!/bin/bash
+#
+GHOM=${HOME}/.gdrive
+
+[ -f ${GHOM}/gdhome ] || {
+    HERE=`pwd`
+    while true
+    do
+        read -p "Initializing gdrive home to ${HERE}. Ok ? ('Y'/'N'): " yn
+        case $yn in
+            [Yy]*)
+                [ -d ${GHOM} ] || mkdir -p ${GHOM}
+                echo "GDHOME=${HERE}" > ${GHOM}/gdhome
+                break
+                ;;
+            [Nn]*)
+                read -p "Enter your gdrive home: " gdhome
+                case ${gdhome} in
+                    *)
+                        echo "GDHOME=${gdhome}" > ${GHOM}/gdhome
+                        ;;
+                esac
+                break
+                ;;
+            * )
+                echo "Please answer yes or no."
+                ;;
+        esac
+    done
+}
+
+. ${GHOM}/gdhome
+[ -d ${GDHOME} ] || {
+    echo "Cannot locate gdrive home ${GDHOME}"
+    echo "Edit ${GHOM}/gdhome and set your local gdrive home"
+    exit 1
+}
+TOP=${GDHOME}
+cd ${GDHOME}
+ID_DIR="${TOP}/drive_ids"
+BU_DIR="${TOP}/Bak/drive_ids"
+FIDLIST="${ID_DIR}/mirror_file_ids.txt"
+DIRLIST="${ID_DIR}/mirror_folder_ids.txt"
+FIDBULIST="${BU_DIR}/mirror_file_ids.txt"
+DIRBULIST="${BU_DIR}/mirror_folder_ids.txt"
+GDOPTS="--no-header --absolute --max 50 --name-width 0"
+
+# MagicMirror folder ID
+MMID='1ZAvsixgtwH14ejxEUxpkZnRPYFFInBJe'
+
+[ -d ${TOP} ] || mkdir -p ${TOP}
+[ -d ${TOP}/MagicMirror ] || mkdir -p ${TOP}/MagicMirror
+[ -d ${ID_DIR} ] || mkdir -p ${ID_DIR}
+[ -d ${BU_DIR} ] || mkdir -p ${BU_DIR}
+[ -f ${FIDLIST} ] && mv ${FIDLIST} ${FIDBULIST}$$
+touch ${FIDLIST}
+[ -f ${DIRLIST} ] && mv ${DIRLIST} ${DIRBULIST}$$
+touch ${DIRLIST}
+
+cd ${TOP}
+echo "MagicMirror=${MMID}" >> ${DIRLIST}
+echo "${MMID}" > MagicMirror/.folderid
+
+getids() {
+  while read entry
+  do
+    thisID=`echo ${entry} | awk ' { print $1 } '`
+    thisName=`echo ${entry} | awk ' { print $2 } '`
+    thisType=`echo ${entry} | awk ' { print $3 } '`
+    if [ "${thisType}" == "dir" ]
+    then
+      subdirIDs="${thisID} ${subdirIDs}"
+      echo "${thisName}=${thisID}" >> ${DIRLIST}
+      [ -d ${thisName} ] && {
+        echo "${thisID}" > ${thisName}/.folderid
+      }
+    else
+      echo "${thisName}=${thisID}" >> ${FIDLIST}
+    fi
+  done <<< `gdrive list ${GDOPTS} --query " '$1' in parents"`
+}
+
+subdirIDs=
+# Start at MagicMirror folder
+# Recursion would be nice
+getids ${MMID}
+[ "${subdirIDs}" ] && {
+  for folderID in ${subdirIDs}
+  do
+    subdirIDs=
+    getids ${folderID}
+    [ "${subdirIDs}" ] && {
+      for subFolderID in ${subdirIDs}
+      do
+        subdirIDs=
+        getids ${subFolderID}
+        [ "${subdirIDs}" ] && {
+          for subSubFolderID in ${subdirIDs}
+          do
+            subdirIDs=
+            getids ${subSubFolderID}
+          done
+        }
+      done
+    }
+  done
+}
+
+[ -f ${FIDBULIST}$$ ] && {
+  diff ${FIDLIST} ${FIDBULIST}$$ > /dev/null && rm -f ${FIDBULIST}$$
+}
+[ -f ${DIRBULIST}$$ ] && {
+  diff ${DIRLIST} ${DIRBULIST}$$ > /dev/null && rm -f ${DIRBULIST}$$
+}

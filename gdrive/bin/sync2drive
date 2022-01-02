@@ -1,0 +1,77 @@
+#!/bin/bash
+#
+GHOM=${HOME}/.gdrive
+
+[ -f ${GHOM}/gdhome ] || {
+    HERE=`pwd`
+    while true
+    do
+        read -p "Initializing gdrive home to ${HERE}. Ok ? ('Y'/'N'): " yn
+        case $yn in
+            [Yy]*)
+                [ -d ${GHOM} ] || mkdir -p ${GHOM}
+                echo "GDHOME=${HERE}" > ${GHOM}/gdhome
+                break
+                ;;
+            [Nn]*)
+                read -p "Enter your gdrive home: " gdhome
+                case ${gdhome} in
+                    *)
+                        echo "GDHOME=${gdhome}" > ${GHOM}/gdhome
+                        ;;
+                esac
+                break
+                ;;
+            * )
+                echo "Please answer yes or no."
+                ;;
+        esac
+    done
+}
+
+. ${GHOM}/gdhome
+[ -d ${GDHOME} ] || {
+    echo "Cannot locate gdrive home ${GDHOME}"
+    echo "Edit ${GHOM}/gdhome and set your local gdrive home"
+    exit 1
+}
+cd ${GDHOME}
+
+FOLDER="$1"
+[ "${FOLDER}" ] || {
+    echo "sync2drive requires a folder name as argument"
+    echo "Exiting"
+    exit 1
+}
+[ -d "${FOLDER}" ] || {
+    echo "sync2drive requires an existing local folder"
+    echo "No folder ${FOLDER} found. Exiting"
+    exit 1
+}
+
+# Does this folder already exist?
+
+useparent=
+echo "${FOLDER}" | grep '/' > /dev/null && {
+    # Get the parent folder ID
+    pdir=`dirname ${FOLDER}`
+    [ -f ${pdir}/.folderid ] || {
+        echo "Cannot locate ${pdir}/.folderid"
+        echo "Run 'getfileids' to populate folders with folder ids"
+        echo "Exiting without sync"
+        exit 1
+    }
+    useparent=1
+    PARENTID=`cat ${pdir}/.folderid`
+}
+
+# Create directory on drive
+if [ "${useparent}" ]
+then
+    FID=`gdrive mkdir --parent ${PARENTID} ${FOLDER} | awk ' { print $2 } '`
+else
+    FID=`gdrive mkdir ${FOLDER} | awk ' { print $2 } '`
+fi
+
+# Sync to drive
+gdrive sync upload ${FOLDER} ${FID}

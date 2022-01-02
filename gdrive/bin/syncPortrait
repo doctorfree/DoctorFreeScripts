@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# MagicMirror folder ID
+MMID="1ZAvsixgtwH14ejxEUxpkZnRPYFFInBJe"
+
+# Create directory on drive
+gdrive mkdir drive-bin
+
+# Sync to drive
+gdrive sync upload _release/bin 0B3X9GlR6EmbnOEd6cEh6bU9XZWM
+
+# Add new local file
+echo "google drive binaries" > _release/bin/readme.txt
+
+# Sync again
+gdrive sync upload _release/bin 0B3X9GlR6EmbnOEd6cEh6bU9XZWM
+
+# Modify local file
+echo "for all platforms" >> _release/bin/readme.txt
+
+# Sync again
+gdrive sync upload _release/bin 0B3X9GlR6EmbnOEd6cEh6bU9XZWM
