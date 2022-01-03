@@ -3,6 +3,20 @@
 # See https://developers.google.com/drive/api/v3/ref-search-terms#operators
 # for more info on the Google Drive for Developers API (V3)
 #
+# In order to support spaces in file and folder names, use 'gdrive info ID'
+# to retrieve the Name and Path rather than trying to awk the list.
+#
+# The format returned by 'gdrive info ID' is:
+#
+# Id: 0B3IaKKQ-Wu1RYXB0eUhMVFNUWjQ
+# Name: iOS Contacts
+# Path: IFTTT/iOS Contacts
+# Mime: application/vnd.google-apps.folder
+# Created: 2013-12-17 19:22:56
+# Modified: 2013-12-17 19:23:01
+# Shared: False
+# Parents: 0B3IaKKQ-Wu1RT3p0WGUtWVJQYkE
+#
 GHOM=${HOME}/.gdrive
 
 [ -f ${GHOM}/gdhome ] || {
@@ -45,14 +59,14 @@ FIDLIST="${ID_DIR}/mirror_file_ids.txt"
 DIRLIST="${ID_DIR}/mirror_folder_ids.txt"
 FIDBULIST="${BU_DIR}/mirror_file_ids.txt"
 DIRBULIST="${BU_DIR}/mirror_folder_ids.txt"
-GDOPTS="--no-header --absolute --max 50 --name-width 0"
+GDOPTS="--no-header --absolute --max 500 --name-width 0"
 
 # Get top folder ID by creating a directory, getting its parent id, then remove it
 tmpfolder="__tmpfolder__$$"
 TMPFID=`gdrive mkdir ${tmpfolder} | awk ' { print $2 } '`
 GDID=`gdrive info ${TMPFID} | grep Parents: | awk ' { print $2 } '`
 echo "Retrieved top level folder ID = ${GDID}"
-gdrive delete --recursive ${TMPFID}
+gdrive delete --recursive ${TMPFID} > /dev/null
 [ "${GDID}" ] || {
   echo "Could not retrieve top-level drive ID"
   echo "Using previously created setting for top-level ID"
@@ -69,23 +83,40 @@ touch ${FIDLIST}
 [ -f ${DIRLIST} ] && mv ${DIRLIST} ${DIRBULIST}$$
 touch ${DIRLIST}
 
+echo "Creating local folder IDs stored in 'path/to/folder/.folderid'"
+echo "Depending on the number of files and folders currently stored in Google Drive,"
+echo "this process can be time consuming. Please be patient."
 echo "${GDID}" > .folderid
 
 getids() {
   while read entry
   do
     thisID=`echo ${entry} | awk ' { print $1 } '`
-    thisName=`echo ${entry} | awk ' { print $2 } '`
+    [ "${thisID}" ] || continue
+    # thisName=`echo ${entry} | awk ' { print $2 } '`
+    thisName=`gdrive info ${thisID} | grep ^Name: | awk -F ':' ' { print $2 } '`
+    # Remove leading and trailing spaces
+    thisName="$(echo -e "${thisName}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    thisPath=`gdrive info ${thisID} | grep ^Path: | awk -F ':' ' { print $2 } '`
+    thisPath="$(echo -e "${thisPath}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
     thisType=`echo ${entry} | awk ' { print $3 } '`
+    thisType=`gdrive info ${thisID} | grep ^Mime: | awk -F ':' ' { print $2 } '`
+    thisType="$(echo -e "${thisType}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    echo ${thisType} | grep folder > /dev/null && thisType="dir"
     if [ "${thisType}" == "dir" ]
     then
-      subdirIDs="${thisID} ${subdirIDs}"
-      echo "${thisName}=${thisID}" >> ${DIRLIST}
-      [ -d ${thisName} ] && {
-        echo "${thisID}" > ${thisName}/.folderid
-      }
+      if [ "${subdirIDs}" ]
+      then
+        subdirIDs="${thisID} ${subdirIDs}"
+      else
+        subdirIDs="${thisID}"
+      fi
+      echo "${thisPath} = ${thisID}" >> ${DIRLIST}
+      [ -d "${thisPath}" ] || mkdir -p "${thisPath}"
+      echo "Adding folder ID for '${thisPath}'"
+      echo "${thisID}" > "${thisPath}"/.folderid
     else
-      echo "${thisName}=${thisID}" >> ${FIDLIST}
+      echo "${thisPath} = ${thisID}" >> ${FIDLIST}
     fi
   done <<< `gdrive list ${GDOPTS} --query " '$1' in parents"`
 }

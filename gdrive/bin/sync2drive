@@ -101,7 +101,7 @@ echo "${folder}" | grep '/' > /dev/null && {
     pdir=`dirname ${folder}`
     [ -f ${pdir}/.folderid ] || {
         echo "Cannot locate ${pdir}/.folderid"
-        echo "Run 'getfileids' to populate folders with folder ids"
+        echo "Run 'getfolderids' to populate folders with folder ids"
         echo "Exiting without sync"
         exit 1
     }
@@ -110,7 +110,7 @@ echo "${folder}" | grep '/' > /dev/null && {
 }
 [ "${parentid}" ] || {
     echo "Could not establish parent id."
-    echo "Run 'getfileids' to populate folders with folder ids"
+    echo "Run 'getfolderids' to populate folders with folder ids"
     echo "Exiting without sync"
     exit 1
 }
@@ -146,7 +146,12 @@ then
     else
         echo "Would sync new folder ${folder} in Google Drive"
     fi
-    echo "gdrive sync upload ${delete} ${folder} FID"
+    if [ "${FID}" ]
+    then
+        gdrive sync upload --dry-run ${delete} ${folder} ${FID}
+    else
+        echo "gdrive sync upload ${delete} ${folder} FID"
+    fi
 else
     gdrive sync upload ${delete} ${folder} ${FID}
 fi

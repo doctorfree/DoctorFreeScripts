@@ -95,7 +95,7 @@ do
   }
   [ "${parentid}" ] || {
     echo "Cannot locate parent id"
-    echo "Run 'getfileids' to populate folders with folder ids"
+    echo "Run 'getfolderids' to populate folders with folder ids"
     echo "Exiting without sync"
     exit 1
   }

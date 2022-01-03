@@ -46,7 +46,7 @@ MMID=
     MMID="1ZAvsixgtwH14ejxEUxpkZnRPYFFInBJe"
     echo "Could not retrieve MagicMirror folder ID"
     echo "Using hard coded MagicMirror ID = ${MMID}"
-    echo "Execute 'getfileids' to populate folders with IDs"
+    echo "Execute 'getfolderids' to populate folders with IDs"
 }
 
 # Check to see if this is a sync folder

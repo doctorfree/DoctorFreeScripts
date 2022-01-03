@@ -47,16 +47,17 @@ do
     pdir=`dirname ${file}`
     [ -f ${pdir}/.folderid ] || {
         echo "Missing ${pdir}/.folderid"
-        echo "Run 'getfileids' to populate folders with ids"
+        echo "Run 'getfolderids' to populate folders with ids"
         echo "Skipping upload of ${file}"
         continue
     }
     parentid=`cat ${folder}/.folderid`
     while read match
     do
-        name=`echo ${match} | awk ' { print $2 } '`
-        [ "${name}" == "${pdir}" ] && {
-          exists=`echo ${match} | awk ' { print $1 } '`
+        syncid=`echo ${match} | awk ' { print $1 } '`
+        [ "${syncid}" == "${parentid}" ] && {
+          exists=${syncid}
+          break
         }
     done <<< `gdrive sync list --no-header`
 

@@ -3,6 +3,15 @@
 # See https://developers.google.com/drive/api/v3/ref-search-terms#operators
 # for more info on the Google Drive for Developers API (V3)
 #
+# Some extra care needs to be taken figuring out the folder to sync because
+# 'gdrive sync upload ...' creates sync folders whose name does not include
+# the full path, just the base folder name, and there is no '--absolute'
+# flag to 'gdrive sync list' nor is there a '--name' argument to 'sync upload'
+#
+# For these reasons, 'sync_from_drive' requires an existing local folder
+# whose name matches that of the sync folder name and with a .folderid
+# that matches the sync folder id. Run 'getfolderids' prior to 'sync_from_drive'.
+#
 GHOM=${HOME}/.gdrive
 
 [ -f ${GHOM}/gdhome ] || {
@@ -66,33 +75,78 @@ folder="$1"
     echo "sync2drive requires a folder name as argument"
     usage
 }
+base=${folder}
+pdir=`dirname ${folder}`
+echo ${folder} | grep '/' > /dev/null && {
+    base=`basename ${folder}`
+}
+[ -d "${folder}" ] || {
+    echo "Locating ${folder}"
+    folder=
+    foundnames=
+    while read dirname
+    do
+      if [ "${foundnames}" ]
+      then
+        foundnames="${foundnames} ${dirname}"
+      else
+        foundnames="${dirname}"
+      fi
+    done <<< `find . -type d -name ${base}`
+    numfound=`echo ${foundnames} | wc -w`
+    [ ${numfound} -eq 1 ] && folder=${foundnames}
+    [ ${numfound} -gt 1 ] && {
+      echo "Multiple folders named '${base}' exist in local directories."
+      echo "Rerun 'sync_from_drive' specifying the full path to"
+      echo "the folder you wish to sync."
+      echo "Exiting without syncing."
+      exit 1
+    }
+}
+
+[ "${folder}" ] || {
+    echo "Could not locate a folder named '${base}'."
+    echo "Try specifying a full path to the folder you wish to sync."
+    echo "Exiting without syncing."
+    exit 1
+}
+
+[ -f ${folder}/.folderid ] || {
+    echo "No ${folder}/.folderid found"
+    echo "Execute 'getfolderids' to populate folders with ids"
+    echo "No sync performed. Exiting."
+    exit 1
+}
+
+fid=`cat ${folder}/.folderid`
 
 # List syncable directories
 exists=
 while read match
 do
-    name=`echo ${match} | awk ' { print $2 } '`
-    [ "${name}" == "${folder}" ] && {
-      exists=`echo ${match} | awk ' { print $1 } '`
+    syncid=`echo ${match} | awk ' { print $1 } '`
+    [ "${fid}" == "${syncid}" ] && {
+      exists=${syncid}
+      break
     }
 done <<< `gdrive sync list --no-header`
 
 [ "${exists}" ] || {
-  echo "No sync folder named ${folder} exists."
+  echo "No sync folder for ${folder} exists."
   usage
 }
 
 # Create path to folder if needed
-pdir=`dirname ${folder}`
-[ -d ${pdir} ] || {
-  if [ "${TELL}" ]
-  then
-    echo "Would create local directory ${pdir}"
-    echo "mkdir -p ${pdir}"
-  else
-    mkdir -p ${pdir}
-  fi
-}
+# pdir=`dirname ${folder}`
+# [ -d ${pdir} ] || {
+#   if [ "${TELL}" ]
+#   then
+#     echo "Would create local directory ${pdir}"
+#     echo "mkdir -p ${pdir}"
+#   else
+#     mkdir -p ${pdir}
+#   fi
+# }
 
 # Sync from drive
 if [ "${TELL}" ]
