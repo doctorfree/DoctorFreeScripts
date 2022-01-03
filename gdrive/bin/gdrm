@@ -102,10 +102,16 @@ do
 
   while read match
   do
-    name=`echo ${match} | awk ' { print $2 } '`
-    [ "${name}" == "${file}" ] && {
-      fid=`echo ${match} | awk ' { print $1 } '`
-      typ=`echo ${match} | awk ' { print $3 } '`
+    id=`echo ${match} | awk ' { print $1 } '`
+    [ "${id}" ] || continue
+    path=`gdrive info ${id} | grep ^Path: | awk -F ':' ' { print $2 } '`
+    # Remove leading and trailing spaces
+    path="$(echo -e "${path}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    [ "${path}" == "${file}" ] && {
+      fid=${id}
+      typ=`gdrive info ${id} | grep ^Mime: | awk -F ':' ' { print $2 } '`
+      typ="$(echo -e "${typ}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+      echo ${typ} | grep folder > /dev/null && typ="dir"
       [ "${typ}" == "dir" ] && {
         [ "${recursive}" ] || {
           echo "${file} is a directory but no -r flag was provided."

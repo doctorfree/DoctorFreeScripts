@@ -53,9 +53,13 @@ MMID=
 exists=
 while read match
 do
-    name=`echo ${match} | awk ' { print $2 } '`
-    [ "${name}" == "MagicMirror" ] && {
-      exists=`echo ${match} | awk ' { print $1 } '`
+    id=`echo ${match} | awk ' { print $1 } '`
+    [ "${id}" ] || continue
+    path=`gdrive info ${id} | grep ^Path: | awk -F ':' ' { print $2 } '`
+    # Remove leading and trailing spaces
+    path="$(echo -e "${path}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    [ "${path}" == "MagicMirror" ] && {
+      exists=${id}
     }
 done <<< `gdrive sync list --no-header`
 

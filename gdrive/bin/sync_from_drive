@@ -76,7 +76,6 @@ folder="$1"
     usage
 }
 base=${folder}
-pdir=`dirname ${folder}`
 echo ${folder} | grep '/' > /dev/null && {
     base=`basename ${folder}`
 }
@@ -92,7 +91,7 @@ echo ${folder} | grep '/' > /dev/null && {
       else
         foundnames="${dirname}"
       fi
-    done <<< `find . -type d -name ${base}`
+    done <<< `find . -type d -name "${base}"`
     numfound=`echo ${foundnames} | wc -w`
     [ ${numfound} -eq 1 ] && folder=${foundnames}
     [ ${numfound} -gt 1 ] && {
@@ -136,23 +135,11 @@ done <<< `gdrive sync list --no-header`
   usage
 }
 
-# Create path to folder if needed
-# pdir=`dirname ${folder}`
-# [ -d ${pdir} ] || {
-#   if [ "${TELL}" ]
-#   then
-#     echo "Would create local directory ${pdir}"
-#     echo "mkdir -p ${pdir}"
-#   else
-#     mkdir -p ${pdir}
-#   fi
-# }
-
 # Sync from drive
 if [ "${TELL}" ]
 then
     echo "Would sync folder ${folder} from Google Drive"
     echo "gdrive sync download ${exists} ${folder}"
 else
-    gdrive sync download ${exists} ${folder}
+    gdrive sync download ${exists} "${folder}"
 fi

@@ -59,9 +59,14 @@ else
     base=`basename ${name}`
     while read match
     do
-      gdname=`echo ${match} | awk ' { print $2 } '`
-      [ "${gdname}" == "${name}" ] && {
-        fid=`echo ${match} | awk ' { print $1 } '`
+      thisID=`echo ${match} | awk ' { print $1 } '`
+      [ "${thisID}" ] || continue
+      thisPath=`gdrive info ${thisID} | grep ^Path: | awk -F ':' ' { print $2 } '`
+      # Remove leading and trailing spaces
+      thisPath="$(echo -e "${thisPath}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+      [ "${thisPath}" == "${name}" ] && {
+        fid=${thisID}
+        break
       }
     done <<< `gdrive list ${GDOPTS} --query " name = '${base}' and parents in '${parentid}'"`
     [ "${fid}" ] && gdrive info ${fid}

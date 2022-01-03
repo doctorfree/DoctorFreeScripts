@@ -55,18 +55,67 @@ GHOM=${HOME}/.gdrive
 cd ${GDHOME}
 ID_DIR="${GDHOME}/drive_ids"
 BU_DIR="${GDHOME}/Bak/drive_ids"
-FIDLIST="${ID_DIR}/mirror_file_ids.txt"
-DIRLIST="${ID_DIR}/mirror_folder_ids.txt"
-FIDBULIST="${BU_DIR}/mirror_file_ids.txt"
-DIRBULIST="${BU_DIR}/mirror_folder_ids.txt"
-GDOPTS="--no-header --absolute --max 500 --name-width 0"
 
-# Get top folder ID by creating a directory, getting its parent id, then remove it
-tmpfolder="__tmpfolder__$$"
-TMPFID=`gdrive mkdir ${tmpfolder} | awk ' { print $2 } '`
-GDID=`gdrive info ${TMPFID} | grep Parents: | awk ' { print $2 } '`
-echo "Retrieved top level folder ID = ${GDID}"
-gdrive delete --recursive ${TMPFID} > /dev/null
+TELL=
+ONLY=1
+maxfiles=500
+
+usage() {
+  printf "\nUsage: getfolderids [-f] [-m maxfiles] [-n] [-u] [path/to/folder]"
+  printf "\nWhere:"
+  printf "\n\t-f indicates 'files', also create a list of file IDs (slower)\n"
+  printf "\n\t-m 'maxfiles' specifies the maximum number of files in query return"
+  printf "\n\t\t(default: 500)"
+  printf "\n\t-n indicates tell me what you would do but don't do it"
+  printf "\n\t-u displays this usage message\n"
+  printf "\nIn the absence of a 'path/to/folder' getfolderids will retrieve"
+  printf "\nand populate all local folders with folder IDs.\n"
+  printf "\nIf a 'path/to/folder' argument is provided then getfolderids will retrieve"
+  printf "\nand populate 'path/to/folder' and its subfolders with folder IDs.\n"
+  printf "\nExample:\n\tgetfolderids MagicMirror"
+  printf "\nWould retrieve and populate folder IDs in the 'MagicMirror' folder"
+  printf "\nand all subfolders within, ignoring files located in that hierarchy.\n"
+  exit 1
+}
+
+while getopts "fm:nu" flag; do
+    case $flag in
+        f)
+            ONLY=
+            ;;
+        m)
+            maxfiles=${OPTARG}
+            ;;
+        n)
+            TELL=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+GDOPTS="--no-header --absolute --max ${maxfiles} --name-width 0"
+
+FOLDER=
+[ "$1" ] && {
+  FOLDER="$1"
+  echo "Setting folder IDs for folder ${FOLDER} and its subfolders"
+}
+
+if [ -f .folderid ]
+then
+  GDID=`cat .folderid`
+else
+  # Get top folder ID by creating a directory, getting its parent id, then remove it
+  tmpfolder="__tmpfolder__$$"
+  TMPFID=`gdrive mkdir ${tmpfolder} | awk ' { print $2 } '`
+  GDID=`gdrive info ${TMPFID} | grep Parents: | awk ' { print $2 } '`
+  echo "Retrieved top level folder ID = ${GDID}"
+  gdrive delete --recursive ${TMPFID} > /dev/null
+  [ "${GDID}" ] && echo "${GDID}" > .folderid
+fi
 [ "${GDID}" ] || {
   echo "Could not retrieve top-level drive ID"
   echo "Using previously created setting for top-level ID"
@@ -74,32 +123,88 @@ gdrive delete --recursive ${TMPFID} > /dev/null
   # that you wish to use with the gdrive command line utility
   GDID='0AHIaKKQ-Wu1RUk9PVA'
 }
+TOPID=${GDID}
 
-[ -d ${GDHOME}/MagicMirror ] || mkdir -p ${GDHOME}/MagicMirror
 [ -d ${ID_DIR} ] || mkdir -p ${ID_DIR}
 [ -d ${BU_DIR} ] || mkdir -p ${BU_DIR}
-[ -f ${FIDLIST} ] && mv ${FIDLIST} ${FIDBULIST}$$
-touch ${FIDLIST}
-[ -f ${DIRLIST} ] && mv ${DIRLIST} ${DIRBULIST}$$
-touch ${DIRLIST}
+
+if [ "${FOLDER}" ]
+then
+  prefix=`echo ${FOLDER} | sed -e "s,/,_,g"`
+  FIDLIST="${ID_DIR}/${prefix}_file_ids.txt"
+  DIRLIST="${ID_DIR}/${prefix}_folder_ids.txt"
+  FIDBULIST="${BU_DIR}/${prefix}_file_ids.txt"
+  DIRBULIST="${BU_DIR}/${prefix}_folder_ids.txt"
+  # Get the parent ID of the specified folder
+  base=`basename ${FOLDER}`
+  pdir=`dirname ${FOLDER}`
+  parentid=
+  [ -f .folderid ] && parentid=`cat .folderid`
+  [ -f ${pdir}/.folderid ] && {
+    parentid=`cat ${pdir}/.folderid`
+  }
+  [ "${parentid}" ] || {
+    echo "Cannot locate parent id"
+    echo "Run 'getfolderids' to populate folders with folder ids"
+    echo "Exiting"
+    usage
+  }
+  exists=
+  while read match
+  do
+    thisID=`echo ${match} | awk ' { print $1 } '`
+    [ "${thisID}" ] || continue
+    thisPath=`gdrive info ${thisID} | grep ^Path: | awk -F ':' ' { print $2 } '`
+    # Remove leading and trailing spaces
+    thisPath="$(echo -e "${thisPath}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    [ "${thisPath}" == "${FOLDER}" ] && {
+      exists=${thisID}
+      TOPID=${exists}
+      echo "Set top folder ID to ${TOPID}"
+      if [ "${TELL}" ]
+      then
+        echo "Would add folder id '${FOLDER}/.folderid'"
+      else
+        [ -d "${FOLDER}" ] || mkdir -p "${FOLDER}"
+        [ "${TOPID}" ] && echo "${TOPID}" > "${FOLDER}"/.folderid
+      fi
+      break
+    }
+  done <<< `gdrive list ${GDOPTS} --query " name = '${base}' and parents in '${parentid}'"`
+
+  [ "${exists}" ] || {
+    echo "Cannot locate specified folder: ${FOLDER}"
+    echo "in Google Drive. Exiting without populating folder IDs"
+    usage
+  }
+else
+  FIDLIST="${ID_DIR}/file_ids.txt"
+  DIRLIST="${ID_DIR}/folder_ids.txt"
+  FIDBULIST="${BU_DIR}/file_ids.txt"
+  DIRBULIST="${BU_DIR}/folder_ids.txt"
+fi
+if [ "${TELL}" ]
+then
+  echo "Would backup any existing file id lists"
+else
+  [ -f ${FIDLIST} ] && mv ${FIDLIST} ${FIDBULIST}$$
+  touch ${FIDLIST}
+  [ -f ${DIRLIST} ] && mv ${DIRLIST} ${DIRBULIST}$$
+  touch ${DIRLIST}
+fi
 
 echo "Creating local folder IDs stored in 'path/to/folder/.folderid'"
 echo "Depending on the number of files and folders currently stored in Google Drive,"
 echo "this process can be time consuming. Please be patient."
-echo "${GDID}" > .folderid
 
 getids() {
   while read entry
   do
     thisID=`echo ${entry} | awk ' { print $1 } '`
     [ "${thisID}" ] || continue
-    # thisName=`echo ${entry} | awk ' { print $2 } '`
-    thisName=`gdrive info ${thisID} | grep ^Name: | awk -F ':' ' { print $2 } '`
-    # Remove leading and trailing spaces
-    thisName="$(echo -e "${thisName}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
     thisPath=`gdrive info ${thisID} | grep ^Path: | awk -F ':' ' { print $2 } '`
+    # Remove leading and trailing spaces
     thisPath="$(echo -e "${thisPath}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-    thisType=`echo ${entry} | awk ' { print $3 } '`
     thisType=`gdrive info ${thisID} | grep ^Mime: | awk -F ':' ' { print $2 } '`
     thisType="$(echo -e "${thisType}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
     echo ${thisType} | grep folder > /dev/null && thisType="dir"
@@ -111,39 +216,55 @@ getids() {
       else
         subdirIDs="${thisID}"
       fi
-      echo "${thisPath} = ${thisID}" >> ${DIRLIST}
-      [ -d "${thisPath}" ] || mkdir -p "${thisPath}"
-      echo "Adding folder ID for '${thisPath}'"
-      echo "${thisID}" > "${thisPath}"/.folderid
+      if [ "${TELL}" ]
+      then
+        echo "Would add folder id for ${thisPath} to folder id list"
+      else
+        echo "${thisPath} = ${thisID}" >> ${DIRLIST}
+        [ -d "${thisPath}" ] || mkdir -p "${thisPath}"
+        echo "Adding folder ID for '${thisPath}'"
+        echo "${thisID}" > "${thisPath}"/.folderid
+      fi
     else
-      echo "${thisPath} = ${thisID}" >> ${FIDLIST}
+      [ "${ONLY}" ] || {
+        if [ "${TELL}" ]
+        then
+          echo "Would add file id for ${thisPath} to file id list"
+        else
+          echo "${thisPath} = ${thisID}" >> ${FIDLIST}
+        fi
+      }
     fi
   done <<< `gdrive list ${GDOPTS} --query " '$1' in parents"`
 }
 
 subdirIDs=
-# Start at top folder
-# Recursion would be nice
-getids ${GDID}
+# Start at top or specified folder
+[ "${TELL}" ] && echo "Calling getids ${TOPID}"
+getids ${TOPID}
 [ "${subdirIDs}" ] && {
   for folderID in ${subdirIDs}
   do
     subdirIDs=
+    [ "${TELL}" ] && echo "Calling getids ${folderID}"
     getids ${folderID}
     [ "${subdirIDs}" ] && {
       for subFolderID in ${subdirIDs}
       do
         subdirIDs=
+        [ "${TELL}" ] && echo "Calling getids ${subFolderID}"
         getids ${subFolderID}
         [ "${subdirIDs}" ] && {
           for subSubFolderID in ${subdirIDs}
           do
             subdirIDs=
+            [ "${TELL}" ] && echo "Calling getids ${subSubFolderID}"
             getids ${subSubFolderID}
             [ "${subdirIDs}" ] && {
               for finalFolderID in ${subdirIDs}
               do
                 subdirIDs=
+                [ "${TELL}" ] && echo "Calling getids ${finalFolderID}"
                 getids ${finalFolderID}
               done
             }
@@ -154,9 +275,14 @@ getids ${GDID}
   done
 }
 
-[ -f ${FIDBULIST}$$ ] && {
-  diff ${FIDLIST} ${FIDBULIST}$$ > /dev/null && rm -f ${FIDBULIST}$$
-}
-[ -f ${DIRBULIST}$$ ] && {
-  diff ${DIRLIST} ${DIRBULIST}$$ > /dev/null && rm -f ${DIRBULIST}$$
-}
+if [ "${TELL}" ]
+then
+  echo "Would remove duplicate file and folder id lists"
+else
+  [ -f ${FIDBULIST}$$ ] && {
+    diff ${FIDLIST} ${FIDBULIST}$$ > /dev/null && rm -f ${FIDBULIST}$$
+  }
+  [ -f ${DIRBULIST}$$ ] && {
+    diff ${DIRLIST} ${DIRBULIST}$$ > /dev/null && rm -f ${DIRBULIST}$$
+  }
+fi
