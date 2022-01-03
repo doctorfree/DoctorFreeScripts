@@ -41,8 +41,10 @@ TELL=
 splitpath=1
 
 usage() {
-  printf "\nUsage: sync2drive [-m maxfiles] [-n] [-s] [-u] folder | path/to/folder"
-  printf "\nWhere:\n\t-m 'maxfiles' specifies maximum number of file ids to return"
+  printf "\nUsage: sync2drive [-k] [-m maxfiles] [-n] [-s] [-u] folder|path/to/folder"
+  printf "\nWhere:"
+  printf "\n\t-k indicates do not delete extraneous remote files"
+  printf "\n\t-m 'maxfiles' specifies maximum number of file ids to return"
   printf "\n\t\t(default: 100)"
   printf "\n\t-n indicates tell me what you would do but don't do it"
   printf "\n\t-s indicates do not split path to identify name"
@@ -52,8 +54,12 @@ usage() {
 }
 
 maxfiles=100
-while getopts "m:nsu" flag; do
+delete="--delete-extraneous"
+while getopts "km:nsu" flag; do
     case $flag in
+        k)
+            delete=
+            ;;
         m)
             maxfiles=${OPTARG}
             ;;
@@ -113,35 +119,31 @@ do
     name=`echo ${match} | awk ' { print $2 } '`
     [ "${name}" == "${folder}" ] && {
       exists=`echo ${match} | awk ' { print $1 } '`
+      FID=${exists}
     }
 done <<< `gdrive list ${GDOPTS} --query " name = '${base}' and parents in '${parentid}'"`
 
 [ "${exists}" ] || {
   [ "${TELL}" ] && echo "Would create new folder ${folder} in Google Drive"
   # Create directory on drive
-  if [ "${parentid}" ]
+  if [ "${TELL}" ]
   then
-      if [ "${TELL}" ]
-      then
-        echo "gdrive mkdir --parent ${parentid} ${folder} | awk ' { print FID } '"
-      else
-        FID=`gdrive mkdir --parent ${parentid} ${folder} | awk ' { print $2 } '`
-      fi
+    echo "gdrive mkdir --parent ${parentid} ${base} | awk ' { print FID } '"
   else
-      if [ "${TELL}" ]
-      then
-        echo "gdrive mkdir ${folder} | awk ' { print FID } '"
-      else
-        FID=`gdrive mkdir ${folder} | awk ' { print $2 } '`
-      fi
+    FID=`gdrive mkdir --parent ${parentid} ${base} | awk ' { print $2 } '`
   fi
 }
 
 # Sync to drive
 if [ "${TELL}" ]
 then
-    echo "Would sync new folder ${folder} in Google Drive"
-    echo "gdrive sync upload ${folder} FID"
+    if [ "${exists}" ]
+    then
+        echo "Would sync existing folder ${folder} in Google Drive"
+    else
+        echo "Would sync new folder ${folder} in Google Drive"
+    fi
+    echo "gdrive sync upload ${delete} ${folder} FID"
 else
-    gdrive sync upload ${folder} ${FID}
+    gdrive sync upload ${delete} ${folder} ${FID}
 fi

@@ -36,11 +36,44 @@ GHOM=${HOME}/.gdrive
     exit 1
 }
 cd ${GDHOME}
+
 for file in $*
 do
-    [ -f ${file} ] || {
-        echo "$file does not exist in local sync directory. Skipping."
+    # Check to see if this is a sync folder
+    exists=
+    pdir=`dirname ${file}`
+    [ -f ${pdir}/.folderid ] || {
+        echo "Missing ${pdir}/.folderid"
+        echo "Run 'getfileids' to populate folders with ids"
+        echo "Skipping upload of ${file}"
         continue
     }
-    gdrive upload ${file}
+    parentid=`cat ${folder}/.folderid`
+    while read match
+    do
+        name=`echo ${match} | awk ' { print $2 } '`
+        [ "${name}" == "${pdir}" ] && {
+          exists=`echo ${match} | awk ' { print $1 } '`
+        }
+    done <<< `gdrive sync list --no-header`
+
+    [ "${exists}" ] && {
+      echo "${pdir} is a sync folder."
+      echo "Currently files and directories cannot be uploaded to sync folders."
+      echo "Place the desired uploads in the local ${pdir} folder"
+      echo "and run 'sync2drive ${pdir}'"
+      continue
+    }
+
+    recursive=
+    if [ -d ${file} ]
+    then
+        recursive="--recursive"
+    else
+        [ -f ${file} ] || {
+            echo "$file does not exist in local directory. Skipping."
+            continue
+        }
+    fi
+    gdrive upload ${recursive} --parent ${parentid} ${file}
 done

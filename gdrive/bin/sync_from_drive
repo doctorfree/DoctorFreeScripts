@@ -37,47 +37,65 @@ GHOM=${HOME}/.gdrive
 }
 cd ${GDHOME}
 
-MMID=
-[ -f MagicMirror/.folderid ] && MMID=`cat MagicMirror/.folderid`
-[ "${MMID}" ] || {
-    MMID="1ZAvsixgtwH14ejxEUxpkZnRPYFFInBJe"
-    echo "Could not retrieve MagicMirror folder ID"
-    echo "Using hard coded MagicMirror ID = ${MMID}"
-    echo "Execute 'getfileids' to populate folders with IDs"
+TELL=
+
+usage() {
+  printf "\nUsage: sync_from_drive [-n] [-u] folder | path/to/folder"
+  printf "\nWhere:\n\t-n indicates tell me what you would do but don't do it"
+  printf "\n\t-u displays this usage message\n"
+  exit 1
 }
 
-# Check to see if this is a sync folder
+while getopts "nu" flag; do
+    case $flag in
+        n)
+            TELL=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+folder="$1"
+[ "${folder}" ] || {
+    echo "sync2drive requires a folder name as argument"
+    usage
+}
+
+# List syncable directories
 exists=
 while read match
 do
     name=`echo ${match} | awk ' { print $2 } '`
-    [ "${name}" == "MagicMirror" ] && {
+    [ "${name}" == "${folder}" ] && {
       exists=`echo ${match} | awk ' { print $1 } '`
     }
 done <<< `gdrive sync list --no-header`
 
-[ "${exists}" ] && {
-  echo "MagicMirror is a sync folder."
-  echo "Currently files and directories cannot be uploaded to sync folders."
-  echo "Place the desired uploads in the local MagicMirror folder"
-  echo "and run 'sync2drive MagicMirror'"
-  exit 1
+[ "${exists}" ] || {
+  echo "No sync folder named ${folder} exists."
+  usage
 }
 
-for file in $*
-do
-    recursive=
-    if [ -d ${file} ]
-    then
-        recursive="--recursive"
-    else
-      [ -f ${file} ] || {
-        echo "$file does not exist in local directory. Skipping."
-        continue
-      }
-    fi
-    dir=`dirname ${file}`
-    base=`basename ${file}`
-    cd ${dir}
-    gdrive upload --parent ${MMID} ${recursive} ${base}
-done
+# Create path to folder if needed
+pdir=`dirname ${folder}`
+[ -d ${pdir} ] || {
+  if [ "${TELL}" ]
+  then
+    echo "Would create local directory ${pdir}"
+    echo "mkdir -p ${pdir}"
+  else
+    mkdir -p ${pdir}
+  fi
+}
+
+# Sync from drive
+if [ "${TELL}" ]
+then
+    echo "Would sync folder ${folder} from Google Drive"
+    echo "gdrive sync download ${exists} ${folder}"
+else
+    gdrive sync download ${exists} ${folder}
+fi
