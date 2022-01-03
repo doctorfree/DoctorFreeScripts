@@ -1,5 +1,8 @@
 #!/bin/bash
 #
+# See https://developers.google.com/drive/api/v3/ref-search-terms#operators
+# for more info on the Google Drive for Developers API (V3)
+#
 GHOM=${HOME}/.gdrive
 GDOPTS="--no-header --absolute --max 100 --name-width 0"
 
