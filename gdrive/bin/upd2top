@@ -3,6 +3,14 @@
 # See https://developers.google.com/drive/api/v3/ref-search-terms#operators
 # for more info on the Google Drive for Developers API (V3)
 #
+gdinst=`type -p gdrive`
+[ "${gdinst}" ] || {
+    echo "The 'gdrive' command is not installed or not in the execution PATH"
+    echo "Visit https://github.com/prasmussen/gdrive/releases to download"
+    echo "a 'gdrive' binary for this platform"
+    exit 1
+}
+
 GHOM=${HOME}/.gdrive
 
 [ -f ${GHOM}/gdhome ] || {

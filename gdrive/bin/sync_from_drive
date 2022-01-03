@@ -12,6 +12,14 @@
 # whose name matches that of the sync folder name and with a .folderid
 # that matches the sync folder id. Run 'getfolderids' prior to 'sync_from_drive'.
 #
+gdinst=`type -p gdrive`
+[ "${gdinst}" ] || {
+    echo "The 'gdrive' command is not installed or not in the execution PATH"
+    echo "Visit https://github.com/prasmussen/gdrive/releases to download"
+    echo "a 'gdrive' binary for this platform"
+    exit 1
+}
+
 GHOM=${HOME}/.gdrive
 
 [ -f ${GHOM}/gdhome ] || {

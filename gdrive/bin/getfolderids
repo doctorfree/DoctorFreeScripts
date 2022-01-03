@@ -17,6 +17,14 @@
 # Shared: False
 # Parents: 0B3IaKKQ-Wu1RT3p0WGUtWVJQYkE
 #
+gdinst=`type -p gdrive`
+[ "${gdinst}" ] || {
+    echo "The 'gdrive' command is not installed or not in the execution PATH"
+    echo "Visit https://github.com/prasmussen/gdrive/releases to download"
+    echo "a 'gdrive' binary for this platform"
+    exit 1
+}
+
 GHOM=${HOME}/.gdrive
 
 [ -f ${GHOM}/gdhome ] || {
