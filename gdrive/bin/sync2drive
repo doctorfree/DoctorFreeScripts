@@ -52,9 +52,10 @@ TELL=
 splitpath=1
 
 usage() {
-  printf "\nUsage: sync2drive [-k] [-m maxfiles] [-n] [-s] [-u] folder|path/to/folder"
+  printf "\nUsage: sync2drive [-k] [-l] [-m maxfiles] [-n] [-s] [-u] folder|path/to/folder"
   printf "\nWhere:"
   printf "\n\t-k indicates do not delete extraneous remote files"
+  printf "\n\t-l indicates list sync folders and exit"
   printf "\n\t-m 'maxfiles' specifies maximum number of file ids to return"
   printf "\n\t\t(default: 100)"
   printf "\n\t-n indicates tell me what you would do but don't do it"
@@ -66,10 +67,14 @@ usage() {
 
 maxfiles=100
 delete="--delete-extraneous"
-while getopts "km:nsu" flag; do
+while getopts "klm:nsu" flag; do
     case $flag in
         k)
             delete=
+            ;;
+        l)
+            gdrive sync list
+            exit 0
             ;;
         m)
             maxfiles=${OPTARG}
