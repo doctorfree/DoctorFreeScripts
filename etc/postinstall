@@ -31,7 +31,7 @@ EXPORT2="mklink md2man mkreadme mkseamless mkusb mkwmv models mp3topic mvBackups
          variety-config variety-favorite variety-fractals variety-get \
          variety-next variety-prev variety-quit variety-select variety-set \
          variety-start vidlinks webloc2url wh wikivim xmldiff \
-         xoff xstop yaml2json zipiso dlmagic gdinfo gdlist gdrm getfileids \
+         xoff xstop yaml2json zipiso dlmagic gdinfo gdlist gdrm getfolderids \
          sync2drive sync_from_drive upd2magic upd2top"
 DFS="/usr/local/DoctorFreeScripts"
 ANY="ape2m4a ape2mp4 avi2mp4 f4v2mp4 flv2mp4 \
