@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# Author: Ronald Joe Record <ronaldrecord@gmail.com>
+#
 # See https://developers.google.com/drive/api/v3/ref-search-terms#operators
 # for more info on the Google Drive for Developers API (V3)
 #
