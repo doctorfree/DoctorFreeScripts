@@ -29,6 +29,9 @@ usage: drfree <action> <project>
     # do a "git pull" and then "npm install" in the project directory.
     BUILD="mkpkg"
     case "$2" in
+      gdrive|drive)
+        PROJECT="DriveCommandLine"
+        ;;
       images)
         PROJECT="MirrorImagesPortrait"
         ;;
