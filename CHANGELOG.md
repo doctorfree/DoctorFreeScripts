@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file.
 
+Sun Jan 9 14:04:52 2022 -0800 fd33ea1 :
+   Install zip if not found, create zip artifacts in CI
+Thu Jan 6 11:57:39 2022 -0800 3b3f004 :
+   Add drive to projects
+Mon Jan 3 20:15:25 2022 -0800 748b3e0 :
+   Add author attribution
+Mon Jan 3 16:22:13 2022 -0800 236f864 :
+   Add -l option to list sync folders
+Mon Jan 3 16:11:26 2022 -0800 d30988a :
+   Renamed getfileids as getfolderids
+Mon Jan 3 13:01:47 2022 -0800 97d0e8d :
+   Check for gdrive binary in PATH
+Mon Jan 3 12:38:50 2022 -0800 ded8f3d :
+   Add options to getfolderids, start on support for spaces in file and folder names
+Mon Jan 3 10:24:36 2022 -0800 627a90d :
+   Support spaces in folder names, retrieve all folder ids
+Sun Jan 2 21:10:06 2022 -0800 1ec7cb9 :
+   Export gdrive utils
+Sun Jan 2 21:07:06 2022 -0800 40e2bdb :
+   Add gdrive scripts to exports
+Sun Jan 2 21:04:30 2022 -0800 e9d2a92 :
+   Add comment for developer's guide to api
+Sun Jan 2 20:19:56 2022 -0800 c674bc0 :
+   Add sync_from_drive, update sync2drive
+Sun Jan 2 11:48:46 2022 -0800 285acd8 :
+   Updated gdrive utility scripts
+Sat Jan 1 20:14:40 2022 -0800 a670a0d :
+   Add new scripts for command line management of Google Drive
+Fri Dec 31 08:52:06 2021 -0800 a1659d2 :
+   Add Mirco Cabbia alias
+Tue Dec 28 09:50:38 2021 -0800 904ab6d :
+   Rename MirrorCommandLine to MirrorCommand
+Mon Dec 27 18:20:34 2021 -0800 3554d70 :
+   New model alias
+Mon Dec 27 08:43:35 2021 -0800 5a2a524 :
+   New model alias
+Mon Dec 27 08:23:33 2021 -0800 a981875 :
+   Create man page for md2man
+Sun Dec 26 17:48:24 2021 -0800 6d83be7 :
+   Set output dir based on man page section in md2man
+Sat Dec 25 08:04:35 2021 -0800 ef79abb :
+   Added Colombian wallpapers
+Fri Dec 24 11:34:02 2021 -0800 0c9e9cc :
+   Adjusted aliases
+Thu Dec 23 09:38:25 2021 -0800 c2b5191 :
+   Updated model name, add Mila Azul to Ukrainians
+Wed Dec 22 16:31:35 2021 -0800 d4296b4 :
+   Use HEAD to determine branch
+Tue Dec 21 14:01:20 2021 -0800 526124a :
+   Bump release number, update changelog
 Tue Dec 21 10:26:02 2021 -0800 8c3a636 :
    Add all my clone and build scripts
 Tue Dec 21 09:43:04 2021 -0800 d625a49 :
