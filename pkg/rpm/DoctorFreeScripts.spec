@@ -12,11 +12,14 @@ Packager:   ronaldrecord@gmail.com
 Utility Bash shell scripts
 
 %prep
-cp -a %{_sourcedir}/usr %{_sourcedir}/BUILDROOT/usr
 
 %build
 
 %install
+cp -a %{_sourcedir}/usr %{buildroot}/usr
+
+%files
+/usr
 
 %post
 [ -x /usr/local/DoctorFreeScripts/etc/postinstall ] && /usr/local/DoctorFreeScripts/etc/postinstall
