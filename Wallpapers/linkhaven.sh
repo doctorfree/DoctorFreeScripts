@@ -20,6 +20,7 @@ LTL="500px Anime Art Asian Ass Beach Body_Oil Boobs_on_Boobs \
 PHD="../../Photographers"
 DIG="../../Digital_Desire"
 BDS="../../Bella_da_Semana"
+ALT="../../Alt_Girls"
 BAB="../../Babes.com"
 CHK="../../Czech"
 DOM="../../Domai"
@@ -227,6 +228,7 @@ shift $(( OPTIND - 1 ))
 # PHD="../../Photographers"
 # DIG="../../Digital_Desire"
 # BDS="../../Bella_da_Semana"
+# ALT="../../Alt_Girls"
 # BAB="../../Babes.com"
 # CHK="../../Czech"
 # DOM="../../Domai"
@@ -241,19 +243,19 @@ shift $(( OPTIND - 1 ))
 if [ "$ALL" ]
 then
     SUB="$MOD"
-    for dest in "$PHD" "$BDS" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    for dest in "$PHD" "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
     do
         DES="$dest"
         linkem
     done
     SUB="$PHO"
-    for dest in "$BDS" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    for dest in "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
     do
         DES="$dest"
         linkem
     done
     SUB="$SUI"
-    for dest in "$BDS" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    for dest in "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
     do
         DES="$dest"
         linkem
