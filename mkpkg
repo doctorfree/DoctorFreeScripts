@@ -130,7 +130,10 @@ echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
 tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tar.gz
 
 have_zip=`type -p zip`
-[ "${have_zip}" ] || ${SUDO} apt-get install zip -y
+[ "${have_zip}" ] || {
+  ${SUDO} apt-get update
+  ${SUDO} apt-get install zip -y
+}
 echo "Creating zip archive of ${PKG_NAME} ${PKG_VER} distribution"
 zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.zip usr
 
