@@ -152,8 +152,9 @@ cd "${SRC}"
 have_rpm=`type -p rpmbuild`
 [ "${have_rpm}" ] || {
   export TZ=America/Los_Angeles
+  export DEBIAN_FRONTEND=noninteractive
   ${SUDO} apt-get update
-  ${SUDO} DEBIAN_FRONTEND=noninteractive apt-get install rpm -y
+  ${SUDO} apt-get install rpm -y
 }
 
 rpmbuild -ba --build-in-place \
