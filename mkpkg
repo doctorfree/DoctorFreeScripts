@@ -151,9 +151,11 @@ cd "${SRC}"
 
 have_rpm=`type -p rpmbuild`
 [ "${have_rpm}" ] || {
-  export TZ=America/Los_Angeles
   ${SUDO} apt-get update
-  DEBIAN_FRONTEND=noninteractive ${SUDO} apt-get install rpm -y
+  export DEBIAN_FRONTEND=noninteractive
+  ${SUDO} ln -fs /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+  ${SUDO} apt-get install rpm -y
+  ${SUDO} dpkg-reconfigure --frontend noninteractive tzdata
 }
 
 rpmbuild -ba --build-in-place \
