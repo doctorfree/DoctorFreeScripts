@@ -27,6 +27,9 @@ cp -a %{_sourcedir}/usr %{buildroot}/usr
 %files
 /usr/local/DoctorFreeScripts
 /usr/local/share/doc/doctorfree-scripts
+/usr/local/share/applications/*
+/usr/local/share/bash/*
+/usr/local/share/images/*
 /usr/local/share/man/man*/*
 
 %changelog
