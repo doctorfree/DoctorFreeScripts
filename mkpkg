@@ -55,9 +55,9 @@ Description: General Purpose Command Line Tools
 
 chmod 644 ${OUT_DIR}/DEBIAN/control
 
-for dir in "${TOP}" "${LOCAL}" "${DESTDIR}" "${TOP}/share" \
-           "${DESTDIR}/share" "${DESTDIR}/share/applications" \
-            "${TOP}/share/doc" "${TOP}/share/doc/${PKG}"
+for dir in "${TOP}" "${LOCAL}" "${DESTDIR}" \
+           "${LOCAL}/share" "${LOCAL}/share/applications" \
+            "${LOCAL}/share/doc" "${LOCAL}/share/doc/${PKG}"
 do
     [ -d ${OUT_DIR}/${dir} ] || ${SUDO} mkdir ${OUT_DIR}/${dir}
     ${SUDO} chown root:root ${OUT_DIR}/${dir}
@@ -91,26 +91,26 @@ do
     }
 done
 
-${SUDO} cp Config/autostart/*.desktop "${OUT_DIR}/${DESTDIR}/share/applications"
-${SUDO} cp AUTHORS ${OUT_DIR}/${TOP}/share/doc/${PKG}/AUTHORS
-${SUDO} cp LICENSE ${OUT_DIR}/${TOP}/share/doc/${PKG}/copyright
-${SUDO} cp CHANGELOG.md ${OUT_DIR}/${TOP}/share/doc/${PKG}/changelog
-${SUDO} cp README.md ${OUT_DIR}/${TOP}/share/doc/${PKG}/README
-${SUDO} gzip -9 ${OUT_DIR}/${TOP}/share/doc/${PKG}/changelog
-${SUDO} cp -a markdown "${OUT_DIR}/${TOP}/share/doc/${PKG}/markdown"
-${SUDO} cp -a man "${OUT_DIR}/${TOP}/share/doc/${PKG}/man"
-${SUDO} cp -a man "${OUT_DIR}/${TOP}/share/man"
+${SUDO} cp Config/autostart/*.desktop "${OUT_DIR}/${LOCAL}/share/applications"
+${SUDO} cp AUTHORS ${OUT_DIR}/${LOCAL}/share/doc/${PKG}/AUTHORS
+${SUDO} cp LICENSE ${OUT_DIR}/${LOCAL}/share/doc/${PKG}/copyright
+${SUDO} cp CHANGELOG.md ${OUT_DIR}/${LOCAL}/share/doc/${PKG}/changelog
+${SUDO} cp README.md ${OUT_DIR}/${LOCAL}/share/doc/${PKG}/README
+${SUDO} gzip -9 ${OUT_DIR}/${LOCAL}/share/doc/${PKG}/changelog
+${SUDO} cp -a markdown "${OUT_DIR}/${LOCAL}/share/doc/${PKG}/markdown"
+${SUDO} cp -a man "${OUT_DIR}/${LOCAL}/share/doc/${PKG}/man"
+${SUDO} cp -a man "${OUT_DIR}/${LOCAL}/share/man"
 
 for dir in ${SUBDIRS}
 do
     ${SUDO} cp -a ${dir} ${OUT_DIR}/${DESTDIR}/${dir}
 done
 
-[ -d ${OUT_DIR}/${DESTDIR}/share ] || ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share
-[ -d ${OUT_DIR}/${DESTDIR}/share/bash ] || ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/bash
-${SUDO} cp ${DOT_FILES} ${OUT_DIR}/${DESTDIR}/share/bash
-[ -d ${OUT_DIR}/${DESTDIR}/share/images ] || ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/share/images
-${SUDO} cp ${IMG_FILES} ${OUT_DIR}/${DESTDIR}/share/images
+[ -d ${OUT_DIR}/${LOCAL}/share ] || ${SUDO} mkdir -p ${OUT_DIR}/${LOCAL}/share
+[ -d ${OUT_DIR}/${LOCAL}/share/bash ] || ${SUDO} mkdir -p ${OUT_DIR}/${LOCAL}/share/bash
+${SUDO} cp ${DOT_FILES} ${OUT_DIR}/${LOCAL}/share/bash
+[ -d ${OUT_DIR}/${LOCAL}/share/images ] || ${SUDO} mkdir -p ${OUT_DIR}/${LOCAL}/share/images
+${SUDO} cp ${IMG_FILES} ${OUT_DIR}/${LOCAL}/share/images
 [ -d ${OUT_DIR}/${DESTDIR}/etc ] || ${SUDO} mkdir -p ${OUT_DIR}/${DESTDIR}/etc
 ${SUDO} cp etc/* ${OUT_DIR}/${DESTDIR}/etc
 

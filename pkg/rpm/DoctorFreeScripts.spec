@@ -18,9 +18,6 @@ Utility Bash shell scripts
 %install
 cp -a %{_sourcedir}/usr %{buildroot}/usr
 
-%files
-/usr
-
 %post
 [ -x /usr/local/DoctorFreeScripts/etc/postinstall ] && /usr/local/DoctorFreeScripts/etc/postinstall
 
@@ -28,6 +25,8 @@ cp -a %{_sourcedir}/usr %{buildroot}/usr
 [ -x /usr/local/DoctorFreeScripts/etc/preremove ] && /usr/local/DoctorFreeScripts/etc/preremove
 
 %files
-/usr
+/usr/local/DoctorFreeScripts
+/usr/local/share/doc/doctorfree-scripts
+/usr/local/share/man/man*/*
 
 %changelog
