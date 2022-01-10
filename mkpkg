@@ -64,7 +64,6 @@ do
 done
 
 ${SUDO} cp -a Utils/bin ${OUT_DIR}/${DESTDIR}/bin
-${SUDO} cp gdrive/bin/* ${OUT_DIR}/${DESTDIR}/bin
 
 for script in ImageMagick/*
 do
