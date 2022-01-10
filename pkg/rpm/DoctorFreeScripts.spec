@@ -8,6 +8,8 @@ URL:        https://gitlab.com/doctorfree/DoctorFreeScripts
 Vendor:     Doctorwhen's Bodacious Laboratory
 Packager:   ronaldrecord@gmail.com
 
+%global __os_install_post %{nil}
+
 %description
 Utility Bash shell scripts
 
