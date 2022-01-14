@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Exit if miner not running or miner enabled
+[ -x /usr/local/bin/check_miner ] && {
+    /usr/local/bin/check_miner -q
+    [ $? -gt 0 ] && {
+        exit 1
+    }
+}
+
+ps -ef|grep /usr/local/bin/ubqminer|grep -v grep|awk ' { print $2 } '|while read PID
+do
+    sudo kill -9 $PID
+done

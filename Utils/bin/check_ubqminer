@@ -1,0 +1,28 @@
+#!/bin/bash
+
+NUM=`ps -ef|grep /usr/local/bin/ubqminer|grep -v grep|awk ' { print $2 } '|wc -w`
+TELL=1
+
+[ "$1" == "-q" ] && TELL=
+
+if [ $NUM -gt 0 ]
+then
+    [ "$TELL" ] && echo "ubqminer is running"
+    if [ -f ${HOME}/.miner_enabled ]
+    then
+        [ "$TELL" ] && echo "ubqminer is enabled"
+        exit 0
+    else
+        # exit $NUM
+        exit 0
+    fi
+else
+    [ "$TELL" ] && echo "ubqminer is not running"
+    if [ -f ${HOME}/.miner_disabled ]
+    then
+        [ "$TELL" ] && echo "ubqminer is disabled"
+        exit 1
+    else
+        exit 0
+    fi
+fi

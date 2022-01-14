@@ -1,0 +1,25 @@
+#!/bin/bash
+
+[ "$1" == "eth" ] && {
+    cd /usr/local/bin
+    sudo rm -f kernels
+    sudo ln -s kernels_ethminer kernels
+    sudo rm -f check_miner
+    sudo ln -s check_ethminer check_miner
+    sudo rm -f start_miner
+    sudo ln -s start_ethminer start_miner
+    exit 0
+}
+[ "$1" == "ubq" ] && {
+    cd /usr/local/bin
+    sudo rm -f kernels
+    sudo ln -s kernels_ubqminer kernels
+    sudo rm -f check_miner
+    sudo ln -s check_ubqminer check_miner
+    sudo rm -f start_miner
+    sudo ln -s start_ubqminer start_miner
+    exit 0
+}
+
+echo "Usage: switch_miner eth|ubq"
+exit 1

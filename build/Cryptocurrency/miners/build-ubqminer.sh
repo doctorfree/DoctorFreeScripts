@@ -23,4 +23,9 @@ cd build
 #cmake ..
 cmake .. -DETHASHCUDA=OFF -DETHASHCL=ON
 cmake --build .
-[ "$1" == "-i" ] && sudo make install
+[ "$1" == "-i" ] && {
+    sudo make install
+    [ -x /usr/local/bin/ethminer ] && {
+        sudo mv /usr/local/bin/ethminer /usr/local/bin/ubqminer
+    }
+}
