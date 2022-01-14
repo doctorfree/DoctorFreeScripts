@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# https://askubuntu.com/questions/1364529/remove-updated-software-notification-on-20-04-2-lts
+#
+# Modified by Ronald Record <ronaldrecord@gmail.com> to check distribution release
+
+[ -f /etc/lsb-release ] || {
+    echo "/etc/lsb-release does not exist or is not readable"
+    echo "Exiting"
+    exit 1
+}
+. /etc/lsb-release
+
+echo ${DISTRIB_RELEASE} | grep 20.04 > /dev/null && {
+    echo "Disabing update-notifier on Ubuntu 20.04"
+    # disable cron jobs for Update Notifier
+    sudo chmod -x /etc/cron.daily/update-notifier-common
+    sudo chmod -x /etc/cron.weekly/update-notifier-common
+
+    # disable graphical Update Notifier application
+    mkdir -p ~/.config/autostart/
+    cp /etc/xdg/autostart/update-notifier.desktop ~/.config/autostart/
+
+    grep -q "^X-$XDG_CURRENT_DESKTOP-Autostart-enabled" ~/.config/autostart/update-notifier.desktop && sed -i "s/X-$XDG_CURRENT_DESKTOP-Autostart-enabled=true/X-$XDG_CURRENT_DESKTOP-Autostart-enabled=false/" ~/.config/autostart/update-notifier.desktop || echo "X-$XDG_CURRENT_DESKTOP-Autostart-enabled=false" >> ~/.config/autostart/update-notifier.desktop
+    exit 0
+}
+
+echo ${DISTRIB_RELEASE} | grep 21.04 > /dev/null && {
+    echo "Disabing update-notifier on Ubuntu 21.04"
+    # disable cron jobs for Update Notifier
+    sudo systemctl disable update-notifier-download.timer
+    sudo systemctl disable update-notifier-motd.timer
+
+    # disable graphical Update Notifier application
+    mkdir -p ~/.config/autostart/
+    cp /etc/xdg/autostart/update-notifier.desktop ~/.config/autostart/
+
+    grep -q "^X-$XDG_CURRENT_DESKTOP-Autostart-enabled" ~/.config/autostart/update-notifier.desktop && sed -i "s/X-$XDG_CURRENT_DESKTOP-Autostart-enabled=true/X-$XDG_CURRENT_DESKTOP-Autostart-enabled=false/" ~/.config/autostart/update-notifier.desktop || echo "X-$XDG_CURRENT_DESKTOP-Autostart-enabled=false" >> ~/.config/autostart/update-notifier.desktop
+    exit 0
+}
+
+echo "No supported platform found"
+echo "This utility only works with Ubuntu 20.04 and 21.04"
+exit 1

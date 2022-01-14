@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# Requires a private access token with api scope
+# Pass the token to release-cli as the --private-token global flag
+# or
+# Define an environment variable $GITLAB_PRIVATE_TOKEN and set it to the token
+#
+
+SERVER_URL="https://gitlab.com"
+
+# Project IDs:
+#
+# DriveCommandLine
+# PROJECT_ID="32557383"
+#
+# MirrorCommand
+# PROJECT_ID="30164802"
+#
+# RoonCommandLine
+# PROJECT_ID="25624069"
+#
+# DoctorFreeScripts
+PROJECT_ID="7060937"
+
+# Tag Names:
+#
+# DoctorFreeScripts
+TAG_NAME="v4.0r3"
+
+HELP=
+[ "$1" == "-h" ] && HELP=1
+if [ "${HELP}" ]
+then
+    release-cli --server-url ${SERVER_URL} \
+                --project-id ${PROJECT_ID} get --help \
+                --tag-name ${TAG_NAME}
+else
+    release-cli --server-url ${SERVER_URL} \
+                --project-id ${PROJECT_ID} get \
+                --tag-name ${TAG_NAME} | jq .
+fi
