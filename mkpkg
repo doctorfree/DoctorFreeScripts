@@ -126,7 +126,7 @@ cd dist
 ${SUDO} dpkg --build ${PKG_NAME}_${PKG_VER} ${PKG_NAME}_${PKG_VER}-${PKG_REL}.deb
 cd ${PKG_NAME}_${PKG_VER}
 echo "Creating compressed tar archive of ${PKG_NAME} ${PKG_VER} distribution"
-tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tar.gz
+tar cf - usr | gzip -9 > ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.tgz
 
 have_zip=`type -p zip`
 [ "${have_zip}" ] || {
@@ -140,7 +140,7 @@ zip -q -r ../${PKG_NAME}_${PKG_VER}-${PKG_REL}.zip usr
     cd ..
     [ -d ../releases ] || mkdir ../releases
     [ -d ../releases/${PKG_VER} ] || mkdir ../releases/${PKG_VER}
-    ${SUDO} cp *.deb *.gz *.zip ../releases/${PKG_VER}
+    ${SUDO} cp *.deb *.tgz *.zip ../releases/${PKG_VER}
 }
 
 # RPM distribution build
@@ -165,7 +165,18 @@ rpmbuild -ba --build-in-place \
    --buildroot ${SRC}/${OUT_DIR}/BUILDROOT \
    ${OUT_DIR}/rpm/${PKG_NAME}.spec
 
-${SUDO} cp dist/${PKG_NAME}_${PKG_VER}/RPMS/*/*.rpm dist
+# Rename RPMs if necessary
+for rpmfile in ${OUT_DIR}/RPMS/*/*.rpm
+do
+  [ "${rpmfile}" == "${OUT_DIR}/RPMS/*/*.rpm" ] && continue
+  rpmbas=`basename ${rpmfile}`
+  rpmdir=`dirname ${rpmfile}`
+  newnam=`echo ${rpmbas} | sed -e "s/${PKG_NAME}-${PKG_VER}-${PKG_REL}/${PKG_NAME}_${PKG_VER}-${PKG_REL}/" -e "s/noarch.rpm/rpm/"`
+  [ "${rpmbas}" == "${newnam}" ] && continue
+  mv ${rpmdir}/${rpmbas} ${rpmdir}/${newnam}
+done
+
+${SUDO} cp ${OUT_DIR}/RPMS/*/*.rpm dist
 
 [ "${GCI}" ] || {
     [ -d releases ] || mkdir releases
