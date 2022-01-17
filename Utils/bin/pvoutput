@@ -1,4 +1,4 @@
-#!/opt/local/bin/perl
+#!/usr/bin/perl
 
 # Get solar production data from Enphase Enlighten
 # and submit to http://pvoutput.org
