@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+Mon Jan 17 12:06:57 2022 -0800 6bc24c5 :
+   Move pvoutput to MirrorCommand
+Mon Jan 17 12:06:31 2022 -0800 8dd49ed :
+   Bump release
+Fri Jan 14 13:52:28 2022 -0800 1ab3135 :
+   Update miner scripts
+Fri Jan 14 10:49:45 2022 -0800 988389c :
+   Add disable-update-notifier and pkg/tools/get_release
+Mon Jan 10 12:23:00 2022 -0800 6e4799a :
+   Do not package or export gdrive utils
+Mon Jan 10 12:19:41 2022 -0800 9c85af0 :
+   Remove gdrive files as they are now packaged in their own repo
+Sun Jan 9 17:43:49 2022 -0800 8962417 :
+   disable rpmbuild strip
+Sun Jan 9 17:18:32 2022 -0800 5af1d70 :
+   Fix files section of spec file
+Sun Jan 9 17:10:20 2022 -0800 905d402 :
+   Move all files into /usr/local
+Sun Jan 9 16:39:42 2022 -0800 e27d740 :
+   Try noninteractive rpm install again
+Sun Jan 9 15:35:04 2022 -0800 64ddc3a :
+   Fix for CI
+Sun Jan 9 15:28:21 2022 -0800 fd5915b :
+   export noninteractive
+Sun Jan 9 15:18:00 2022 -0800 c6e51e9 :
+   Copy rpm dist tree in install phase
+Sun Jan 9 14:46:58 2022 -0800 bfa4e07 :
+   Install rpm in CI in noninteractive mode with TZ set
+Sun Jan 9 14:17:31 2022 -0800 53255f8 :
+   Use ubuntu:latest CI image
+Sun Jan 9 14:09:05 2022 -0800 c6963e9 :
+   Version 4.0 release 3
 Sun Jan 9 14:04:52 2022 -0800 fd33ea1 :
    Install zip if not found, create zip artifacts in CI
 Thu Jan 6 11:57:39 2022 -0800 3b3f004 :

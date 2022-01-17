@@ -167,6 +167,7 @@ SYNCTL="${DFS}/bin/synergyctl"
   }
 }
 
-[ -x ${DFS}/bin/dl_fred_scripts ] && ${DFS}/bin/dl_fred_scripts
+# This breaks the RPM install as RPM is always non-interactive
+# [ -x ${DFS}/bin/dl_fred_scripts ] && ${DFS}/bin/dl_fred_scripts
 
 exit 0

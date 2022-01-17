@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# dl_fred_scripts - download Fred's ImageMagick scripts
+
+# Modify this list of scripts if you wish to download others
+SCRIPTS="edgefx edges juliaset mandelbrot mesmerize sketch sketching"
 
 DOM="http://www.fmwconcepts.com/imagemagick"
 
@@ -44,7 +49,7 @@ do
 done
 
 [ "${INSTALL}" ] && {
-  for EXE in edgefx edges juliaset mandelbrot mesmerize sketch sketching
+  for EXE in ${SCRIPTS}
   do
     SCR="downloadcounter.php?scriptname=${EXE}&dirname=${EXE}"
     OUT=/usr/local/bin/${EXE}
