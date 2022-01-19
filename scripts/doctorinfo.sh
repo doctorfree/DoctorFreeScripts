@@ -40,7 +40,7 @@ have_vcgencmd=`type -p vcgencmd`
 [ "${have_vcgencmd}" == "${MCL_HOME}/bin/vcgencmd" ] && fake_vcgencmd=1
 
 # Set this to the X11 DISPLAY you are using. DISPLAY=:0 works for most systems.
-export DISPLAY=:0
+export DISPLAY=${DISPLAY:=:0}
 
 MIRRORSCREEN="${MCL_HOME}/etc/mirrorscreen"
 HAVE_PORT=

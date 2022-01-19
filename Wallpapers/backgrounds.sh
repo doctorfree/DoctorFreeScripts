@@ -212,7 +212,7 @@ then
       fi
     fi
     # TODO: Set background on systems without pcmanfm
-    [ "$foundpaper" ] && DISPLAY=:0 pcmanfm --set-wallpaper=$paper
+    [ "$foundpaper" ] && DISPLAY=${DISPLAY:=:0} pcmanfm --set-wallpaper=$paper
 fi
 
 [ "$show" ] && {
@@ -419,7 +419,7 @@ EOF
         else
             if [ "${pcman}" ]
             then
-                DISPLAY=:0 pcmanslideshow
+                DISPLAY=${DISPLAY:=:0} pcmanslideshow
             else
                 echo "No slideshow program found for this platform"
             fi

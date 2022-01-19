@@ -31,7 +31,6 @@ then
     # increase if problems
     #sleep 1s
     # you can change this command with your desktop manager's one
-    DISPLAY=:0
-    export DISPLAY
+    export DISPLAY=${DISPLAY:=:0}
     pcmanfm --set-wallpaper="$selectedFile"
 fi
