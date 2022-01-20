@@ -21,9 +21,13 @@ Utility Bash shell scripts
 cp -a %{_sourcedir}/usr %{buildroot}/usr
 
 %post
+exec 1>/proc/${PPID}/fd/1
+exec 2>/proc/${PPID}/fd/2
 [ -x /usr/local/DoctorFreeScripts/etc/postinstall ] && /usr/local/DoctorFreeScripts/etc/postinstall
 
 %preun
+exec 1>/proc/${PPID}/fd/1
+exec 2>/proc/${PPID}/fd/2
 [ -x /usr/local/DoctorFreeScripts/etc/preremove ] && /usr/local/DoctorFreeScripts/etc/preremove
 
 %files
