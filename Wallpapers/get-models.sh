@@ -457,6 +457,13 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Tempe"
             ;;
+        Muriel)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Muriel_Senderos"
+            get_search "${MODD}/${model}" "Muryel_Senderos"
+            get_search "${MODD}/${model}" "Muriel_Hegre"
+            get_search "${MODD}/${model}" "Muriel_Makovitz"
+            ;;
         Mya)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Jati"
