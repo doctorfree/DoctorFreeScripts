@@ -6,9 +6,7 @@
 #
 
 NUMBACK=`date "+%Y%m%d"`
-OUT_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
 OUT_FILE="Raspbian-MagicMirror-${NUMBACK}.iso"
-DEVNAM="disk3"
 TELL=
 ZIP=
 
@@ -16,6 +14,16 @@ usage() {
     echo "Usage: sdbackup [-n] [-o filename] [-z] [-d disk#]"
     exit 1
 }
+
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+    DEVNAM="disk3"
+    OUT_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
+else
+    DEVNAM="sde"
+    OUT_DIR="/u/gdrive/MagicMirror/Raspberry_Pi"
+fi
 
 while getopts d:no:uz flag; do
     case $flag in
@@ -42,13 +50,24 @@ while getopts d:no:uz flag; do
 done
 shift $(( OPTIND - 1 ))
 
-DEVICE="/dev/r${DEVNAM}"
+if [ "${platform}" == "Darwin" ]
+then
+    DEVICE="/dev/r${DEVNAM}"
+    FOUND=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } ' | cut -c 1-5`
+    FOUND="/dev/r${FOUND}"
+else
+    DEVICE="/dev/${DEVNAM}"
+    FOUND=`sudo fdisk -l | grep FAT32 | awk ' { print $1 } ' | sed 's/[0-9]\+$//'`
+fi
 
-FOUND=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } ' | cut -c 1-5`
-
-[ "${FOUND}" == "${DEVNAM}" ] || {
-    echo "Discovered SD card on ${FOUND} does not match specified device ${DEVNAM}"
-    echo "Use 'diskutil list' or Disk Utility to verify correct device node"
+[ "${FOUND}" == "${DEVICE}" ] || {
+    echo "Discovered SD card on ${FOUND} does not match specified device ${DEVICE}"
+    if [ "${platform}" == "Darwin" ]
+    then
+      echo "Use 'diskutil list' or Disk Utility to verify correct device node"
+    else
+      echo "Use 'sudo fdisk -l' to verify correct device node"
+    fi
     echo "Exiting"
     usage
 }
