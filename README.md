@@ -181,6 +181,7 @@ issueing the following commands:
 - [man saver](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/saver.1.md)
 - [man sdbackup](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/sdbackup.1.md)
 - [man sderase](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/sderase.1.md)
+- [man sdlist](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/sdlist.1.md)
 - [man sdrestore](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/sdrestore.1.md)
 - [man setwall](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/setwall.1.md)
 - [man updgit](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/updgit.1.md)

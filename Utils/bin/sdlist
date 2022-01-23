@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# sdlist - List SD card device info
+#
+# Written January 2022 by Ronald Joe Record <rr at ronrecord dot com>
+#
+platform=`uname -s`
+
+usage() {
+    echo "Usage: sdlist"
+    exit 1
+}
+
+while getopts u flag; do
+    case $flag in
+        u)
+            usage
+            ;;
+        *)
+            echo "Unrecognized argument: $flag"
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+if [ "${platform}" == "Darwin" ]
+then
+    DEVICE=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } '`
+    diskutil list ${DEVICE}
+else
+    DEVICE=`sudo fdisk -l | grep FAT32 | awk ' { print $1 } ' | sed 's/[0-9]\+$//'`
+    sudo fdisk -l ${DEVICE}
+fi
+
+[ "${DEVICE}" ] || echo "No FAT32 devices found"
