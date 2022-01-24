@@ -1,0 +1,89 @@
+#!/bin/bash
+#
+# sdmount - mount an SD card
+#
+# Written February 2020 by Ronald Joe Record <rr at ronrecord dot com>
+#
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+    DEVNAM="disk3"
+else
+    DEVNAM="sdd"
+    USER=`id -u -n`
+fi
+TELL=
+
+usage() {
+    echo "Usage: sdmount [-n] [-d disk#]"
+    exit 1
+}
+
+while getopts d:nu flag; do
+    case $flag in
+        d)
+            DEVNAM="$OPTARG"
+            ;;
+        n)
+            TELL=1
+            ;;
+        u)
+            usage
+            ;;
+        *)
+            echo "Unrecognized argument: $flag"
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+if [ "${platform}" == "Darwin" ]
+then
+    DEVICE="/dev/r${DEVNAM}"
+    FOUND=`diskutil list | grep Windows_FAT_32 | awk ' { print $6 } ' | cut -c 1-5`
+    FOUND="/dev/r${FOUND}"
+else
+    DEVICE="/dev/${DEVNAM}"
+    FOUND=`sudo fdisk -l | grep FAT32 | awk ' { print $1 } ' | sed 's/[0-9]\+$//'`
+fi
+
+[ "${FOUND}" == "${DEVICE}" ] || {
+    echo "Discovered SD card on /dev/${FOUND} does not match specified device ${DEVICE}"
+    if [ "${platform}" == "Darwin" ]
+    then
+      echo "Use 'diskutil list' or Disk Utility to verify correct device node"
+    else
+      echo "Use 'sudo fdisk -l' to verify correct device node"
+    fi
+    echo "Exiting"
+    usage
+}
+
+if [ "${platform}" == "Darwin" ]
+then
+  if [ "${TELL}" ]
+  then
+    echo "diskutil mountDisk ${DEVICE}"
+  else
+    diskutil mountDisk ${DEVICE}
+  fi
+else
+  sudo fdisk -l ${DEVICE} | grep ^${DEVICE} | while read devlist
+  do
+    dev=`echo ${devlist} | awk ' { print $1 } '`
+    mount | grep ^${dev} > /dev/null && continue
+    b=`basename ${dev}`
+    if [ "${TELL}" ]
+    then
+      [ -d /media ] || echo "sudo mkdir /media"
+      [ -d /media/${USER} ] || echo "sudo mkdir /media/${USER}"
+      [ -d /media/${USER}/${b} ] || echo "sudo mkdir /media/${USER}/${b}"
+      echo "sudo mount ${dev} /media/${USER}/${b}"
+    else
+      [ -d /media ] || sudo mkdir /media
+      [ -d /media/${USER} ] || sudo mkdir /media/${USER}
+      [ -d /media/${USER}/${b} ] || sudo mkdir /media/${USER}/${b}
+      sudo mount ${dev} /media/${USER}/${b}
+    fi
+  done
+fi
