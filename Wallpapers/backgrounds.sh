@@ -29,8 +29,9 @@ mirror=
 # Modify these image folder settings to reflect your image folder layout
 if [ "$mirror" ]
 then
+    USER=`id -u -n`
     # MagicMirror image folders
-    LIN_TOP=/mnt/transcend/Pictures
+    LIN_TOP=/media/${USER}/Transcend/Pictures
     PRE_TOP=$HOME/Pictures/Backgrounds
 else
     # Linux Desktop image folders
