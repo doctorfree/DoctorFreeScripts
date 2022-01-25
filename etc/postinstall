@@ -20,7 +20,7 @@ EXPORT1="any2any aptsearch audlinks backgrounds build-sgminer cap2any \
          githubinit gitinit gitlog gitlogtoday gitshow gittag hangup \
          imfonts.pl installamdgpu install-to-project-repo.py instdeb \
          keybinds-pipemenu killscreen latest lgitinit linkhaven listgit \
-         doctorinfo mandelhist mkcomps mkdiffs"
+         journalclean doctorinfo mandelhist mkcomps mkdiffs"
 EXPORT2="mklink md2man mkreadme mkseamless mkusb mkwmv models mp3topic mvBackups \
          mvdown myterm nouchg obam.pl only packaud pcmanslideshow piclinks \
          playkeynote progress_bar puml randback randmodel reget remdeb \
