@@ -15,7 +15,7 @@ then
     DEVNAM="disk3"
     INP_DIR="/Volumes/Seagate_8TB/Raspberry_Pi/Backups"
 else
-    DEVNAM="sde"
+    DEVNAM="sdd"
     INP_DIR="/u/gdrive/MagicMirror/Raspberry_Pi"
 fi
 

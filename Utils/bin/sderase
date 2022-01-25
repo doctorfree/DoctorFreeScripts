@@ -9,7 +9,7 @@ if [ "${platform}" == "Darwin" ]
 then
     DEVNAM="disk3"
 else
-    DEVNAM="sde"
+    DEVNAM="sdd"
 fi
 TELL=
 
