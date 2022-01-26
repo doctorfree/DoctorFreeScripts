@@ -4,8 +4,8 @@ After=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/start_ethminer -d 30 -s
-ExecStop=/usr/local/bin/stop_ethminer
+ExecStart=/bin/bash /usr/local/bin/start_ethminer -d 30 -s
+ExecStop=/bin/bash /usr/local/bin/stop_ethminer
 
 [Install]
 WantedBy=multi-user.target
