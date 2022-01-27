@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file.
 
+Jan 27, 2022 Version 4.0.1 Release 2
+    Minor release update with improved support for SD management utilities,
+    extending supported platforms to Linux for the SD utils.
+
+Jan 17, 2022 Version 4.0.1 Release 1
+    Release update to Version 4.0.1 including additional man pages
+    and Zip format distribution archive. Minor bug fixes and improvements.
+    RPM installation fixes.
+
+Nov 26, 2021 Version 4.0 Release 1
+    This release adds Debian and RPM format installation package support with
+    improved support for ease of installation, configuration, update, and removal.
+
+Wed Jan 26 14:27:43 2022 -0800 b752940 :
+   Exec /bin/bash in systemd service to comply with Fedora restrictions
+Tue Jan 25 08:37:12 2022 -0800 f38080d :
+   Add journalclean command
+Tue Jan 25 07:14:52 2022 -0800 d4b92fc :
+   Set backgrounds folder to /media/user/Transcend by default on Linux
+Mon Jan 24 18:21:57 2022 -0800 363a940 :
+   Change default SD device to /dev/sdd
+Mon Jan 24 10:17:35 2022 -0800 3be3fab :
+   Add documentation for sdmount and sdumount
+Sun Jan 23 19:48:26 2022 -0800 4088f8d :
+   Add sdmount and sdumount commands
+Sun Jan 23 10:31:20 2022 -0800 68b537d :
+   Doc for sdlist
+Sun Jan 23 10:04:48 2022 -0800 04f8708 :
+   Add sdlist command
+Sat Jan 22 16:03:14 2022 -0800 02729e7 :
+   Extend SD utilities with Linux support
+Fri Jan 21 07:50:47 2022 -0800 6be5d58 :
+   Muriel aliases
+Thu Jan 20 11:45:13 2022 -0800 24d045d :
+   Redirect stderr and stdout to parent process during RPM scriptlets
+Tue Jan 18 17:17:31 2022 -0800 2152b2d :
+   Use DISPLAY env var if set
+Tue Jan 18 13:20:58 2022 -0800 85da437 :
+   Add doctorinfo script
+Mon Jan 17 13:52:51 2022 -0800 65cd49e :
+   Adopt release creation during Gitlab CI
+Mon Jan 17 13:42:38 2022 -0800 735ff4e :
+   Do not invoke dl_fred_scripts during postinstall, new version string
 Mon Jan 17 12:06:57 2022 -0800 6bc24c5 :
    Move pvoutput to MirrorCommand
 Mon Jan 17 12:06:31 2022 -0800 8dd49ed :
