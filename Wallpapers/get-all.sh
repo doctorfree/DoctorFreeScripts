@@ -187,6 +187,7 @@ do
         get_search "${dir}" "Sara_Calixto"
         get_search "${dir}" "Valery_Ponce"
         get_search "${dir}" "Hinata_Suicide"
+        get_search "${dir}" "Calypso_Muse"
         ;;
     Czech)
         get_search "${dir}" "${dir}"
