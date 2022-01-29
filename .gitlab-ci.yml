@@ -47,20 +47,20 @@ release:
       artifacts: true
   release:
     name: 'DoctorFreeScripts Version $VERSION release $RELEASE'
-    description: 'Created using the release-cli'
+    description: './pkg/release.md'
     tag_name: 'v${VERSION}r${RELEASE}'
     assets:
       links:
-        - name: 'Debian format installation package (Ubuntu Linux, etc)'
+        - name: 'DoctorFreeScripts_${VERSION}-${RELEASE}.deb - Debian format installation package (Ubuntu Linux, etc)'
           url: 'https://gitlab.com/doctorfree/DoctorFreeScripts/-/jobs/${BUILD_JOB_ID}/artifacts/file/dist/DoctorFreeScripts_${VERSION}-${RELEASE}.deb'
           link_type: 'package'
-        - name: 'RPM format installation package (CentOS/Fedora Linux etc)'
+        - name: 'DoctorFreeScripts_${VERSION}-${RELEASE}.rpm - RPM format installation package (CentOS/Fedora Linux etc)'
           url: 'https://gitlab.com/doctorfree/DoctorFreeScripts/-/jobs/${BUILD_JOB_ID}/artifacts/file/dist/DoctorFreeScripts_${VERSION}-${RELEASE}.rpm'
           link_type: 'package'
-        - name: 'Compressed tar format distribution archive'
+        - name: 'DoctorFreeScripts_${VERSION}-${RELEASE}.tgz - Compressed tar format distribution archive'
           url: 'https://gitlab.com/doctorfree/DoctorFreeScripts/-/jobs/${BUILD_JOB_ID}/artifacts/file/dist/DoctorFreeScripts_${VERSION}-${RELEASE}.tgz'
           link_type: 'other'
-        - name: 'Zip format distribution archive'
+        - name: 'DoctorFreeScripts_${VERSION}-${RELEASE}.zip - Zip format distribution archive'
           url: 'https://gitlab.com/doctorfree/DoctorFreeScripts/-/jobs/${BUILD_JOB_ID}/artifacts/file/dist/DoctorFreeScripts_${VERSION}-${RELEASE}.zip'
           link_type: 'other'
   only:
