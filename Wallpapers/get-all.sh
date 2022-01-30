@@ -283,6 +283,7 @@ do
         get_search "${dir}" "Angelika_Wachowska"
         get_search "${dir}" "Iga_Wyrwal"
         get_search "${dir}" "Justyna_Dabkowska"
+        get_search "${dir}" "Marta_Gut"
         get_search "${dir}" "Monika_Pietrasinska"
         get_search "${dir}" "Olga_Kaminska"
         get_search "${dir}" "Sandra_Ciechomska"
