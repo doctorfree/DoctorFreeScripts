@@ -3,7 +3,7 @@
 TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
 
 # Subdirs with model name subdirs
-JAP="$TOP/Japanese"
+JAV="$TOP/JAV_Idol"
 MOD="$TOP/Models"
 PHO="$TOP/Photographers"
 SUI="$TOP/Suicide_Girls"
@@ -25,7 +25,9 @@ BAB="../../Babes.com"
 CHK="../../Czech"
 DOM="../../Domai"
 FEM="../../Femjoy"
-JAV="../JAV_Idol"
+CHN="../../Chinese"
+JAP="../../Japanese"
+ASN="../../Asian"
 MET="../../Met-Art"
 DRO="../../Photodromm"
 PLA="../../Playboy"
@@ -179,8 +181,8 @@ while getopts abcdfhjnmpqrsBDPSwzUu flag; do
             LN="ln"
             ;;
         j)
-            DES="$JAV"
-            SUB="$JAP"
+            DES="$JAP"
+            SUB="$JAV"
             ;;
         m)
             DES="$MET"
@@ -224,6 +226,12 @@ done
 shift $(( OPTIND - 1 ))
 [ "${VERB}" ] && printf "\n"
 
+[ -d "${TOP}" ] || {
+  echo "$TOP does not exist or is not a directory. Exiting."
+  exit 1
+}
+cd "${TOP}"
+
 # The destinations
 # PHD="../../Photographers"
 # DIG="../../Digital_Desire"
@@ -260,9 +268,12 @@ then
         DES="$dest"
         linkem
     done
-    DES="$JAV"
-    SUB="$JAP"
-    linkem
+    SUB="$JAV"
+    for dest in "$JAP" "$CHN" "$ASN"
+    do
+        DES="$dest"
+        linkem
+    done
     for des in "Playboy"
     do
         for sub in "${des}_*"

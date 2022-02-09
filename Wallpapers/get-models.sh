@@ -557,7 +557,6 @@ get_model() {
               get_search "${photomodel}" "${modelname}"
               case "$modelname" in
                 Brittie_Photodromm)
-                  get_search "${photomodel}" "Brittie_\(Photodromm\)"
                   get_search "${photomodel}" "Brittie"
                   ;;
                 Claudia_Photodromm)
