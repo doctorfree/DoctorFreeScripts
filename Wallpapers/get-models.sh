@@ -572,6 +572,10 @@ get_model() {
                 Karola_Photodromm)
                   get_search "${photomodel}" "Karola"
                   ;;
+                Maria_Dezideryeva)
+                  get_search "${photomodel}" "Maria_Photodromm"
+                  get_search "${photomodel}" "Maria_Dreamgirl"
+                  ;;
                 Rachel_Photodromm)
                   get_search "${photomodel}" "Taliah"
                   get_search "${photomodel}" "Anna_D"
