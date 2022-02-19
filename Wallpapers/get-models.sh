@@ -886,6 +886,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Brookliyn"
             ;;
+        Sophie_Gem)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Sophie_Sweet"
+            ;;
         Sofie_Lilith)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sofie_Lilith_\(iStripper.com\)"
