@@ -10,6 +10,9 @@
 Ronnie Record
 =============
 
+>  <fuufnf@ronrecord.com> • 831-xxx-xxxx •\
+>  522 Laurent Street, Santa Cruz, CA 95060
+
 ----
 
 >  Specialties: Time Dilation, Party Host, Freeform Dancer,\
@@ -41,10 +44,11 @@ Accomplishments
 *  [Found my bowling ball](https://archive.ronrecord.com/Stories/bowling.html) in an abandoned Victorian in Gainesville, Florida
 *  Managed SCO softball team to two second place finishes in the slow pitch 'D' league
 *  Bobby Darin and Nancy Sinatra invited me and my brother into Bobby's hotel room
-*  I touched Mickey Mantle's forearm hair
+*  Touched Mickey Mantle's forearm hair
 *  Bought a drink for Harry Dean Stanton
-*  Hitchhiked from Seattle to Enid, Oklahoma without ever needing to stick out my thumb
-*  "*We've got a naked hippie reading science fiction by candlelight in the rain*" - call by cop when I was discovered in azalea bushes
+*  Fired from University of Florida for giving everyone 'A's
+*  Hitchhiked from Seattle to Enid without ever needing to stick out my thumb
+*  "*We've got a naked hippie reading science fiction by candlelight in the rain*" - call by cop after being discovered in azalea bushes
 
 Social Media / Projects
 -----------------------
@@ -56,8 +60,3 @@ Social Media / Projects
 * LinkedIn: [https://www.linkedin.com/in/ronrecord](https://www.linkedin.com/in/ronrecord)
 * Twitter: [https://twitter.com/ronrecord](https://twitter.com/ronrecord)
 * YouTube: [https://www.youtube.com/c/doctorfree](https://www.youtube.com/c/doctorfree)
-
-----
-
->  <fuufnf@ronrecord.com> • 831-xxx-xxxx •\
->  522 Laurent Street, Santa Cruz, CA 95060

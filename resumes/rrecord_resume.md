@@ -80,10 +80,10 @@ Earlier Technical Highlights
 *  Founding member, [86open](https://en.wikipedia.org/wiki/Executable_and_Linkable_Format#86open)
 *  Senior SCO Security Officer
 *  Technical lead in research, planning & presentation of a 1990's Cloud Computing initiative
-*  Created, designed & prototyped the SCO Webtop (applications, data & system services embedded in a browser over a web connection)
+*  Created, designed & prototyped the [SCO Webtop](https://en.wikipedia.org/wiki/Web_desktop)
 *  Guided and coordinated a global team of engineers in the design and production of the SCO Skunkware CD-ROMs (Open Source solutions for developers and partners)
 *  Ported, integrated, packaged, distributed and maintained hundreds of Open Source projects
-*  Architect of GNUnix, an integrated Open Source and UNIX operating system and user environment (GNU is a recursive acronym standing for GNU is Now Unix)
+*  Architect of GNUnix, an integrated Open Source and UNIX operating system and user environment
 *  Designed and implemented SCO world-wide source and revision control system
 *  Created energy efficient smart home using technology developed in the Automatic Guidance and Navigation group at NASA Ames Research Center
 
@@ -92,12 +92,11 @@ Publications
 
 *  Gardini, L., R. H. Abraham, R. J. Record, D. Fournier-Prunaret, [1994] "A Double Logistic Map", International Journal of Bifurcation and Chaos, Vol. 4, No. 1, 145-176
 *  Abraham, R. H., G. Chichilnisky, R. J. Record, [1994] "Dynamics of North-South Trade and the Environment", Environmental Economics, Graciela Chichilnisky, ed., Mattei Foundation, Milan
-*  Co-author "Chaos in Discrete Dynamical Systems: A Visual Introduction in 2 Dimensions", (May, 1997) Telos/Springer-Verlag
-*  Co-author of "Just Plane Chaos" teaching guide CD-ROM
+*  Co-author "Chaos in Discrete Dynamical Systems: A Visual Introduction in 2 Dimensions", Telos/Springer-Verlag
+*  Co-author "Just Plane Chaos" teaching guide CD-ROM
 *  Co-author and presenter of a paper on Linux emulation at 1998 Summer USENIX
-*  Author of "SCO and the Open Source Movement" SCO World article, Jan/Feb/Mar 1999 - Volume 6 - Number 1
-*  Author of "Porting Open Source Software to SCO" SCO World article, November/December 1999 - Volume 6 - Number 6
-
+*  Author "SCO and the Open Source Movement", SCO World, Jan/Feb/Mar 1999
+*  Author "Porting Open Source Software to SCO", SCO World, November/December 1999
 
 Social Media / Projects
 -----------------------
