@@ -1,0 +1,276 @@
+% Copyright 2013 Christophe-Marie Duquesne <chmd@chmd.fr>
+% Copyright 2014 Mark Szepieniec <http://github.com/mszep>
+% 
+% ConText style for making a resume with pandoc. Inspired by moderncv.
+% 
+% This CSS document is delivered to you under the CC BY-SA 3.0 License.
+% https://creativecommons.org/licenses/by-sa/3.0/deed.en_US
+
+\startmode[*mkii]
+  \enableregime[utf-8]  
+  \setupcolors[state=start]
+\stopmode
+
+\setupcolor[hex]
+\definecolor[titlegrey][h=757575]
+\definecolor[sectioncolor][h=397249]
+\definecolor[rulecolor][h=9cb770]
+
+% Enable hyperlinks
+\setupinteraction[state=start, color=sectioncolor]
+
+\setuppapersize [letter][letter]
+\setuplayout    [width=middle, height=middle,
+                 backspace=20mm, cutspace=0mm,
+                 topspace=10mm, bottomspace=20mm,
+                 header=0mm, footer=0mm]
+
+%\setuppagenumbering[location={footer,center}]
+
+\setupwhitespace[medium]
+
+\setupblackrules[width=31mm, color=rulecolor]
+
+\setuphead[chapter]      [style=\tfd]
+\setuphead[section]      [style=\tfd\bf, color=titlegrey, align=middle]
+\setuphead[subsection]   [style=\tfb\bf, color=sectioncolor, align=right,
+                          before={\leavevmode\blackrule\hspace}]
+\setuphead[subsubsection][style=\bf]
+
+\setuphead[chapter, section, subsection, subsubsection][number=no]
+
+%\setupdescriptions[width=10mm]
+
+\definedescription
+  [description]
+  [headstyle=bold, style=normal,
+   location=hanging, width=18mm, distance=14mm, margin=0cm]
+
+\setupitemize[autointro, packed]    % prevent orphan list intro
+\setupitemize[indentnext=no]
+
+\defineitemgroup[enumerate]
+\setupenumerate[each][fit][itemalign=left,distance=.5em,style={\feature[+][default:tnum]}]
+
+\setupfloat[figure][default={here,nonumber}]
+\setupfloat[table][default={here,nonumber}]
+
+\setuptables[textwidth=max, HL=none]
+\setupxtable[frame=off,option={stretch,width}]
+
+\setupthinrules[width=15em] % width of horizontal rules
+
+\setupdelimitedtext
+  [blockquote]
+  [before={\setupalign[middle]},
+   indentnext=no,
+  ]
+
+
+\starttext
+
+\section[title={Ron Record},reference={ron-record}]
+
+\thinrule
+
+\startblockquote
+Specialties: Open Source Solutions, Multiple Programming Languages\crlf
+Blockchain Expertise, Cloud/Services Workflow Automation
+\stopblockquote
+
+\thinrule
+
+\subsection[title={Education},reference={education}]
+
+\startitemize
+\item
+  {\em Ph.D.~Mathematics, University of California, Santa Cruz}
+
+  Research in applications of dynamical system theory including models
+  of marine snow, the Italian economy, cell morphogenesis, and
+  population dynamics. Developed a software laboratory for
+  algorithmically detecting the boundaries of basins of attraction in a
+  chaotic dynamical system.
+
+  \useURL[url1][https://en.wikipedia.org/wiki/Erd\%C5\%91s_number][][Erdős
+  number:]\from[url1] Four
+
+  Thesis Advisor:
+  \useURL[url2][https://en.wikipedia.org/wiki/Ralph_Abraham_\%28mathematician\%29][][Ralph
+  Abraham]\from[url2]
+\stopitemize
+
+\subsection[title={Employment},reference={employment}]
+
+\startdescription{2020-2021}
+  {\em Principal Engineer}
+
+  Eloquent Cloud, LLC
+\stopdescription
+
+\startdescription{2018-2020}
+  {\em Big Chief}
+
+  Moonlight Mining Company
+\stopdescription
+
+\startdescription{2012-2017}
+  {\em Staff Engineer}
+
+  VMware, Inc.
+\stopdescription
+
+\startdescription{2010-2012}
+  {\em Artificial Intelligence and Virtual Reality research consultant}
+
+  Second Life
+\stopdescription
+
+\startdescription{1983-2010}
+  {\em Senior Open Source Architect}
+
+  Santa Cruz Operation (SCO)
+\stopdescription
+
+\subsection[title={Recent Technical
+Experience},reference={recent-technical-experience}]
+
+\startitemize[packed]
+\item
+  Automation of billing, provisioning, and deployment of Cloud services
+\item
+  \useURL[url3][https://en.wikipedia.org/wiki/Solidity][][Solidity]\from[url3]
+  and
+  \useURL[url4][https://plutus.readthedocs.io/en/latest/][][Plutus]\from[url4]
+  smart contract development on the Ethereum and Cardano blockchains
+\item
+  Development, packaging, distribution, support, and maintenance of
+  several open source projects with automated continuous integration
+  using the Gitlab CLI
+  \startitemize[packed]
+  \item
+    \useURL[url5][https://gitlab.com/doctorfree/DriveCommandLine][][DriveCommandLine]\from[url5],
+    manage Google Drive from the command line
+  \item
+    \useURL[url6][https://gitlab.com/doctorfree/RoonCommandLine][][RoonCommandLine]\from[url6],
+    command line control of the
+    \useURL[url7][https://roonlabs.com/][][Roon audio system]\from[url7]
+  \item
+    \useURL[url8][https://gitlab.com/doctorfree/MirrorCommand][][MirrorCommand]\from[url8],
+    command line control of the
+    \useURL[url9][https://magicmirror.builders/][][MagicMirror
+    platform]\from[url9]
+  \stopitemize
+\item
+  Created prototype baseball card auction and trading site using the
+  \useURL[url10][https://en.wikipedia.org/wiki/InterPlanetary_File_System][][InterPlanetary
+  File System]\from[url10] (IPFS) and the
+  \useURL[url11][https://en.wikipedia.org/wiki/Filecoin][][Filecoin]\from[url11]
+  digital payment system
+\stopitemize
+
+\subsection[title={Earlier Technical
+Highlights},reference={earlier-technical-highlights}]
+
+\startitemize[packed]
+\item
+  Developed the prototype for VMware's Cloud Management of IoT device
+  hubs
+\item
+  Lead Technical Architect, SCO Linux
+\item
+  SCO's primary representative and voting member on the UnitedLinux
+  Management team
+\item
+  Technical Architect of SCO Open Source strategy and programs
+\item
+  Founding member,
+  \useURL[url12][https://en.wikipedia.org/wiki/Executable_and_Linkable_Format\#86open][][86open]\from[url12]
+\item
+  Senior SCO Security Officer
+\item
+  Technical lead in research, planning & presentation of a 1990's Cloud
+  Computing initiative
+\item
+  Created, designed & prototyped the
+  \useURL[url13][https://en.wikipedia.org/wiki/Web_desktop][][SCO
+  Webtop]\from[url13]
+\item
+  Guided and coordinated a global team of engineers in the design and
+  production of the SCO Skunkware CD-ROMs (Open Source solutions for
+  developers and partners)
+\item
+  Ported, integrated, packaged, distributed and maintained hundreds of
+  Open Source projects
+\item
+  Architect of GNUnix, an integrated Open Source and UNIX operating
+  system and user environment
+\item
+  Designed and implemented SCO world-wide source and revision control
+  system
+\item
+  Created energy efficient smart home using technology developed in the
+  Automatic Guidance and Navigation group at NASA Ames Research Center
+\stopitemize
+
+\subsection[title={Publications},reference={publications}]
+
+\startitemize[packed]
+\item
+  Gardini, L., R. H. Abraham, R. J. Record, D. Fournier-Prunaret,
+  {[}1994{]} \quotation{A Double Logistic Map}, International Journal of
+  Bifurcation and Chaos, Vol. 4, No.~1, 145-176
+\item
+  Abraham, R. H., G. Chichilnisky, R. J. Record, {[}1994{]}
+  \quotation{Dynamics of North-South Trade and the Environment},
+  Environmental Economics, Graciela Chichilnisky, ed., Mattei
+  Foundation, Milan
+\item
+  Co-author \quotation{Chaos in Discrete Dynamical Systems: A Visual
+  Introduction in 2 Dimensions}, Telos/Springer-Verlag
+\item
+  Co-author \quotation{Just Plane Chaos} teaching guide CD-ROM
+\item
+  Co-author and presenter of a paper on Linux emulation at 1998 Summer
+  USENIX
+\item
+  Author \quotation{SCO and the Open Source Movement}, SCO World,
+  Jan/Feb/Mar 1999
+\item
+  Author \quotation{Porting Open Source Software to SCO}, SCO World,
+  November/December 1999
+\stopitemize
+
+\subsection[title={Social Media /
+Projects},reference={social-media-projects}]
+
+\startitemize[packed]
+\item
+  Blog: \useURL[url14][https://blog.ronrecord.com]\from[url14]
+\item
+  Facebook:
+  \useURL[url15][https://www.facebook.com/ronrecord]\from[url15]
+\item
+  Github: \useURL[url16][https://github.com/doctorfree]\from[url16]
+\item
+  Instagram:
+  \useURL[url17][https://www.instagram.com/doctorfree]\from[url17]
+\item
+  LinkedIn:
+  \useURL[url18][https://www.linkedin.com/in/ronrecord]\from[url18]
+\item
+  Twitter: \useURL[url19][https://twitter.com/ronrecord]\from[url19]
+\item
+  YouTube:
+  \useURL[url20][https://www.youtube.com/c/doctorfree]\from[url20]
+\stopitemize
+
+\thinrule
+
+\startblockquote
+\useURL[url21][mailto:rr@ronrecord.com][][rr@ronrecord.com]\from[url21]
+• 831-332-7972 •\crlf
+522 Laurent Street, Santa Cruz, CA 95060
+\stopblockquote
+
+\stoptext

@@ -1,0 +1,171 @@
+% Copyright 2013 Christophe-Marie Duquesne <chmd@chmd.fr>
+% Copyright 2014 Mark Szepieniec <http://github.com/mszep>
+% 
+% ConText style for making a resume with pandoc. Inspired by moderncv.
+% 
+% This CSS document is delivered to you under the CC BY-SA 3.0 License.
+% https://creativecommons.org/licenses/by-sa/3.0/deed.en_US
+
+\startmode[*mkii]
+  \enableregime[utf-8]  
+  \setupcolors[state=start]
+\stopmode
+
+\setupcolor[hex]
+\definecolor[titlegrey][h=757575]
+\definecolor[sectioncolor][h=397249]
+\definecolor[rulecolor][h=9cb770]
+
+% Enable hyperlinks
+\setupinteraction[state=start, color=sectioncolor]
+
+\setuppapersize [letter][letter]
+\setuplayout    [width=middle, height=middle,
+                 backspace=20mm, cutspace=0mm,
+                 topspace=10mm, bottomspace=20mm,
+                 header=0mm, footer=0mm]
+
+%\setuppagenumbering[location={footer,center}]
+
+\setupwhitespace[medium]
+
+\setupblackrules[width=31mm, color=rulecolor]
+
+\setuphead[chapter]      [style=\tfd]
+\setuphead[section]      [style=\tfd\bf, color=titlegrey, align=middle]
+\setuphead[subsection]   [style=\tfb\bf, color=sectioncolor, align=right,
+                          before={\leavevmode\blackrule\hspace}]
+\setuphead[subsubsection][style=\bf]
+
+\setuphead[chapter, section, subsection, subsubsection][number=no]
+
+%\setupdescriptions[width=10mm]
+
+\definedescription
+  [description]
+  [headstyle=bold, style=normal,
+   location=hanging, width=18mm, distance=14mm, margin=0cm]
+
+\setupitemize[autointro, packed]    % prevent orphan list intro
+\setupitemize[indentnext=no]
+
+\defineitemgroup[enumerate]
+\setupenumerate[each][fit][itemalign=left,distance=.5em,style={\feature[+][default:tnum]}]
+
+\setupfloat[figure][default={here,nonumber}]
+\setupfloat[table][default={here,nonumber}]
+
+\setuptables[textwidth=max, HL=none]
+\setupxtable[frame=off,option={stretch,width}]
+
+\setupthinrules[width=15em] % width of horizontal rules
+
+\setupdelimitedtext
+  [blockquote]
+  [before={\setupalign[middle]},
+   indentnext=no,
+  ]
+
+
+\starttext
+
+\section[title={Ronnie Record},reference={ronnie-record}]
+
+\startblockquote
+\useURL[url1][mailto:fuufnf@ronrecord.com][][fuufnf@ronrecord.com]\from[url1]
+• 831-xxx-xxxx •\crlf
+522 Laurent Street, Santa Cruz, CA 95060
+\stopblockquote
+
+\thinrule
+
+\startblockquote
+Specialties: Time Dilation, Party Host, Freeform Dancer,\crlf
+Dream Nudger, Existential Absurdist, Raconteur
+\stopblockquote
+
+\thinrule
+
+\subsection[title={Education},reference={education}]
+
+\startitemize
+\item
+  {\em Ph.D.~Mathematics, University of California, Santa Cruz}
+
+  Research in applications of dynamical system theory including models
+  of marine snow, the Italian economy, cell morphogenesis, and
+  population dynamics. Developed a software laboratory for
+  algorithmically detecting the boundaries of basins of attraction in a
+  chaotic dynamical system.
+
+  \useURL[url2][https://en.wikipedia.org/wiki/Erd\%C5\%91s_number][][Erdős
+  number:]\from[url2] Four
+
+  Thesis Advisor:
+  \useURL[url3][https://en.wikipedia.org/wiki/Ralph_Abraham_\%28mathematician\%29][][Ralph
+  Abraham]\from[url3]
+\stopitemize
+
+\subsection[title={Accomplishments},reference={accomplishments}]
+
+\startitemize[packed]
+\item
+  \useURL[url4][https://blog.ronrecord.com/index.php/2011/07/28/how-i-kissed-grace-slick/][][Kissed
+  Grace Slick]\from[url4]
+\item
+  Hosted Timothy Leary's 64th birthday party at Family Student Housing,
+  UCSC, October 22, 1984
+\item
+  Co-Authored Rainbow Family P.E.A.C.E. Village proposal rejected by
+  U.S. Dept. of Interior
+\item
+  Invited Richard Nixon to the Rainbow Gathering
+\item
+  \useURL[url5][https://archive.ronrecord.com/Stories/bowling.html][][Found
+  my bowling ball]\from[url5] in an abandoned Victorian in Gainesville,
+  Florida
+\item
+  Managed SCO softball team to two second place finishes in the slow
+  pitch \quote{D} league
+\item
+  Bobby Darin and Nancy Sinatra invited me and my brother into Bobby's
+  hotel room
+\item
+  Touched Mickey Mantle's forearm hair
+\item
+  Bought a drink for Harry Dean Stanton
+\item
+  Fired from University of Florida for giving everyone 'A's
+\item
+  Hitchhiked from Seattle to Enid without ever needing to stick out my
+  thumb
+\item
+  \quotation{{\em We've got a naked hippie reading science fiction by
+  candlelight in the rain}} - call by cop after being discovered in
+  azalea bushes
+\stopitemize
+
+\subsection[title={Social Media /
+Projects},reference={social-media-projects}]
+
+\startitemize[packed]
+\item
+  Blog: \useURL[url6][https://blog.ronrecord.com]\from[url6]
+\item
+  Facebook: \useURL[url7][https://www.facebook.com/ronrecord]\from[url7]
+\item
+  Github: \useURL[url8][https://github.com/doctorfree]\from[url8]
+\item
+  Instagram:
+  \useURL[url9][https://www.instagram.com/doctorfree]\from[url9]
+\item
+  LinkedIn:
+  \useURL[url10][https://www.linkedin.com/in/ronrecord]\from[url10]
+\item
+  Twitter: \useURL[url11][https://twitter.com/ronrecord]\from[url11]
+\item
+  YouTube:
+  \useURL[url12][https://www.youtube.com/c/doctorfree]\from[url12]
+\stopitemize
+
+\stoptext

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>rrecord_resume</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style type="text/css">
+  /*
+   * Copyright 2013 Christophe-Marie Duquesne <chmd@chmd.fr>
+   *
+   * CSS for making a resume with pandoc. Inspired by moderncv.
+   *
+   * This CSS document is delivered to you under the CC BY-SA 3.0 License.
+   * https://creativecommons.org/licenses/by-sa/3.0/deed.en_US
+   */
+
+  /* Whole document */
+  body {
+      max-width: 800px;
+      margin: auto;
+      background: #FFFFFF;
+      padding: 10px 10px 10px 10px;
+  }
+
+  /* Title of the resume */
+  h1 {
+      font-size: 55px;
+      color: #757575;
+      text-align:center;
+      margin-bottom:15px;
+  }
+  /* h1:hover { */
+  /*     background-color: #757575; */
+  /*     color: #FFFFFF; */
+  /*     text-shadow: 1px 1px 1px #333; */
+  /* } */
+
+  /* Titles of categories */
+  h2 {
+      /* This is called "sectioncolor" in the ConTeXt stylesheet. */
+      color: #397249;
+  }
+  /* There is a bar just before each category */
+  h2:before {
+      content: "";
+      display: inline-block;
+      margin-right:1%;
+      width: 16%;
+      height: 10px;
+      /* This is called "rulecolor" in the ConTeXt stylesheet. */
+      background-color: #9CB770;
+  }
+  /* h2:hover { */
+  /*     background-color: #397249; */
+  /*     color: #FFFFFF; */
+  /*     text-shadow: 1px 1px 1px #333; */
+  /* } */
+
+  /* Definitions */
+  dt {
+      float: left;
+      clear: left;
+      width: 17%;
+      font-weight: bold;
+  }
+  dd {
+      margin-left: 17%;
+      margin-bottom:7px;
+  }
+  p {
+      margin-top:0;
+      margin-bottom:7px;
+  }
+
+  /* Blockquotes */
+  blockquote {
+      text-align: center
+  }
+
+  /* Links */
+  a {
+      text-decoration: none;
+      color: #397249;
+  }
+  a:hover, a:active {
+      background-color: #397249;
+      color: #FFFFFF;
+      text-decoration: none;
+      text-shadow: 1px 1px 1px #333;
+  }
+
+  /* Horizontal separators */
+  hr {
+      color: #A6A6A6;
+  }
+
+  table {
+      width: 100%;
+  }
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="ron-record">Ron Record</h1>
+<hr />
+<blockquote>
+<p>Specialties: Open Source Solutions, Multiple Programming
+Languages<br />
+Blockchain Expertise, Cloud/Services Workflow Automation</p>
+</blockquote>
+<hr />
+<h2 id="education">Education</h2>
+<ul>
+<li><p><em>Ph.D. Mathematics, University of California, Santa
+Cruz</em></p>
+<p>Research in applications of dynamical system theory including models
+of marine snow, the Italian economy, cell morphogenesis, and population
+dynamics. Developed a software laboratory for algorithmically detecting
+the boundaries of basins of attraction in a chaotic dynamical
+system.</p>
+<p><a href="https://en.wikipedia.org/wiki/Erd%C5%91s_number"
+target="_blank">Erdős number:</a> Four</p>
+<p>Thesis Advisor: <a
+href="https://en.wikipedia.org/wiki/Ralph_Abraham_%28mathematician%29"
+target="_blank">Ralph Abraham</a></p></li>
+</ul>
+<h2 id="employment">Employment</h2>
+<dl>
+<dt>2020-2021</dt>
+<dd>
+<p><em>Principal Engineer</em></p>
+<p>Eloquent Cloud, LLC</p>
+</dd>
+<dt>2018-2020</dt>
+<dd>
+<p><em>Big Chief</em></p>
+<p>Moonlight Mining Company</p>
+</dd>
+<dt>2012-2017</dt>
+<dd>
+<p><em>Staff Engineer</em></p>
+<p>VMware, Inc.</p>
+</dd>
+<dt>2010-2012</dt>
+<dd>
+<p><em>Artificial Intelligence and Virtual Reality research
+consultant</em></p>
+<p>Second Life</p>
+</dd>
+<dt>1983-2010</dt>
+<dd>
+<p><em>Senior Open Source Architect</em></p>
+<p>Santa Cruz Operation (SCO)</p>
+</dd>
+</dl>
+<h2 id="recent-technical-experience">Recent Technical Experience</h2>
+<ul>
+<li>Automation of billing, provisioning, and deployment of Cloud
+services</li>
+<li><a href="https://en.wikipedia.org/wiki/Solidity"
+target="_blank">Solidity</a> and <a
+href="https://plutus.readthedocs.io/en/latest/"
+target="_blank">Plutus</a> smart contract development on the Ethereum
+and Cardano blockchains</li>
+<li>Development, packaging, distribution, support, and maintenance of
+several open source projects with automated continuous integration using
+the Gitlab CLI
+<ul>
+<li><a href="https://gitlab.com/doctorfree/DriveCommandLine"
+target="_blank">DriveCommandLine</a>, manage Google Drive from the
+command line</li>
+<li><a href="https://gitlab.com/doctorfree/RoonCommandLine"
+target="_blank">RoonCommandLine</a>, command line control of the <a
+href="https://roonlabs.com/" target="_blank">Roon audio system</a></li>
+<li><a href="https://gitlab.com/doctorfree/MirrorCommand"
+target="_blank">MirrorCommand</a>, command line control of the <a
+href="https://magicmirror.builders/" target="_blank">MagicMirror
+platform</a></li>
+</ul></li>
+<li>Created prototype baseball card auction and trading site using the
+<a href="https://en.wikipedia.org/wiki/InterPlanetary_File_System"
+target="_blank">InterPlanetary File System</a> (IPFS) and the <a
+href="https://en.wikipedia.org/wiki/Filecoin"
+target="_blank">Filecoin</a> digital payment system</li>
+</ul>
+<h2 id="earlier-technical-highlights">Earlier Technical Highlights</h2>
+<ul>
+<li>Developed the prototype for VMware’s Cloud Management of IoT device
+hubs</li>
+<li>Lead Technical Architect, SCO Linux</li>
+<li>SCO’s primary representative and voting member on the UnitedLinux
+Management team</li>
+<li>Technical Architect of SCO Open Source strategy and programs</li>
+<li>Founding member, <a
+href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format#86open"
+target="_blank">86open</a></li>
+<li>Senior SCO Security Officer</li>
+<li>Technical lead in research, planning &amp; presentation of a 1990’s
+Cloud Computing initiative</li>
+<li>Created, designed &amp; prototyped the <a
+href="https://en.wikipedia.org/wiki/Web_desktop" target="_blank">SCO
+Webtop</a></li>
+<li>Guided and coordinated a global team of engineers in the design and
+production of the SCO Skunkware CD-ROMs (Open Source solutions for
+developers and partners)</li>
+<li>Ported, integrated, packaged, distributed and maintained hundreds of
+Open Source projects</li>
+<li>Architect of GNUnix, an integrated Open Source and UNIX operating
+system and user environment</li>
+<li>Designed and implemented SCO world-wide source and revision control
+system</li>
+<li>Created energy efficient smart home using technology developed in
+the Automatic Guidance and Navigation group at NASA Ames Research
+Center</li>
+</ul>
+<h2 id="publications">Publications</h2>
+<ul>
+<li>Gardini, L., R. H. Abraham, R. J. Record, D. Fournier-Prunaret,
+[1994] “A Double Logistic Map”, International Journal of Bifurcation and
+Chaos, Vol. 4, No. 1, 145-176</li>
+<li>Abraham, R. H., G. Chichilnisky, R. J. Record, [1994] “Dynamics of
+North-South Trade and the Environment”, Environmental Economics,
+Graciela Chichilnisky, ed., Mattei Foundation, Milan</li>
+<li>Co-author “Chaos in Discrete Dynamical Systems: A Visual
+Introduction in 2 Dimensions”, Telos/Springer-Verlag</li>
+<li>Co-author “Just Plane Chaos” teaching guide CD-ROM</li>
+<li>Co-author and presenter of a paper on Linux emulation at 1998 Summer
+USENIX</li>
+<li>Author “SCO and the Open Source Movement”, SCO World, Jan/Feb/Mar
+1999</li>
+<li>Author “Porting Open Source Software to SCO”, SCO World,
+November/December 1999</li>
+</ul>
+<h2 id="social-media-projects">Social Media / Projects</h2>
+<ul>
+<li>Blog: <a href="https://blog.ronrecord.com"
+target="_blank">https://blog.ronrecord.com</a></li>
+<li>Facebook: <a href="https://www.facebook.com/ronrecord"
+target="_blank">https://www.facebook.com/ronrecord</a></li>
+<li>Github: <a href="https://github.com/doctorfree"
+target="_blank">https://github.com/doctorfree</a></li>
+<li>Instagram: <a href="https://www.instagram.com/doctorfree"
+target="_blank">https://www.instagram.com/doctorfree</a></li>
+<li>LinkedIn: <a href="https://www.linkedin.com/in/ronrecord"
+target="_blank">https://www.linkedin.com/in/ronrecord</a></li>
+<li>Twitter: <a href="https://twitter.com/ronrecord"
+target="_blank">https://twitter.com/ronrecord</a></li>
+<li>YouTube: <a href="https://www.youtube.com/c/doctorfree"
+target="_blank">https://www.youtube.com/c/doctorfree</a></li>
+</ul>
+<hr />
+<blockquote>
+<p><a href="mailto:rr@ronrecord.com" class="email">rr@ronrecord.com</a>
+• 831-332-7972 •<br />
+522 Laurent Street, Santa Cruz, CA 95060</p>
+</blockquote>
+</body>
+</html>
