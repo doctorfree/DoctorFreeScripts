@@ -67,6 +67,10 @@ do
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "HollyRandall"
             ;;
+        János_Szalai)
+            get_search "Photographers/${photographer}" "${photographer}"
+            get_search "Photographers/${photographer}" "Janos_Szalai"
+            ;;
         Konstantin_Makarchikov)
             get_search "Photographers/${photographer}" "${photographer}"
             get_search "Photographers/${photographer}" "Constantin_Makarchikov"
