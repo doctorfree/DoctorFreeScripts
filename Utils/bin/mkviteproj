@@ -1,0 +1,78 @@
+#!/bin/bash
+#
+# mkviteproj - create a new Vite project using a community template
+#
+# See https://vitejs.dev/
+# See https://vitejs.dev/guide/#community-templates
+#
+# See https://github.com/vitejs/awesome-vite#templates
+# For example, to use https://github.com/byoungd/modern-vue-template
+#                 and https://github.com/helixsoftco/vuelix
+#
+# Set the project name
+PROJECT=my-project
+#
+# Set the template path
+# If the template project uses main as the default branch,
+# suffix the template project repo with #main
+# e.g. set TEMPLATE="user/project#main"
+#
+# To download from GitLab:
+# degit gitlab:user/repo
+# degit git@gitlab.com:user/repo
+# degit https://gitlab.com/user/repo
+# e.g. set TEMPLATE="git@gitlab.com:user/repo"
+#
+TEMPLE=byoungd/modern-vue-template
+
+usage() {
+    printf "\nUsage: mkviteproj [-n] [-u] [-p project-name] [-t template]"
+    printf "\nWhere:"
+    printf "\n\t-n indicates tell me what you would do but don't do it"
+    printf "\n\t-u displays this usage message"
+    printf "\n\t-p project-name specifies the project name"
+    printf "\n\t-t template specifies the template path"
+    printf "\n\nProject name is: ${PROJECT}"
+    printf "\nTemplate path is: ${TEMPLE}\n"
+    exit 1
+}
+
+TELL=
+USAGE=
+while getopts "p:t:nu" flag; do
+    case $flag in
+        p)
+            PROJECT="$OPTARG"
+            ;;
+        t)
+            TEMPLE="$OPTARG"
+            ;;
+        n)
+            TELL=1
+            ;;
+        u)
+            USAGE=1
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+[ "$1" ] && {
+    echo "Extraneous arguments detected: $*"
+    USAGE=1
+}
+[ "${USAGE}" ] && usage
+
+if [ "${TELL}" ]
+then
+    echo "npx degit ${TEMPLE} ${PROJECT}"
+    echo "cd ${PROJECT}"
+    echo "npm install"
+    echo "npm run dev"
+else
+    npx degit ${TEMPLE} ${PROJECT}
+    cd ${PROJECT}
+    npm install
+    npm run dev
+fi
+
