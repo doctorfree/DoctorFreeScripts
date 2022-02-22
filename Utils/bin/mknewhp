@@ -1,0 +1,72 @@
+#!/bin/bash
+#
+# https://ihp.digitallyinduced.com/Guide/your-first-project.html#1-project-setup
+#
+# This script acts as a convenience front-end to ihp-new
+# IHP can be installed following the guide at
+# https://ihp.digitallyinduced.com/Guide/installation.html
+#
+# If you already have the nix package manager installed, install IHP with:
+# nix-env -f https://downloads.digitallyinduced.com/ihp-new.tar.gz -i ihp-new
+#
+# Usage: ihp-new PROJECT_NAME
+# 
+# or:    ihp-new --OPTION PROJECT_NAME
+# 
+# Generates an empty IHP project
+# 
+# Full documentation: https://ihp.digitallyinduced.com/Guide/installation.html
+# Project template: https://github.com/digitallyinduced/ihp-boilerplate.git
+# 
+# In case there already exists a directory named like the given project name,
+# this script will stop execution.
+# 
+# Available options:
+# 
+#       --version
+#           Print version of ihp-new
+#
+#       --default
+#           (recommended, default, code on branch master)
+#           Generates a pure IHP project.
+#
+#       --elm
+#           (code on branch elm)
+#           Generates an IHP project with Elm ready to go.
+#
+#       --purescript-halogen
+#           (code on branch purescript-halogen)
+#           Generates an IHP project with PureScript + Halogen ready to go.
+#
+
+type -p ihp-new > /dev/null || {
+    echo "Required command 'ihp-new' is not installed or not in your PATH"
+    echo "This script acts as a convenience front-end to ihp-new"
+    echo "IHP can be installed following the guide at"
+    echo "https://ihp.digitallyinduced.com/Guide/installation.html"
+    echo ""
+    echo "If you already have the nix package manager installed, install IHP with:"
+    echo "nix-env -f https://downloads.digitallyinduced.com/ihp-new.tar.gz -i ihp-new"
+    exit 1
+}
+
+if [ "$1" ]
+then
+    for arg in $*
+    do
+        [ "${arg}" == "--version" ] && continue
+        [ "${arg}" == "--default" ] && continue
+        [ "${arg}" == "--elm" ] && continue
+        [ "${arg}" == "--purescript-halogen" ] && continue
+        [ -d "${arg}" ] && {
+            echo "${arg} directory already exists. Exiting"
+            exit 1
+        }
+    done
+    # All this script does is invoke 'ihp-new'
+    ihp-new $*
+else
+    echo "Usage: mknewhp project-name"
+    echo "Generates a new Haskell project using IHP"
+    exit 1
+fi
