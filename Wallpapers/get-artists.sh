@@ -39,6 +39,10 @@ do
             get_search "Artists/${artist}" "${artist}"
             get_search "Artists/${artist}" "AyyaSAP"
             ;;
+        Dandonfuga)
+            get_search "Artists/${artist}" "${artist}"
+            get_search "Artists/${artist}" "Dandon_Fuga"
+            ;;
         Mirco_Cabbia)
             get_search "Artists/${artist}" "${artist}"
             get_search "Artists/${artist}" "Sciamano240"
