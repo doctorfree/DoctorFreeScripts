@@ -33,7 +33,7 @@ usage: drfree <action> <project>
         PROJECT="DriveCommandLine"
         ;;
       images)
-        PROJECT="MirrorImagesPortrait"
+        PROJECT="MirrorImages"
         ;;
       instagram)
         PROJECT="MMM-InstagramView"
