@@ -10,7 +10,12 @@ TAG=$1
 git tag | while read tag
 do
     [ "$TAG" == "$tag" ] && {
-        git show $TAG
+	if command -v batcat > /dev/null
+	then
+            git show $TAG | batcat -l rs
+        else
+            git show $TAG
+	fi
         exit 0
     }
 done
