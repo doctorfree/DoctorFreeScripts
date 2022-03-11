@@ -1,0 +1,22 @@
+[user]
+	name = Ronald Record
+	email = github@ronrecord.com
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+	ui = true
+	pager = true
+[pull]
+	rebase = false
+[core]
+	attributesfile = ~/.gitattributes
+[diff "image"]
+	command = compare $2 $1 png:- | montage -geometry +4+4 $2 - $1 png:- | display -title \"$1\" -
