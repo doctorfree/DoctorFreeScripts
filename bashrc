@@ -90,6 +90,9 @@ export LESS_TERMCAP_ue=$'\e[0m'
 export LESS_TERMCAP_us=$'\e[1;4;31m'
 export LESSHISTFILE=-
 
+# Set the location of the bat config file
+export BAT_CONFIG_PATH="/etc/bat.conf"
+
 # see /usr/share/doc/bash/examples/startup-files
 # (in the package bash-doc) for examples
 
