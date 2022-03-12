@@ -73,14 +73,11 @@ command -v bashtop > /dev/null && alias top='bashtop'
 command -v bpytop > /dev/null && alias top='bpytop'
 
 ### CAT & LESS
-#	alias bat='bat --theme="Monokai Extended"' && \
 command -v bat > /dev/null && \
-	alias bat='bat' && \
 	alias cat='bat --pager=never' && \
 	alias less='bat'
-# in debian the command is batcat
-#	alias batcat='batcat --theme="Monokai Extended"' && \
+# In Debian the command is batcat
 command -v batcat > /dev/null && \
-	alias batcat='batcat' && \
+	alias bat='batcat' && \
 	alias cat='batcat --pager=never' && \
 	alias less='batcat'
