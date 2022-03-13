@@ -20,7 +20,7 @@ usage() {
 # Which system are we on?
 if [ -d /Volumes/Seagate_8TB/Pictures ]
 then
-    TOP="/Volumes/Seagate_8TB/Pictures"
+    TOP="/Volumes/Seagate_8TB/Pictures/Work"
 else
     if [ -d /u/pictures ]
     then
@@ -32,7 +32,7 @@ else
 fi
 
 # Subfolder under $TOP where model folders are located
-WDIR="Work/KindGirls"
+WDIR="KindGirls"
 
 EFLAG=
 JFLAG=
@@ -42,11 +42,11 @@ USAGE=
 while getopts ejnt:w:yu flag; do
     case $flag in
         e)
-            WDIR="Work/Elite_Babes"
+            WDIR="Elite_Babes"
             EFLAG=1
             ;;
         j)
-            WDIR="Work/JP_Erotica"
+            WDIR="JP_Erotica"
             JFLAG=1
             ;;
         n)

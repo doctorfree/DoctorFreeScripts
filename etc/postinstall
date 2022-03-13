@@ -21,17 +21,18 @@ EXPORT1="any2any aptsearch audlinks backgrounds build-sgminer cap2any \
          imfonts.pl installamdgpu install-to-project-repo.py instdeb \
          keybinds-pipemenu killscreen latest lgitinit linkhaven listgit \
          journalclean doctorinfo mandelhist mkcomps mkdiffs mkviteproj"
-EXPORT2="mklink md2man mkreadme mkseamless mkusb mkwmv models mp3topic mvBackups \
-         mvdown myterm nouchg obam.pl only packaud pcmanslideshow piclinks \
-         playkeynote progress_bar puml randback randmodel reget remdeb \
-         revlink ripvcr rmBackups rmdups rmlandscape rmportargs rmportrait \
-         rpm2cpio saver sdbackup sderase sdlist sdmount sdumount sdrestore \
-         sdwrite show-background showmem sndprobe synchaven syncitunes \
-         synergyctl timemachinedelete upd updflash updgit updsums updtranscend \
-         updtz url-create variety-beauty variety-config variety-favorite \
-         variety-fractals variety-get variety-next variety-prev variety-quit \
-         variety-select variety-set variety-start vidlinks webloc2url wh wikivim \
-         xmldiff xoff xstop yaml2json zipiso disable-update-notifier mknewhp"
+EXPORT2="echk mklink md2man mkreadme mkseamless mkusb mkwmv models mp3topic \
+         mvBackups mvdown myterm nouchg obam.pl only packaud pcmanslideshow \
+         piclinks playkeynote progress_bar puml randback randmodel reget \
+         remdeb revlink ripvcr rmBackups rmdups rmlandscape rmportargs \
+         rmportrait rpm2cpio saver sdbackup sderase sdlist sdmount sdumount \
+         sdrestore sdwrite show-background showmem sndprobe synchaven \
+         syncitunes synergyctl timemachinedelete upd updflash updgit updsums \
+         updtranscend updtz url-create variety-beauty variety-config \
+         variety-favorite variety-fractals variety-get variety-next \
+         variety-prev variety-quit variety-select variety-set variety-start \
+         vidlinks webloc2url wh wikivim xmldiff xoff xstop yaml2json zipiso \
+         disable-update-notifier mknewhp"
 DFS="/usr/local/DoctorFreeScripts"
 ANY="ape2m4a ape2mp4 avi2mp4 f4v2mp4 flv2mp4 \
      m4a2mp3 m4v2mp4 mkv2mp4 mov2mp4 mp42m4v \
