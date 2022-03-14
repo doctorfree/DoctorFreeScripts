@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#
+# From https://gist.github.com/planetceres/917840478e1e4d45f8373667630e51a0
+#
+# Info https://www.linux.org/threads/resetting-the-usb-subsystem.10404/
+
+[ "$1" == "-u" ] && {
+  echo "Usage: usb-reset [-a]"
+  echo "Where -a indicates All USB controllers"
+  echo "Default is reset of USB 3.1 Only"
+  exit 1
+}
+
+if [ "$1" == "-a" ]
+then
+  # All USB
+  for port in $(lspci | grep USB | cut -d' ' -f1); do
+    echo -n "0000:${port}"| sudo tee /sys/bus/pci/drivers/xhci_hcd/unbind;
+    sleep 5;
+    echo -n "0000:${port}" | sudo tee /sys/bus/pci/drivers/xhci_hcd/bind;
+    sleep 5;
+  done
+else
+  # USB 3.1 Only
+  for port in $(lspci | grep xHCI | cut -d' ' -f1); do
+    echo -n "0000:${port}"| sudo tee /sys/bus/pci/drivers/xhci_hcd/unbind;
+    sleep 5;
+    echo -n "0000:${port}" | sudo tee /sys/bus/pci/drivers/xhci_hcd/bind;
+    sleep 5;
+  done
+fi
