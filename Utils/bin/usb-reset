@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+#
+# From https://gist.github.com/planetceres/917840478e1e4d45f8373667630e51a0
+#
+# Info https://www.linux.org/threads/resetting-the-usb-subsystem.10404/
+
+DDIR="/sys/bus/pci/drivers/xhci_hcd"
+
+usage*() {
+  printf "\nUsage: usb-reset [-a] [-n] [-u]"
+  printf "\n\nWhere:"
+  printf "\n\t-a indicates All USB controllers"
+  printf "\n\t-n indicates tell me what you would do but don't do it"
+  printf "\n\t-u indicates display this usage message and exit"
+  printf "\nDefault is reset of USB 3.1 Only on Linux, all on Mac\n"
+  exit 1
+}
+
+ALL=
+TELL=
+while getopts anu flag; do
+    case $flag in
+        a)
+            ALL=1
+            ;;
+        n)
+            TELL=1
+            ;;
+        u)
+            usage
+            ;;
+        *)
+            echo "Unrecognized argument: $flag"
+            usage
+            ;;
+    esac
+done
+shift $(( OPTIND - 1 ))
+
+platform=`uname -s`
+if [ "${platform}" == "Darwin" ]
+then
+  if [ "${TELL}" ]
+  then
+    echo "sudo kextunload IOUSBMassStorageClass.kext"
+    echo "sleep 5"
+    echo "sudo kextload /System/Library/Extensions/IOUSBMassStorageClass.kext"
+    echo "sleep 5"
+  else
+    sudo kextunload IOUSBMassStorageClass.kext
+    sleep 5
+    sudo kextload /System/Library/Extensions/IOUSBMassStorageClass.kext
+    sleep 5
+  fi
+else
+  if [ "${ALL}" ]
+  then
+    # All USB
+    for port in $(lspci | grep USB | cut -d' ' -f1)
+    do
+      if [ "${TELL}" ]
+      then
+        echo "echo -n \"0000:${port}\" | sudo tee ${DDIR}/unbind"
+        echo "sleep 5"
+        echo "echo -n \"0000:${port}\" | sudo tee ${DDIR}/bind"
+        echo "sleep 5"
+      else
+        echo -n "0000:${port}" | sudo tee ${DDIR}/unbind
+        sleep 5
+        echo -n "0000:${port}" | sudo tee ${DDIR}/bind
+        sleep 5
+      fi
+    done
+  else
+    # USB 3.1 Only
+    for port in $(lspci | grep xHCI | cut -d' ' -f1)
+    do
+      if [ "${TELL}" ]
+      then
+        echo "echo -n \"0000:${port}\" | sudo tee ${DDIR}/unbind"
+        echo "sleep 5"
+        echo "echo -n \"0000:${port}\" | sudo tee ${DDIR}/bind"
+        echo "sleep 5"
+      else
+        echo -n "0000:${port}" | sudo tee ${DDIR}/unbind
+        sleep 5
+        echo -n "0000:${port}" | sudo tee ${DDIR}/bind
+        sleep 5
+      fi
+    done
+  fi
+fi

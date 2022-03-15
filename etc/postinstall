@@ -32,7 +32,7 @@ EXPORT2="echk mklink md2man mkreadme mkseamless mkusb mkwmv models mp3topic \
          variety-favorite variety-fractals variety-get variety-next \
          variety-prev variety-quit variety-select variety-set variety-start \
          vidlinks webloc2url wh wikivim xmldiff xoff xstop yaml2json zipiso \
-         disable-update-notifier mknewhp"
+         disable-update-notifier mknewhp usb-reset"
 DFS="/usr/local/DoctorFreeScripts"
 ANY="ape2m4a ape2mp4 avi2mp4 f4v2mp4 flv2mp4 \
      m4a2mp3 m4v2mp4 mkv2mp4 mov2mp4 mp42m4v \
