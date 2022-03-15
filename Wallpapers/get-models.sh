@@ -224,10 +224,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Cecelia"
             ;;
-        Georgia)
-            get_search "${MODD}/${model}" "${model}_\(model\)"
-            get_search "${MODD}/${model}" "${model}_\(MetArt\)"
-            get_search "${MODD}/${model}" "Polina_Kadynskaya"
+        Polina_Kadynskaya)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Georgia_\(model\)"
+            get_search "${MODD}/${model}" "Georgia_\(MetArt\)"
             get_search "${MODD}/${model}" "Susza_K."
             ;;
         Hailee_Rain)
@@ -241,6 +241,10 @@ get_model() {
         Hanna_Hilton)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Hannah_Hilton"
+            ;;
+        Helen_H)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Vic_E"
             ;;
         Helga_Grey)
             get_search "${MODD}/${model}" "${model}"
