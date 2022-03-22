@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# mpcava - start two terminal emulators, one running ncmpcpp
+#          and the other running cava.
+#
+# I am using two separate terminal emulators as I want a smaller
+# font for the cava terminal. The terminal command options are
+# customized for my setup, you may need to adjust the geometry
+# to get the two windows to align as desired. I wanted the cava
+# terminal window at the bottom of the screen and aligned with
+# the ncmpcpp terminal window. Couldn't figure out how to set
+# the window title for gnome-terminal.
+#
+# In addition, this assumes a "SmallFont" profile has been created
+# in gnome-terminal. I used a size 8 font for the cava terminal window.
+# The geometry settings here align the two windows well, the ncmpcpp
+# window using a size 32 font.
+
+gnome-terminal -t 'Cava Spectrum Visualizer' \
+               --profile=SmallFont \
+               --hide-menubar \
+               --geometry 360x16+150-0 \
+               -- cava &
+
+xfce4-terminal --title "Music Player Client" \
+               --icon=audio-player \
+               --hide-menubar \
+               --hide-toolbar \
+               --hide-scrollbar \
+               --geometry 90x20+150+25 \
+               --command="ncmpcpp" &
