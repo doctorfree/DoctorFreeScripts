@@ -15,5 +15,8 @@ Contents
 [**audio/mpd.conf**](audio/mpd.conf) - Music Player Daemon global configuration
     `/etc/mpd.conf`
 
+[**audio/ncmpcpp-bindings**](audio/ncmpcpp-bindings) - MPD client ncmpcpp bindings
+    `$HOME/.config/ncmpcpp/bindings`
+
 [**audio/ncmpcpp-config**](audio/ncmpcpp-config) - MPD client ncmpcpp configuration
     `$HOME/.config/ncmpcpp/config`
