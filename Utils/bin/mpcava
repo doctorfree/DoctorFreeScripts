@@ -10,22 +10,75 @@
 # terminal window at the bottom of the screen and aligned with
 # the ncmpcpp terminal window. Couldn't figure out how to set
 # the window title for gnome-terminal.
-#
-# In addition, this assumes a "SmallFont" profile has been created
-# in gnome-terminal. I used a size 8 font for the cava terminal window.
-# The geometry settings here align the two windows well, the ncmpcpp
-# window using a size 32 font.
 
-gnome-terminal -t 'Cava Spectrum Visualizer' \
+RETRO=
+FULLSCREEN=
+
+usage() {
+    printf "\nUsage: mpcava [-f] [-r] [-u]"
+    printf "\nWhere:"
+    printf "\n\t-f indicates fullscreen display"
+    printf "\n\t-r indicates use retro terminal emulator"
+    printf "\n\t-u displays this usage message and exits\n"
+    exit 1
+}
+
+while getopts "fru" flag; do
+    case $flag in
+        f)
+            FULLSCREEN=1
+            ;;
+        r)
+            RETRO=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+
+if [ "${FULLSCREEN}" ]
+then
+    gnome-terminal -t 'Cava Spectrum Visualizer' \
+               --profile=SmallFont \
+               --hide-menubar \
+               --full-screen \
+               -- cava &
+else
+    gnome-terminal -t 'Cava Spectrum Visualizer' \
                --profile=SmallFont \
                --hide-menubar \
                --geometry 360x16+150-0 \
                -- cava &
+fi
 
-xfce4-terminal --title "Music Player Client" \
+sleep 4
+
+if [ "${RETRO}" ]
+then
+    if [ "${FULLSCREEN}" ]
+    then
+        cool-retro-term --fullscreen -e ncmpcpp &
+    else
+        cool-retro-term -e ncmpcpp &
+    fi
+else
+    if [ "${FULLSCREEN}" ]
+    then
+        xfce4-terminal --title "Music Player Client" \
+               --icon=audio-player \
+               --hide-menubar \
+               --hide-toolbar \
+               --hide-scrollbar \
+               --fullscreen \
+               --command="ncmpcpp" &
+    else
+        xfce4-terminal --title "Music Player Client" \
                --icon=audio-player \
                --hide-menubar \
                --hide-toolbar \
                --hide-scrollbar \
                --geometry 90x20+150+25 \
                --command="ncmpcpp" &
+    fi
+fi
