@@ -1,7 +1,9 @@
 #!/bin/bash
 #
-# mpcava - start two terminal emulators, one running ncmpcpp
-#          and the other running cava.
+# mpcava - run ncmpcpp and cava in separate terminal emulators
+#
+# Written by Ronald Joe Record <ronaldrecord@gmail.com>
+# March, 2022
 #
 # I am using two separate terminal emulators as I want a smaller
 # font for the cava terminal. The terminal command options are
@@ -10,20 +12,44 @@
 # terminal window at the bottom of the screen and aligned with
 # the ncmpcpp terminal window. Couldn't figure out how to set
 # the window title for gnome-terminal.
+#
+# Alternately, if the "-t" option is specified then only a single
+# terminal emulator is used, tilix. Tilix is invoked twice with
+# different profiles, one for ncmpcpp and another for cava. The
+# profiles are named "MusicPlayer" and "Cava". 
+#
+# In both types of invocations, with or without "-t", the terminal
+# profiles used have font sizee settings of 32 and 8 for ncmpcpp and
+# cava, respectively. This aligns the windows, on my system, when
+# not in fullscreen mode.
+#
+# When using the cool-retro-term for ncmpcpp (-r option), adjust the
+# size of the cool-retro-term window manually so it aligns with the
+# cava window. I could not figure out how to specify a geometry for
+# the cool-retro-term window when invoked with "-e ncmpcpp".
+#
+# Note also that the key bindings I have configured for ncmpcpp
+# to dynamically set the transparency of the terminal window only
+# work when using xfce4-terminal for ncmpcpp. That is, without
+# the "-t" or "-r" arguments.
 
-RETRO=
-FULLSCREEN=
+VTITLE="Spectrum Visualizer"
+MTITLE="Music Player Plus"
 
 usage() {
-    printf "\nUsage: mpcava [-f] [-r] [-u]"
+    printf "\nUsage: mpcava [-f] [-r] [-t] [-u]"
     printf "\nWhere:"
     printf "\n\t-f indicates fullscreen display"
     printf "\n\t-r indicates use retro terminal emulator"
+    printf "\n\t-t indicates use tilix terminal emulator"
     printf "\n\t-u displays this usage message and exits\n"
     exit 1
 }
 
-while getopts "fru" flag; do
+RETRO=
+FULLSCREEN=
+RXVT=
+while getopts "frtu" flag; do
     case $flag in
         f)
             FULLSCREEN=1
@@ -31,28 +57,53 @@ while getopts "fru" flag; do
         r)
             RETRO=1
             ;;
+        t)
+            RXVT=1
+            ;;
         u)
             usage
             ;;
     esac
 done
 
+[ "${RETRO}" ] && [ "${RXVT}" ] && {
+  echo "Only one of '-r' and '-t' can be specified"
+  echo "Exiting"
+  usage
+}
+
 if [ "${FULLSCREEN}" ]
 then
-    gnome-terminal -t 'Cava Spectrum Visualizer' \
+  if [ "${RXVT}" ]
+  then
+    tilix --title="${VTITLE}" \
+               --full-screen \
+               --window-style=borderless \
+               --profile=Cava &
+  else
+    gnome-terminal -t "${VTITLE}" \
                --profile=SmallFont \
                --hide-menubar \
                --full-screen \
                -- cava &
+  fi
 else
-    gnome-terminal -t 'Cava Spectrum Visualizer' \
+  if [ "${RXVT}" ]
+  then
+    tilix --title="${VTITLE}" \
+               --window-style=borderless \
+               --geometry=360x16+150-0 \
+               --profile=Cava &
+  else
+    gnome-terminal -t "${VTITLE}" \
                --profile=SmallFont \
                --hide-menubar \
                --geometry 360x16+150-0 \
                -- cava &
+  fi
 fi
 
-sleep 4
+sleep 2
 
 if [ "${RETRO}" ]
 then
@@ -65,20 +116,36 @@ then
 else
     if [ "${FULLSCREEN}" ]
     then
-        xfce4-terminal --title "Music Player Client" \
+      if [ "${RXVT}" ]
+      then
+        tilix --title="${MTITLE}" \
+               --full-screen \
+               --window-style=borderless \
+               --profile=MusicPlayer &
+      else
+        xfce4-terminal --title "${MTITLE}" \
                --icon=audio-player \
                --hide-menubar \
                --hide-toolbar \
                --hide-scrollbar \
                --fullscreen \
                --command="ncmpcpp" &
+      fi
     else
-        xfce4-terminal --title "Music Player Client" \
+      if [ "${RXVT}" ]
+      then
+        tilix --title="${MTITLE}" \
+               --window-style=borderless \
+               --geometry=90x20+150+25 \
+               --profile=MusicPlayer &
+      else
+        xfce4-terminal --title "${MTITLE}" \
                --icon=audio-player \
                --hide-menubar \
                --hide-toolbar \
                --hide-scrollbar \
                --geometry 90x20+150+25 \
                --command="ncmpcpp" &
+      fi
     fi
 fi
