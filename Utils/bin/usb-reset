@@ -6,7 +6,7 @@
 
 DDIR="/sys/bus/pci/drivers/xhci_hcd"
 
-usage*() {
+usage() {
   printf "\nUsage: usb-reset [-a] [-n] [-u]"
   printf "\n\nWhere:"
   printf "\n\t-a indicates All USB controllers"
