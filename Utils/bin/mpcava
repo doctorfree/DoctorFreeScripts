@@ -37,22 +37,27 @@ VTITLE="Spectrum Visualizer"
 MTITLE="Music Player Plus"
 
 usage() {
-    printf "\nUsage: mpcava [-f] [-r] [-t] [-u]"
+    printf "\nUsage: mpcava [-f] [-h] [-r] [-t] [-u]"
     printf "\nWhere:"
     printf "\n\t-f indicates fullscreen display"
+    printf "\n\t-h indicates half-height for cava window (with -f only)"
     printf "\n\t-r indicates use retro terminal emulator"
     printf "\n\t-t indicates use tilix terminal emulator"
     printf "\n\t-u displays this usage message and exits\n"
     exit 1
 }
 
-RETRO=
 FULLSCREEN=
+HALFHEIGHT=
+RETRO=
 RXVT=
-while getopts "frtu" flag; do
+while getopts "fhrtu" flag; do
     case $flag in
         f)
             FULLSCREEN=1
+            ;;
+        h)
+            HALFHEIGHT=1
             ;;
         r)
             RETRO=1
@@ -66,6 +71,9 @@ while getopts "frtu" flag; do
     esac
 done
 
+[ "${HALFHEIGHT}" ] && {
+  [ "${FULLSCREEN}" ] || HALFHEIGHT=
+}
 [ "${RETRO}" ] && [ "${RXVT}" ] && {
   echo "Only one of '-r' and '-t' can be specified"
   echo "Exiting"
@@ -87,6 +95,40 @@ then
                --full-screen \
                -- cava &
   fi
+  [ "${HALFHEIGHT}" ] && {
+    sleep 1
+    if [ "${RXVT}" ]
+    then
+      cavawin=`wmctrl -l -G -x | grep tilix.Tilix | grep "${VTITLE}"`
+    else
+      cavawin=`wmctrl -l -G -x | grep gnome-terminal-server | grep "${VTITLE}"`
+    fi
+    [ "${cavawin}" ] || {
+      if [ "${RXVT}" ]
+      then
+        cavawin=`wmctrl -l -G -x | grep tilix.Tilix | grep "cava"`
+        [ "${cavawin}" ] || echo "Could not find cava window"
+      else
+        cavawin=`wmctrl -l -G -x | grep gnome-terminal-server | grep "cava"`
+        [ "${cavawin}" ] || echo "Could not find cava window"
+      fi
+    }
+    [ "${cavawin}" ] && {
+      winid=`echo ${cavawin} | awk ' { print $1 } '`
+      grav=`echo ${cavawin} | awk ' { print $2 } '`
+      xoff=`echo ${cavawin} | awk ' { print $3 } '`
+      yoff=`echo ${cavawin} | awk ' { print $4 } '`
+      width=`echo ${cavawin} | awk ' { print $5 } '`
+      height=`echo ${cavawin} | awk ' { print $6 } '`
+      [ "${winid}" ] && {
+        half_height=$((height / 2))
+        # yoff=$((yoff + height - half_height))
+        mvarg="${grav},${xoff},${yoff},${width},${half_height}"
+        wmctrl -i -r "${winid}" -b "remove,fullscreen,maximized_vert"
+        wmctrl -i -r "${winid}" -e "${mvarg}"
+      }
+    }
+  }
 else
   if [ "${RXVT}" ]
   then
