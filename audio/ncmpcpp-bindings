@@ -579,3 +579,6 @@ def_key "alt-9"
 def_key "alt-0"
   run_external_command "/usr/local/bin/set_term_trans 1.0"
 
+def_key "alt-r"
+  run_external_command "/usr/local/bin/raise_cava"
+

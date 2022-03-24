@@ -29,7 +29,7 @@ EXPORT2="echk mklink md2man mkreadme mkseamless mkusb mkwmv models mp3topic \
          sdrestore sdwrite show-background showmem sndprobe synchaven \
          syncitunes synergyctl timemachinedelete upd updflash updgit updsums \
          updtranscend updtz url-create variety-beauty variety-config \
-         variety-favorite variety-fractals variety-get variety-next \
+         variety-favorite variety-fractals variety-get variety-next raise_cava \
          variety-prev variety-quit variety-select variety-set variety-start \
          vidlinks webloc2url wh wikivim xmldiff xoff xstop yaml2json zipiso \
          mpcava disable-update-notifier mknewhp set_term_trans usb-reset"
