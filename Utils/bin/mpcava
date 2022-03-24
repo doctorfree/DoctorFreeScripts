@@ -37,10 +37,11 @@ VTITLE="Spectrum Visualizer"
 MTITLE="Music Player Plus"
 
 usage() {
-    printf "\nUsage: mpcava [-f] [-h] [-r] [-t] [-u]"
+    printf "\nUsage: mpcava [-f] [-h] [-q] [-r] [-t] [-u]"
     printf "\nWhere:"
     printf "\n\t-f indicates fullscreen display"
     printf "\n\t-h indicates half-height for cava window (with -f only)"
+    printf "\n\t-q indicates quarter-height for cava window (with -f only)"
     printf "\n\t-r indicates use retro terminal emulator"
     printf "\n\t-t indicates use tilix terminal emulator"
     printf "\n\t-u displays this usage message and exits\n"
@@ -49,15 +50,19 @@ usage() {
 
 FULLSCREEN=
 HALFHEIGHT=
+QRTRHEIGHT=
 RETRO=
 RXVT=
-while getopts "fhrtu" flag; do
+while getopts "fhqrtu" flag; do
     case $flag in
         f)
             FULLSCREEN=1
             ;;
         h)
             HALFHEIGHT=1
+            ;;
+        q)
+            QRTRHEIGHT=1
             ;;
         r)
             RETRO=1
@@ -71,13 +76,21 @@ while getopts "fhrtu" flag; do
     esac
 done
 
-[ "${HALFHEIGHT}" ] && {
-  [ "${FULLSCREEN}" ] || HALFHEIGHT=
-}
 [ "${RETRO}" ] && [ "${RXVT}" ] && {
   echo "Only one of '-r' and '-t' can be specified"
   echo "Exiting"
   usage
+}
+[ "${HALFHEIGHT}" ] && [ "${QRTRHEIGHT}" ] && {
+  echo "Only one of '-h' and '-q' can be specified"
+  echo "Exiting"
+  usage
+}
+[ "${HALFHEIGHT}" ] && {
+  [ "${FULLSCREEN}" ] || HALFHEIGHT=
+}
+[ "${QRTRHEIGHT}" ] && {
+  [ "${FULLSCREEN}" ] || QRTRHEIGHT=
 }
 
 if [ "${FULLSCREEN}" ]
@@ -95,7 +108,7 @@ then
                --full-screen \
                -- cava &
   fi
-  [ "${HALFHEIGHT}" ] && {
+  [ "${HALFHEIGHT}" ] || [ "${QRTRHEIGHT}" ] && {
     sleep 1
     if [ "${RXVT}" ]
     then
@@ -121,9 +134,15 @@ then
       width=`echo ${cavawin} | awk ' { print $5 } '`
       height=`echo ${cavawin} | awk ' { print $6 } '`
       [ "${winid}" ] && {
-        half_height=$((height / 2))
-        # yoff=$((yoff + height - half_height))
-        mvarg="${grav},${xoff},${yoff},${width},${half_height}"
+        if [ "${HALFHEIGHT}" ]
+        then
+          height=$((height / 2))
+        else
+          height=$((height / 4))
+          # Fudge this to compensate for differing window decoration size
+          [ "${RXVT}" ] || height=$((height - 30))
+        fi
+        mvarg="${grav},${xoff},${yoff},${width},${height}"
         wmctrl -i -r "${winid}" -b "remove,fullscreen,maximized_vert"
         wmctrl -i -r "${winid}" -e "${mvarg}"
       }
