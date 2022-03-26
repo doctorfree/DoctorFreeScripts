@@ -285,11 +285,6 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Janelle_B."
             ;;
-        Janesinner)
-            get_search "${MODD}/${model}" "${model}_Suicide"
-            get_search "${MODD}/${model}" "Jane_Sinner"
-            get_search "${MODD}/${model}" "Yana_Sinner"
-            ;;
         Jasmine_A)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Zoi_Gorman"
@@ -1056,9 +1051,13 @@ get_suicide() {
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Anette_Down"
             ;;
+        Blooma)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "${model}_Suicide"
+            ;;
         Avrora)
             get_search "${SUGD}/${model}" "${model}"
-            get_search "${SUGD}/${model}" "Avrora_Suicide"
+            get_search "${SUGD}/${model}" "${model}_Suicide"
             ;;
         Brea_Suicide)
             get_search "${SUGD}/${model}" "${model}"
@@ -1090,6 +1089,11 @@ get_suicide() {
         Ivory_Suicide)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Ivory"
+            ;;
+        Janesinner)
+            get_search "${SUGD}/${model}" "${model}_Suicide"
+            get_search "${SUGD}/${model}" "Jane_Sinner"
+            get_search "${SUGD}/${model}" "Yana_Sinner"
             ;;
         Jessicalou_Suicide)
             get_search "${SUGD}/${model}" "${model}"
