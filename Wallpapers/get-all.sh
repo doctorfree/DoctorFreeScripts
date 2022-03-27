@@ -239,6 +239,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Women_With_Glasses"
         ;;
+    Graphis.ne)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Graphis"
+        ;;
     Hard_Nipples)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Perky_Nipples"
