@@ -161,6 +161,12 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "${model}_\(Met-art\)"
             ;;
+        Chloe_Benson)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "FTV_Chloe"
+            get_search "${MODD}/${model}" "Chloe_Toy"
+            get_search "${MODD}/${model}" "Chloe_Scott"
+            ;;
         Christina_Tishova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kristina_Tishova"
@@ -578,6 +584,9 @@ get_model() {
                   ;;
                 Karola_Photodromm)
                   get_search "${photomodel}" "Karola"
+                  ;;
+                Margo_Dumas)
+                  get_search "${photomodel}" "Margot_Photodromm"
                   ;;
                 Maria_Dezideryeva)
                   get_search "${photomodel}" "Maria_Photodromm"
