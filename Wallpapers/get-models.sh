@@ -575,6 +575,9 @@ get_model() {
                 Claudia_Photodromm)
                   get_search "${photomodel}" "Claudia"
                   ;;
+                Ela_Savanas)
+                  get_search "${photomodel}" "Ela_Photodromm"
+                  ;;
                 Isabelle_Photodromm)
                   get_search "${photomodel}" "Isabelle"
                   ;;
@@ -1076,10 +1079,6 @@ get_suicide() {
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Sara_Calixto"
             get_search "${SUGD}/${model}" "PetiteMarie"
-            ;;
-        Ela_Savanas)
-            get_search "${SUGD}/${model}" "${model}"
-            get_search "${SUGD}/${model}" "Ela_Photodromm"
             ;;
         Elisa_Rose)
             get_search "${SUGD}/${model}" "${model}"
