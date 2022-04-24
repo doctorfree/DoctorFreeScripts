@@ -214,6 +214,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Arina_F"
             ;;
+        Eufrat)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Eufrat_Mai"
+            ;;
         Eva_Chejova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Eva_Chehova"
