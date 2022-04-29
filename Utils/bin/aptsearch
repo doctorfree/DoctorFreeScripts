@@ -4,4 +4,4 @@ printf "\n\033[1mAvailable packages matching your search term:\033[0m\n\n"
 apt-cache search $*
 
 printf "\n\033[1mInstalled packages matching your search term:\033[0m\n\n"
-dpkg -l | grep -i $*
+dpkg -l | grep ^i | grep -i $*
