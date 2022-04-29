@@ -27,6 +27,11 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Adriana_Morriss"
             ;;
+        Aislin)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Ammra_Aislin"
+            get_search "${MODD}/${model}" "Vika_P"
+            ;;
         Alena_Hemkova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Scarlett_A"
@@ -156,6 +161,12 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "${model}_\(Met-art\)"
             ;;
+        Chloe_Benson)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "FTV_Chloe"
+            get_search "${MODD}/${model}" "Chloe_Toy"
+            get_search "${MODD}/${model}" "Chloe_Scott"
+            ;;
         Christina_Tishova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kristina_Tishova"
@@ -202,6 +213,10 @@ get_model() {
         Emmy)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Arina_F"
+            ;;
+        Eufrat)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Eufrat_Mai"
             ;;
         Eva_Chejova)
             get_search "${MODD}/${model}" "${model}"
@@ -279,11 +294,6 @@ get_model() {
         Janelle_B)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Janelle_B."
-            ;;
-        Janesinner)
-            get_search "${MODD}/${model}" "${model}_Suicide"
-            get_search "${MODD}/${model}" "Jane_Sinner"
-            get_search "${MODD}/${model}" "Yana_Sinner"
             ;;
         Jasmine_A)
             get_search "${MODD}/${model}" "${model}"
@@ -569,6 +579,9 @@ get_model() {
                 Claudia_Photodromm)
                   get_search "${photomodel}" "Claudia"
                   ;;
+                Ela_Savanas)
+                  get_search "${photomodel}" "Ela_Photodromm"
+                  ;;
                 Isabelle_Photodromm)
                   get_search "${photomodel}" "Isabelle"
                   ;;
@@ -578,6 +591,9 @@ get_model() {
                   ;;
                 Karola_Photodromm)
                   get_search "${photomodel}" "Karola"
+                  ;;
+                Margo_Dumas)
+                  get_search "${photomodel}" "Margot_Photodromm"
                   ;;
                 Maria_Dezideryeva)
                   get_search "${photomodel}" "Maria_Photodromm"
@@ -1051,9 +1067,13 @@ get_suicide() {
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Anette_Down"
             ;;
+        Blooma)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "${model}_Suicide"
+            ;;
         Avrora)
             get_search "${SUGD}/${model}" "${model}"
-            get_search "${SUGD}/${model}" "Avrora_Suicide"
+            get_search "${SUGD}/${model}" "${model}_Suicide"
             ;;
         Brea_Suicide)
             get_search "${SUGD}/${model}" "${model}"
@@ -1063,10 +1083,6 @@ get_suicide() {
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Sara_Calixto"
             get_search "${SUGD}/${model}" "PetiteMarie"
-            ;;
-        Ela_Savanas)
-            get_search "${SUGD}/${model}" "${model}"
-            get_search "${SUGD}/${model}" "Ela_Photodromm"
             ;;
         Elisa_Rose)
             get_search "${SUGD}/${model}" "${model}"
@@ -1085,6 +1101,11 @@ get_suicide() {
         Ivory_Suicide)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Ivory"
+            ;;
+        Janesinner)
+            get_search "${SUGD}/${model}" "${model}_Suicide"
+            get_search "${SUGD}/${model}" "Jane_Sinner"
+            get_search "${SUGD}/${model}" "Yana_Sinner"
             ;;
         Jessicalou_Suicide)
             get_search "${SUGD}/${model}" "${model}"

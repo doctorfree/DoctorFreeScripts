@@ -1,0 +1,212 @@
+#!/bin/bash
+#
+# mpcava - run ncmpcpp and cava in separate terminal emulators
+#
+# Written by Ronald Joe Record <ronaldrecord@gmail.com>
+# March, 2022
+#
+# I am using two separate terminal emulators as I want a smaller
+# font for the cava terminal. The terminal command options are
+# customized for my setup, you may need to adjust the geometry
+# to get the two windows to align as desired. I wanted the cava
+# terminal window at the bottom of the screen and aligned with
+# the ncmpcpp terminal window. Couldn't figure out how to set
+# the window title for gnome-terminal.
+#
+# Alternately, if the "-t" option is specified then only a single
+# terminal emulator is used, tilix. Tilix is invoked twice with
+# different profiles, one for ncmpcpp and another for cava. The
+# profiles are named "MusicPlayer" and "Cava". 
+#
+# In both types of invocations, with or without "-t", the terminal
+# profiles used have font sizee settings of 32 and 8 for ncmpcpp and
+# cava, respectively. This aligns the windows, on my system, when
+# not in fullscreen mode.
+#
+# When using the cool-retro-term for ncmpcpp (-r option), adjust the
+# size of the cool-retro-term window manually so it aligns with the
+# cava window. I could not figure out how to specify a geometry for
+# the cool-retro-term window when invoked with "-e ncmpcpp".
+#
+# Note also that the key bindings I have configured for ncmpcpp
+# to dynamically set the transparency of the terminal window only
+# work when using xfce4-terminal for ncmpcpp. That is, without
+# the "-t" or "-r" arguments.
+
+VTITLE="Spectrum Visualizer"
+MTITLE="Music Player Plus"
+
+usage() {
+    printf "\nUsage: mpcava [-f] [-h] [-q] [-r] [-t] [-u]"
+    printf "\nWhere:"
+    printf "\n\t-f indicates fullscreen display"
+    printf "\n\t-h indicates half-height for cava window (with -f only)"
+    printf "\n\t-q indicates quarter-height for cava window (with -f only)"
+    printf "\n\t-r indicates use retro terminal emulator"
+    printf "\n\t-t indicates use tilix terminal emulator"
+    printf "\n\t-u displays this usage message and exits\n"
+    exit 1
+}
+
+FULLSCREEN=
+HALFHEIGHT=
+QRTRHEIGHT=
+RETRO=
+RXVT=
+while getopts "fhqrtu" flag; do
+    case $flag in
+        f)
+            FULLSCREEN=1
+            ;;
+        h)
+            HALFHEIGHT=1
+            ;;
+        q)
+            QRTRHEIGHT=1
+            ;;
+        r)
+            RETRO=1
+            ;;
+        t)
+            RXVT=1
+            ;;
+        u)
+            usage
+            ;;
+    esac
+done
+
+[ "${RETRO}" ] && [ "${RXVT}" ] && {
+  echo "Only one of '-r' and '-t' can be specified"
+  echo "Exiting"
+  usage
+}
+[ "${HALFHEIGHT}" ] && [ "${QRTRHEIGHT}" ] && {
+  echo "Only one of '-h' and '-q' can be specified"
+  echo "Exiting"
+  usage
+}
+[ "${HALFHEIGHT}" ] && {
+  [ "${FULLSCREEN}" ] || HALFHEIGHT=
+}
+[ "${QRTRHEIGHT}" ] && {
+  [ "${FULLSCREEN}" ] || QRTRHEIGHT=
+}
+
+if [ "${FULLSCREEN}" ]
+then
+  if [ "${RXVT}" ]
+  then
+    tilix --title="${VTITLE}" \
+               --full-screen \
+               --window-style=borderless \
+               --profile=Cava &
+  else
+    gnome-terminal -t "${VTITLE}" \
+               --profile=SmallFont \
+               --hide-menubar \
+               --full-screen \
+               -- cava &
+  fi
+  [ "${HALFHEIGHT}" ] || [ "${QRTRHEIGHT}" ] && {
+    sleep 1
+    if [ "${RXVT}" ]
+    then
+      cavawin=`wmctrl -l -G -x | grep tilix.Tilix | grep "${VTITLE}"`
+    else
+      cavawin=`wmctrl -l -G -x | grep gnome-terminal-server | grep "${VTITLE}"`
+    fi
+    [ "${cavawin}" ] || {
+      if [ "${RXVT}" ]
+      then
+        cavawin=`wmctrl -l -G -x | grep tilix.Tilix | grep "cava"`
+        [ "${cavawin}" ] || echo "Could not find cava window"
+      else
+        cavawin=`wmctrl -l -G -x | grep gnome-terminal-server | grep "cava"`
+        [ "${cavawin}" ] || echo "Could not find cava window"
+      fi
+    }
+    [ "${cavawin}" ] && {
+      winid=`echo ${cavawin} | awk ' { print $1 } '`
+      grav=`echo ${cavawin} | awk ' { print $2 } '`
+      xoff=`echo ${cavawin} | awk ' { print $3 } '`
+      yoff=`echo ${cavawin} | awk ' { print $4 } '`
+      width=`echo ${cavawin} | awk ' { print $5 } '`
+      height=`echo ${cavawin} | awk ' { print $6 } '`
+      [ "${winid}" ] && {
+        if [ "${HALFHEIGHT}" ]
+        then
+          height=$((height / 2))
+        else
+          height=$((height / 4))
+          # Fudge this to compensate for differing window decoration size
+          [ "${RXVT}" ] || height=$((height - 30))
+        fi
+        mvarg="${grav},${xoff},${yoff},${width},${height}"
+        wmctrl -i -r "${winid}" -b "remove,fullscreen,maximized_vert"
+        wmctrl -i -r "${winid}" -e "${mvarg}"
+      }
+    }
+  }
+else
+  if [ "${RXVT}" ]
+  then
+    tilix --title="${VTITLE}" \
+               --window-style=borderless \
+               --geometry=360x16+150-0 \
+               --profile=Cava &
+  else
+    gnome-terminal -t "${VTITLE}" \
+               --profile=SmallFont \
+               --hide-menubar \
+               --geometry 360x16+150-0 \
+               -- cava &
+  fi
+fi
+
+sleep 2
+
+if [ "${RETRO}" ]
+then
+    if [ "${FULLSCREEN}" ]
+    then
+        cool-retro-term --fullscreen -e ncmpcpp &
+    else
+        cool-retro-term -e ncmpcpp &
+    fi
+else
+    if [ "${FULLSCREEN}" ]
+    then
+      if [ "${RXVT}" ]
+      then
+        tilix --title="${MTITLE}" \
+               --full-screen \
+               --window-style=borderless \
+               --profile=MusicPlayer &
+      else
+        xfce4-terminal --title "${MTITLE}" \
+               --icon=audio-player \
+               --hide-menubar \
+               --hide-toolbar \
+               --hide-scrollbar \
+               --fullscreen \
+               --command="ncmpcpp" &
+      fi
+    else
+      if [ "${RXVT}" ]
+      then
+        tilix --title="${MTITLE}" \
+               --window-style=borderless \
+               --geometry=90x20+150+25 \
+               --profile=MusicPlayer &
+      else
+        xfce4-terminal --title "${MTITLE}" \
+               --icon=audio-player \
+               --hide-menubar \
+               --hide-toolbar \
+               --hide-scrollbar \
+               --geometry 90x20+150+25 \
+               --command="ncmpcpp" &
+      fi
+    fi
+fi
