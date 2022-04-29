@@ -1032,6 +1032,11 @@ get_jav() {
             get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Chibana_Meisa"
             ;;
+        Miao_Xiao_Ji)
+            get_search "${JAVD}/${model}" "${model}"
+            get_search "${JAVD}/${model}" "baojishaonvmiaoxiaoji"
+            get_search "${JAVD}/${model}" "miaoxiaoji"
+            ;;
         Minami_Kojima)
             get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Kojima_Minami"
