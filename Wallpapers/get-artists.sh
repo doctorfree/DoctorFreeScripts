@@ -47,6 +47,10 @@ do
             get_search "Artists/${artist}" "${artist}"
             get_search "Artists/${artist}" "Sciamano240"
             ;;
+        ZOh)
+            get_search "Artists/${artist}" "${artist}"
+            get_search "Artists/${artist}" "therealzOh"
+            ;;
         Zumi)
             get_search "Artists/${artist}" "${artist}"
             get_search "Artists/${artist}" "zumidraws"
