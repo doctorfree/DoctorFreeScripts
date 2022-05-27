@@ -1126,6 +1126,10 @@ get_suicide() {
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Keshia_Suicide"
             ;;
+        Lass_Suicide)
+            get_search "${SUGD}/${model}" "${model}"
+            get_search "${SUGD}/${model}" "Julie_Kennedy_\(Pornstar\)"
+            ;;
         Lucy_Collett)
             get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "LucyV_Suicide"
