@@ -167,6 +167,10 @@ get_model() {
             get_search "${MODD}/${model}" "Chloe_Toy"
             get_search "${MODD}/${model}" "Chloe_Scott"
             ;;
+        Chloe_\(Hegre\))
+            get_search "${MODD}/${model}" "Chloe_\(Hegre\)"
+            get_search "${MODD}/${model}" "Chloe_R."
+            ;;
         Christina_Tishova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kristina_Tishova"
