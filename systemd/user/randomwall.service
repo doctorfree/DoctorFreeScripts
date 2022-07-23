@@ -1,0 +1,6 @@
+# ~/.config/systemd/user/randomwall.service
+[Unit]
+Description=Change GNOME wallpaper
+
+[Service]
+ExecStart=/usr/local/bin/randomwall

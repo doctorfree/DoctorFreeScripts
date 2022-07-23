@@ -1,0 +1,9 @@
+# ~/.config/systemd/user/randomwall.timer
+[Unit]
+Description=Start randomwall.service hourly
+
+[Timer]
+OnCalendar=hourly
+
+[Install]
+WantedBy=timers.target
