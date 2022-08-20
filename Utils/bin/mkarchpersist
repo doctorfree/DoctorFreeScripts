@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# mkarchpersist - create a Ventoy persistance data filesystem for Arch Linux
+#
+# Assumes this script is executed in the extracted Ventoy folder
+#
+# See https://ventoy.net/en/index.html
+
+# Set MNTP to the mount point of the USB device
+MNTP="/media/ronnie/Ventoy"
+
+# Set OUTP to the name of the persistance data filesystem
+OUTP="${MNTP}/ventoy/archlinux_persistence.dat"
+
+# Set SIZE to the size of the desired filesystem
+SIZE=16384 # 16GB
+
+# Set label, for Arch Linux this needs to be 'vtoycow'
+LABL="vtoycow"
+
+[ -x CreatePersistentImg.sh ] || {
+    echo "CreatePersistentImg.sh is not found or not executable."
+    echo "Make sure this script is executed in the extracted Ventoy folder"
+    echo "and that the CreatePersistentImg.sh script is executable."
+    echo "Exiting."
+    exit 1
+}
+
+sudo ./CreatePersistentImg.sh -s ${SIZE} -l ${LABL} -o "${OUTP}"
