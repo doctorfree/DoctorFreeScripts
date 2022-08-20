@@ -185,6 +185,10 @@ get_model() {
             get_search "${MODD}/${model}" "Connie_Carter"
             get_search "${MODD}/${model}" "Josephine"
             ;;
+        Danaz_Kaleesy)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Carin_E"
+            ;;
         Darya_Chekanova)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Daria_Chekanova"
@@ -1028,6 +1032,10 @@ get_jav() {
     model="$1"
     cd "${WHVN}"
     case "${model}" in
+        Beau_Hesling)
+            get_search "${JAVD}/${model}" "${model}"
+            get_search "${JAVD}/${model}" "Beau_D"
+            ;;
         Julia_Kyoka)
             get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Julia_Boin"
@@ -1136,7 +1144,7 @@ get_suicide() {
             ;;
         Lass_Suicide)
             get_search "${SUGD}/${model}" "${model}"
-            get_search "${SUGD}/${model}" "Julie_Kennedy_\(Pornstar\)"
+            get_search "${SUGD}/${model}" "Julie_Kennedy"
             ;;
         Lucy_Collett)
             get_search "${SUGD}/${model}" "${model}"

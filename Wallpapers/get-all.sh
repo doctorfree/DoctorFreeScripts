@@ -251,6 +251,11 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "hegre.com"
         ;;
+    Hungarian)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Hungarian_Women"
+        get_search "${dir}" "Alisa_I"
+        ;;
     Japanese)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Japanese_women"
@@ -365,13 +370,13 @@ do
     Ukrainian)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Ukraine"
-        get_search "${dir}" "Ukrainian"
         get_search "${dir}" "Gloria_Sol"
         get_search "${dir}" "Mila_Azul"
         get_search "${dir}" "Jula"
         get_search "${dir}" "Kseniia_Kufeld"
         get_search "${dir}" "Li_Moon"
         get_search "${dir}" "Katie_Fey"
+        get_search "${dir}" "Ulya_Lexivia"
         get_search "${dir}" "Viktoria_Yarova"
         ;;
     Vixen.com)

@@ -26,6 +26,7 @@ CHK="../../Czech"
 DOM="../../Domai"
 FEM="../../Femjoy"
 CHN="../../Chinese"
+HUN="../../Hungarian"
 JAP="../../Japanese"
 ASN="../../Asian"
 MET="../../Met-Art"
@@ -35,6 +36,7 @@ RUS="../../Russian"
 STQ="../../Stasy_Q"
 UKR="../../Ukrainian"
 W4B="../../Watch4Beauty"
+ZSY="../../Zishy"
 DES="$PHD"
 SUB="$MOD"
 LN="ln -s"
@@ -44,7 +46,7 @@ TELL=
 VERB=1
 
 usage() {
-  printf "\nUsage: linkhaven [-a] [-bBcCdD] [-f] [-h] [-j] [-m] [-n] [-pP] [-q] [-rsS] [-uU] [-wz]"
+  printf "\nUsage: linkhaven [-a] [-bBcCdD] [-f] [-hH] [-j] [-m] [-n] [-pP] [-q] [-rsS] [-uU] [-wz]"
   printf "\nWhere:"
   printf "\n\t-a indicates use all combinations of subdirs and destinations"
   printf "\n\t-b indicates use Playboy destination dir"
@@ -55,6 +57,7 @@ usage() {
   printf "\n\t-f indicates use Femjoy destination dir"
   printf "\n\t-h indicates use hard links for duplicates"
   printf "\n\t\t(default is symbolic links)"
+  printf "\n\t-H indicates use Hungarian destination dir"
   printf "\n\t-j indicates use Japanese destination dir"
   printf "\n\t-m indicates use Met-Art destination"
   printf "\n\t-n indicates tell me what you would do but don't do it"
@@ -154,7 +157,7 @@ do_big() {
     done
 }
 
-while getopts abcdfhjnmpqrsBDPSwzUu flag; do
+while getopts abcdfhHjnmpqrsBDPSwzUu flag; do
     case $flag in
         a)
             ALL=1
@@ -179,6 +182,9 @@ while getopts abcdfhjnmpqrsBDPSwzUu flag; do
             ;;
         h)
             LN="ln"
+            ;;
+        H)
+            DES="$HUN"
             ;;
         j)
             DES="$JAP"
@@ -241,6 +247,7 @@ cd "${TOP}"
 # CHK="../../Czech"
 # DOM="../../Domai"
 # FEM="../../Femjoy"
+# HUN="../../Hungarian"
 # MET="../../Met-Art"
 # DRO="../../Photodromm"
 # PLA="../../Playboy"
@@ -248,22 +255,23 @@ cd "${TOP}"
 # STQ="../../Stasy_Q"
 # UKR="../../Ukrainian"
 # W4B="../../Watch4Beauty"
+# ZSY="../../Zishy"
 if [ "$ALL" ]
 then
     SUB="$MOD"
-    for dest in "$PHD" "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    for dest in "$PHD" "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$HUN" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B" "$ZSY"
     do
         DES="$dest"
         linkem
     done
     SUB="$PHO"
-    for dest in "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    for dest in "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$HUN" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B" "$ZSY"
     do
         DES="$dest"
         linkem
     done
     SUB="$SUI"
-    for dest in "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B"
+    for dest in "$BDS" "$ALT" "$BAB" "$CHK" "$DIG" "$DOM" "$FEM" "$HUN" "$MET" "$DRO" "$PLA" "$RUS" "$STQ" "$UKR" "$W4B" "$ZSY"
     do
         DES="$dest"
         linkem
