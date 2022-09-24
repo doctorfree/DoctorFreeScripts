@@ -2,7 +2,7 @@
 #
 # gh_get_latest - retrieve the latest release of a Github repository release
 #
-# Usage: gh_get_latest [-i] [-l] [-o owner] [-p project]
+# Usage: gh_get_latest [-i] [-l] [-L] [-o owner] [-p project]
 #
 # Filtering the returned JSON object from the API request with:
 #
@@ -35,11 +35,12 @@
 #   CURL_PIP_TO_JQ | grep "\.amd64\.deb"
 
 usage() {
-  printf "\nUsage: gh_get_latest [-i] [-l] [-o owner] [-p project]"
+  printf "\nUsage: gh_get_latest [-i] [-l] [-L] [-o owner] [-p project]"
   printf "\nWhere:"
   printf "\n\t-i indicates install downloaded package"
   printf "\n\t\tprints download url if no '-i' argument provided"
   printf "\n\t-l indicates list all release assets for the project"
+  printf "\n\t-L indicates use the Gitlab API to access projects hosted on Gitlab"
   printf "\n\t-o owner specifies the Github repository owner"
   printf "\n\t\tdefault: doctorfree"
   printf "\n\t-p project specifies the Github repository name"
@@ -67,6 +68,7 @@ debian=
 fedora=
 rpi=
 ubuntu=
+use_gitlab=
 have_apt=`type -p apt`
 have_aptget=`type -p apt-get`
 have_dnf=`type -p dnf`
@@ -79,13 +81,16 @@ INSTALL=
 LISTALL=
 OWNER=doctorfree
 PROJECT=mpcplus
-while getopts "ilo:p:u" flag; do
+while getopts "ilLo:p:u" flag; do
     case $flag in
         i)
             INSTALL=1
             ;;
         l)
             LISTALL=1
+            ;;
+        L)
+            use_gitlab=1
             ;;
         o)
             OWNER="$OPTARG"
@@ -102,7 +107,13 @@ shift $(( OPTIND - 1 ))
 
 [ "${LISTALL}" ] && [ "${INSTALL}" ] && INSTALL=
 
-API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+if [ "${use_gitlab}" ]
+then
+  API_URL="https://gitlab.com/api/v4/projects/${OWNER}%2F${PROJECT}/releases"
+else
+  API_URL="https://api.github.com/repos/${OWNER}/${PROJECT}/releases/latest"
+fi
+
 
 if [ -f /etc/os-release ]
 then
@@ -186,41 +197,134 @@ fi
 [ "${have_jq}" ] || install_package jq
 
 [ "${LISTALL}" ] && {
-  curl --silent "${API_URL}" | \
-       jq --raw-output '.assets | .[]?.browser_download_url'
+  if [ "${use_gitlab}" ]
+  then
+    curl --silent "${API_URL}" | \
+         jq --raw-output '.[0].assets.links | .[]?.direct_asset_url'
+  else
+    curl --silent "${API_URL}" | \
+         jq --raw-output '.assets | .[]?.browser_download_url'
+  fi
   exit 0
 }
 
 DL_URL=
 if [ "${arch}" ]
 then
-  DL_URL=$(curl --silent "${API_URL}" | \
+  if [ "${use_gitlab}" ]
+  then
+    DL_URL=$(curl --silent "${API_URL}" | \
+           jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+           grep "\.pkg\.tar\.zst")
+  else
+    DL_URL=$(curl --silent "${API_URL}" | \
            jq --raw-output '.assets | .[]?.browser_download_url' | \
            grep "\.pkg\.tar\.zst")
+  fi
 else
   if [ "${centos}" ]
   then
-    DL_URL=$(curl --silent "${API_URL}" | \
+    if [ "${use_gitlab}" ]
+    then
+      DL_URL=$(curl --silent "${API_URL}" | \
+             jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+             grep "\.el.*x86_64\.rpm")
+    else
+      DL_URL=$(curl --silent "${API_URL}" | \
              jq --raw-output '.assets | .[]?.browser_download_url' | \
              grep "\.el.*x86_64\.rpm")
+    fi
+    [ "${DL_URL}" ] || {
+      # Sometimes the project does not use an architecture suffix
+      if [ "${use_gitlab}" ]
+      then
+        DL_URL=$(curl --silent "${API_URL}" | \
+               jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+               grep ".*\.rpm")
+      else
+        DL_URL=$(curl --silent "${API_URL}" | \
+               jq --raw-output '.assets | .[]?.browser_download_url' | \
+               grep ".*\.rpm")
+      fi
+    }
   else
     if [ "${fedora}" ]
     then
-      DL_URL=$(curl --silent "${API_URL}" | \
+      if [ "${use_gitlab}" ]
+      then
+        DL_URL=$(curl --silent "${API_URL}" | \
+               jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+               grep "\.fc.*x86_64\.rpm")
+      else
+        DL_URL=$(curl --silent "${API_URL}" | \
                jq --raw-output '.assets | .[]?.browser_download_url' | \
                grep "\.fc.*x86_64\.rpm")
+      fi
+      [ "${DL_URL}" ] || {
+        # Sometimes the project does not use an architecture suffix
+        if [ "${use_gitlab}" ]
+        then
+          DL_URL=$(curl --silent "${API_URL}" | \
+               jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+               grep ".*\.rpm")
+        else
+          DL_URL=$(curl --silent "${API_URL}" | \
+               jq --raw-output '.assets | .[]?.browser_download_url' | \
+               grep ".*\.rpm")
+        fi
+      }
     else
       if [ "${debian}" ]
       then
         if [ "${mach}" == "x86_64" ]
         then
-          DL_URL=$(curl --silent "${API_URL}" | \
+          if [ "${use_gitlab}" ]
+          then
+            DL_URL=$(curl --silent "${API_URL}" | \
+                   jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+                   grep "\.amd64\.deb")
+          else
+            DL_URL=$(curl --silent "${API_URL}" | \
                    jq --raw-output '.assets | .[]?.browser_download_url' | \
                    grep "\.amd64\.deb")
+          fi
+          [ "${DL_URL}" ] || {
+            # Sometimes the project does not use an architecture suffix
+            if [ "${use_gitlab}" ]
+            then
+              DL_URL=$(curl --silent "${API_URL}" | \
+                jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+                grep ".*\.deb")
+            else
+              DL_URL=$(curl --silent "${API_URL}" | \
+                jq --raw-output '.assets | .[]?.browser_download_url' | \
+                grep ".*\.deb")
+            fi
+          }
         else
-          DL_URL=$(curl --silent "${API_URL}" | \
+          if [ "${use_gitlab}" ]
+          then
+            DL_URL=$(curl --silent "${API_URL}" | \
+                   jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+                   grep "\.arm.*\.deb")
+          else
+            DL_URL=$(curl --silent "${API_URL}" | \
                    jq --raw-output '.assets | .[]?.browser_download_url' | \
                    grep "\.arm.*\.deb")
+          fi
+          [ "${DL_URL}" ] || {
+            # Sometimes the project does not use an architecture suffix
+            if [ "${use_gitlab}" ]
+            then
+              DL_URL=$(curl --silent "${API_URL}" | \
+                jq --raw-output '.[0].assets.links | .[]?.direct_asset_url' | \
+                grep ".*\.deb")
+            else
+              DL_URL=$(curl --silent "${API_URL}" | \
+                jq --raw-output '.assets | .[]?.browser_download_url' | \
+                grep ".*\.deb")
+            fi
+          }
         fi
       else
         echo "No release asset found for this platform"

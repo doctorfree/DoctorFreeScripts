@@ -6,10 +6,10 @@ footer: gh_get_latest 1.0
 date: September 24, 2022
 ---
 # NAME
-**gh_get_latest** - list, print, or install the latest Github release asset(s) for a project
+**gh_get_latest** - list, print, or install the latest Github/Gitlab release asset(s) for a project
 
 # SYNOPSIS
-**gh_get_latest** [-i] [-l] [-o owner] [-p project]
+**gh_get_latest** [-i] [-l] [-L] [-o owner] [-p project]
 
 # DESCRIPTION
 *gh_get_latest* will display the download url for the latest release asset
@@ -23,6 +23,10 @@ The *gh_get_latest* command detects the platform it is being run on and
 attempts to locate any platfrom-specific release assets. Platforms supported
 include Arch Linux, Ubuntu, Raspberry Pi OS, CentOS, Fedora, and RPM or
 Debian based systems.
+
+*gh_get_latest* uses the Github API to access projects hosted on Github unless
+the `-L` argument is provided which indicates use the Gitlab API to access
+projects hosted on Gitlab.
 
 # COMMAND LINE OPTIONS
 
@@ -46,8 +50,8 @@ Debian based systems.
 **gh_get_latest -i -o doctorfree -p MusicPlayerPlus**
 : Download and install the latest release asset for this platfrom of the MusicPlayerPlus project maintained by Github user doctorfree
 
-**gh_get_latest -p RoonCommandLine**
-: Print the latest release asset download url for this platfrom of the RoonCommandLine project maintained by Github user doctorfree
+**gh_get_latest -L -o doctorfree -p RoonCommandLine**
+: Print the latest release asset download url for this platfrom of the RoonCommandLine project hosted on Gitlab and maintained by Gitlab user doctorfree
 
 **gh_get_latest -l -o doctorfree -p Asciiville**
 : List all release asset download urls of the Asciiville project maintained by Github user doctorfree

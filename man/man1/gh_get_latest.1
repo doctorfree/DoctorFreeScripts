@@ -18,11 +18,11 @@
 .hy
 .SH NAME
 .PP
-\f[B]gh_get_latest\f[R] - list, print, or install the latest Github
-release asset(s) for a project
+\f[B]gh_get_latest\f[R] - list, print, or install the latest
+Github/Gitlab release asset(s) for a project
 .SH SYNOPSIS
 .PP
-\f[B]gh_get_latest\f[R] [-i] [-l] [-o owner] [-p project]
+\f[B]gh_get_latest\f[R] [-i] [-l] [-L] [-o owner] [-p project]
 .SH DESCRIPTION
 .PP
 \f[I]gh_get_latest\f[R] will display the download url for the latest
@@ -38,6 +38,10 @@ The \f[I]gh_get_latest\f[R] command detects the platform it is being run
 on and attempts to locate any platfrom-specific release assets.
 Platforms supported include Arch Linux, Ubuntu, Raspberry Pi OS, CentOS,
 Fedora, and RPM or Debian based systems.
+.PP
+\f[I]gh_get_latest\f[R] uses the Github API to access projects hosted on
+Github unless the \f[V]-L\f[R] argument is provided which indicates use
+the Gitlab API to access projects hosted on Gitlab.
 .SH COMMAND LINE OPTIONS
 .TP
 \f[B]-i\f[R]
@@ -61,9 +65,10 @@ display usage message and exit
 Download and install the latest release asset for this platfrom of the
 MusicPlayerPlus project maintained by Github user doctorfree
 .TP
-\f[B]gh_get_latest -p RoonCommandLine\f[R]
+\f[B]gh_get_latest -L -o doctorfree -p RoonCommandLine\f[R]
 Print the latest release asset download url for this platfrom of the
-RoonCommandLine project maintained by Github user doctorfree
+RoonCommandLine project hosted on Gitlab and maintained by Gitlab user
+doctorfree
 .TP
 \f[B]gh_get_latest -l -o doctorfree -p Asciiville\f[R]
 List all release asset download urls of the Asciiville project
