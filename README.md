@@ -170,6 +170,7 @@ issueing the following commands:
 - [man cap2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/cap2mp4.1.md)
 - [man f4v2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/f4v2mp4.1.md)
 - [man flv2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/flv2mp4.1.md)
+- [man gh_get_latest](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/gh_get_latest.1.md)
 - [man m4a2mp3](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/m4a2mp3.1.md)
 - [man m4v2mp4](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/m4v2mp4.1.md)
 - [man md2man](https://gitlab.com/doctorfree/DoctorFreeScripts/-/blob/master/markdown/md2man.1.md)
