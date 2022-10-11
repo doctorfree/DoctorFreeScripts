@@ -1,0 +1,10 @@
+#!/bin/zsh
+#
+# showcolors2 - display the color palette available in a terminal window
+#
+
+for i in {0..255}
+do
+# print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}
+  print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%8)):#7}:+$'\n'}
+done
