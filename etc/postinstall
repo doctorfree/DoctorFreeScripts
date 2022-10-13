@@ -160,7 +160,19 @@ done
 # Set the IP in synergyctl, assuming this is the Synergy server
 SYNCTL="${DFS}/bin/synergyctl"
 [ -f ${SYNCTL} ] && {
-  IP=`hostname -I | awk ' { print $1 } '`
+  plat=`uname -s`
+  if [ "$plat" == "Darwin" ]
+  then
+    have_ipconfig=`type -p ipconfig`
+    if [ "$have_ipconfig}" ]
+    then
+      IP=`ipconfig getifaddr en0`
+    else
+      IP=`ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}'`
+    fi
+  else
+    IP=`hostname -I | awk ' { print $1 } '`
+  fi
   [ "${IP}" ] && {
     cat ${SYNCTL} | sed -e "s/XX.X.X.XX/${IP}/" > /tmp/syn$$
     cp /tmp/syn$$ ${SYNCTL}
