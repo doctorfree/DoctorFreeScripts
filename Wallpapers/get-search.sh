@@ -104,9 +104,14 @@ cd "${DDIR}"
     page=`expr $numpage + 1`
 }
 
-wh -l "${DDIR}" -n $numdown -s $page -t search $quiet \
-   -c $categories -f $filters -q "${query}" -p 0 ${latest}
-#echo "wh -l ${DDIR} -n $numdown -s $page -t search $quiet -c $categories -f $filters -q ${query} -p 0 ${latest}"
+if [ "${demo}" ]
+then
+  echo "wh -l ${DDIR} -n $numdown -s $page -t search $quiet \
+           -c $categories -f $filters -q ${query} -p 0 ${latest}"
+else
+  wh -l "${DDIR}" -n $numdown -s $page -t search $quiet \
+     -c $categories -f $filters -q "${query}" -p 0 ${latest}
+fi
 
 #cd "${WHDIR}"
 #echo "Finding duplicates in ${QDIR}"

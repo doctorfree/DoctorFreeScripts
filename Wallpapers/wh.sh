@@ -6,16 +6,28 @@
 #
 # This Script is written for GNU Linux, it should work under Mac OS
 
-REVISION=0.2.1
+REVISION=0.2.6
 
 #####################################
 ###   Needed for NSFW/Favorites   ###
 #####################################
 # Enter your API key
 # you can get it here: https://wallhaven.cc/settings/account
-APIKEY="ENTER_API_KEY_HERE"
+APIKEY=""
 #####################################
 ### End needed for NSFW/Favorites ###
+#####################################
+
+#####################################
+### Needed for Collections        ###
+#####################################
+# User from which wallpapers should be downloaded
+# used for TYPE=useruploads and TYPE=collections
+# If you want to download your own Collection
+# this has to be set to your username
+USR="doctorfree"
+#####################################
+### End needed for Collections    ###
 #####################################
 
 #####################################
@@ -30,7 +42,7 @@ LOCATION=/Volumes/Seagate_8TB/Pictures/Work/Wallhaven
 WPNUMBER=48
 # What page to start downloading at, default and minimum of 1.
 STARTPAGE=1
-# Type standard (newest, oldest, random, hits, mostfav), search, favorites
+# Type standard (newest, oldest, random, hits, mostfav), search, collections
 # (for now only the default collection), useruploads (if selected, only
 # FILTER variable will change the outcome)
 TYPE=standard
@@ -56,7 +68,7 @@ ATLEAST=
 # with , eg. 4x3,16x9
 ASPECTRATIO=
 # Which Type should be displayed (relevance, random, date_added, views,
-# favorites, toplist)
+# favorites, toplist, toplist-beta)
 MODE=relevance
 # if MODE is set to toplist show the toplist for the given timeframe
 # possible values: 1d (last day), 3d (last 3 days), 1w (last week),
@@ -64,11 +76,15 @@ MODE=relevance
 TOPRANGE=
 # How should the wallpapers be ordered (desc, asc)
 ORDER=desc
-# ! currently broken, might be removed
-# favorites collections, only used if TYPE = favorites
-# specify the name of the favorites collection you want to download
+# Collections, only used if TYPE = collections
+# specify the name of the collection you want to download
 # Default is the default collection name on wallhaven
-FAVCOLLECTION="Default"
+# If you want to download your own Collections make sure USR is set to your username
+# If you want to download someone elses public collection enter the name here
+# and the username under USR
+# Please note that the only filter option applied to Collections is the Number
+# of Wallpapers to download, there is no filter for resolution, purity, ...
+COLLECTION="Default"
 # Searchterm, only used if TYPE = search
 # you can also search by tags, use id:TAGID
 # to get the tag id take a look at: https://wallhaven.cc/tags/
@@ -81,17 +97,15 @@ COLOR=""
 # Should the search results be saved to a separate subfolder?
 # 0 for no separate folder, 1 for separate subfolder
 SUBFOLDER=0
-# User from which wallpapers should be downloaded (only used for
-# TYPE=useruploads)
-USR=AksumkA
 # use gnu parallel to speed up the download (0, 1), if set to 1 make sure
 # you have gnuparallel installed, see normal.vs.parallel.txt for
 # speed improvements
+# using this option can lead to cloudflare blocking some of the downloads
 PARALLEL=0
 # custom thumbnails per page
 # changeable here: https://wallhaven.cc/settings/browsing
 # valid values: 24, 32, 64
-# if set to 32 or 64 you need to provide login credentials
+# if set to 32 or 64 you need to provide an api key
 THUMBS=24
 #####################################
 ###   End Configuration Options   ###
@@ -101,16 +115,17 @@ function checkDependencies {
     [ "$QUIET" ] || {
         printf "Checking dependencies..."
     }
+
     dependencies=(wget jq sed)
     [[ $PARALLEL == 1 ]] && dependencies+=(parallel)
 
-    deps=0
-    for name in ${dependencies[@]}
+    for name in "${dependencies[@]}"
     do
-        [[ $(which $name 2>/dev/null) ]] ||
-        { printf "\n$name needs to be installed. Use your package manager to do so, e.g. 'sudo apt install $name'";deps=1; }
+        [[ $(command -v "$name" 2>/dev/null) ]] ||
+        { printf "\n%s needs to be installed. Use your package manager to do so, e.g. 'sudo apt install %s'" "$name" "$name";deps=1; }
     done
-    if [ $deps -ne 1 ]
+
+    if [[ $deps -ne 1 ]]
     then
         [ "$QUIET" ] || {
             printf "OK\n"
@@ -132,7 +147,7 @@ function setAPIkeyHeader {
     then
         printf "Please make sure to enter a valid API key,\n"
         printf "it is needed for NSFW Content and downloading \n"
-        printf "your Favorites also make sure your Thumbnails per\n"
+        printf "your Collections also make sure your Thumbnails per\n"
         printf "Page Setting matches the THUMBS Variable\n\n"
         printf "Press any key to exit\n"
         read -r
@@ -142,14 +157,6 @@ function setAPIkeyHeader {
     # everythings ok --> set api key header
     httpHeader="X-API-Key: $APIKEY"
 } # /setAPIkeyHeader
-
-#
-# get favorites page to extract id number later
-#
-function getFavs {
-    WGET --referer="https://wallhaven.cc" -O favtmp \
-        "https://wallhaven.cc/favorites"
-} # /WGET
 
 #
 # downloads Page with Thumbnails
@@ -174,7 +181,15 @@ function getPage {
 # arg1: the file containing the wallpapers
 #
 function downloadWallpapers {
-    for ((i=0; i<$THUMBS; i++))
+    lpchk=$(jq -r ".meta.last_page" tmp)
+    [ "${lpchk}" ] && {
+      if (( "$page" >= "$(jq -r ".meta.last_page" tmp)" ))
+      then
+        downloadEndReached=true
+      fi
+    }
+
+    for ((i=0; i<THUMBS; i++))
     do
         imgURL=$(jq -r ".data[$i].path" tmp)
 
@@ -188,9 +203,8 @@ function downloadWallpapers {
         then
             echo "$imgURL" >> download.txt
         else
-            downloadWallpaper "$imgURL"
             # check if downloadWallpaper was successful
-            if [ $? == 0 ]
+            if downloadWallpaper "$imgURL"
             then
                 echo "$filename" >> downloaded.txt
             fi
@@ -201,9 +215,10 @@ function downloadWallpapers {
     then
         # export wget wrapper and download function to make it
         # available for parallel
-        export -f WGET downloadWallpaper
+        export -f WGET coolDown downloadWallpaper
+        # shellcheck disable=SC2016
         SHELL=$(type -p bash) parallel --gnu --no-notice \
-            'imgURL={} && ! downloadWallpaper $imgURL && echo $imgURL >> downloaded.txt' < download.txt
+            'imgURL={} && downloadWallpaper $imgURL && echo "$imgURL"| sed "s/.*\///" >> downloaded.txt' < download.txt
             rm tmp download.txt
         else
             rm tmp
@@ -225,6 +240,15 @@ function downloadWallpaper {
 } # /downloadWallpaper
 
 #
+# Waits for 30 seconds if rate limiting is detected
+#
+function coolDown {
+    printf "\\t -Rate Limiting detected, sleeping for 30 seconds\\n"
+    sleep 30
+    WGET "$@"
+} # /coolDown
+
+#
 # wrapper for wget with some default arguments
 # arg0: additional arguments for wget (optional)
 # arg1: file to download
@@ -242,7 +266,12 @@ function WGET {
     fi
 
     # default wget command
-    wget -c -q --header="$httpHeader" "$@"
+    # wget -c -q --header="$httpHeader" "$@"
+    wget --server-response -q --header="$httpHeader" --keep-session-cookies \
+         --save-cookies cookies.txt --load-cookies cookies.txt "$@" 2>&1 | \
+         grep "429 Too Many Requests" >/dev/null && coolDown "$@"
+
+    return "${PIPESTATUS[0]}"
 } # /WGET
 
 #
@@ -258,7 +287,7 @@ function helpText {
     printf " -n, --number\\t\\tNumber of Wallpapers to download\\n"
     printf " -s, --startpage\\tpage to start downloading from\\n"
     printf " -t, --type\\t\\tType of download Operation: standard, search, "
-    printf "\\n\\t\\t\\tfavorites, useruploads\\n"
+    printf "\\n\\t\\t\\tcollections, useruploads\\n"
     printf " -c, --categories\\tcategories to download from, eg. 111 for "
     printf "General,\\n\\t\\t\\tAnime and People, 1 to include, 0 to exclude\\n"
     printf " -f, --filter\\t\\tfilter out content based on purity rating, "
@@ -275,7 +304,7 @@ function helpText {
     printf ",\\n\\t\\t\\tdate_added, views, favorites \\n"
     printf " -o, --order\\t\\torder ascending (asc) or descending "
     printf "(desc)\\n"
-    printf " -b, --favcollection\\tname of the favorite collections to download\\n"
+    printf " -b, --collection\\tname of the collection to download\\n"
     printf " -q, --query\\t\\tsearch query, eg. 'mario', single "
     printf "quotes needed,\\n\\t\\t\\tfor searching exact phrases use double "
     printf "quotes \\n\\t\\t\\tinside single quotes, eg. '\"super mario\"'"
@@ -350,8 +379,8 @@ while [[ $# -ge 1 ]]
         -o|--order)
             ORDER="$2"
             shift;;
-        -b|--favcollection)
-            FAVCOLLECTION="$2"
+        -b|--collection)
+            COLLECTION="$2"
             shift;;
         -q|--query)
             QUERY=${2//\'/}
@@ -406,10 +435,10 @@ then
     touch downloaded.txt
 fi
 
-# set auth header only when it is required ( for example to download favourites
-# or nsfw content... )
+# set auth header only when it is required ( for example to download your
+# own collections or nsfw content... )
 if  [ "$FILTER" == 001 ] || [ "$FILTER" == 011 ] || [ "$FILTER" == 111 ] \
-    || [ "$TYPE" == favorites ] || [ "$THUMBS" != 24 ]
+    || [ "$TYPE" == collections ] || [ "$THUMBS" != 24 ]
 then
     setAPIkeyHeader "$APIKEY"
 fi
@@ -435,6 +464,10 @@ then
         [ "$QUIET" ] || {
             printf "\\t- done!\\n"
         }
+        if [ "$downloadEndReached" = true ]
+        then
+            break
+        fi
     done
 
 elif [ "$TYPE" == search ] || [ "$TYPE" == useruploads ]
@@ -449,8 +482,13 @@ then
         s1="search?page=$page&categories=$CATEGORIES&purity=$FILTER&"
         s1+="atleast=$ATLEAST&resolutions=$RESOLUTION&ratios=$ASPECTRATIO"
         s1+="&sorting=$MODE&order=desc&topRange=$TOPRANGE&colors=$COLOR"
-        [[ "$TYPE" == search ]] && s1+="&q=$QUERY"
-        [[ "$TYPE" == useruploads ]] && s1+="&q=@$USR"
+        if [ "$TYPE" == search ]
+        then
+            s1+="&q=$QUERY"
+        elif [ "$TYPE" == useruploads ]
+        then
+            s1+="&q=@$USR"
+        fi
 
         getPage "$s1"
         [ "$QUIET" ] || {
@@ -461,69 +499,58 @@ then
         [ "$QUIET" ] || {
             printf "\\t- done!\\n"
         }
+        if [ "$downloadEndReached" = true ]
+        then
+            break
+        fi
+    done
+elif [ "$TYPE" == collections ]
+then
+    if [ "$USR" == "" ]
+    then
+        printf "Please check the value specified for USR\\n"
+        printf "to download a Collection it is necessary to specify a User\\n\\n"
+        printf "Press any key to exit\\n"
+        read -r
+        exit
+    fi
+
+    getPage "collections/$USR"
+
+    i=0
+    while
+        label=$(jq -e -r ".data[$i].label" tmp)
+        id=$(jq -e -r ".data[$i].id" tmp)
+        collectionsize=$(jq -e -r ".data[$i].count" tmp)
+        [[ $label != "$COLLECTION" && $label != null ]]
+    do
+        (( i++ ))
     done
 
-elif [ "$TYPE" == favorites ]
-then
-    getFavs
-
-    favnumber="$(grep -o "<small>[0-9]*</small>$FAVCOLLECTION" favtmp | \
-                sed 's/[^0-9]*//g')"
-
-    favlistval=$(grep -Eo "https://wallhaven.cc/favorites/[0-9]+[^.]*small>$FAVCOLLECTION" \
-                favtmp | gsed -r 's/([^0-9]*)([0-9]+)(".*)/\2/')
-
-    if [ -z "$favnumber" ] || [ -z "$favlistval" ]
+    if [ -z "$id" ]
     then
-        printf "Please check the value specified for FAVCOLLECTION\\n"
+        printf "Please check the value specified for COLLECTION\\n"
         printf "it seems that a collection with the name \"%s\" does not exist\\n\\n" \
-                "$FAVCOLLECTION"
+                "$COLLECTION"
         printf "Press any key to exit\\n"
         read -r
         exit
     fi
 
     for ((  count=0, page="$STARTPAGE";
-            count< "$WPNUMBER" && count< "$favnumber";
+            count< "$WPNUMBER" && count< "$collectionsize";
             count=count+"$THUMBS", page=page+1 ));
     do
-        [ "$QUIET" ] || {
-            printf "Download Page %s\\n" "$page"
-        }
-        getPage "favorites/$favlistval?page=$page"
-        [ "$QUIET" ] || {
-            printf "\\t- done!\\n"
-            printf "Download Wallpapers from Page %s\\n" "$page"
-        }
+        printf "Download Page %s\\n" "$page"
+        getPage "collections/$USR/$id?page=$page"
+        printf "\\t- done!\\n"
+        printf "Download Wallpapers from Page %s\\n" "$page"
         downloadWallpapers
-        [ "$QUIET" ] || {
-            printf "\\t- done!\\n"
-        }
+        printf "\\t- done!\\n"
     done
-
-elif [ "$TYPE" == useruploads ]
-then
-    # UPLOADS FROM SPECIFIC USER
-    for ((  count=0, page="$STARTPAGE";
-            count< "$WPNUMBER";
-            count=count+"$THUMBS", page=page+1 ));
-    do
-        [ "$QUIET" ] || {
-            printf "Download Page %s\\n" "$page"
-        }
-        getPage "user/$USR/uploads?page=$page&purity=$FILTER"
-        [ "$QUIET" ] || {
-            printf "\\t- done!\\n"
-            printf "Download Wallpapers from Page %s\\n" "$page"
-        }
-        downloadWallpapers
-        [ "$QUIET" ] || {
-            printf "\\t- done!\\n"
-        }
-    done
-
 else
     printf "error in TYPE please check Variable\\n"
 fi
 
-rm -f cookies.txt login login.1 favtmp
+# rm -f cookies.txt login login.1 favtmp
+rm -f cookies.txt
