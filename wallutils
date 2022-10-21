@@ -8,6 +8,7 @@
 ##
 # Set these to your top-level pictures directory paths
 SEA_DIR="/Volumes/Seagate_8TB/Pictures"
+NFS_DIR="/mac/pictures"
 LIN_DIR="/u/pictures"
 
 # Set PICROOT in your environment to override what is set here
@@ -19,7 +20,12 @@ else
     then
         WHDIR="${SEA_DIR}/Work/Wallhaven"
     else
-        WHDIR="${LIN_DIR}/Work/Wallhaven"
+        if [ -d "${NFS_DIR}" ]
+        then
+            WHDIR="${NFS_DIR}/Work/Wallhaven"
+        else
+            WHDIR="${LIN_DIR}/Work/Wallhaven"
+        fi
     fi
 fi
 

@@ -6,7 +6,7 @@
 #
 # This Script is written for GNU Linux, it should work under Mac OS
 
-REVISION=0.2.6
+REVISION=0.2.7
 
 #####################################
 ###   Needed for NSFW/Favorites   ###
@@ -33,10 +33,12 @@ USR="doctorfree"
 #####################################
 ###     Configuration Options     ###
 #####################################
+# Should debug output be displayed?
+DEBUG=
 # Should informative messages be suppressed?
 QUIET=
 # Where should the Wallpapers be stored?
-LOCATION=/Volumes/Seagate_8TB/Pictures/Work/Wallhaven
+LOCATION=/mac/pictures/Work/Wallhaven
 # How many Wallpapers should be downloaded, should be multiples of the
 # value in the THUMBS Variable
 WPNUMBER=48
@@ -135,6 +137,34 @@ function checkDependencies {
         exit 1
     fi
 } # /checkDependencies
+
+function checkLocation {
+    [ "$QUIET" ] || {
+        printf "Checking download location..."
+    }
+
+    locations=(/mac/pictures/Work/Wallhaven /u/pictures/Wallhaven /Volumes/Seagate_8TB/Pictures/Work/Wallhaven)
+
+    found_folder=
+    for folder in "${locations[@]}"
+    do
+        [ -d "${folder}" ] && {
+            printf "\nUsing ${folder} as download location\n"
+            LOCATION="${folder}"
+            found_folder=1
+        }
+    done
+
+    if [ "$found_folder" ]
+    then
+        [ "$QUIET" ] || {
+            printf "OK\n"
+        }
+    else
+        printf "\n${LOCATION} does not exist or is not a directory. Exiting.\n"
+        exit 1
+    fi
+} # /checkLocation
 
 #
 # sets the authentication header/API key to give the user more functionality
@@ -267,6 +297,11 @@ function WGET {
 
     # default wget command
     # wget -c -q --header="$httpHeader" "$@"
+    [ "${DEBUG}" ] && {
+        echo "$@"
+        printf "\nwget --server-response -q --header=$httpHeader --keep-session-cookies"
+        printf " --save-cookies cookies.txt --load-cookies cookies.txt $@"
+    }
     wget --server-response -q --header="$httpHeader" --keep-session-cookies \
          --save-cookies cookies.txt --load-cookies cookies.txt "$@" 2>&1 | \
          grep "429 Too Many Requests" >/dev/null && coolDown "$@"
@@ -315,6 +350,7 @@ function helpText {
     printf " -u, --user\\t\\tdownload wallpapers from given user\\n"
     printf " -p, --parallel\\t\\tmake use of gnu parallel (1 to enable, 0 "
     printf "to disable)\\n"
+    printf " -D, --debug\\t\\tshow debug output\\n"
     printf " -v, --version\\t\\tshow current version\\n"
     printf " -h, --help\\t\\tshow this help text and exit\\n\\n"
     printf "Examples:\\n"
@@ -349,6 +385,9 @@ while [[ $# -ge 1 ]]
         -n|--number)
             WPNUMBER="$2"
             shift;;
+        -D|--debug)
+            DEBUG=1
+            ;;
         -Q|--quiet)
             QUIET=1
             ;;
@@ -412,6 +451,8 @@ while [[ $# -ge 1 ]]
     done
 
 checkDependencies
+
+[ -d "${LOCATION}" ] || checkLocation
 
 # optionally create a separate subfolder for each search query
 # might download duplicates as each search query has its own list of
