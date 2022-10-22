@@ -2,16 +2,22 @@
 
 TOP="/Volumes/Seagate_8TB/Pictures/Work"
 OTOP="/u/pictures/Work"
+NTOP="/mac/pictures/Work"
 DES="Description.txt"
 
 # Which system are we on?
 [ -d "${TOP}" ] || {
-    if [ -d "${OTOP}" ]
+    if [ -d "${NTOP}" ]
     then
-        TOP="${OTOP}"
+        TOP="${NTOP}"
     else
-        echo "Cannot determine top-level photo dir. Exiting."
-        exit 1
+        if [ -d "${OTOP}" ]
+        then
+            TOP="${OTOP}"
+        else
+            echo "Cannot determine top-level photo dir. Exiting."
+            exit 1
+        fi
     fi
 }
 

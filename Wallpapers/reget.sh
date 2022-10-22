@@ -14,6 +14,21 @@
 
 [ "${PICROOT}" ] || PICROOT=/Volumes/Seagate_8TB/Pictures/Work
 
+[ -d "${PICROOT}" ] || {
+  if [ -d /mac/pictures/Work ]
+  then
+    PICROOT="/mac/pictures/Work"
+  else
+    if [ -d /u/pictures ]
+    then
+      PICROOT="/u/pictures"
+    else
+      echo "Can't find Wallhaven download folder. Exiting."
+      exit 1
+    fi
+  fi
+}
+
 TDIR="${PICROOT}/Wallhaven"
 MDIR="$TDIR/Models"
 PDIR="$TDIR/Photographers"

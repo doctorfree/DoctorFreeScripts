@@ -23,6 +23,7 @@ fi
 
 # Root directory of your subfolders of Wallhaven image files
 MAC_TOP=/u/pictures/Work/Wallhaven
+NFS_TOP=/mac/pictures/Work/Wallhaven
 LIN_TOP=/u/pictures/Wallhaven
 SEA_TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
 
@@ -43,7 +44,7 @@ SEA_TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
         fi
     fi
     [ -d "$WHDIR" ] || {
-        WHDIR="$SEA_TOP"
+        WHDIR="$NFS_TOP"
         [ -d "$WHDIR" ] || {
             echo "Cannot locate Work directory for pics. Exiting."
             exit 1

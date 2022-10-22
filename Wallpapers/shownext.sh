@@ -5,6 +5,20 @@
 #
 
 TOP="/Volumes/Seagate_BPH_8TB/Pictures/Work"
+[ -d "${TOP}" ] || {
+  if [ -d /mac/pictures/Work ]
+  then
+    TOP="/mac/pictures/Work"
+  else
+    if [ -d /u/pictures ]
+    then
+      TOP="/u/pictures"
+    else
+      echo "Can't find Wallhaven download folder. Exiting."
+      exit 1
+    fi
+  fi
+}
 EB="${TOP}/Elite_Babes"
 JP="${TOP}/JP_Erotica"
 EB_URL="https://www.elitebabes.com/model"

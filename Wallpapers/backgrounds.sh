@@ -40,7 +40,7 @@ else
 fi
 # Mac OS X image folders
 MAC_TOP="/Volumes/Seagate_8TB/Pictures/Work"
-NFS_TOP=/u/pictures/Work
+NFS_TOP=/mac/pictures/Work
 #
 # Location of folder to copy selected images to
 MAC_OUT=$HOME/Pictures/Backgrounds

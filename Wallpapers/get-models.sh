@@ -1224,6 +1224,20 @@ get_suicide() {
 }
 
 TOP="/Volumes/Seagate_8TB/Pictures/Work"
+[ -d "${TOP}" ] || {
+  if [ -d /mac/pictures/Work ]
+  then
+    TOP="/mac/pictures/Work"
+  else
+    if [ -d /u/pictures ]
+    then
+      TOP="/u/pictures"
+    else
+      echo "Can't find Wallhaven download folder. Exiting."
+      exit 1
+    fi
+  fi
+}
 WHVN="${TOP}/Wallhaven"
 MODD="Models"
 JAVD="JAV_Idol"

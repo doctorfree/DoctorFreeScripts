@@ -1,7 +1,22 @@
 #!/bin/bash
 
-TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven/Models"
-KIND="/Volumes/Seagate_8TB/Pictures/Work/KindGirls"
+TOP="/Volumes/Seagate_8TB/Pictures/Work"
+[ -d "${TOP}" ] || {
+  if [ -d /mac/pictures/Work ]
+  then
+    TOP="/mac/pictures/Work"
+  else
+    if [ -d /u/pictures ]
+    then
+      TOP="/u/pictures"
+    else
+      echo "Can't find Wallhaven download folder. Exiting."
+      exit 1
+    fi
+  fi
+}
+MDLS="${TOP}/Wallhaven/Models"
+KIND="${TOP}/KindGirls"
 HER=`pwd`
 
 isportrait() {
@@ -37,10 +52,10 @@ do
     do
         [ "$img" == "*" ] && continue
         [ -L $img ] && continue
-        if [ -f $TOP/$folder/$img ]
+        if [ -f $MDLS/$folder/$img ]
         then
             rm -f $img
-            ln -s $TOP/$folder/$img .
+            ln -s $MDLS/$folder/$img .
         else
             [ -f $KIND/$folder/$img ] && {
                 rm -f $img
@@ -56,16 +71,16 @@ for folder in *
 do
     [ "$folder" == "*" ] && continue
     [ -d $folder ] || continue
-    [ -d $TOP/$folder ] && {
-        echo "Checking $TOP/$folder for newly added files"
-        cd $TOP/$folder
+    [ -d $MDLS/$folder ] && {
+        echo "Checking $MDLS/$folder for newly added files"
+        cd $MDLS/$folder
         for img in *
         do
             [ "$img" == "*" ] && continue
             [ -L $HER/$folder/$img ] && continue
             if isportrait $img
             then
-                ln -s $TOP/$folder/$img $HER/$folder/$img
+                ln -s $MDLS/$folder/$img $HER/$folder/$img
             fi
         done
     }

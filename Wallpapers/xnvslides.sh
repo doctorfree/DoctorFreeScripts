@@ -27,6 +27,20 @@
 #
 # Set these to your default slideshow image folder and default model name
 TOP="/Volumes/Seagate_8TB/Pictures/Work"
+[ -d "${TOP}" ] || {
+  if [ -d /mac/pictures/Work ]
+  then
+    TOP="/mac/pictures/Work"
+  else
+    if [ -d /u/pictures ]
+    then
+      TOP="/u/pictures"
+    else
+      echo "Can't find Wallhaven download folder. Exiting."
+      exit 1
+    fi
+  fi
+}
 ALT_TOP="/Volumes/My_Book_Studio/Pictures/Work"
 SUB="Wallhaven"
 DEF_MODEL="Models/Alisa_I"

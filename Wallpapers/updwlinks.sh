@@ -1,10 +1,26 @@
 #!/bin/bash
 
-TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven/Models"
-PLA="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven/Models/Playboy"
-PEN="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven/Models/Penthouse"
-PHO="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven/Models/Photodromm"
-KIND="/Volumes/Seagate_8TB/Pictures/Work/KindGirls"
+TOP="/Volumes/Seagate_8TB/Pictures/Work"
+[ -d "${TOP}" ] || {
+  if [ -d /mac/pictures/Work ]
+  then
+    TOP="/mac/pictures/Work"
+  else
+    if [ -d /u/pictures ]
+    then
+      TOP="/u/pictures"
+    else
+      echo "Can't find Wallhaven download folder. Exiting."
+      exit 1
+    fi
+  fi
+}
+
+MDL="${TOP}/Wallhaven/Models/Models"
+PLA="${TOP}/Wallhaven/Models/Playboy"
+PEN="${TOP}/Wallhaven/Models/Penthouse"
+PHO="${TOP}/Wallhaven/Models/Photodromm"
+KIND="${TOP}/KindGirls"
 HER=`pwd`
 
 isportrait() {
@@ -48,7 +64,7 @@ do
     do
         [ "$img" == "*" ] && continue
         [ -L $img ] && continue
-        for MDIR in $TOP $KIND $PLA $PEN $PHO
+        for MDIR in $MDL $KIND $PLA $PEN $PHO
         do
             [ -f $MDIR/$folder/$img ] && {
                 rm -f $img
@@ -65,7 +81,7 @@ for folder in $*
 do
     [ "$folder" == "*" ] && continue
     [ -d $folder ] || continue
-    for MDIR in $TOP $KIND $PLA $PEN $PHO
+    for MDIR in $MDL $KIND $PLA $PEN $PHO
     do
       [ -d $MDIR/$folder ] && {
         echo "Checking $MDIR/$folder for newly added files"

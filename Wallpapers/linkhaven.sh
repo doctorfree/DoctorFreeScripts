@@ -1,6 +1,20 @@
 #!/bin/bash
 
 TOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
+[ -d "${TOP}" ] || {
+  if [ -d /mac/pictures/Work/Wallhaven ]
+  then
+    TOP="/mac/pictures/Work/Wallhaven"
+  else
+    if [ -d /u/pictures/Wallhaven ]
+    then
+      TOP="/u/pictures/Wallhaven"
+    else
+      echo "Can't find Wallhaven download folder. Exiting."
+      exit 1
+    fi
+  fi
+}
 
 # Subdirs with model name subdirs
 JAV="$TOP/JAV_Idol"

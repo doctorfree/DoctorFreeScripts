@@ -24,12 +24,17 @@ if [ -d /Volumes/Seagate_8TB/Pictures/$WORK ]
 then
     TOP="/Volumes/Seagate_8TB/Pictures/$WORK"
 else
-    if [ -d /u/pictures ]
+    if [ -d /mac/pictures ]
     then
-        TOP="/u/pictures/$WORK"
+        TOP="/mac/pictures/$WORK"
     else
-        echo "Cannot determine top-level photo dir. Exiting."
-        exit 1
+        if [ -d /u/pictures ]
+        then
+            TOP="/u/pictures/$WORK"
+        else
+            echo "Cannot determine top-level photo dir. Exiting."
+            exit 1
+        fi
     fi
 fi
 

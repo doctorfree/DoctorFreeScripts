@@ -1,6 +1,21 @@
 #!/bin/bash
 
 WTOP="/Volumes/Seagate_8TB/Pictures/Work/Wallhaven"
+[ -d "${WTOP}" ] || {
+  if [ -d /mac/pictures/Work/Wallhaven ]
+  then
+    WTOP="/mac/pictures/Work/Wallhaven"
+  else
+    if [ -d /u/pictures/Wallhaven ]
+    then
+      WTOP="/u/pictures/Wallhaven"
+    else
+      echo "Can't find Wallhaven download folder. Exiting."
+      exit 1
+    fi
+  fi
+}
+
 JDIR="${WTOP}/JAV_Idol"
 MDIR="${WTOP}/Models"
 DDIR="${WTOP}/Models/Photodromm"
