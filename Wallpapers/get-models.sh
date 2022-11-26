@@ -902,8 +902,9 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Darina_Nikitina"
             ;;
-        Scarlet_\(Met_Art\))
+        Scarlet_Hansen)
             get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Scarlet_\(Met_Art\)"
             ;;
         Selena_Werner)
             get_search "${MODD}/${model}" "${model}"
