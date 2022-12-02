@@ -320,6 +320,7 @@ get_model() {
             ;;
         Julia_Rommelt)
             get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "Julia_Römmelt"
             get_search "${MODD}/${model}" "Julia_Roemmelt"
             ;;
         Karina_Avakian)
