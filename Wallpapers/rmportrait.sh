@@ -31,7 +31,7 @@ do
     [ "$i" == "*.jpeg" ] && continue
     [ "$i" == "*.png" ] && continue
     [ "${VERB}" ] && echo "Identifying $i"
-    GEO=`identify "$i" | awk ' { print $(NF-6) } '`
+    GEO=`identify "$i" | awk ' { print $3 } '`
     W=`echo $GEO | awk -F "x" ' { print $1 } '`
     # Remove if width not greater than 1000
     [ "$W" ] && [ $W -gt 1000 ] || {
@@ -43,7 +43,7 @@ do
         fi
         continue
     }
-    H=`echo $GEO | awk -F "x" ' { print $2 } '`
+    H=`echo $GEO | awk -F "x" ' { print $2 } ' | awk -F '+' ' { print $1 } '`
     # Remove if height not greater than 750
     [ "$H" ] && [ $H -gt 750 ] || {
         if [ "${TELL}" ]
