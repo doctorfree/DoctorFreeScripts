@@ -43,6 +43,10 @@ do
             get_search "Artists/${artist}" "${artist}"
             get_search "Artists/${artist}" "Dandon_Fuga"
             ;;
+        MatrixIAs)
+            get_search "Artists/${artist}" "${artist}"
+            get_search "Artists/${artist}" "Stable_Diffusion"
+            ;;
         Mirco_Cabbia)
             get_search "Artists/${artist}" "${artist}"
             get_search "Artists/${artist}" "Sciamano240"
