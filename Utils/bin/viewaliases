@@ -1,0 +1,135 @@
+#!/bin/env python3
+
+'''
+Original work by https://github.com/Fitzy1293
+gist:   https://gist.github.com/Fitzy1293/ccacc7a4420ff4a1a42d2f97dd5e1823
+
+Modified to work with < Python 3.10 and Zsh aliases by doctorfree@github.com
+
+Note: Zsh aliases can include syntax unsupported as yet by this script
+For example, the Zsh alias:
+    ail='sed -e '\''s/  */ /g'\'' -e '\''s/ *//'\'' | cut -s -d '\'' '\'' -f 1 | xargs sudo apt install'
+    causes an exception when processing by this script
+A workaround for this limitation is to temporarily unalias the offending alias:
+    unalias ail
+'''
+
+import sys
+
+class Colors:
+    magenta = '\033[1;95m'
+    blue = '\033[1;34m'
+    cyan = '\033[1;36m'
+    green = '\033[92m'
+    yellow = '\033[1;33m'
+    endc = '\033[0m'
+
+
+def alias_from_stdin():
+
+    '''
+        gets aliases from stdin after running `alias | pyalias.py`
+            - in ~/.aliases I added `alias al='alias | pyalias.py'`
+    '''
+
+    alias_start_strings     = []
+    second_spaces_lens_list = []
+    commands_list           = []
+
+    '''
+    aliases_from_stdin      = [line.strip().replace('alias ', '', 1) for line in sys.stdin if line.lstrip().startswith('alias ')]
+    '''
+    aliases_from_stdin      = [line.strip().replace('alias ', '', 1) for line in sys.stdin]
+    alias_count             = len(aliases_from_stdin)
+    max_number_str          = len(str(alias_count))
+
+    for alias_index, alias_possible in enumerate(aliases_from_stdin):
+
+        cmdname_cmdargs_list   = []
+
+        split_index            = alias_possible.find('=')       
+        alias_key, alias_value = alias_possible[:split_index], alias_possible[split_index:][2:-1].strip()
+
+        # make spacing even
+        alias_pos              = f'{alias_index + 1}'
+        alias_pos_len          = len(alias_pos)
+        extra_spaces_count     = max_number_str - alias_pos_len 
+        alias_name_len         = len(alias_key)
+
+
+        first_extra_spaces     = ' ' * int(extra_spaces_count - alias_pos_len + 1)
+        start_string           = (alias_pos, first_extra_spaces, alias_key)
+
+        alias_start_strings.append(start_string)
+        second_spaces_lens_list.append(alias_pos_len + extra_spaces_count + alias_name_len)
+
+        # get actual program and args for the alias
+        alias_value_list       = alias_value.split(' ')
+        cmdname_cmdargs_list.append(alias_value_list[0])
+
+        if len(alias_value_list) == 1:
+            cmdname_cmdargs_list.append(None)
+        elif len(alias_value_list) > 1:
+            cmdname_cmdargs_list.append(alias_value_list[1:])
+        else:
+            print('ERROR FIX IT, SOMETHING IS WRONG'); sys.exit()
+
+        commands_list.append(cmdname_cmdargs_list)
+
+    # spaces after the number + alias name
+    longest_start_string = max(second_spaces_lens_list)
+    spaces_strings_after_alias_name = [' ' * int(longest_start_string - num_of_spaces) for num_of_spaces in second_spaces_lens_list]
+
+    return alias_start_strings, spaces_strings_after_alias_name, commands_list
+
+
+def aliasformalist():
+
+    '''
+    colors and formats to be pretty and readable
+    '''
+    
+    alias_data = alias_from_stdin()
+
+    for triple_start_tuple, second_spaces, command_name_command_args_tuple in zip(alias_data[0], alias_data[1], alias_data[2]):
+
+        pos, first_spaces, alias_name = triple_start_tuple
+        command_name, command_args     = command_name_command_args_tuple
+
+        formatted_pos     = f'{Colors.magenta}{pos}{Colors.endc}'
+        formatted_alias   = f'{Colors.cyan} {first_spaces}{alias_name}{second_spaces}{Colors.endc}'
+        formatted_colon   = f'{Colors.green} : {Colors.endc}'
+        formatted_command = f'{Colors.yellow}{command_name}{Colors.endc}'
+
+        print(f'{formatted_pos}{formatted_alias}{formatted_colon}{formatted_command}', end=' ')
+        
+        if command_args is not None:
+            # add different color if individiual arg starts with `-` or not
+            formatted_args = []
+            for arg in command_args:
+                if arg[0] == '-':
+                    formatted_args.append(f'{Colors.magenta}{arg}{Colors.endc}')
+                else:
+                    formatted_args.append(f'{Colors.blue}{arg}{Colors.endc}')
+
+            print(' '.join(formatted_args))
+            
+        else:
+            print(Colors.endc)
+
+
+if __name__ == '__main__':
+
+    # help, or accept stdin
+    help_or_not    = sys.argv[1] if len(sys.argv) > 1 else 'stdin' if not sys.stdin.isatty() else 'no-input'
+
+    if help_or_not == '-h' or help_or_not == '--help' or help_or_not == 'no-input':
+        script_path = sys.argv[0]     
+
+        print(f'run\t`alias | {script_path}`')
+        print(f'or add something like\n\t`alias al=\'alias | {script_path}\'` to ~/.aliases (or wherever you defined where aliases can go)')    
+        print('then run\n\t`source ~/.aliases`')
+        print(f'make sure {script_path} is executable')
+        print('\nnow run `al`')
+    elif help_or_not == 'stdin':
+        aliasformalist()
