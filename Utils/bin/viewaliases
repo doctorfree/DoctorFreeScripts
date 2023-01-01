@@ -6,12 +6,16 @@ gist:   https://gist.github.com/Fitzy1293/ccacc7a4420ff4a1a42d2f97dd5e1823
 
 Modified to work with < Python 3.10 and Zsh aliases by doctorfree@github.com
 
+Usage: alias | viewaliases
+
 Note: Zsh aliases can include syntax unsupported as yet by this script
 For example, the Zsh alias:
     ail='sed -e '\''s/  */ /g'\'' -e '\''s/ *//'\'' | cut -s -d '\'' '\'' -f 1 | xargs sudo apt install'
     causes an exception when processing by this script
 A workaround for this limitation is to temporarily unalias the offending alias:
     unalias ail
+
+Update: Reworked by original author to support Zsh extended aliases
 '''
 
 import sys
@@ -29,26 +33,29 @@ def alias_from_stdin():
 
     '''
         gets aliases from stdin after running `alias | pyalias.py`
-            - in ~/.aliases I added `alias al='alias | pyalias.py'`
+            - in ~/.bash_aliases I added `alias al='alias | pyalias.py'`
     '''
 
     alias_start_strings     = []
     second_spaces_lens_list = []
     commands_list           = []
 
-    '''
-    aliases_from_stdin      = [line.strip().replace('alias ', '', 1) for line in sys.stdin if line.lstrip().startswith('alias ')]
-    '''
-    aliases_from_stdin      = [line.strip().replace('alias ', '', 1) for line in sys.stdin]
+    aliases_from_stdin      = [line.strip() for line in sys.stdin]
     alias_count             = len(aliases_from_stdin)
     max_number_str          = len(str(alias_count))
 
     for alias_index, alias_possible in enumerate(aliases_from_stdin):
+        if alias_possible.startswith('alias '):
+            alias_possible = alias_possible.replace('alias ', '', 1)
+  
 
         cmdname_cmdargs_list   = []
+        
 
-        split_index            = alias_possible.find('=')       
-        alias_key, alias_value = alias_possible[:split_index], alias_possible[split_index:][2:-1].strip()
+        split_index            = alias_possible.find('=')  
+
+        alias_key, alias_value = alias_possible[:split_index], alias_possible[split_index:][1:]
+        alias_value_trail_rm   = alias_value[1:-1].strip() if alias_value[0] == "'" and alias_value[-1] == "'" else alias_value.strip()
 
         # make spacing even
         alias_pos              = f'{alias_index + 1}'
@@ -64,7 +71,7 @@ def alias_from_stdin():
         second_spaces_lens_list.append(alias_pos_len + extra_spaces_count + alias_name_len)
 
         # get actual program and args for the alias
-        alias_value_list       = alias_value.split(' ')
+        alias_value_list       = alias_value_trail_rm.split(' ')
         cmdname_cmdargs_list.append(alias_value_list[0])
 
         if len(alias_value_list) == 1:
@@ -107,10 +114,11 @@ def aliasformalist():
             # add different color if individiual arg starts with `-` or not
             formatted_args = []
             for arg in command_args:
-                if arg[0] == '-':
-                    formatted_args.append(f'{Colors.magenta}{arg}{Colors.endc}')
-                else:
-                    formatted_args.append(f'{Colors.blue}{arg}{Colors.endc}')
+                if arg != '':
+                    if arg[0] == '-':
+                        formatted_args.append(f'{Colors.magenta}{arg}{Colors.endc}')
+                    else:
+                        formatted_args.append(f'{Colors.blue}{arg}{Colors.endc}')
 
             print(' '.join(formatted_args))
             
@@ -119,17 +127,21 @@ def aliasformalist():
 
 
 if __name__ == '__main__':
+    script_path = sys.argv[0]     
 
     # help, or accept stdin
     help_or_not    = sys.argv[1] if len(sys.argv) > 1 else 'stdin' if not sys.stdin.isatty() else 'no-input'
 
-    if help_or_not == '-h' or help_or_not == '--help' or help_or_not == 'no-input':
-        script_path = sys.argv[0]     
-
+    if help_or_not in {'-h', '--help', 'no-input'}:
         print(f'run\t`alias | {script_path}`')
-        print(f'or add something like\n\t`alias al=\'alias | {script_path}\'` to ~/.aliases (or wherever you defined where aliases can go)')    
-        print('then run\n\t`source ~/.aliases`')
+        print(f'or add something like\n\t`alias al=\'alias | {script_path}\'` to ~/.bash_aliases (or wherever you defined where aliases can go)')    
+        print('then run\n\t`source ~/.bash_aliases`')
         print(f'make sure {script_path} is executable')
         print('\nnow run `al`')
+        
     elif help_or_not == 'stdin':
         aliasformalist()
+    else:
+        print('incorrect args format') 
+        print(f'run `{script_path} --help` for more info')
+        sys.exit(1)
