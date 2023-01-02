@@ -982,6 +982,7 @@ get_model() {
         Vika_A)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alisa_G"
+            get_search "${MODD}/${model}" "Tinna"
             ;;
         Viktoriia_Aliko)
             get_search "${MODD}/${model}" "Paula_U"
