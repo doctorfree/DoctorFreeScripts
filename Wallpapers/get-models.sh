@@ -261,6 +261,10 @@ get_model() {
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Hannah_Hilton"
             ;;
+        Hayley-Marie_Coppin)
+            get_search "${MODD}/${model}" "${model}"
+            get_search "${MODD}/${model}" "HayleysSecrets"
+            ;;
         Helen_H)
             get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Vic_E"
