@@ -363,6 +363,10 @@ do
         get_search "${dir}" "Women_With_Shades"
         get_search "${dir}" "Women_With_Sunglasses"
         ;;
+    SweetSinner)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Mile_High_Media"
+        ;;
     The_Life_Erotic)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "TheLifeErotic"
