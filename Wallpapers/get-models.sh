@@ -1078,6 +1078,10 @@ get_jav() {
             get_search "${JAVD}/${model}" "Rara_Anzai"
             get_search "${JAVD}/${model}" "Rion"
             ;;
+        Yunxixi)
+            get_search "${JAVD}/${model}" "${model}"
+            get_search "${JAVD}/${model}" "Yun_XiXi"
+            ;;
         *)
             get_search "${JAVD}/${model}" "${model}"
             ;;
