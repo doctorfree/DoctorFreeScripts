@@ -169,6 +169,29 @@ do_big() {
             done
         done
     done
+    # Nipples and Breasts
+    NPB="Perky_Breasts Hard_Nipples Breasts"
+    for npb in $NPB
+    do
+        # echo "Linking in $npb"
+        cd $TOP/$npb
+        for pic in wall*
+        do
+            [ -L $pic ] && continue
+            for dir in $NPB
+            do
+                [ "$dir" == "$npb" ] && continue
+                [ -f "../$dir/$pic" ] || continue
+                [ -L "../$dir/$pic" ] && continue
+                [ "$TELL" ] && {
+                    echo "${LN} ../$dir/$pic $npb"
+                }
+                rm -f $pic
+                ${LN} ../$dir/$pic .
+                break
+            done
+        done
+    done
 }
 
 while getopts abcdfhHjnmpqrsBDPSwzUu flag; do

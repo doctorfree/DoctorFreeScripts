@@ -247,6 +247,10 @@ do
         get_search "${dir}" "${dir}"
         get_search "${dir}" "Perky_Nipples"
         ;;
+    Perky_Breasts)
+        get_search "${dir}" "${dir}"
+        get_search "${dir}" "Firm_Breasts"
+        ;;
     Hegre-Art)
         get_search "${dir}" "${dir}"
         get_search "${dir}" "hegre.com"
