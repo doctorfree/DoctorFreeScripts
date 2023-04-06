@@ -378,6 +378,7 @@ do
     Ukrainian)
         get_search "$dir" "$dir"
         get_search "$dir" "Ukraine"
+        get_search "$dir" "Darina_Litvinova"
         get_search "$dir" "Anna_Sbitnaya"
         get_search "$dir" "Anna_AJ"
         get_search "$dir" "Gloria_Sol"
