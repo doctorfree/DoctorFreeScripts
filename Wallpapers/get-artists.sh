@@ -8,14 +8,14 @@
 ## @version 1.0.1
 ##
 get_search() {
-    QUERY=`echo $2 | sed -e "s/_/\%2B/g"`
-#   echo "Running get-search ${LAT} -n 256 -p 1 -l $1 -s $QUERY"
-    get-search -q ${LAT} -n 256 -p 1 -l "$1" -s "$QUERY"
-#   echo "Running get-search ${LAT} -l $1 -s $QUERY"
-#   get-search -q ${LAT} -l "$1" -s "$QUERY"
+  QUERY=$(echo $2 | sed -e "s/_/\%2B/g")
+  #   echo "Running get-search ${LAT} -n 256 -p 1 -l $1 -s $QUERY"
+  get-search -q ${LAT} -n 256 -p 1 -l "$1" -s "$QUERY"
+  #   echo "Running get-search ${LAT} -l $1 -s $QUERY"
+  #   get-search -q ${LAT} -l "$1" -s "$QUERY"
 }
 
-HERE=`pwd`
+HERE=$(pwd)
 LAT=
 UPD=1
 
@@ -29,46 +29,49 @@ UPD=1
   [ "$2" == "-R" ] && LAT="-R"
 }
 
-cd Artists
-for artist in *
-do
-    [ -d "${artist}" ] || continue
-    cd "${HERE}"
-    case "${artist}" in
-        Ayya_Saparniyazova)
-            get_search "Artists/${artist}" "${artist}"
-            get_search "Artists/${artist}" "AyyaSAP"
-            ;;
-        Dandonfuga)
-            get_search "Artists/${artist}" "${artist}"
-            get_search "Artists/${artist}" "Dandon_Fuga"
-            ;;
-        MatrixIAs)
-            get_search "Artists/${artist}" "${artist}"
-            get_search "Artists/${artist}" "Stable_Diffusion"
-            ;;
-        Mirco_Cabbia)
-            get_search "Artists/${artist}" "${artist}"
-            get_search "Artists/${artist}" "Sciamano240"
-            ;;
-        ZOh)
-            get_search "Artists/${artist}" "${artist}"
-            get_search "Artists/${artist}" "therealzOh"
-            ;;
-        Zumi)
-            get_search "Artists/${artist}" "${artist}"
-            get_search "Artists/${artist}" "zumidraws"
-            ;;
-        *)
-            get_search "Artists/${artist}" "${artist}"
-            ;;
-    esac
-    cd Artists
+cd Artists || exit
+for artist in *; do
+  [ -d "${artist}" ] || continue
+  cd "${HERE}" || exit
+  case "${artist}" in
+    Ayya_Saparniyazova)
+      get_search "Artists/${artist}" "${artist}"
+      get_search "Artists/${artist}" "AyyaSAP"
+      ;;
+    Dandonfuga)
+      get_search "Artists/${artist}" "${artist}"
+      get_search "Artists/${artist}" "Dandon_Fuga"
+      ;;
+    MatrixIAs)
+      get_search "Artists/${artist}" "${artist}"
+      get_search "Artists/${artist}" "Stable_Diffusion"
+      ;;
+    Mirco_Cabbia)
+      get_search "Artists/${artist}" "${artist}"
+      get_search "Artists/${artist}" "Sciamano240"
+      ;;
+    NeoArtCorE)
+      get_search "Artists/${artist}" "${artist}"
+      get_search "Artists/${artist}" "NeoArtCorE_\(artist\)"
+      ;;
+    ZOh)
+      get_search "Artists/${artist}" "${artist}"
+      get_search "Artists/${artist}" "therealzOh"
+      ;;
+    Zumi)
+      get_search "Artists/${artist}" "${artist}"
+      get_search "Artists/${artist}" "zumidraws"
+      ;;
+    *)
+      get_search "Artists/${artist}" "${artist}"
+      ;;
+  esac
+  cd Artists || exit
 done
-cd "${HERE}"
+cd "${HERE}" || exit
 [ "${UPD}" ] && {
   [ -x ../updsumhaven ] && {
-#   echo "Running ../updsumhaven -p"
-    ../updsumhaven -p > /dev/null
+    #   echo "Running ../updsumhaven -p"
+    ../updsumhaven -p >/dev/null
   }
 }
