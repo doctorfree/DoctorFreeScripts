@@ -22,45 +22,38 @@ get_search() {
 get_model() {
     model="$1"
     cd "${WHVN}"
+    get_search "${MODD}/${model}" "${model}"
     case "$1" in
         Adriana_F)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Adriana_Morriss"
             ;;
         Aislin)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Ammra_Aislin"
             get_search "${MODD}/${model}" "Vika_P"
             ;;
         Alena_Hemkova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Scarlett_A"
             get_search "${MODD}/${model}" "Cheryl_C"
             ;;
         Alena_Ushkova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Aliona_Aganova"
             get_search "${MODD}/${model}" "Alena_Aganova"
             get_search "${MODD}/${model}" "Alyona_Ushkova"
             get_search "${MODD}/${model}" "Alena_Night"
             ;;
         Alexandra_Zimny)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Marisa"
             ;;
         Alina_Gorokhova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alina_Gorohova"
             ;;
         Alina_Panevskaya)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alina_Panewskaja"
             get_search "${MODD}/${model}" "Alinka_Rainer"
             get_search "${MODD}/${model}" "Alina_Maier"
             get_search "${MODD}/${model}" "Alina_Mayer"
             ;;
         Alisa_I)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alisa_Amore"
             get_search "${MODD}/${model}" "Alisa_A"
             get_search "${MODD}/${model}" "Alisa_Femjoy"
@@ -68,101 +61,80 @@ get_model() {
             get_search "${MODD}/${model}" "Jessica_Albanka"
             ;;
         Anastasia_Aleksandrova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alice_Wonder_\(Met-Art\)"
             get_search "${MODD}/${model}" "Anastasia_Alexandrova"
             get_search "${MODD}/${model}" "Nastya_Aleksandrova"
             ;;
         Anastasia_Martzipanova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anastasya"
             ;;
         Anastasia_Petrova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Chantelle_A"
             ;;
         Anastasia_Scheglova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anastasia_Schlegova"
             get_search "${MODD}/${model}" "Anastasia_Shcheglova"
             get_search "${MODD}/${model}" "Anastasiya_Scheglova"
             ;;
         Anastasia_Sujorukova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anastasia_Sukhorukova"
             ;;
         Angelika_Wachowska)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Jackie_Photodromm"
             get_search "${MODD}/${model}" "Jackie"
             ;;
         Anita_Silver)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anita_C"
             get_search "${MODD}/${model}" "Vasilisa_Mudraja"
             ;;
         Anna_Sbitnaya)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anna_AJ"
             get_search "${MODD}/${model}" "Anna_S"
             ;;
         Annele_Grace)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anna_Grace"
             get_search "${MODD}/${model}" "Ana_Grace"
             ;;
         Annely_Gerritsen)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anneli"
             get_search "${MODD}/${model}" "Pinky_June"
             ;;
         Any_Tsareva)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Amy_Tsareva"
             ;;
         Anya_Dmitrieva)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "BerylQ"
             ;;
         Apolonia_Lapiedra)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Apolonia"
             ;;
         Aria_Salazar)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Bambi_Wolfe"
             ;;
         Ariel_Piper_Fawn)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Piper_Fawn"
             ;;
         Avery)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Nona"
             ;;
         Blake_Bartelli)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Blake_Eden"
             ;;
         Brook_Amelia_Wright)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Brook_Wright"
             ;;
         Caramel)
             get_search "${MODD}/${model}" "${model}_\(Met-Art_Model\)"
             ;;
         Carolina_Kris)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Libby_White"
             get_search "${MODD}/${model}" "Libby"
             get_search "${MODD}/${model}" "Carolina_K"
             ;;
         Charlize)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "${model}_\(Met-art\)"
             ;;
         Chloe_Benson)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "FTV_Chloe"
             get_search "${MODD}/${model}" "Chloe_Toy"
             get_search "${MODD}/${model}" "Chloe_Scott"
@@ -172,21 +144,17 @@ get_model() {
             get_search "${MODD}/${model}" "Chloe_R."
             ;;
         Clarice_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Elvira_U"
             get_search "${MODD}/${model}" "Clarice"
             ;;
         Conny_Lior)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Connie_Carter"
             get_search "${MODD}/${model}" "Josephine"
             ;;
         Danaz_Kaleesy)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Carin_E"
             ;;
         Darya_Chekanova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Daria_Chekanova"
             ;;
         Diana_\(Famegirls\))
@@ -194,40 +162,31 @@ get_model() {
             get_search "${MODD}/${model}" "Diana_Jam"
             ;;
         Dillion_Harper)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kelsey_Hayes"
             ;;
         Dina_P)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Violla_A"
             get_search "${MODD}/${model}" "Myza"
             ;;
         Divina_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Davina_A"
             ;;
         Elle_Tan)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Elle_P"
             ;;
         Ellina_Myuller)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Ellina Muller"
             ;;
         Emmy)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Arina_F"
             ;;
         Eufrat)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Eufrat_Mai"
             ;;
         Eva_Chejova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Eva_Chehova"
             ;;
         Foxy_Di)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Angel_C"
             get_search "${MODD}/${model}" "Foxi_Di"
             get_search "${MODD}/${model}" "Katoa"
@@ -236,49 +195,38 @@ get_model() {
             get_search "${MODD}/${model}" "Nensi_B"
             ;;
         Gabbie_Carter)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Gabbie_\(FTV\)"
             ;;
         Galina_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Cecelia"
             ;;
         Polina_Kadynskaya)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Georgia_\(model\)"
             get_search "${MODD}/${model}" "Georgia_\(MetArt\)"
             get_search "${MODD}/${model}" "Susza_K."
             ;;
         Hailee_Rain)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Krysten_Pyle"
             ;;
         Hailey_Lynzz)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sofi_Ryan"
             ;;
         Hanna_Hilton)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Hannah_Hilton"
             ;;
         Hayley-Marie_Coppin)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "HayleysSecrets"
             ;;
         Helen_H)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Vic_E"
             ;;
         Helga_Grey)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Goldie_Baby"
             ;;
         Helly_von_Valentine)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Disharmonica"
             ;;
         Irina_Buromskih)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anya_MPL"
             get_search "${MODD}/${model}" "Irma_B"
             get_search "${MODD}/${model}" "Fibby"
@@ -287,75 +235,59 @@ get_model() {
             get_search "${MODD}/${model}" "Ira"
             ;;
         Irina_Telicheva)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Tasha_\(Hegre-Art\)"
             get_search "${MODD}/${model}" "Tasha\(Hegre\)"
             ;;
         Isabella_Star)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Emily_Cutie"
             ;;
         Ivette_Blanche)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Linda_L_\(Hegre-Art\)"
             ;;
         Janelle_B)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Janelle_B."
             ;;
         Jasmine_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Zoi_Gorman"
             get_search "${MODD}/${model}" "Jasmine_Andreas"
             get_search "${MODD}/${model}" "Clio_Photodromm"
             ;;
         Jenni_Gregg)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Jenny_Gregg"
             ;;
         Jia_Lissa)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sherice"
             ;;
         Josephine_B)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Josephine_Jackson"
             get_search "${MODD}/${model}" "Josephine_C."
             ;;
         Julia_Rommelt)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Julia_Römmelt"
             get_search "${MODD}/${model}" "Julia_Roemmelt"
             ;;
         Karina_Avakian)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Karina_Avakyan"
             ;;
         Kate_Fresh)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Lulya_D"
             get_search "${MODD}/${model}" "Lulya"
             ;;
         Katerina_Hartlova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Katarina_Dubrova"
             ;;
         Katerina_Raykh)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Katerina_Raij"
             ;;
         Katerina_Shiryaeva)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Katerina_Shiriaeva"
             ;;
         Keeley_Hazell)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "keeley_hazel"
             get_search "${MODD}/${model}" "Keely_Hazel"
             get_search "${MODD}/${model}" "Kelley_Hazell"
             ;;
         Kiara_Diletto)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alina_N"
             get_search "${MODD}/${model}" "Anastasia_\(PhotoDromm\)"
             get_search "${MODD}/${model}" "Beverly_A"
@@ -363,209 +295,163 @@ get_model() {
             get_search "${MODD}/${model}" "Pelageya"
             ;;
         Kiere)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Gala_Ann"
             ;;
         Kristina_Knyazeva)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kristina_Tishova"
             get_search "${MODD}/${model}" "Christina_Tishova"
             ;;
         Kristina_Makarova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kris_Strange"
             ;;
         Kristina_Shcherbinina)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Liya_Silver"
             ;;
         Krystal_Boyd)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Anjelica"
             get_search "${MODD}/${model}" "Ebbi"
             get_search "${MODD}/${model}" "Katherine_A."
             get_search "${MODD}/${model}" "Ksenia_Kondratyeva"
             ;;
         Lana_Lane_\(MPL_Studios\))
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Lana_Lane"
             ;;
         Lera_Kovalenko)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Valeryia_Kovalenko"
             ;;
         Li_Moon)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Annika_A"
             ;;
         Lidia_Savoderova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kamilla_J"
             ;;
         Liza_Voronina)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Liza_B"
             ;;
         Lizzie_Ryan)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Lizzy_Ryan"
             ;;
         Lucia_Javorcekova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Lucia_Javorčeková"
             ;;
         Magen)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Magen_\(Model\)"
             get_search "${MODD}/${model}" "Magen_Hana"
             ;;
         Malena_Fendi)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Malena_F"
             get_search "${MODD}/${model}" "Malena"
             get_search "${MODD}/${model}" "Lada_Brik"
             get_search "${MODD}/${model}" "Black_Cherry"
             ;;
         Malinda)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Malinda_A"
             ;;
         Maria_Demina)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Maria_Dyomina"
             ;;
         Maria_Ryabushkina)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Maria_Rya"
             get_search "${MODD}/${model}" "Melena_A"
             ;;
         Mariko_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Mariko"
             ;;
         Marit)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Marit_Silalatu"
             ;;
         Marketa_Pechova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Cikita"
             get_search "${MODD}/${model}" "Chikita"
             ;;
         Marry_Queen)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Miela"
             ;;
         Maxa)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Saloma"
             ;;
         Meaghan_Stanfill)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Meg_Cyria"
             ;;
         Melissa_Clarke)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Mellisa_Clarke"
             ;;
         Michelle_H._Paghie)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Michelle_H"
             get_search "${MODD}/${model}" "The_Red_Fox"
             get_search "${MODD}/${model}" "Red_Fox"
             ;;
         Milana_Kuznetsova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Milky_Kiss"
             ;;
         Milena_D)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sunna"
             get_search "${MODD}/${model}" "Taya_Karpenko"
             ;;
         Monika_C)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Monica_M"
             get_search "${MODD}/${model}" "Monika_Mohrova"
             ;;
         Monika_V)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Tempe"
             ;;
         Muriel)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Muriel_Senderos"
             get_search "${MODD}/${model}" "Muryel_Senderos"
             get_search "${MODD}/${model}" "Muriel_Hegre"
             get_search "${MODD}/${model}" "Muriel_Makovitz"
             ;;
         Mya)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Jati"
             get_search "${MODD}/${model}" "Hella_G"
             ;;
         Nancy_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Nancy_Photodromm"
             get_search "${MODD}/${model}" "Nancy_Ace"
             get_search "${MODD}/${model}" "Nancy_Anastasiia"
             ;;
         Nadya_Nabakova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Bunny_Colby"
             ;;
         Nadya_Rusu)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Nadia_Rusu"
             ;;
         Nata_Lee)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Natalya_Krasavina"
             ;;
         Natalia_Forrest)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Natalia_Forest"
             ;;
         Natalia_Shilova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Lia"
             ;;
         Natalia_Tihomirova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Natasha_Tijomirova"
             get_search "${MODD}/${model}" "Natali_Tihomirova"
             ;;
         Nikia_Dolceza)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Nikia"
             ;;
         Nina_North)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "FTV_Nina"
             get_search "${MODD}/${model}" "Nina_X."
             ;;
         Octokuro)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Marina_Octokuro"
             ;;
         Olesia_Levina)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Olesya_Levina"
             ;;
         Olesya_Bukhtoyarova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Olesia_Bujtoyarova"
             ;;
         Olga_Kaminska)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Olga_Maria_Kaminska"
             ;;
         Olga_Rudik)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Mariposa"
             ;;
 #       Pammie_Lee)
-#           get_search "${MODD}/${model}" "${model}"
 #           get_search "${MODD}/${model}" "Anastasiya Platonova"
 #           get_search "${MODD}/${model}" "Lubachka"
 #           get_search "${MODD}/${model}" "Lubashka"
@@ -575,11 +461,9 @@ get_model() {
 #           get_search "${MODD}/${model}" "Winona"
 #           ;;
         Patritcy_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Maria_Pie"
             ;;
         Paula_Shy)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Paula_De_Sousa"
             get_search "${MODD}/${model}" "Christy_Charming"
             ;;
@@ -838,6 +722,9 @@ get_model() {
                   get_search "${playboymodel}" "Karissa_Shannon"
                   get_search "${playboymodel}" "Kristina_Shannon"
                   ;;
+                Sophie_Limma)
+                  get_search "${playboymodel}" "Sophie_Lima"
+                  ;;
                 Stefani_Kovalyova)
                   get_search "${playboymodel}" "Izabella"
                   get_search "${playboymodel}" "Ryana"
@@ -890,101 +777,78 @@ get_model() {
             done
             ;;
         Polina_Pszenicznaia)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Polina_Pshenichnaya"
             ;;
         Portia_Victoria)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Valis_Volkova"
             ;;
         Penelope_G)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Rafaella"
             get_search "${MODD}/${model}" "Raffaella"
             get_search "${MODD}/${model}" "Gyana_A"
             ;;
         Sarika_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Darina_Nikitina"
             ;;
         Scarlet_Hansen)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Scarlet_\(Met_Art\)"
             ;;
         Selena_Werner)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Selena_Verner"
             ;;
         Simon_\(GoddessNudes\))
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Simon_\(GoddessNudes\]"
             ;;
         Sofi_Shane)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sofie_S"
             ;;
         Sophia_Blake)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Jadoresophia"
             ;;
         Sophia_Sinclair)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Brookliyn"
             ;;
         Sophie_Gem)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sophie_Sweet"
             ;;
         Sofie_Lilith)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sofie_Lilith_\(iStripper.com\)"
             get_search "${MODD}/${model}" "Sofie_\(MetArt.com\)"
             get_search "${MODD}/${model}" "Nadine_\(PhotoDromm.com\)"
             ;;
         Sonya_D)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sonya_D_\(Met-Art\)"
             ;;
         Stefania_Valentinovna_Iodkovskaya)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Stefania_Iodkovskaya"
             ;;
         Stefanija)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Flower_Femjoy"
             ;;
         Sveta_Akatyeva)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Svetlana_Akatieva"
             get_search "${MODD}/${model}" "Svetlana_Akatyeva"
             ;;
         Sveta_Grashchenkova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Sveta_Statham"
             ;;
         Tatyana_Bakhtina)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Tanya_Bahtina"
             ;;
         Tommie_Jo)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Tommi_Jo"
             ;;
         Valeria_Kika)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Kika"
             ;;
         Vanessa_Angel)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Vanessa_A"
             ;;
         Victoria_Sokolova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Viktoria_Sokolova"
             get_search "${MODD}/${model}" "Cali"
             ;;
         Vika_A)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Alisa_G"
             get_search "${MODD}/${model}" "Tinna"
             ;;
@@ -999,41 +863,33 @@ get_model() {
             get_search "${MODD}/${model}" "Viktoria_Aliko"
             ;;
         Viola_Bailey)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Viola_Paige"
             ;;
         Vos)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Vos_Met-art"
             ;;
         Wilma_Togoony)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Wilma"
             ;;
         Whitney_Sarka)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Tabitha"
             get_search "${MODD}/${model}" "Lynne_\(Hegre\)"
             ;;
         Yara_Eggiman)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Yara_\(Hegre-Art\)"
             ;;
         Yulia_Liepa)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Julia_Liepa"
             ;;
         Yulia_Silenkova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Julia_Silenkova"
             get_search "${MODD}/${model}" "Lilia_Kot"
             ;;
         Zuzana_Drabinova)
-            get_search "${MODD}/${model}" "${model}"
             get_search "${MODD}/${model}" "Raylene_Richards"
             ;;
         *)
-            get_search "${MODD}/${model}" "${model}"
+            echo "Unlisted model: ${model}"
             ;;
     esac
     cd "${WHVN}/${MODD}"
@@ -1042,48 +898,40 @@ get_model() {
 get_jav() {
     model="$1"
     cd "${WHVN}"
+    get_search "${JAVD}/${model}" "${model}"
     case "${model}" in
         Beau_Hesling)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Beau_D"
             ;;
         Julia_Kyoka)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Julia_Boin"
             ;;
         Madoka_Hitomi)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Hitomi_Madoka"
             ;;
         Meisa_Chibana)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Chibana_Meisa"
             ;;
         Miao_Xiao_Ji)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "baojishaonvmiaoxiaoji"
             get_search "${JAVD}/${model}" "miaoxiaoji"
             ;;
         Minami_Kojima)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Kojima_Minami"
             ;;
         Tinami)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "MiiTao"
             ;;
         Utsunomiya_Shion)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Shion_Utsunomiya"
             get_search "${JAVD}/${model}" "Rara_Anzai"
             get_search "${JAVD}/${model}" "Rion"
             ;;
         Yunxixi)
-            get_search "${JAVD}/${model}" "${model}"
             get_search "${JAVD}/${model}" "Yun_XiXi"
             ;;
         *)
-            get_search "${JAVD}/${model}" "${model}"
+            echo "Unlisted JAV model: ${model}"
             ;;
     esac
     cd "${WHVN}/${JAVD}"
@@ -1092,50 +940,41 @@ get_jav() {
 get_suicide() {
     model="$1"
     cd "${WHVN}"
+    get_search "${SUGD}/${model}" "${model}"
     case "${model}" in
         Alyona_German)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Aliona_German"
             get_search "${SUGD}/${model}" "Alenagerman_Suicide"
             get_search "${SUGD}/${model}" "Алёна"
             ;;
         Anette_Dawn)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Anette_Down"
             ;;
         Blooma)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "${model}_Suicide"
             ;;
         Avrora)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "${model}_Suicide"
             ;;
         Brea_Suicide)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Brea"
             ;;
         Coralinne_Suicide)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Sara_Calixto"
             get_search "${SUGD}/${model}" "PetiteMarie"
             ;;
         Elisa_Rose)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "ElisaRose"
             get_search "${SUGD}/${model}" "Elisa_Suicide"
             ;;
         Ellie_Suicide)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Elise_Laurenne"
             ;;
         Enrapture)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Elise_Tails"
             get_search "${SUGD}/${model}" "Enrapturex"
             ;;
         Ivory_Suicide)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Ivory"
             ;;
         Janesinner)
@@ -1144,91 +983,72 @@ get_suicide() {
             get_search "${SUGD}/${model}" "Yana_Sinner"
             ;;
         Jessicalou_Suicide)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "JessicaLou"
             ;;
         Katrina_Novikova)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Killer_Suicide"
             get_search "${SUGD}/${model}" "Killer_Katrin"
             get_search "${SUGD}/${model}" "Natalia_M"
             ;;
         Keshia_Hamlani)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Keshia_Suicide"
             ;;
         Lass_Suicide)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Julie_Kennedy"
             ;;
         Lucy_Collett)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "LucyV_Suicide"
             ;;
         Lure_Suicide)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Lurelady"
             ;;
         Lyuba_Menyaeva)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Lyuba"
             ;;
         Milenci)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Milenci_Suicide"
             ;;
         Mille)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Mille_Suicide"
             ;;
         Misc)
             cd "${WHVN}/${SUGD}"
             ;;
         Natasha_Legeyda)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Natashalegeyda_Suicide"
             ;;
         NattyBohh)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "NattyBohh_Suicide"
             ;;
         Nefka)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Micaela_Nefka"
             ;;
         Octavia_May)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Octavia_Suicide"
             get_search "${SUGD}/${model}" "Octaviamay_\(Suicide_Girls\)"
             get_search "${SUGD}/${model}" "Octaviamay"
             ;;
         Scribbles_Suicide)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Jo_Evans"
             ;;
         Sierhaus)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Sierhaus_Suicide"
             ;;
         *Suicide_Girls*)
-            get_search "${SUGD}/${model}" "${model}"
             mname=`echo ${model} | sed -e "s/Suicide_Girls/\(Suicide_Girls\)/"`
             get_search "${SUGD}/${model}" "${mname}"
             ;;
         Sunnie_Jones)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Sunniejones"
             ;;
         Valeria_Yakisel)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Valerig_Suicide"
             ;;
         Valeriya)
-            get_search "${SUGD}/${model}" "${model}"
             get_search "${SUGD}/${model}" "Valeriya_Suicide"
             ;;
         *)
-            get_search "${SUGD}/${model}" "${model}"
+            echo "Unlisted Suicide Girl: ${model}"
             ;;
     esac
     cd "${WHVN}/${SUGD}"
