@@ -385,6 +385,7 @@ do
         get_search "$dir" "Mila_Azul"
         get_search "$dir" "Jasmine_Jazz"
         get_search "$dir" "Jula"
+        get_search "$dir" "Lana_Lane"
         get_search "$dir" "Kacy_Lane_\(Met-Art\)"
         get_search "$dir" "Kseniia_Kufeld"
         get_search "$dir" "Li_Moon"
