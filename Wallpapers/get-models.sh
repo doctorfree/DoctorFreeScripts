@@ -266,6 +266,9 @@ get_model() {
             get_search "${MODD}/${model}" "Julia_Römmelt"
             get_search "${MODD}/${model}" "Julia_Roemmelt"
             ;;
+        Kacy_Lane)
+            get_search "${MODD}/${model}" "Kacy_Lane_\(Met-Art\)"
+            ;;
         Karina_Avakian)
             get_search "${MODD}/${model}" "Karina_Avakyan"
             ;;
