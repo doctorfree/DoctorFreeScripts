@@ -259,6 +259,10 @@ do
         get_search "$dir" "$dir"
         get_search "$dir" "Hungarian_Women"
         get_search "$dir" "Alisa_I"
+        get_search "$dir" "Antonya_Corrine"
+        get_search "$dir" "Brigitta"
+        get_search "$dir" "Guinevere_Huney"
+        get_search "$dir" "Gigi_Radics"
         ;;
     Japanese)
         get_search "$dir" "$dir"
