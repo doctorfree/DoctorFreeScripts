@@ -171,6 +171,9 @@ get_model() {
         Divina_A)
             get_search "${MODD}/${model}" "Davina_A"
             ;;
+        Dzhili)
+            get_search "${MODD}/${model}" "Olivia_Cassi"
+            ;;
         Elle_Tan)
             get_search "${MODD}/${model}" "Elle_P"
             ;;
