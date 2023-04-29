@@ -280,6 +280,11 @@ do
         get_search "$dir" "$dir"
         get_search "$dir" "Nubiles.net"
         ;;
+    Only_Magazines)
+        get_search "$dir" "Only_Secretaries_Magazine"
+        get_search "$dir" "OnlyTease_Magazine"
+        get_search "$dir" "Only_Sportswear"
+        ;;
     OnOff)
         get_search "$dir" "On/Off"
         ;;
