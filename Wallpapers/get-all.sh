@@ -332,6 +332,7 @@ for dir in *; do
       get_search "$dir" "Russian_girls"
       get_search "$dir" "Russian_Model"
       get_search "$dir" "Anastasia_Martzipanova"
+      get_search "$dir" "Cyberstoner007"
       get_search "$dir" "Disha_Shemetova"
       get_search "$dir" "Ekaterina_Enokaeva"
       get_search "$dir" "Natalia_Andreeva"
