@@ -35,28 +35,40 @@ get_repo() {
   repo="$1"
   # Place some doctorfree repositories in subdirectories
   [ "${user}" == "doctorfree" ] && {
-    if [[ ${repo} == *"bsidian"* ]]
-    then
-      if [ "${dryrun}" ]
-      then
-        echo "[ -d Obsidian ] || mkdir Obsidian"
-        echo "cd Obsidian"
-      else
-        [ -d Obsidian ] || mkdir Obsidian
-        cd Obsidian
-      fi
-    fi
-    if [[ ${repo} == "Mirror"* ]] || [[ ${repo} == "MMM-"* ]] || [[ ${repo} == "mmm-"* ]]
-    then
-      if [ "${dryrun}" ]
-      then
-        echo "[ -d MagicMirror ] || mkdir MagicMirror"
-        echo "cd MagicMirror"
-      else
-        [ -d MagicMirror ] || mkdir MagicMirror
-        cd MagicMirror
-      fi
-    fi
+    case ${repo} in
+      *bsidian*|cheat-sheets-plus|Pokedex-Markdown)
+        if [ "${dryrun}" ]
+        then
+          echo "[ -d Obsidian ] || mkdir Obsidian"
+          echo "cd Obsidian"
+        else
+          [ -d Obsidian ] || mkdir Obsidian
+          cd Obsidian
+        fi
+        ;;
+      Mirror*|MMM-*|mmm-*)
+        if [ "${dryrun}" ]
+        then
+          echo "[ -d MagicMirror ] || mkdir MagicMirror"
+          echo "cd MagicMirror"
+        else
+          [ -d MagicMirror ] || mkdir MagicMirror
+          cd MagicMirror
+        fi
+        ;;
+      *vim*|NvChad*|Neoville)
+        if [ "${dryrun}" ]
+        then
+          echo "[ -d Neovim ] || mkdir Neovim"
+          echo "cd Neovim"
+        else
+          [ -d Neovim ] || mkdir Neovim
+          cd Neovim
+        fi
+        ;;
+      *)
+        ;;
+    esac
   }
   if [ -d ${repo} ]
   then
