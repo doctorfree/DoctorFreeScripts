@@ -402,6 +402,7 @@ for dir in *; do
       get_search "$dir" "Mara_Blake"
       get_search "$dir" "Marta_E"
       get_search "$dir" "Milena_D"
+      get_search "$dir" "Olga_Rudik"
       get_search "$dir" "Oxana_Chic"
       get_search "$dir" "Katie_Fey"
       get_search "$dir" "Sabrina_Young"
