@@ -1056,6 +1056,9 @@ get_suicide() {
         Valeriya)
             get_search "${SUGD}/${model}" "Valeriya_Suicide"
             ;;
+        Yegola)
+            get_search "${SUGD}/${model}" "Magnum_Suicide"
+            ;;
         *)
             echo "Unlisted Suicide Girl: ${model}"
             ;;
