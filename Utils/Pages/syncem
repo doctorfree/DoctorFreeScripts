@@ -1,0 +1,12 @@
+#!/bin/bash
+
+for site in *
+do
+  [ -d $site/.git ] && {
+    cd $site
+    if [[ `git status --porcelain` ]]; then
+      updgit -a -m "Update projects tab"
+    fi
+    cd ..
+  }
+done

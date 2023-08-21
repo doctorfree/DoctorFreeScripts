@@ -1,0 +1,12 @@
+#!/bin/bash
+
+for site in *
+do
+  [ -d $site/.git ] && {
+    cd $site
+    if [[ `git status --porcelain` ]]; then
+      echo "$site"
+    fi
+    cd ..
+  }
+done

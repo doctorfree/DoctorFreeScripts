@@ -1,0 +1,23 @@
+#!/bin/bash
+
+PAGES="archive.ronrecord.com \
+asciigames.neoman.dev \
+asciiville.dev \
+astronvim.lazyman.dev \
+google-chrome-themes \
+ide.lazyman.dev \
+lazyman.dev \
+lazyvim.lazyman.dev \
+lunarvim.lazyman.dev \
+mirrorcommand.dev \
+musicplayerplus.dev \
+neoman.dev \
+nvchad.lazyman.dev \
+rooncommand.dev \
+skunkware.dev \
+webdev.lazyman.dev"
+
+for page in ${PAGES}
+do
+  [ -d ${page} ] || gh repo clone doctorfree/${page}
+done

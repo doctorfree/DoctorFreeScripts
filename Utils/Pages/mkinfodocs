@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+MDIR="$HOME/src/Neovim/nvim-lazyman/info"
+ODIR="$HOME/src/Github/Pages/lazyman.dev/info"
+
+[ -d "${ODIR}" ] || {
+  echo "$ODIR does not exist or is not a directory. Exiting."
+  exit 1
+}
+[ -d "${MDIR}" ] || {
+  echo "$MDIR does not exist or is not a directory. Exiting."
+  exit 1
+}
+
+conf="$1"
+cd "${ODIR}"
+for i in *.md
+do
+  m="$i"
+  [ "${conf}" ] && {
+    if [ -f ${conf}.md ]
+    then
+      m="${conf}.md"
+    else
+      if [ -f ${conf} ]
+      then
+        m="${conf}"
+      else
+        echo "Cannot locate info doc for ${conf}. Exiting."
+        exit 1
+      fi
+    fi
+  }
+  [ -f ${MDIR}/$m ] || {
+    echo "Cannot locate info doc $MDIR/$m. Skipping."
+    continue
+  }
+  j=$(echo $m | sed -e "s/.md//")
+  echo "Generating info doc page for $j"
+  echo "---" > /tmp/$m
+  echo "layout: post" >> /tmp/$m
+  echo "title: $j Configuration Info" >> /tmp/$m
+  echo "toc: true" >> /tmp/$m
+  echo "post_style: page" >> /tmp/$m
+  echo "---" >> /tmp/$m
+  echo "" >> /tmp/$m
+  cat ${MDIR}/$m | grep -v "Links to all Lazyman" | sed \
+    -e "s%github.com/doctorfree/nvim-lazyman/wiki/infodocs%lazyman.dev/info/%" \
+    -e "s%github.com/doctorfree/nvim-lazyman%lazyman.dev/configurations/%" >> /tmp/$m
+  cp /tmp/$m $m
+  rm -f /tmp/$m
+  [ "${conf}" ] && break
+done
