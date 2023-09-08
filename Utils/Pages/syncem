@@ -5,7 +5,7 @@ do
   [ -d $site/.git ] && {
     cd $site
     if [[ `git status --porcelain` ]]; then
-      updgit -a -m "Update projects tab"
+      updgit -a -m "Auto-generate sitemap with jekyll-sitemap plugin"
     fi
     cd ..
   }

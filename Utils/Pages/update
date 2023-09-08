@@ -1,26 +1,24 @@
 #!/bin/bash
 
-PAGES="archive.ronrecord.com \
-       asciigames.neoman.dev \
-       asciiville.dev \
-       ide.lazyman.dev \
-       lazyman.dev \
-       mirrorcommand.dev \
-       musicplayerplus.dev \
-       neoman.dev \
-       rooncommand.dev \
-       skunkware.dev \
-       webdev.lazyman.dev"
+#PAGES="archive.ronrecord.com \
+#       asciigames.neoman.dev \
+#       asciiville.dev \
+#       ide.lazyman.dev \
+#       lazyman.dev \
+#       mirrorcommand.dev \
+#       musicplayerplus.dev \
+#       neoman.dev \
+#       rooncommand.dev \
+#       skunkware.dev \
+#       webdev.lazyman.dev"
+#
+#for site in ${PAGES}
 
-for site in ${PAGES}
+for site in *
 do
-  if [ -d ${site}/.git ]
-  then
+  [ -d ${site}/.git ] && {
     cd ${site}
     git pull
     cd ..
-  else
-    [ -d ${site} ] && mv ${site} ${site}$$
-    gh repo clone doctorfree/${site}
-  fi
+  }
 done

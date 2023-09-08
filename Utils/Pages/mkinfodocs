@@ -45,8 +45,7 @@ do
   echo "---" >> /tmp/$m
   echo "" >> /tmp/$m
   cat ${MDIR}/$m | grep -v "Links to all Lazyman" | sed \
-    -e "s%github.com/doctorfree/nvim-lazyman/wiki/infodocs%lazyman.dev/info/%" \
-    -e "s%github.com/doctorfree/nvim-lazyman%lazyman.dev/configurations/%" >> /tmp/$m
+    -e "s%github.com/doctorfree/nvim-lazyman/wiki/infodocs%lazyman.dev/info/%" >> /tmp/$m
   cp /tmp/$m $m
   rm -f /tmp/$m
   [ "${conf}" ] && break

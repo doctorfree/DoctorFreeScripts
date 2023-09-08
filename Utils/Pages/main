@@ -1,0 +1,11 @@
+#!/bin/bash
+
+for site in *
+do
+  [ -d ${site}/.git ] && {
+    cd ${site}
+    branch=$(git status | grep On | grep branch | awk ' { print $3 } ')
+    [ "${branch}" == "subdir" ] && git checkout main
+    cd ..
+  }
+done
