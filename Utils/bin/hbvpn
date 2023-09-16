@@ -1,0 +1,81 @@
+#!/bin/bash
+#
+# hbvpn - Hornblower OpenVPN front-end
+
+# Ubuntu 20.04 is "focal", Ubuntu 22.04 is "jammy"
+DISTRO="focal"
+CONFIG="${HOME}/Hornblower/ronnie.hornblower.ovpn"
+
+usage() {
+  printf "\nUsage: hbvpn [-c config] [list|clean|help|import|restart|setup|start|stop|stats]"
+  printf "\n       default action is 'start'"
+  printf "\n       default config is ${CONFIG}\n"
+  exit 1
+}
+
+while getopts ":c:u" flag; do
+  case $flag in
+    c)
+      CONFIG="$OPTARG"
+      ;;
+    u)
+      usage
+      ;;
+    \?)
+      echo "Invalid option: $flag"
+      usage
+      ;;
+  esac
+done
+shift $(( OPTIND - 1 ))
+
+action="start"
+[ "$1" ] && action="$1"
+
+case "${action}" in
+  clean)
+    openvpn3 session-manage --cleanup
+    ;;
+  list)
+    openvpn3 sessions-list
+    ;;
+  help)
+    openvpn3 --help
+    usage
+    ;;
+  import)
+    openvpn3 config-import --persistent --config ${CONFIG}
+    ;;
+  restart)
+    openvpn3 session-manage --restart --config ${CONFIG}
+    ;;
+  setup)
+    sudo apt install apt-transport-https
+    curl -fsSL https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub | \
+      gpg --dearmor > /tmp/openvpn-repo-pkg-keyring.gpg
+    sudo cp /tmp/openvpn-repo-pkg-keyring.gpg \
+	    /etc/apt/trusted.gpg.d/openvpn-repo-pkg-keyring.gpg
+    rm -f /tmp/openvpn-repo-pkg-keyring.gpg \
+    curl -fsSL \
+      https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-${DISTRO}.list \
+      >/tmp/openvpn3.list
+    sudo cp /tmp/openvpn3.list /etc/apt/sources.list.d/openvpn3.list
+    rm -f /tmp/openvpn3.list
+    sudo apt update
+    sudo apt install openvpn3
+    ;;
+  start)
+    openvpn3 session-start --config ${CONFIG}
+    ;;
+  stop)
+    openvpn3 session-manage --disconnect --config ${CONFIG}
+    ;;
+  stats)
+    openvpn3 session-stats --config ${CONFIG}
+    ;;
+  *)
+    echo "Unrecognized argument: ${action}"
+    usage
+    ;;
+esac
+
