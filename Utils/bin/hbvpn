@@ -1,15 +1,33 @@
 #!/bin/bash
 #
 # hbvpn - Hornblower OpenVPN front-end
-
+#
+# See https://community.openvpn.net/openvpn/wiki/OpenVPN3Linux
+#
+# Supported Ubuntu releases: buster, bullseye, focal, jammy, kinetic
 # Ubuntu 20.04 is "focal", Ubuntu 22.04 is "jammy"
 DISTRO="focal"
+# Path to the openvpn3 client configuration file
 CONFIG="${HOME}/Hornblower/ronnie.hornblower.ovpn"
 
 usage() {
-  printf "\nUsage: hbvpn [-c config] [list|clean|help|import|restart|setup|start|stop|stats]"
-  printf "\n       default action is 'start'"
+  printf "\nUsage: hbvpn [-c config] [command] [help]"
+  printf "\n       default command is 'start'"
   printf "\n       default config is ${CONFIG}\n"
+  printf "\nAvailable commands:"
+  printf "\n  help              - This help screen"
+  printf "\n  version           - Show program version information"
+  printf "\n  clean             - Clean up stale sessions"
+  printf "\n  import            - Import configuration profiles"
+  printf "\n  dump              - Show/dump a configuration profile"
+  printf "\n  remove            - Remove an available configuration profile"
+  printf "\n  listconfigs       - List all available configuration profiles"
+  printf "\n  restart           - Disconnect and reconnect a running VPN session"
+  printf "\n  setup             - Perform all OpenVPN setup actions"
+  printf "\n  start             - Start a new VPN session"
+  printf "\n  stop              - Disconnect a VPN session"
+  printf "\n  stats             - Show session statistics"
+  printf "\n  list              - List available VPN sessions\n"
   exit 1
 }
 
@@ -30,48 +48,119 @@ done
 shift $(( OPTIND - 1 ))
 
 action="start"
-[ "$1" ] && action="$1"
+help=
+[ "$1" ] && {
+  action="$1"
+  [ "$2" == "help" ] && help=1
+}
 
 case "${action}" in
   clean)
-    openvpn3 session-manage --cleanup
+    if [ "${help}" ]; then
+      openvpn3 session-manage --help
+    else
+      openvpn3 session-manage --cleanup
+    fi
+    ;;
+  dump)
+    if [ "${help}" ]; then
+      openvpn3 config-dump --help
+    else
+      openvpn3 config-dump --json --config ${CONFIG}
+    fi
+    ;;
+  remove)
+    if [ "${help}" ]; then
+      openvpn3 config-remove --help
+    else
+      openvpn3 config-remove --config ${CONFIG}
+    fi
+    ;;
+  listconfigs)
+    if [ "${help}" ]; then
+      openvpn3 configs-list --help
+    else
+      openvpn3 configs-list
+    fi
     ;;
   list)
-    openvpn3 sessions-list
+    if [ "${help}" ]; then
+      openvpn3 session-list --help
+    else
+      openvpn3 sessions-list
+    fi
     ;;
   help)
-    openvpn3 --help
     usage
     ;;
   import)
-    openvpn3 config-import --persistent --config ${CONFIG}
+    if [ "${help}" ]; then
+      openvpn3 config-import --help
+    else
+      openvpn3 config-import --persistent --config ${CONFIG}
+    fi
     ;;
   restart)
-    openvpn3 session-manage --restart --config ${CONFIG}
+    if [ "${help}" ]; then
+      openvpn3 session-manage --help
+    else
+      openvpn3 session-manage --restart --config ${CONFIG}
+    fi
     ;;
   setup)
-    sudo apt install apt-transport-https
-    curl -fsSL https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub | \
-      gpg --dearmor > /tmp/openvpn-repo-pkg-keyring.gpg
-    sudo cp /tmp/openvpn-repo-pkg-keyring.gpg \
-	    /etc/apt/trusted.gpg.d/openvpn-repo-pkg-keyring.gpg
-    rm -f /tmp/openvpn-repo-pkg-keyring.gpg \
-    curl -fsSL \
-      https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-${DISTRO}.list \
-      >/tmp/openvpn3.list
-    sudo cp /tmp/openvpn3.list /etc/apt/sources.list.d/openvpn3.list
-    rm -f /tmp/openvpn3.list
-    sudo apt update
-    sudo apt install openvpn3
+    if [ "${help}" ]; then
+      printf "\nsudo apt install apt-transport-https"
+      printf "\ncurl -fsSL https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub |"
+      printf "\n  gpg --dearmor > /tmp/openvpn-repo-pkg-keyring.gpg"
+      printf "\nsudo cp /tmp/openvpn-repo-pkg-keyring.gpg"
+	    printf "\n  /etc/apt/trusted.gpg.d/openvpn-repo-pkg-keyring.gpg"
+      printf "\nrm -f /tmp/openvpn-repo-pkg-keyring.gpg"
+      printf "\ncurl -fsSL"
+      printf "\n  https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-${DISTRO}.list"
+      printf "\n  >/tmp/openvpn3.list"
+      printf "\nsudo cp /tmp/openvpn3.list /etc/apt/sources.list.d/openvpn3.list"
+      printf "\nrm -f /tmp/openvpn3.list"
+      printf "\nsudo apt update"
+      printf "\nsudo apt install openvpn3\n"
+    else
+      sudo apt install apt-transport-https
+      curl -fsSL https://swupdate.openvpn.net/repos/openvpn-repo-pkg-key.pub | \
+        gpg --dearmor > /tmp/openvpn-repo-pkg-keyring.gpg
+      sudo cp /tmp/openvpn-repo-pkg-keyring.gpg \
+	      /etc/apt/trusted.gpg.d/openvpn-repo-pkg-keyring.gpg
+      rm -f /tmp/openvpn-repo-pkg-keyring.gpg \
+      curl -fsSL \
+        https://swupdate.openvpn.net/community/openvpn3/repos/openvpn3-${DISTRO}.list \
+        >/tmp/openvpn3.list
+      sudo cp /tmp/openvpn3.list /etc/apt/sources.list.d/openvpn3.list
+      rm -f /tmp/openvpn3.list
+      sudo apt update
+      sudo apt install openvpn3
+    fi
     ;;
   start)
-    openvpn3 session-start --config ${CONFIG}
+    if [ "${help}" ]; then
+      openvpn3 session-start --help
+    else
+      openvpn3 session-start --config ${CONFIG}
+    fi
     ;;
   stop)
-    openvpn3 session-manage --disconnect --config ${CONFIG}
+    if [ "${help}" ]; then
+      openvpn3 session-manage --help
+    else
+      openvpn3 session-manage --disconnect --config ${CONFIG}
+    fi
     ;;
   stats)
-    openvpn3 session-stats --config ${CONFIG}
+    if [ "${help}" ]; then
+      openvpn3 session-stats --help
+    else
+      openvpn3 session-stats --config ${CONFIG}
+    fi
+    ;;
+  version)
+    openvpn3 version
     ;;
   *)
     echo "Unrecognized argument: ${action}"
