@@ -117,6 +117,9 @@ get_model() {
         Avery)
             get_search "${MODD}/${model}" "Nona"
             ;;
+        Barbie_\(Colombian_model\))
+            get_search "${MODD}/${model}" "Barbie_Rous"
+            ;;
         Bernie_Svintis)
             get_search "${MODD}/${model}" "Bernie"
             ;;
