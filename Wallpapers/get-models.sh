@@ -160,6 +160,9 @@ get_model() {
         Danaz_Kaleesy)
             get_search "${MODD}/${model}" "Carin_E"
             ;;
+        Daniela_Rosch)
+            get_search "${MODD}/${model}" "Corinna_\(Femjoy\)"
+            ;;
         Darya_Chekanova)
             get_search "${MODD}/${model}" "Daria_Chekanova"
             ;;

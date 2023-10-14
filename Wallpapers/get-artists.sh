@@ -33,37 +33,31 @@ cd Artists || exit
 for artist in *; do
   [ -d "${artist}" ] || continue
   cd "${HERE}" || exit
+  get_search "Artists/${artist}" "${artist}"
   case "${artist}" in
     Ayya_Saparniyazova)
-      get_search "Artists/${artist}" "${artist}"
       get_search "Artists/${artist}" "AyyaSAP"
       ;;
     Dandonfuga)
-      get_search "Artists/${artist}" "${artist}"
       get_search "Artists/${artist}" "Dandon_Fuga"
       ;;
+    Luminyu)
+      get_search "Artists/${artist}" "Lumi_Nyu_\(Artist\)"
+      ;;
     MatrixIAs)
-      get_search "Artists/${artist}" "${artist}"
       get_search "Artists/${artist}" "Stable_Diffusion"
       ;;
     Mirco_Cabbia)
-      get_search "Artists/${artist}" "${artist}"
       get_search "Artists/${artist}" "Sciamano240"
       ;;
     NeoArtCorE)
-      get_search "Artists/${artist}" "${artist}"
       get_search "Artists/${artist}" "NeoArtCorE_\(artist\)"
       ;;
     ZOh)
-      get_search "Artists/${artist}" "${artist}"
       get_search "Artists/${artist}" "therealzOh"
       ;;
     Zumi)
-      get_search "Artists/${artist}" "${artist}"
       get_search "Artists/${artist}" "zumidraws"
-      ;;
-    *)
-      get_search "Artists/${artist}" "${artist}"
       ;;
   esac
   cd Artists || exit
