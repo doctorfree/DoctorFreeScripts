@@ -2,7 +2,7 @@
 #
 # Modify 'user' and 'host' with your rsync.net username and hostname
 user="<rsync.net username>"
-host="<hostname>.rsync.net"
+host="<host>.rsync.net"
 
 myhost="$(hostname)"
 dryrun=
@@ -62,13 +62,21 @@ shift $(( OPTIND - 1 ))
 }
 
 src="$(realpath "$1" | sed -e "s%/$%%")"
-name="$(echo "${src}" | sed -e "s%/%_%g")"
+name="$(echo "${src}" | sed -e "s%/%_%g" | sed -e "s/^_//")"
 
 if [ "${list}" ]; then
   if [ "${recurse}" ]; then
-    ssh ${user}@${host} ls -lRa "${myhost}/${name}"
+    if [ "${dryrun}" ]; then
+      printf "\nssh ${user}@${host} ls -lRa ${myhost}/${name}\n"
+    else
+      ssh ${user}@${host} ls -lRa "${myhost}/${name}"
+    fi
   else
-    ssh ${user}@${host} ls -la "${myhost}/${name}"
+    if [ "${dryrun}" ]; then
+      printf "\nssh ${user}@${host} ls -la ${myhost}/${name}\n"
+    else
+      ssh ${user}@${host} ls -la "${myhost}/${name}"
+    fi
   fi
 else
   if [ "${remove}" ]; then
