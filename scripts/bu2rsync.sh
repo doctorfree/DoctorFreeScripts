@@ -9,6 +9,8 @@ dryrun=
 list=
 recurse=
 remove=
+src=
+name=
 verbose=
 
 usage() {
@@ -53,15 +55,25 @@ done
 shift $(( OPTIND - 1 ))
 
 [ "$1" ] || {
-  printf "\nERROR: directory argument required\n"
-  usage
+  if [ "${list}" ]; then
+    src="."
+  else
+    printf "\nDirectory argument required to upload or remove folders\n"
+    printf "\nCurrent rsync.net ${myhost} directory listing:\n"
+    ssh ${user}@${host} ls -la "${myhost}"
+    usage
+  fi
 }
-[ -d "$1" ] || {
-  printf "\nERROR: $1 does not exist or is not a directory\n"
-  usage
+[ "${list}" ] || {
+  [ "${remove}" ] || {
+    [ -d "$1" ] || {
+      printf "\nERROR: $1 does not exist or is not a directory\n"
+      usage
+    }
+  }
 }
 
-src="$(realpath "$1" | sed -e "s%/$%%")"
+[ "${src}" ] || src="$(realpath "$1" | sed -e "s%/$%%")"
 name="$(echo "${src}" | sed -e "s%/%_%g" | sed -e "s/^_//")"
 
 if [ "${list}" ]; then
