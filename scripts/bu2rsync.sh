@@ -1,10 +1,8 @@
 #!/bin/bash
 #
 # Modify 'user' and 'host' with your rsync.net username and hostname
-# user="<rsync.net username>"
-# host="<host>.rsync.net"
-user="fm1804"
-host="fm1804.rsync.net"
+user="<rsync.net username>"
+host="<host>.rsync.net"
 myhost="$(hostname)"
 dryrun=
 list=
