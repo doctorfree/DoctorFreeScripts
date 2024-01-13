@@ -1,9 +1,10 @@
 #!/bin/bash
 #
 # Modify 'user' and 'host' with your rsync.net username and hostname
-user="<rsync.net username>"
-host="<host>.rsync.net"
-
+# user="<rsync.net username>"
+# host="<host>.rsync.net"
+user="fm1804"
+host="fm1804.rsync.net"
 myhost="$(hostname)"
 dryrun=
 list=
@@ -11,21 +12,23 @@ recurse=
 remove=
 src=
 name=
+quota=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-lL] [-n] [-r] [-v] directory"
+  printf "\nUsage: bu2rsync [-lL] [-n] [-q] [-r] [-v] directory"
   printf "\nWhere:"
   printf "\n\t-l indicates list the contents of the backup folder"
   printf "\n\t-L indicates recursively list the contents of the backup folder"
   printf "\n\t-n indicates perform a dry run, don't make any changes"
+  printf "\n\t-q indicates see how much space your account uses with the quota command"
   printf "\n\t-r indicates remove remote backup"
   printf "\n\t-v indicates verbose mode"
   printf "\n\t-u displays this usage message and exits\n"
   exit 1
 }
 
-while getopts ":lLnrvu" flag; do
+while getopts ":lLnqrvu" flag; do
   case $flag in
     l)
       list=1
@@ -36,6 +39,9 @@ while getopts ":lLnrvu" flag; do
       ;;
     n)
       dryrun="nv"
+      ;;
+    q)
+      quota=1
       ;;
     r)
       remove=1
@@ -54,6 +60,16 @@ while getopts ":lLnrvu" flag; do
 done
 shift $(( OPTIND - 1 ))
 
+[ "${quota}" ] && {
+  printf "\nCommand: quota\n\n"
+  ssh ${user}@${host} quota
+  printf "\n\nCommand: df -h\n\n"
+  ssh ${user}@${host} df -h
+  printf "\n\nCommand: du -h -d 0 *\n\n"
+  ssh ${user}@${host} du -h -d 0 \*
+  exit 0
+}
+
 [ "$1" ] || {
   if [ "${list}" ]; then
     src="."
@@ -66,9 +82,11 @@ shift $(( OPTIND - 1 ))
 }
 [ "${list}" ] || {
   [ "${remove}" ] || {
-    [ -d "$1" ] || {
-      printf "\nERROR: $1 does not exist or is not a directory\n"
-      usage
+    [ "${quota}" ] || {
+      [ -d "$1" ] || {
+        printf "\nERROR: $1 does not exist or is not a directory\n"
+        usage
+      }
     }
   }
 }
