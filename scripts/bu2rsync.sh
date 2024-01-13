@@ -4,6 +4,8 @@
 user="<rsync.net username>"
 host="<host>.rsync.net"
 myhost="$(hostname)"
+borg=
+cmd=
 dryrun=
 list=
 recurse=
@@ -14,8 +16,10 @@ quota=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-lL] [-n] [-q] [-r] [-v] directory"
+  printf "\nUsage: bu2rsync [-b init|create] [-c command] [-lL] [-n] [-q] [-r] [-v] directory"
   printf "\nWhere:"
+  printf "\n\t-b init initializes a bork backup system on rsync.net"
+  printf "\n\t-c command runs command on rsync.net"
   printf "\n\t-l indicates list the contents of the backup folder"
   printf "\n\t-L indicates recursively list the contents of the backup folder"
   printf "\n\t-n indicates perform a dry run, don't make any changes"
@@ -26,8 +30,36 @@ usage() {
   exit 1
 }
 
-while getopts ":lLnqrvu" flag; do
+borg_create() {
+  REPOSITORY=${user}@${host}:${myhost}/backups
+  export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
+
+  # Backup all of /home and /var/www except a few
+  # excluded directories
+  borg create -v --stats                        \
+    $REPOSITORY::'{hostname}-{now:%Y-%m-%d}'    \
+    /home                                       \
+    /var/www                                    \
+    --exclude "${HOME}/.cache"                  \
+    --exclude "${HOME}/Music"                   \
+    --exclude '*.pyc'
+
+  # Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
+  # archives of THIS machine. The '{hostname}-' prefix is very important to
+  # limit prune's operation to this machine's archives and not apply to
+  # other machine's archives also.
+  borg prune -v --list $REPOSITORY --prefix '{hostname}-' \
+    --keep-daily=7 --keep-weekly=4 --keep-monthly=6
+}
+
+while getopts ":b:c:lLnqrvu" flag; do
   case $flag in
+    b)
+      borg="${OPTARG}"
+      ;;
+    c)
+      cmd="${OPTARG}"
+      ;;
     l)
       list=1
       ;;
@@ -58,13 +90,52 @@ while getopts ":lLnqrvu" flag; do
 done
 shift $(( OPTIND - 1 ))
 
+[ "${cmd}" ] && {
+  printf "\nCommand: ${cmd}\n"
+  if [ "${dryrun}" ]; then
+    printf "\nssh ${user}@${host} ${cmd}\n"
+  else
+    ssh ${user}@${host} ${cmd}
+  fi
+  exit 0
+}
+
 [ "${quota}" ] && {
-  printf "\nCommand: quota\n\n"
-  ssh ${user}@${host} quota
-  printf "\n\nCommand: df -h\n\n"
-  ssh ${user}@${host} df -h
-  printf "\n\nCommand: du -h -d 0 *\n\n"
-  ssh ${user}@${host} du -h -d 0 \*
+  if [ "${dryrun}" ]; then
+    printf "\nCommand: quota\n\n"
+    printf "\n\nCommand: df -h\n\n"
+    printf "\n\nCommand: du -h -d 0 *\n\n"
+  else
+    printf "\nCommand: quota\n\n"
+    ssh ${user}@${host} quota
+    printf "\n\nCommand: df -h\n\n"
+    ssh ${user}@${host} df -h
+    printf "\n\nCommand: du -h -d 0 *\n\n"
+    ssh ${user}@${host} du -h -d 0 \*
+  fi
+  exit 0
+}
+
+[ "${borg}" ] && {
+  case "${borg}" in
+    init|initialize)
+      sudo apt install borgbackup -q -y
+      borg init ${user}@${host}:${myhost}/backups
+      printf "\nExport your passphrase with:\n"
+      printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
+      ;;
+    create)
+      have_create=$(type -p borg-create)
+      if [ "${have_create}" ]; then
+        borg-create
+      else
+        borg_create
+      fi
+      ;;
+    *)
+      usage
+      ;;
+  esac
   exit 0
 }
 
