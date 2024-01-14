@@ -16,10 +16,12 @@ dudf=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-b init|create] [-c command] [-lL] [-n] [-q|Q] [-r] [-u] [-v] folder"
+  printf "\nUsage: bu2rsync [-b init|create|mount] [-c command] [-lL] [-n]"
+  printf "\n                [-q|Q] [-r] [-u] [-U user] [-H host] [-v] folder"
   printf "\nWhere:"
   printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
   printf "\n\t-b 'create' creates a borg backup to rsync.net"
+  printf "\n\t-b 'mount' mounts the borg backup repository on /mnt/borg"
   printf "\n\t-c 'command' runs 'command' on rsync.net"
   printf "\n\t-l indicates list the contents of the backup folder"
   printf "\n\t-L indicates recursively list the contents of the backup folder"
@@ -28,8 +30,12 @@ usage() {
   printf "\n\t-Q indicates see how much space your account uses with the quota/df/du commands"
   printf "\n\t-r indicates remove remote backup"
   printf "\n\t-v indicates verbose mode"
+  printf "\n\t-U 'user' sets the rsync.net user to 'user'"
+  printf "\n\t-H 'host' sets the rsync.net host to 'host'"
   printf "\n\t-u displays this usage message and exits\n"
   printf "\nThe 'folder' argument indicates the folder to sync/list/remove with rsync.net\n"
+  printf "\nCurrently using rsync.net user/host:"
+  printf "\n\t${user}@${host} for ${myhost}\n"
   exit 1
 }
 
@@ -55,9 +61,8 @@ install_borg() {
 }
 
 borg_create() {
-  REPOSITORY=${user}@${host}:${myhost}/backups
   export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
-  export BORG_REPO=ssh://${REPOSITORY}
+  export BORG_REPO=ssh://${user}@${host}/${myhost}/backups
 
   [ "${BORG_PASSPHRASE}" ] || {
     printf "\nWARNING: No Borg passphrase detected."
@@ -136,13 +141,16 @@ else
 fi
 export PATH="/usr/local/bin:$PATH"
 have_borg=$(type -p borg)
-while getopts ":b:c:hlLnqQrvu" flag; do
+while getopts ":b:c:hHlLnqQrvuU" flag; do
   case $flag in
     b)
       borg="${OPTARG}"
       ;;
     c)
       cmd="${OPTARG}"
+      ;;
+    H)
+      host="${OPTARG}"
       ;;
     l)
       list=1
@@ -164,6 +172,9 @@ while getopts ":b:c:hlLnqQrvu" flag; do
     r)
       remove=1
       ;;
+    U)
+      user="${OPTARG}"
+      ;;
     v)
       verbose="v"
       ;;
@@ -177,6 +188,11 @@ while getopts ":b:c:hlLnqQrvu" flag; do
   esac
 done
 shift $(( OPTIND - 1 ))
+
+[ "${user}" == "<rsync.net username>" ] || [ "${host}" == "<host>.rsync.net" ] && {
+  printf "\nERROR: user and host variables must be set too rsync.net account values\n"
+  usage
+}
 
 [ "${cmd}" ] && {
   printf "\nCommand: ${cmd}\n"
@@ -234,6 +250,11 @@ shift $(( OPTIND - 1 ))
       else
         borg_create
       fi
+      ;;
+    mount)
+      [ "${have_borg}" ] || install_borg
+      [ -d /mnt/borg ] || sudo mkdir -p /mnt/borg
+      borg mount ssh://${user}@${host}/${myhost}/backups /mnt/borg
       ;;
     *)
       usage
