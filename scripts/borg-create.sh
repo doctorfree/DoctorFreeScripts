@@ -8,6 +8,12 @@ myhost="$(hostname)"
 REPOSITORY=${user}@${host}:${myhost}/backups
 export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
 
+[ "${BORG_PASSPHRASE}" ] || {
+  printf "\nWARNING: No Borg passphrase detected."
+  printf "\nExport your passphrase in the environment variable:"
+  printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
+}
+
 # Backup all of /home and /var/www except a few
 # excluded directories
 borg create -v --stats                        \

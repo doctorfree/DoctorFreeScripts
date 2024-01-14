@@ -18,8 +18,9 @@ verbose=
 usage() {
   printf "\nUsage: bu2rsync [-b init|create] [-c command] [-lL] [-n] [-q] [-r] [-v] directory"
   printf "\nWhere:"
-  printf "\n\t-b init initializes a bork backup system on rsync.net"
-  printf "\n\t-c command runs command on rsync.net"
+  printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
+  printf "\n\t-b 'create' creates a borg backup to rsync.net"
+  printf "\n\t-c 'command' runs 'command' on rsync.net"
   printf "\n\t-l indicates list the contents of the backup folder"
   printf "\n\t-L indicates recursively list the contents of the backup folder"
   printf "\n\t-n indicates perform a dry run, don't make any changes"
@@ -28,6 +29,27 @@ usage() {
   printf "\n\t-v indicates verbose mode"
   printf "\n\t-u displays this usage message and exits\n"
   exit 1
+}
+
+install_borg() {
+  API_URL="https://api.github.com/repos/borgbackup/borg/releases/latest"
+  DL_URL=
+  DL_URL=$(curl --silent ${AUTH_HEADER} "${API_URL}" \
+    | jq --raw-output '.assets | .[]?.browser_download_url' \
+    | grep "borg-linux64$")
+
+  [ "${DL_URL}" ] && {
+    printf "\n\tInstalling Borg ..."
+    wget --quiet -O /tmp/borg$$ "${DL_URL}"
+    chmod 644 /tmp/borg$$
+    [ -d /usr/local/bin ] || sudo mkdir -p /usr/local/bin
+    sudo cp /tmp/borg$$ /usr/local/bin/borg
+    sudo chown root:root /usr/local/bin/borg
+    sudo chmod 755 /usr/local/bin/borg
+    sudo ln -s /usr/local/bin/borg /usr/local/bin/borgfs
+    rm -f /tmp/borg$$
+    printf " done"
+  }
 }
 
 borg_create() {
@@ -52,6 +74,13 @@ borg_create() {
     --keep-daily=7 --keep-weekly=4 --keep-monthly=6
 }
 
+if [ "${GH_TOKEN}" ]; then
+  AUTH_HEADER="-H \"Authorization: Bearer ${GH_TOKEN}\""
+else
+  AUTH_HEADER=
+fi
+export PATH="/usr/local/bin:$PATH"
+have_borg=$(type -p borg)
 while getopts ":b:c:lLnqrvu" flag; do
   case $flag in
     b)
@@ -119,12 +148,23 @@ shift $(( OPTIND - 1 ))
 [ "${borg}" ] && {
   case "${borg}" in
     init|initialize)
-      sudo apt install borgbackup -q -y
+      [ "${have_borg}" ] || install_borg
       borg init ${user}@${host}:${myhost}/backups
-      printf "\nExport your passphrase with:\n"
+      printf "\nExport your passphrase with:"
       printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       ;;
     create)
+      [ "${BORG_PASSPHRASE}" ] || {
+        printf "\nWARNING: No Borg passphrase detected."
+        printf "\nExport your passphrase in the environment variable:"
+        printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
+      }
+      [ "${have_borg}" ] || {
+        install_borg
+        borg init ${user}@${host}:${myhost}/backups
+        printf "\nExport your passphrase with:"
+        printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
+      }
       have_create=$(type -p borg-create)
       if [ "${have_create}" ]; then
         borg-create
