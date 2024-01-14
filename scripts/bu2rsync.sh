@@ -13,10 +13,11 @@ remove=
 src=
 name=
 quota=
+dudf=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-b init|create] [-c command] [-lL] [-n] [-q] [-r] [-v] directory"
+  printf "\nUsage: bu2rsync [-b init|create] [-c command] [-lL] [-n] [-q|Q] [-r] [-v] directory"
   printf "\nWhere:"
   printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
   printf "\n\t-b 'create' creates a borg backup to rsync.net"
@@ -24,7 +25,8 @@ usage() {
   printf "\n\t-l indicates list the contents of the backup folder"
   printf "\n\t-L indicates recursively list the contents of the backup folder"
   printf "\n\t-n indicates perform a dry run, don't make any changes"
-  printf "\n\t-q indicates see how much space your account uses with the quota command"
+  printf "\n\t-q indicates see how much space your account uses with the quota/df commands"
+  printf "\n\t-Q indicates see how much space your account uses with the quota/df/du commands"
   printf "\n\t-r indicates remove remote backup"
   printf "\n\t-v indicates verbose mode"
   printf "\n\t-u displays this usage message and exits\n"
@@ -81,7 +83,7 @@ else
 fi
 export PATH="/usr/local/bin:$PATH"
 have_borg=$(type -p borg)
-while getopts ":b:c:lLnqrvu" flag; do
+while getopts ":b:c:lLnqQrvu" flag; do
   case $flag in
     b)
       borg="${OPTARG}"
@@ -101,6 +103,10 @@ while getopts ":b:c:lLnqrvu" flag; do
       ;;
     q)
       quota=1
+      ;;
+    Q)
+      quota=1
+      dudf=1
       ;;
     r)
       remove=1
@@ -133,14 +139,18 @@ shift $(( OPTIND - 1 ))
   if [ "${dryrun}" ]; then
     printf "\nCommand: quota\n\n"
     printf "\n\nCommand: df -h\n\n"
-    printf "\n\nCommand: du -h -d 0 *\n\n"
+    [ "${dudf}" ] && {
+      printf "\n\nCommand: du -h -d 0 *\n\n"
+    }
   else
     printf "\nCommand: quota\n\n"
     ssh ${user}@${host} quota
     printf "\n\nCommand: df -h\n\n"
     ssh ${user}@${host} df -h
-    printf "\n\nCommand: du -h -d 0 *\n\n"
-    ssh ${user}@${host} du -h -d 0 \*
+    [ "${dudf}" ] && {
+      printf "\n\nCommand: du -h -d 0 *\n\n"
+      ssh ${user}@${host} du -h -d 0 \*
+    }
   fi
   exit 0
 }
