@@ -56,23 +56,76 @@ install_borg() {
 borg_create() {
   REPOSITORY=${user}@${host}:${myhost}/backups
   export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
+  export BORG_REPO=ssh://${REPOSITORY}
 
-  # Backup all of /home and /var/www except a few
-  # excluded directories
-  borg create -v --stats                        \
-    $REPOSITORY::'{hostname}-{now:%Y-%m-%d}'    \
-    /home                                       \
-    /var/www                                    \
-    --exclude "${HOME}/.cache"                  \
-    --exclude "${HOME}/Music"                   \
-    --exclude '*.pyc'
+  [ "${BORG_PASSPHRASE}" ] || {
+    printf "\nWARNING: No Borg passphrase detected."
+    printf "\nExport your passphrase in the environment variable:"
+    printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
+  }
+
+  info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
+  trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
+
+  info "Starting backup"
+
+  borg create                         \
+      --verbose                       \
+      --filter AME                    \
+      --list                          \
+      --stats                         \
+      --show-rc                       \
+      --compression lz4               \
+      --exclude-caches                \
+      --exclude 'home/*/.cache/*'     \
+      --exclude 'home/*/Music/*'      \
+      --exclude 'var/tmp/*'           \
+      --exclude '*.pyc'               \
+                                      \
+      ::'{hostname}-{now}'            \
+      /etc                            \
+      /home                           \
+      /root                           \
+      /var
+
+  backup_exit=$?
+
+  info "Pruning repository"
 
   # Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
-  # archives of THIS machine. The '{hostname}-' prefix is very important to
+  # archives of THIS machine. The '{hostname}-*' matching is very important to
   # limit prune's operation to this machine's archives and not apply to
-  # other machine's archives also.
-  borg prune -v --list $REPOSITORY --prefix '{hostname}-' \
-    --keep-daily=7 --keep-weekly=4 --keep-monthly=6
+  # other machines' archives also:
+  borg prune                          \
+      --list                          \
+      --glob-archives '{hostname}-*'  \
+      --show-rc                       \
+      --keep-daily    7               \
+      --keep-weekly   4               \
+      --keep-monthly  6
+
+  prune_exit=$?
+
+  # free repo disk space by compacting segments
+  info "Compacting repository"
+
+  borg compact
+
+  compact_exit=$?
+
+  # use highest exit code as global exit code
+  global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
+  global_exit=$(( compact_exit > global_exit ? compact_exit : global_exit ))
+
+  if [ ${global_exit} -eq 0 ]; then
+    info "Backup, Prune, and Compact finished successfully"
+  elif [ ${global_exit} -eq 1 ]; then
+    info "Backup, Prune, and/or Compact finished with warnings"
+  else
+    info "Backup, Prune, and/or Compact finished with errors"
+  fi
+
+  exit ${global_exit}
 }
 
 if [ "${GH_TOKEN}" ]; then
