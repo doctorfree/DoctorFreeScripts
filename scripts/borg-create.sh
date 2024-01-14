@@ -6,7 +6,7 @@ host="<host>.rsync.net"
 myhost="$(hostname)"
 
 export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
-export BORG_REPO=ssh://${user}@${host}/${myhost}/backups
+export BORG_REPO=${user}@${host}:${myhost}/backups
 
 [ "${BORG_PASSPHRASE}" ] || {
   printf "\nWARNING: No Borg passphrase detected."

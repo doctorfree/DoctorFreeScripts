@@ -62,7 +62,7 @@ install_borg() {
 
 borg_create() {
   export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
-  export BORG_REPO=ssh://${user}@${host}/${myhost}/backups
+  export BORG_REPO=${user}@${host}:${myhost}/backups
 
   [ "${BORG_PASSPHRASE}" ] || {
     printf "\nWARNING: No Borg passphrase detected."
@@ -236,7 +236,7 @@ fi
   case "${borg}" in
     init|initialize)
       [ "${have_borg}" ] || install_borg
-      borg init ${user}@${host}:${myhost}/backups
+      borg init --encryption=keyfile ${user}@${host}:${myhost}/backups
       printf "\nExport your passphrase with:"
       printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       ;;
@@ -262,7 +262,7 @@ fi
     mount)
       [ "${have_borg}" ] || install_borg
       [ -d /mnt/borg ] || ${SUDO} mkdir -p /mnt/borg
-      borg mount ssh://${user}@${host}/${myhost}/backups /mnt/borg
+      borg mount ${user}@${host}:${myhost}/backups /mnt/borg
       ;;
     *)
       usage
