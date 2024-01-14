@@ -11,7 +11,6 @@ list=
 recurse=
 remove=
 src=
-name=
 quota=
 dudf=
 verbose=
@@ -191,7 +190,7 @@ shift $(( OPTIND - 1 ))
 
 [ "$1" ] || {
   if [ "${list}" ]; then
-    src="."
+    src="/."
   else
     printf "\nDirectory argument required to upload or remove folders\n"
     printf "\nCurrent rsync.net ${myhost} directory listing:\n"
@@ -211,35 +210,37 @@ shift $(( OPTIND - 1 ))
 }
 
 [ "${src}" ] || src="$(realpath "$1" | sed -e "s%/$%%")"
-name="$(echo "${src}" | sed -e "s%/%_%g" | sed -e "s/^_//")"
 
 if [ "${list}" ]; then
   if [ "${recurse}" ]; then
     if [ "${dryrun}" ]; then
-      printf "\nssh ${user}@${host} ls -lRa ${myhost}/${name}\n"
+      printf "\nssh ${user}@${host} ls -lRa ${myhost}${src}\n"
     else
-      ssh ${user}@${host} ls -lRa "${myhost}/${name}"
+      ssh ${user}@${host} ls -lRa "${myhost}${src}"
     fi
   else
     if [ "${dryrun}" ]; then
-      printf "\nssh ${user}@${host} ls -la ${myhost}/${name}\n"
+      printf "\nssh ${user}@${host} ls -la ${myhost}${src}\n"
     else
-      ssh ${user}@${host} ls -la "${myhost}/${name}"
+      ssh ${user}@${host} ls -la "${myhost}${src}"
     fi
   fi
 else
   if [ "${remove}" ]; then
     if [ "${dryrun}" ]; then
-      printf "\nssh ${user}@${host} rm -rf${verbose} ${myhost}/${name}\n"
+      printf "\nssh ${user}@${host} rm -rf${verbose} ${myhost}${src}\n"
     else
-      ssh ${user}@${host} rm -rf${verbose} "${myhost}/${name}"
+      ssh ${user}@${host} rm -rf${verbose} "${myhost}${src}"
     fi
   else
     # Create directory if it does not exist
+    top=$(dirname ${myhost}${src})
     if [ "${dryrun}" ]; then
       printf "\nssh ${user}@${host} mkdir -p${verbose} ${myhost}\n"
+      printf "\nssh ${user}@${host} mkdir -p${verbose} ${top}\n"
     else
       ssh ${user}@${host} mkdir -p${verbose} ${myhost}
+      ssh ${user}@${host} mkdir -p${verbose} ${top}
     fi
 
     # Backup specified directory
@@ -248,10 +249,10 @@ else
       --delete-excluded \
       --exclude='.DS_Store' \
       "${src}/" \
-      ${user}@${host}:"${myhost}/${name}"
+      ${user}@${host}:"${myhost}${src}"
     [ "${dryrun}" ] || {
-      printf "\nListing of rsync.net backup folder ${myhost}/${name}:\n"
-      ssh ${user}@${host} ls -a "${myhost}/${name}"
+      printf "\nListing of rsync.net backup folder ${myhost}${src}:\n"
+      ssh ${user}@${host} ls -a "${myhost}${src}"
     }
   fi
 fi
