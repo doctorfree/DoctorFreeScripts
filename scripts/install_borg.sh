@@ -12,11 +12,18 @@ install_borg() {
     printf "\n\tInstalling Borg ..."
     wget --quiet -O /tmp/borg$$ "${DL_URL}"
     chmod 644 /tmp/borg$$
-    [ -d /usr/local/bin ] || sudo mkdir -p /usr/local/bin
-    sudo cp /tmp/borg$$ /usr/local/bin/borg
-    sudo chown root:root /usr/local/bin/borg
-    sudo chmod 755 /usr/local/bin/borg
-    sudo ln -s /usr/local/bin/borg /usr/local/bin/borgfs
+    SUDO=sudo
+    if [ "${EUID}" ]; then
+      [ ${EUID} -eq 0 ] && SUDO=
+    else
+      uid=$(id -u)
+      [ ${uid} -eq 0 ] && SUDO=
+    fi
+    [ -d /usr/local/bin ] || ${SUDO} mkdir -p /usr/local/bin
+    ${SUDO} cp /tmp/borg$$ /usr/local/bin/borg
+    ${SUDO} chown root:root /usr/local/bin/borg
+    ${SUDO} chmod 755 /usr/local/bin/borg
+    ${SUDO} ln -s /usr/local/bin/borg /usr/local/bin/borgfs
     rm -f /tmp/borg$$
     printf " done"
   }
