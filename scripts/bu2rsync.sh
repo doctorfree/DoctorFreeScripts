@@ -1,8 +1,22 @@
 #!/bin/bash
+#       _             ____
+#      | |__   _   _ |___ \  _ __  ___  _   _  _ __    ___
+#      | '_ \ | | | |  __) || '__|/ __|| | | || '_ \  / __|
+#      | |_) || |_| | / __/ | |   \__ \| |_| || | | || (__
+#      |_.__/  \__,_||_____||_|   |___/ \__, ||_| |_| \___|
+#                                       |___/
 #
+# Manage backups/storage on rsync.net
+# Usage: bu2rsync -u
+#
+# Written 2024-01-14 by Ronald Joe Record <ronaldrecord@gmail.com>
+# See: https://www.rsync.net/resources/howto/unix.html
+#
+# ========================= Customize ==============================
 # Modify 'user' and 'host' with your rsync.net username and hostname
 user="<rsync.net username>"
 host="<host>.rsync.net"
+# ======================= End Customize ============================
 myhost="$(hostname)"
 borg=
 cmd=
