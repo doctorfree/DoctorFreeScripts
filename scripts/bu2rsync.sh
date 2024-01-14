@@ -202,6 +202,10 @@ else
   [ ${uid} -eq 0 ] && SUDO=
 fi
 
+[ "${BORG_PASSPHRASE}" ] || {
+  [ -f ${HOME}/.private ] && source ${HOME}/.private
+}
+
 [ "${cmd}" ] && {
   printf "\nCommand: ${cmd}\n"
   if [ "${dryrun}" ]; then

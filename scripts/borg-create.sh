@@ -9,9 +9,12 @@ export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
 export BORG_REPO=${user}@${host}:${myhost}/backups
 
 [ "${BORG_PASSPHRASE}" ] || {
-  printf "\nWARNING: No Borg passphrase detected."
-  printf "\nExport your passphrase in the environment variable:"
-  printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
+  [ -f ${HOME}/.private ] && source ${HOME}/.private
+  [ "${BORG_PASSPHRASE}" ] || {
+    printf "\nWARNING: No Borg passphrase detected."
+    printf "\nExport your passphrase in the environment variable:"
+    printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
+  }
 }
 
 info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
