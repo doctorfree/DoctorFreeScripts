@@ -1,0 +1,6 @@
+SHELL=/bin/bash
+#
+# m h  dom mon dow   command
+#
+# Remote backup daily with borg
+0 23 * * * /bin/bash -lc '/home/ronnie/bin/borg-create'
