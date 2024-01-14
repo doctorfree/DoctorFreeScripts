@@ -16,7 +16,7 @@ dudf=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-b init|create] [-c command] [-lL] [-n] [-q|Q] [-r] [-v] directory"
+  printf "\nUsage: bu2rsync [-b init|create] [-c command] [-lL] [-n] [-q|Q] [-r] [-u] [-v] folder"
   printf "\nWhere:"
   printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
   printf "\n\t-b 'create' creates a borg backup to rsync.net"
@@ -29,6 +29,7 @@ usage() {
   printf "\n\t-r indicates remove remote backup"
   printf "\n\t-v indicates verbose mode"
   printf "\n\t-u displays this usage message and exits\n"
+  printf "\nThe 'folder' argument indicates the folder to sync/list/remove with rsync.net\n"
   exit 1
 }
 
@@ -135,7 +136,7 @@ else
 fi
 export PATH="/usr/local/bin:$PATH"
 have_borg=$(type -p borg)
-while getopts ":b:c:lLnqQrvu" flag; do
+while getopts ":b:c:hlLnqQrvu" flag; do
   case $flag in
     b)
       borg="${OPTARG}"
@@ -166,7 +167,7 @@ while getopts ":b:c:lLnqQrvu" flag; do
     v)
       verbose="v"
       ;;
-    u)
+    h|u)
       usage
       ;;
     \?)
