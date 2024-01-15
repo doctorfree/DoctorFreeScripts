@@ -264,7 +264,7 @@ fi
   [ "${have_borg}" ] || install_borg
   case "${borg}" in
     init|initialize)
-      borg init --encryption=keyfile ${user}@${host}:${myhost}/${bdir}
+      borg init --encryption=keyfile ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       printf "\nExport your passphrase with:"
       printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       ;;
@@ -279,7 +279,7 @@ fi
       }
       borg check --repository-only ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       [ $? -eq 2 ] && {
-        borg init ${user}@${host}:${myhost}/${bdir}
+        borg init ${user}@${host}:${myhost}/${bdir} 2>/dev/null
         printf "\nExport your passphrase with:"
         printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       }
