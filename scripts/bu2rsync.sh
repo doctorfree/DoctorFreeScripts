@@ -278,7 +278,7 @@ fi
         printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       }
       borg check --repository-only ${user}@${host}:${myhost}/${bdir} 2>/dev/null
-      [ $? -eq 0 ] || {
+      [ $? -eq 2 ] && {
         borg init ${user}@${host}:${myhost}/${bdir}
         printf "\nExport your passphrase with:"
         printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
