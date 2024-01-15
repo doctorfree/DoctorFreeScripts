@@ -49,6 +49,7 @@ borg create                                     \
     --exclude '/home/*/.cache/*'                \
     --exclude '/home/*/.local/share/Daedalus'   \
     --exclude '/home/*/Music/*'                 \
+    --exclude '/home/*/transfers/*'             \
     --exclude '/var/tmp/*'                      \
     --exclude '/var/cache'                      \
     --exclude '/var/lib/docker/devicemapper'    \
