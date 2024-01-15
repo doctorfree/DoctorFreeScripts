@@ -37,32 +37,33 @@ trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
 
 info "Starting backup"
 
-borg create                                  \
-    --verbose                                \
-    --filter AME                             \
-    --list                                   \
-    --stats                                  \
-    --show-rc                                \
-    --compression lz4                        \
-    --exclude-caches                         \
-    --exclude '/root/.cache'                 \
-    --exclude '/home/*/.cache/*'             \
-    --exclude '/home/*/Music/*'              \
-    --exclude '/var/tmp/*'                   \
-    --exclude '/var/cache'                   \
-    --exclude '/var/lib/docker/devicemapper' \
-    --exclude '/var/lock/*'                  \
-    --exclude '/var/log/*'                   \
-    --exclude '/var/run/*'                   \
-    --exclude '/var/tmp/*'                   \
-    --exclude '/var/backups/*'               \
-    --exclude '/var/spool/*'                 \
-    --exclude '*.pyc'                        \
-                                             \
-    ::'{hostname}-{now}'                     \
-    /etc                                     \
-    /home                                    \
-    /root                                    \
+borg create                                     \
+    --verbose                                   \
+    --filter AME                                \
+    --list                                      \
+    --stats                                     \
+    --show-rc                                   \
+    --compression lz4                           \
+    --exclude-caches                            \
+    --exclude '/root/.cache'                    \
+    --exclude '/home/*/.cache/*'                \
+    --exclude '/home/*/.local/share/Daedalus'   \
+    --exclude '/home/*/Music/*'                 \
+    --exclude '/var/tmp/*'                      \
+    --exclude '/var/cache'                      \
+    --exclude '/var/lib/docker/devicemapper'    \
+    --exclude '/var/lock/*'                     \
+    --exclude '/var/log/*'                      \
+    --exclude '/var/run/*'                      \
+    --exclude '/var/tmp/*'                      \
+    --exclude '/var/backups/*'                  \
+    --exclude '/var/spool/*'                    \
+    --exclude '*.pyc'                           \
+                                                \
+    ::'{hostname}-{now}'                        \
+    /etc                                        \
+    /home                                       \
+    /root                                       \
     /var
 
 backup_exit=$?

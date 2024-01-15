@@ -95,40 +95,46 @@ borg_create() {
 
   info "Starting backup"
 
-  borg create                         \
-      --verbose                       \
-      --filter AME                    \
-      --list                          \
-      --stats                         \
-      --show-rc                       \
-      --compression lz4               \
-      --exclude-caches                \
-      --exclude 'home/*/.cache/*'     \
-      --exclude 'home/*/Music/*'      \
-      --exclude 'var/tmp/*'           \
-      --exclude '*.pyc'               \
-                                      \
-      ::'{hostname}-{now}'            \
-      /etc                            \
-      /home                           \
-      /root                           \
-      /var
+  borg create                                   \
+    --verbose                                   \
+    --filter AME                                \
+    --list                                      \
+    --stats                                     \
+    --show-rc                                   \
+    --compression lz4                           \
+    --exclude-caches                            \
+    --exclude '/root/.cache'                    \
+    --exclude '/home/*/.cache/*'                \
+    --exclude '/home/*/.local/share/Daedalus'   \
+    --exclude '/home/*/Music/*'                 \
+    --exclude '/var/tmp/*'                      \
+    --exclude '/var/cache'                      \
+    --exclude '/var/lib/docker/devicemapper'    \
+    --exclude '/var/lock/*'                     \
+    --exclude '/var/log/*'                      \
+    --exclude '/var/run/*'                      \
+    --exclude '/var/tmp/*'                      \
+    --exclude '/var/backups/*'                  \
+    --exclude '/var/spool/*'                    \
+    --exclude '*.pyc'                           \
+                                                \
+    ::'{hostname}-{now}'                        \
+    /etc                                        \
+    /home                                       \
+    /root                                       \
+    /var
 
   backup_exit=$?
 
   info "Pruning repository"
 
-  # Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
-  # archives of THIS machine. The '{hostname}-*' matching is very important to
-  # limit prune's operation to this machine's archives and not apply to
-  # other machines' archives also:
-  borg prune                          \
-      --list                          \
-      --glob-archives '{hostname}-*'  \
-      --show-rc                       \
-      --keep-daily    7               \
-      --keep-weekly   4               \
-      --keep-monthly  6
+  borg prune                        \
+    --list                          \
+    --glob-archives '{hostname}-*'  \
+    --show-rc                       \
+    --keep-daily    7               \
+    --keep-weekly   4               \
+    --keep-monthly  3
 
   prune_exit=$?
 
