@@ -18,6 +18,7 @@ user="<rsync.net username>"
 host="<host>.rsync.net"
 # ======================= End Customize ============================
 myhost="$(hostname)"
+bdir="backups"
 borg=
 cmd=
 dryrun=
@@ -30,9 +31,8 @@ dudf=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-b init|check|create|info|list|mount|umount]"
-  printf "\n                [-c command] [-lL] [-n] [-q|Q] [-r] [-u]"
-  printf "\n                [-U user] [-H host] [-v] folder"
+  printf "\nUsage: bu2rsync [-b borg-command] [-c command] [-d dir] [-lL] [-n]"
+  printf "\n                [-q|Q] [-r] [-u] [-U user] [-H host] [-v] folder"
   printf "\nWhere:"
   printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
   printf "\n\t-b 'check' verifies the consistency of the borg backup repository"
@@ -42,6 +42,7 @@ usage() {
   printf "\n\t-b 'mount' mounts the borg backup repository on /mnt/borg"
   printf "\n\t-b 'umount' unmounts the borg backup repository from /mnt/borg"
   printf "\n\t-c 'command' runs 'command' on rsync.net"
+  printf "\n\t-d 'dir' specifies a borg backup directory (default: 'backups'"
   printf "\n\t-l indicates list the contents of the backup folder"
   printf "\n\t-L indicates recursively list the contents of the backup folder"
   printf "\n\t-n indicates perform a dry run, don't make any changes"
@@ -81,7 +82,7 @@ install_borg() {
 
 borg_create() {
   export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
-  export BORG_REPO=${user}@${host}:${myhost}/backups
+  export BORG_REPO=${user}@${host}:${myhost}/${bdir}
 
   [ "${BORG_PASSPHRASE}" ] || {
     printf "\nWARNING: No Borg passphrase detected."
@@ -159,13 +160,16 @@ else
   AUTH_HEADER=
 fi
 export PATH="/usr/local/bin:$PATH"
-while getopts ":b:c:hHlLnqQrvuU" flag; do
+while getopts ":b:c:d:hHlLnqQrvuU" flag; do
   case $flag in
     b)
       borg="${OPTARG}"
       ;;
     c)
       cmd="${OPTARG}"
+      ;;
+    d)
+      bdir="${OPTARG}"
       ;;
     H)
       host="${OPTARG}"
@@ -260,12 +264,12 @@ fi
   [ "${have_borg}" ] || install_borg
   case "${borg}" in
     init|initialize)
-      borg init --encryption=keyfile ${user}@${host}:${myhost}/backups
+      borg init --encryption=keyfile ${user}@${host}:${myhost}/${bdir}
       printf "\nExport your passphrase with:"
       printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       ;;
     check)
-      borg check ${user}@${host}:${myhost}/backups 2>/dev/null
+      borg check ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       ;;
     create)
       [ "${BORG_PASSPHRASE}" ] || {
@@ -273,9 +277,9 @@ fi
         printf "\nExport your passphrase in the environment variable:"
         printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       }
-      borg check --repository-only ${user}@${host}:${myhost}/backups 2>/dev/null
+      borg check --repository-only ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       [ $? -eq 0 ] || {
-        borg init ${user}@${host}:${myhost}/backups
+        borg init ${user}@${host}:${myhost}/${bdir}
         printf "\nExport your passphrase with:"
         printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       }
@@ -287,18 +291,18 @@ fi
       fi
       ;;
     info|information)
-      borg info ${user}@${host}:${myhost}/backups 2>/dev/null
+      borg info ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       ;;
     list)
-      borg list ${user}@${host}:${myhost}/backups 2>/dev/null
+      borg list ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       ;;
     mount)
       [ -d /mnt/borg ] || ${SUDO} mkdir -p /mnt/borg
       ${SUDO} chown ${uid}:${gid} /mnt/borg
-      borg mount ${user}@${host}:${myhost}/backups /mnt/borg 2>/dev/null
+      borg mount ${user}@${host}:${myhost}/${bdir} /mnt/borg 2>/dev/null
       ;;
     umount|unmount)
-      borg unmount /mnt/borg 2>/dev/null
+      borg umount /mnt/borg
       ;;
     *)
       usage
