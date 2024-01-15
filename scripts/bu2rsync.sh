@@ -30,11 +30,12 @@ dudf=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-b init|create|mount] [-c command] [-lL] [-n]"
+  printf "\nUsage: bu2rsync [-b init|create|list|mount] [-c command] [-lL] [-n]"
   printf "\n                [-q|Q] [-r] [-u] [-U user] [-H host] [-v] folder"
   printf "\nWhere:"
   printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
   printf "\n\t-b 'create' creates a borg backup to rsync.net"
+  printf "\n\t-b 'list' lists all archives in the borg backup repository"
   printf "\n\t-b 'mount' mounts the borg backup repository on /mnt/borg"
   printf "\n\t-c 'command' runs 'command' on rsync.net"
   printf "\n\t-l indicates list the contents of the backup folder"
@@ -276,6 +277,10 @@ fi
       else
         borg_create
       fi
+      ;;
+    list)
+      [ "${have_borg}" ] || install_borg
+      borg list ${user}@${host}:${myhost}/backups
       ;;
     mount)
       [ "${have_borg}" ] || install_borg
