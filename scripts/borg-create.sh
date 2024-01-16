@@ -36,7 +36,7 @@ export BORG_REPO=${user}@${host}:${myhost}/${bdir}
 
 uid=$(id -u)
 gid=$(id -g)
-SUDO="sudo -i"
+SUDO="sudo -E"
 if [ "${EUID}" ]; then
   [ ${EUID} -eq 0 ] && SUDO=
 else

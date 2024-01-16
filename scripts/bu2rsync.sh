@@ -276,7 +276,7 @@ shift $(( OPTIND - 1 ))
 
 uid=$(id -u)
 gid=$(id -g)
-SUDO="sudo -i"
+SUDO="sudo -E"
 if [ "${EUID}" ]; then
   [ ${EUID} -eq 0 ] && SUDO=
 else
@@ -341,9 +341,9 @@ fi
         printf "\nExport your passphrase with:"
         printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       }
-      have_create=$(type -p borg-create)
+      have_create=$(command -v borg-create)
       if [ "${have_create}" ]; then
-        borg-create ${bdir} ${borg}
+        ${SUDO} ${have_create} ${bdir} ${borg}
       else
         borg_create ${borg}
       fi
