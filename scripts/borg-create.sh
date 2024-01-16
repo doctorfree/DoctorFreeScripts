@@ -36,7 +36,7 @@ export BORG_REPO=${user}@${host}:${myhost}/${bdir}
 
 uid=$(id -u)
 gid=$(id -g)
-SUDO=sudo
+SUDO="sudo -i"
 if [ "${EUID}" ]; then
   [ ${EUID} -eq 0 ] && SUDO=
 else
@@ -56,15 +56,16 @@ if [ "$2" == "full" ]; then
     --stats                                     \
     --show-rc                                   \
     --compression lz4                           \
+    --one-file-system                           \
     --exclude-caches                            \
-    --exclude-if-present ".nobackup"            \
+    --exclude-if-present '.nobackup'            \
     --keep-exclude-tags                         \
     --exclude '/root/.cache'                    \
-    --exclude "/home/*/.cache"                  \
+    --exclude '/home/*/.cache'                  \
     --exclude '/home/*/.local/share/Daedalus'   \
     --exclude '/home/*/Music/*'                 \
     --exclude '/home/*/transfers/*'             \
-    --exclude "/home/*/.irssi/irclogs/"         \
+    --exclude '/home/*/.irssi/irclogs/'         \
     --exclude '/var/tmp/*'                      \
     --exclude '/var/cache'                      \
     --exclude '/var/lib/docker/devicemapper'    \
@@ -74,15 +75,15 @@ if [ "$2" == "full" ]; then
     --exclude '/var/tmp/*'                      \
     --exclude '/var/backups/*'                  \
     --exclude '/var/spool/*'                    \
-    --exclude "*/.Trash-*"                      \
-    --exclude "*/[Cc]ache/*"                    \
-    --exclude "*/.bitcoin/blocks/*"             \
-    --exclude "*.vmdk"                          \
-    --exclude "/tmp/*"                          \
-    --exclude "*/build-area/*"                  \
-    --exclude "/proc/*"                         \
-    --exclude "/dev/*"                          \
-    --exclude "/sys/*"                          \
+    --exclude '*/.Trash-*'                      \
+    --exclude '*/[Cc]ache/*'                    \
+    --exclude '*/.bitcoin/blocks/*'             \
+    --exclude '*.vmdk'                          \
+    --exclude '/tmp/*'                          \
+    --exclude '*/build-area/*'                  \
+    --exclude '/proc/*'                         \
+    --exclude '/dev/*'                          \
+    --exclude '/sys/*'                          \
     --exclude '*.pyc'                           \
                                                 \
     ::'{hostname}-full-{now}'                   \
