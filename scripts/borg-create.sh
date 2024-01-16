@@ -19,9 +19,11 @@ user="<rsync.net username>"
 host="<host>.rsync.net"
 # ======================= End Customize ============================
 myhost="$(hostname)"
+bdir="backups"
+[ "$1" ] && bdir="$1"
 
 export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
-export BORG_REPO=${user}@${host}:${myhost}/backups
+export BORG_REPO=${user}@${host}:${myhost}/${bdir}
 
 [ "${BORG_PASSPHRASE}" ] || {
   [ -f ${HOME}/.private ] && source ${HOME}/.private
@@ -32,12 +34,66 @@ export BORG_REPO=${user}@${host}:${myhost}/backups
   }
 }
 
+uid=$(id -u)
+gid=$(id -g)
+SUDO=sudo
+if [ "${EUID}" ]; then
+  [ ${EUID} -eq 0 ] && SUDO=
+else
+  [ ${uid} -eq 0 ] && SUDO=
+fi
+
 info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
 trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
 
 info "Starting backup"
 
-borg create                                     \
+if [ "$2" == "full" ]; then
+  ${SUDO} borg create                           \
+    --verbose                                   \
+    --filter AME                                \
+    --list                                      \
+    --stats                                     \
+    --show-rc                                   \
+    --compression lz4                           \
+    --exclude-caches                            \
+    --exclude-if-present ".nobackup"            \
+    --keep-exclude-tags                         \
+    --exclude '/root/.cache'                    \
+    --exclude "/home/*/.cache"                  \
+    --exclude '/home/*/.local/share/Daedalus'   \
+    --exclude '/home/*/Music/*'                 \
+    --exclude '/home/*/transfers/*'             \
+    --exclude "/home/*/.irssi/irclogs/"         \
+    --exclude '/var/tmp/*'                      \
+    --exclude '/var/cache'                      \
+    --exclude '/var/lib/docker/devicemapper'    \
+    --exclude '/var/lock/*'                     \
+    --exclude '/var/log/*'                      \
+    --exclude '/var/run/*'                      \
+    --exclude '/var/tmp/*'                      \
+    --exclude '/var/backups/*'                  \
+    --exclude '/var/spool/*'                    \
+    --exclude "*/.Trash-*"                      \
+    --exclude "*/[Cc]ache/*"                    \
+    --exclude "*/.bitcoin/blocks/*"             \
+    --exclude "*.vmdk"                          \
+    --exclude "/tmp/*"                          \
+    --exclude "*/build-area/*"                  \
+    --exclude "/proc/*"                         \
+    --exclude "/dev/*"                          \
+    --exclude "/sys/*"                          \
+    --exclude '*.pyc'                           \
+                                                \
+    ::'{hostname}-full-{now}'                   \
+    /                                           \
+    /boot                                       \
+    /home                                       \
+    /root                                       \
+    /usr                                        \
+    /var
+else
+  ${SUDO} borg create                           \
     --verbose                                   \
     --filter AME                                \
     --list                                      \
@@ -66,6 +122,11 @@ borg create                                     \
     /home                                       \
     /root                                       \
     /var
+fi
+
+${SUDO} borg create --verbose --stats           \
+  ::'{hostname}-logs-{now}'                     \
+  /var/log/
 
 backup_exit=$?
 
