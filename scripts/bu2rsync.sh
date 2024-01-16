@@ -32,12 +32,13 @@ dudf=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-b init|check|create|full|home|info|list|mount|umount]"
+  printf "\nUsage: bu2rsync [-b init|check|create|delete|full|home|info|list|mount|umount]"
   printf "\n      [-c cmd] [-d dir] [-lLnqQruv] [-m mnt] [-U user] [-H host] folder"
   printf "\nWhere:"
   printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
   printf "\n\t-b 'check' verifies the consistency of the borg backup repository"
   printf "\n\t-b 'create' creates a borg backup to rsync.net"
+  printf "\n\t-b 'delete' deletes the borg backup repository on rsync.net"
   printf "\n\t-b 'info' displays detailed information about the borg backup repository"
   printf "\n\t-b 'full' performs a full borg backup to rsync.net"
   printf "\n\t-b 'home' performs a borg backup of only /home to rsync.net"
@@ -63,6 +64,8 @@ usage() {
   exit 1
 }
 
+info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
+
 install_borg() {
   API_URL="https://api.github.com/repos/borgbackup/borg/releases/latest"
   DL_URL=
@@ -85,16 +88,12 @@ install_borg() {
 }
 
 borg_create() {
-  export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
-  export BORG_REPO=${user}@${host}:${myhost}/${bdir}
-
   [ "${BORG_PASSPHRASE}" ] || {
     printf "\nWARNING: No Borg passphrase detected."
     printf "\nExport your passphrase in the environment variable:"
     printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
   }
 
-  info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
   trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
 
   info "Starting backup"
@@ -318,6 +317,9 @@ fi
   [ -f ${HOME}/.private ] && source ${HOME}/.private
 }
 
+export BORG_REMOTE_PATH=/usr/loca/bin/borg1/borg1
+export BORG_REPO=${user}@${host}:${myhost}/${bdir}
+
 [ "${cmd}" ] && {
   printf "\nCommand: ${cmd}\n"
   if [ "${dryrun}" ]; then
@@ -378,6 +380,12 @@ fi
       else
         borg_create ${borg}
       fi
+      ;;
+    delete)
+      info "Deleting repository ${myhost}/${bdir}"
+      ${SUDO} borg delete ${user}@${host}:${myhost}/${bdir}
+      info "Compacting repository ${myhost}/${bdir}"
+      ${SUDO} borg compact ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       ;;
     info|information)
       ${SUDO} borg info ${user}@${host}:${myhost}/${bdir} 2>/dev/null
