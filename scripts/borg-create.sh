@@ -102,6 +102,7 @@ else
       --stats                                     \
       --show-rc                                   \
       --compression lz4                           \
+      --one-file-system                           \
       --exclude-caches                            \
       --exclude '/home/*/.cache/*'                \
       --exclude '/home/*/.local/share/Daedalus'   \
@@ -119,6 +120,7 @@ else
       --stats                                     \
       --show-rc                                   \
       --compression lz4                           \
+      --one-file-system                           \
       --exclude-caches                            \
       --exclude '/root/.cache'                    \
       --exclude '/home/*/.cache/*'                \
@@ -145,7 +147,9 @@ else
 fi
 
 [ "$2" == "home" ] || {
-  ${SUDO} borg create --verbose --stats           \
+  ${SUDO} borg create                             \
+    --verbose                                     \
+    --stats                                       \
     ::'{hostname}-logs-{now}'                     \
     /var/log/
 }
@@ -154,7 +158,7 @@ backup_exit=$?
 
 info "Pruning repository"
 
-borg prune                          \
+${SUDO} borg prune                  \
     --list                          \
     --glob-archives '{hostname}-*'  \
     --show-rc                       \
@@ -167,7 +171,7 @@ prune_exit=$?
 # free repo disk space by compacting segments
 info "Compacting repository"
 
-borg compact
+${SUDO} borg compact
 
 compact_exit=$?
 

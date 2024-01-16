@@ -19,6 +19,7 @@ host="<host>.rsync.net"
 # ======================= End Customize ============================
 myhost="$(hostname)"
 bdir="backups"
+mntpt="/mnt/borg"
 borg=
 cmd=
 dryrun=
@@ -32,7 +33,7 @@ verbose=
 
 usage() {
   printf "\nUsage: bu2rsync [-b init|check|create|full|home|info|list|mount|umount]"
-  printf "\n                [-c cmd] [-d dir] [-lLnqQruv] [-U user] [-H host] folder"
+  printf "\n      [-c cmd] [-d dir] [-lLnqQruv] [-m mnt] [-U user] [-H host] folder"
   printf "\nWhere:"
   printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
   printf "\n\t-b 'check' verifies the consistency of the borg backup repository"
@@ -41,12 +42,13 @@ usage() {
   printf "\n\t-b 'full' performs a full borg backup to rsync.net"
   printf "\n\t-b 'home' performs a borg backup of only /home to rsync.net"
   printf "\n\t-b 'list' lists all archives in the borg backup repository"
-  printf "\n\t-b 'mount' mounts the borg backup repository on /mnt/borg"
-  printf "\n\t-b 'umount' unmounts the borg backup repository from /mnt/borg"
+  printf "\n\t-b 'mount' mounts the borg backup repository on ${mntpt}"
+  printf "\n\t-b 'umount' unmounts the borg backup repository from ${mntpt}"
   printf "\n\t-c 'cmd' runs command 'cmd' on rsync.net"
   printf "\n\t-d 'dir' specifies a borg backup directory (default: 'backups'"
   printf "\n\t-l indicates list the contents of the backup folder"
   printf "\n\t-L indicates recursively list the contents of the backup folder"
+  printf "\n\t-m 'mnt' specifies the mount point for the borg repo (default: /mnt/borg)"
   printf "\n\t-n indicates perform a dry run, don't make any changes"
   printf "\n\t-q indicates see how much space your account uses with the quota/df commands"
   printf "\n\t-Q indicates see how much space your account uses with the quota/df/du commands"
@@ -151,6 +153,7 @@ borg_create() {
         --stats                                     \
         --show-rc                                   \
         --compression lz4                           \
+        --one-file-system                           \
         --exclude-caches                            \
         --exclude '/home/*/.cache/*'                \
         --exclude '/home/*/.local/share/Daedalus'   \
@@ -168,6 +171,7 @@ borg_create() {
         --stats                                     \
         --show-rc                                   \
         --compression lz4                           \
+        --one-file-system                           \
         --exclude-caches                            \
         --exclude '/root/.cache'                    \
         --exclude '/home/*/.cache/*'                \
@@ -193,7 +197,9 @@ borg_create() {
     fi
   fi
   [ "$1" == "home" ] || {
-    ${SUDO} borg create --verbose --stats           \
+    ${SUDO} borg create                             \
+      --verbose                                     \
+      --stats                                       \
       ::'{hostname}-logs-{now}'                     \
       /var/log/
   }
@@ -202,7 +208,7 @@ borg_create() {
 
   info "Pruning repository"
 
-  borg prune                        \
+  ${SUDO} borg prune                \
     --list                          \
     --glob-archives '{hostname}-*'  \
     --show-rc                       \
@@ -215,7 +221,7 @@ borg_create() {
   # free repo disk space by compacting segments
   info "Compacting repository"
 
-  borg compact
+  ${SUDO} borg compact
 
   compact_exit=$?
 
@@ -240,7 +246,7 @@ else
   AUTH_HEADER=
 fi
 export PATH="/usr/local/bin:$PATH"
-while getopts ":b:c:d:hHlLnqQrvuU" flag; do
+while getopts ":b:c:d:hHlLm:nqQrvuU" flag; do
   case $flag in
     b)
       borg="${OPTARG}"
@@ -260,6 +266,9 @@ while getopts ":b:c:d:hHlLnqQrvuU" flag; do
     L)
       list=1
       recurse=1
+      ;;
+    m)
+      mntpt="${OPTARG}"
       ;;
     n)
       dryrun="nv"
@@ -344,12 +353,12 @@ fi
   [ "${have_borg}" ] || install_borg
   case "${borg}" in
     init|initialize)
-      borg init --encryption=keyfile ${user}@${host}:${myhost}/${bdir} 2>/dev/null
+      ${SUDO} borg init --encryption=keyfile ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       printf "\nExport your passphrase with:"
       printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       ;;
     check)
-      borg check ${user}@${host}:${myhost}/${bdir} 2>/dev/null
+      ${SUDO} borg check ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       ;;
     create|full|home)
       [ "${BORG_PASSPHRASE}" ] || {
@@ -357,9 +366,9 @@ fi
         printf "\nExport your passphrase in the environment variable:"
         printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       }
-      borg check --repository-only ${user}@${host}:${myhost}/${bdir} 2>/dev/null
+      ${SUDO} borg check --repository-only ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       [ $? -eq 2 ] && {
-        borg init ${user}@${host}:${myhost}/${bdir} 2>/dev/null
+        ${SUDO} borg init ${user}@${host}:${myhost}/${bdir} 2>/dev/null
         printf "\nExport your passphrase with:"
         printf "\n\texport BORG_PASSPHRASE='your-pass-phrase'\n"
       }
@@ -371,18 +380,18 @@ fi
       fi
       ;;
     info|information)
-      borg info ${user}@${host}:${myhost}/${bdir} 2>/dev/null
+      ${SUDO} borg info ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       ;;
     list)
-      borg list ${user}@${host}:${myhost}/${bdir} 2>/dev/null
+      ${SUDO} borg list ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       ;;
     mount)
-      [ -d /mnt/borg ] || ${SUDO} mkdir -p /mnt/borg
-      ${SUDO} chown ${uid}:${gid} /mnt/borg
-      borg mount ${user}@${host}:${myhost}/${bdir} /mnt/borg 2>/dev/null
+      [ -d ${mntpt} ] || ${SUDO} mkdir -p ${mntpt}
+      ${SUDO} chown ${uid}:${gid} ${mntpt}
+      ${SUDO} borg mount ${user}@${host}:${myhost}/${bdir} ${mntpt} 2>/dev/null
       ;;
     umount|unmount)
-      borg umount /mnt/borg
+      ${SUDO} borg umount ${mntpt}
       ;;
     *)
       usage
