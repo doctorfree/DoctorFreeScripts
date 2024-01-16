@@ -94,40 +94,61 @@ if [ "$2" == "full" ]; then
     /usr                                        \
     /var
 else
-  ${SUDO} borg create                           \
-    --verbose                                   \
-    --filter AME                                \
-    --list                                      \
-    --stats                                     \
-    --show-rc                                   \
-    --compression lz4                           \
-    --exclude-caches                            \
-    --exclude '/root/.cache'                    \
-    --exclude '/home/*/.cache/*'                \
-    --exclude '/home/*/.local/share/Daedalus'   \
-    --exclude '/home/*/Music/*'                 \
-    --exclude '/home/*/transfers/*'             \
-    --exclude '/var/tmp/*'                      \
-    --exclude '/var/cache'                      \
-    --exclude '/var/lib/docker/devicemapper'    \
-    --exclude '/var/lock/*'                     \
-    --exclude '/var/log/*'                      \
-    --exclude '/var/run/*'                      \
-    --exclude '/var/tmp/*'                      \
-    --exclude '/var/backups/*'                  \
-    --exclude '/var/spool/*'                    \
-    --exclude '*.pyc'                           \
-                                                \
-    ::'{hostname}-{now}'                        \
-    /etc                                        \
-    /home                                       \
-    /root                                       \
-    /var
+  if [ "$2" == "home" ]; then
+    ${SUDO} borg create                           \
+      --verbose                                   \
+      --filter AME                                \
+      --list                                      \
+      --stats                                     \
+      --show-rc                                   \
+      --compression lz4                           \
+      --exclude-caches                            \
+      --exclude '/home/*/.cache/*'                \
+      --exclude '/home/*/.local/share/Daedalus'   \
+      --exclude '/home/*/Music/*'                 \
+      --exclude '/home/*/transfers/*'             \
+      --exclude '*.pyc'                           \
+                                                  \
+      ::'{hostname}-home-{now}'                   \
+      /home
+  else
+    ${SUDO} borg create                           \
+      --verbose                                   \
+      --filter AME                                \
+      --list                                      \
+      --stats                                     \
+      --show-rc                                   \
+      --compression lz4                           \
+      --exclude-caches                            \
+      --exclude '/root/.cache'                    \
+      --exclude '/home/*/.cache/*'                \
+      --exclude '/home/*/.local/share/Daedalus'   \
+      --exclude '/home/*/Music/*'                 \
+      --exclude '/home/*/transfers/*'             \
+      --exclude '/var/tmp/*'                      \
+      --exclude '/var/cache'                      \
+      --exclude '/var/lib/docker/devicemapper'    \
+      --exclude '/var/lock/*'                     \
+      --exclude '/var/log/*'                      \
+      --exclude '/var/run/*'                      \
+      --exclude '/var/tmp/*'                      \
+      --exclude '/var/backups/*'                  \
+      --exclude '/var/spool/*'                    \
+      --exclude '*.pyc'                           \
+                                                  \
+      ::'{hostname}-{now}'                        \
+      /etc                                        \
+      /home                                       \
+      /root                                       \
+      /var
+  fi
 fi
 
-${SUDO} borg create --verbose --stats           \
-  ::'{hostname}-logs-{now}'                     \
-  /var/log/
+[ "$2" == "home" ] || {
+  ${SUDO} borg create --verbose --stats           \
+    ::'{hostname}-logs-{now}'                     \
+    /var/log/
+}
 
 backup_exit=$?
 

@@ -31,14 +31,15 @@ dudf=
 verbose=
 
 usage() {
-  printf "\nUsage: bu2rsync [-b init|check|create|full|info|list|mount|umount]"
-  printf "\n          [-c cmd] [-d dir] [-lLnqQruv] [-U user] [-H host] folder"
+  printf "\nUsage: bu2rsync [-b init|check|create|full|home|info|list|mount|umount]"
+  printf "\n                [-c cmd] [-d dir] [-lLnqQruv] [-U user] [-H host] folder"
   printf "\nWhere:"
   printf "\n\t-b 'init' initializes a borg backup system on rsync.net"
   printf "\n\t-b 'check' verifies the consistency of the borg backup repository"
   printf "\n\t-b 'create' creates a borg backup to rsync.net"
   printf "\n\t-b 'info' displays detailed information about the borg backup repository"
   printf "\n\t-b 'full' performs a full borg backup to rsync.net"
+  printf "\n\t-b 'home' performs a borg backup of only /home to rsync.net"
   printf "\n\t-b 'list' lists all archives in the borg backup repository"
   printf "\n\t-b 'mount' mounts the borg backup repository on /mnt/borg"
   printf "\n\t-b 'umount' unmounts the borg backup repository from /mnt/borg"
@@ -142,39 +143,60 @@ borg_create() {
       /usr                                        \
       /var
   else
-    ${SUDO} borg create                           \
-      --verbose                                   \
-      --filter AME                                \
-      --list                                      \
-      --stats                                     \
-      --show-rc                                   \
-      --compression lz4                           \
-      --exclude-caches                            \
-      --exclude '/root/.cache'                    \
-      --exclude '/home/*/.cache/*'                \
-      --exclude '/home/*/.local/share/Daedalus'   \
-      --exclude '/home/*/Music/*'                 \
-      --exclude '/home/*/transfers/*'             \
-      --exclude '/var/tmp/*'                      \
-      --exclude '/var/cache'                      \
-      --exclude '/var/lib/docker/devicemapper'    \
-      --exclude '/var/lock/*'                     \
-      --exclude '/var/log/*'                      \
-      --exclude '/var/run/*'                      \
-      --exclude '/var/tmp/*'                      \
-      --exclude '/var/backups/*'                  \
-      --exclude '/var/spool/*'                    \
-      --exclude '*.pyc'                           \
-                                                  \
-      ::'{hostname}-{now}'                        \
-      /etc                                        \
-      /home                                       \
-      /root                                       \
-      /var
+    if [ "$1" == "home" ]; then
+      ${SUDO} borg create                           \
+        --verbose                                   \
+        --filter AME                                \
+        --list                                      \
+        --stats                                     \
+        --show-rc                                   \
+        --compression lz4                           \
+        --exclude-caches                            \
+        --exclude '/home/*/.cache/*'                \
+        --exclude '/home/*/.local/share/Daedalus'   \
+        --exclude '/home/*/Music/*'                 \
+        --exclude '/home/*/transfers/*'             \
+        --exclude '*.pyc'                           \
+                                                    \
+        ::'{hostname}-home-{now}'                   \
+        /home
+    else
+      ${SUDO} borg create                           \
+        --verbose                                   \
+        --filter AME                                \
+        --list                                      \
+        --stats                                     \
+        --show-rc                                   \
+        --compression lz4                           \
+        --exclude-caches                            \
+        --exclude '/root/.cache'                    \
+        --exclude '/home/*/.cache/*'                \
+        --exclude '/home/*/.local/share/Daedalus'   \
+        --exclude '/home/*/Music/*'                 \
+        --exclude '/home/*/transfers/*'             \
+        --exclude '/var/tmp/*'                      \
+        --exclude '/var/cache'                      \
+        --exclude '/var/lib/docker/devicemapper'    \
+        --exclude '/var/lock/*'                     \
+        --exclude '/var/log/*'                      \
+        --exclude '/var/run/*'                      \
+        --exclude '/var/tmp/*'                      \
+        --exclude '/var/backups/*'                  \
+        --exclude '/var/spool/*'                    \
+        --exclude '*.pyc'                           \
+                                                    \
+        ::'{hostname}-{now}'                        \
+        /etc                                        \
+        /home                                       \
+        /root                                       \
+        /var
+    fi
   fi
-  ${SUDO} borg create --verbose --stats           \
-    ::'{hostname}-logs-{now}'                     \
-    /var/log/
+  [ "$1" == "home" ] || {
+    ${SUDO} borg create --verbose --stats           \
+      ::'{hostname}-logs-{now}'                     \
+      /var/log/
+  }
 
   backup_exit=$?
 
@@ -329,7 +351,7 @@ fi
     check)
       borg check ${user}@${host}:${myhost}/${bdir} 2>/dev/null
       ;;
-    create|full)
+    create|full|home)
       [ "${BORG_PASSPHRASE}" ] || {
         printf "\nWARNING: No Borg passphrase detected."
         printf "\nExport your passphrase in the environment variable:"
