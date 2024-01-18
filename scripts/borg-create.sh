@@ -113,46 +113,50 @@ else
       ::'{hostname}-home-{now}'                   \
       /home
   else
-    ${SUDO} borg create                           \
-      --verbose                                   \
-      --filter AME                                \
-      --list                                      \
-      --stats                                     \
-      --show-rc                                   \
-      --compression lz4                           \
-      --one-file-system                           \
-      --exclude-caches                            \
-      --exclude '/root/.cache'                    \
-      --exclude '/home/*/.cache/*'                \
-      --exclude '/home/*/.local/share/Daedalus'   \
-      --exclude '/home/*/Music/*'                 \
-      --exclude '/home/*/transfers/*'             \
-      --exclude '/var/tmp/*'                      \
-      --exclude '/var/cache'                      \
-      --exclude '/var/lib/docker/devicemapper'    \
-      --exclude '/var/lock/*'                     \
-      --exclude '/var/log/*'                      \
-      --exclude '/var/run/*'                      \
-      --exclude '/var/tmp/*'                      \
-      --exclude '/var/backups/*'                  \
-      --exclude '/var/spool/*'                    \
-      --exclude '*.pyc'                           \
-                                                  \
-      ::'{hostname}-{now}'                        \
-      /etc                                        \
-      /home                                       \
-      /root                                       \
-      /var
+    if [ "$2" == "logs" ]; then
+      ${SUDO} borg create                         \
+        --verbose                                 \
+        --stats                                   \
+        ::'{hostname}-logs-{now}'                 \
+        /var/log/
+    else
+      ${SUDO} borg create                           \
+        --verbose                                   \
+        --filter AME                                \
+        --list                                      \
+        --stats                                     \
+        --show-rc                                   \
+        --compression lz4                           \
+        --one-file-system                           \
+        --exclude-caches                            \
+        --exclude '/root/.cache'                    \
+        --exclude '/home/*/.cache/*'                \
+        --exclude '/home/*/.local/share/Daedalus'   \
+        --exclude '/home/*/Music/*'                 \
+        --exclude '/home/*/transfers/*'             \
+        --exclude '/var/tmp/*'                      \
+        --exclude '/var/cache'                      \
+        --exclude '/var/lib/docker/devicemapper'    \
+        --exclude '/var/lock/*'                     \
+        --exclude '/var/log/*'                      \
+        --exclude '/var/run/*'                      \
+        --exclude '/var/tmp/*'                      \
+        --exclude '/var/backups/*'                  \
+        --exclude '/var/spool/*'                    \
+        --exclude '*/.Trash-*'                      \
+        --exclude '*/[Cc]ache/*'                    \
+        --exclude '*/.bitcoin/blocks/*'             \
+        --exclude '*.vmdk'                          \
+        --exclude '*.pyc'                           \
+                                                    \
+        ::'{hostname}-{now}'                        \
+        /etc                                        \
+        /home                                       \
+        /root                                       \
+        /var
+    fi
   fi
 fi
-
-[ "$2" == "home" ] || {
-  ${SUDO} borg create                             \
-    --verbose                                     \
-    --stats                                       \
-    ::'{hostname}-logs-{now}'                     \
-    /var/log/
-}
 
 backup_exit=$?
 
