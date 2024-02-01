@@ -23,7 +23,7 @@ OPTS=
 
 usage() {
   printf "\nUsage: kitty-control [ dark | font [num] | list | load [subdir] | tran [opacity]]"
-  printf "\n                     [-a] [-m <match>] [-t <match>] [ -h | -u ] [-s /path/to/socket]"
+  printf "\n                     [-a] [-f] [-m <match>] [-t <match>] [ -h | -u ] [-s /path/to/socket]"
   printf "\nWhere:"
   printf "\n    'dark' Sets the Kitty background opacity to 1.0 (fully opaque)"
   printf "\n           Can use 'dark' or 'opaque'"
@@ -45,6 +45,7 @@ usage() {
   printf "\n           Specify a second argument to set a custom background opacity:"
   printf "\n           e.g. 'kitty-control transparent 0.9'"
   printf "\n    '-a' Indicates modify all windows rather than just the currently active OS window"
+  printf "\n    '-f' Indicates toggle fullscreen"
   printf "\n    '-m <match>' Specifies the window to match"
   printf "\n    '-t <match>' Specifies the tab to match"
   printf "\n        If <match> is 'help' the Kitty documentation URL for matching will be displayed"
@@ -87,6 +88,10 @@ kitty-fontsize() {
   fi
 }
 
+toggle-fullscreen() {
+  kitty @ ${SOCKET} resize-os-window --action toggle-fullscreen ${OPTS}
+}
+
 kitty-list() {
   kitty @ ${SOCKET} ls ${OPTS}
 }
@@ -111,14 +116,18 @@ kitty-transparent() {
 }
 
 [ "$1" ] || usage
-while getopts ":am:s:t:hu" flag; do
+while getopts ":afm:s:t:hu" flag; do
   case $flag in
     a)
       OPTS="$OPTS -a"
       ;;
+    f)
+      toggle-fullscreen
+      ;;
     m)
       if [ "${OPTARG}" == "help" ]; then
-        printf "\nSee https://sw.kovidgoyal.net/kitty/remote-control/#matching-windows-and-tabs\n"
+        printf "\nSee https://sw.kovidgoyal.net/kitty/remote-control/#matching-windows-and-tabs\n\n"
+        exit 0
       else
         OPTS="$OPTS -m ${OPTARG}"
       fi
@@ -128,7 +137,8 @@ while getopts ":am:s:t:hu" flag; do
       ;;
     t)
       if [ "${OPTARG}" == "help" ]; then
-        printf "\nSee https://sw.kovidgoyal.net/kitty/remote-control/#matching-windows-and-tabs\n"
+        printf "\nSee https://sw.kovidgoyal.net/kitty/remote-control/#matching-windows-and-tabs\n\n"
+        exit 0
       else
         OPTS="$OPTS -t ${OPTARG}"
       fi
