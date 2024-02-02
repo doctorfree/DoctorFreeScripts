@@ -22,13 +22,42 @@ SOCKET=
 OPTS=
 
 brief_usage() {
-  printf "\nUsage: kitty-control [-a] [-b /path/to/image] [-f] [-m <match>] [-t <match>]"
-  printf "\n                     [-s /path/to/socket] [-u | -h] [back <color>] [fore <color>]"
-  printf "\n                     [dark | font [num] | list | load [subdir] | tran [opacity]]"
+  printf "\nUsage: kitty-control [-a] [-b /path/to/image] [-e] [-f] [-m <match>] [-t <match>]"
+  printf "\n           [-s /path/to/socket] [-u | -h] [back <color>] [dark] [fore <color>]"
+  printf "\n           [font [num]] [list] [load [subdir]] [title <title>] [tran [opacity]]"
   [ "$1" == "noexit" ] || {
-    printf "\n\nFor a full usage message run 'kitty-control -u'\n\n"
+    printf "\n\nTo display several examples run 'kitty-control -e'"
+    printf "\n\nFor a full usage message run 'kitty-control -u'"
+    printf "\n\nFor a full usage message with examples run 'kitty-control -h'\n\n"
     exit 1
   }
+}
+
+show_examples() {
+  brief_usage noexit
+  printf "\nExample invocations of kitty-control\n"
+  printf "\nTo set a transparent Kitty background with 0.9 opacity:"
+  printf "\n\tkitty-control tran 0.9"
+  printf "\nTo set the Kitty background to fully opaque (no transparency):"
+  printf "\n\tkitty-control dark"
+  printf "\nTo set the Kitty background color to black and foreground color to white:"
+  printf "\n\tkitty-control back black fore white"
+  printf "\nTo load the Kitty config in ~/.config/kitty/laptop/kitty.conf"
+  printf "\n\tkitty-control load laptop"
+  printf "\nTo increase the font size by 2 points:"
+  printf "\n\tkitty-control font +2"
+  printf "\nTo set the background image to ~/Pictures/groovy.png"
+  printf "\n\tkitty-control -b ~/Pictures/groovy.png"
+  printf "\nActions can be combined on the same command line:"
+  printf "\n\tkitty-control -b ~/Pictures/groovy.png fore cyan font 24"
+  printf "\nOrder is sometimes important, especially when switching configs:"
+  printf "\n\tkitty-control font -4 load laptop # The 'font -4' is overridden by the new config"
+  printf "\n\tInstead use 'kitty-control load laptop font -4'"
+  printf "\nTo set the tab title of the tab currently titled '~/src/borg' to 'Borg Backup':"
+  printf "\n\tkitty-control -m \"title:borg\" title \"Borg Backup\""
+  printf "\nTo restore the original Kitty configuration:"
+  printf "\n\tkitty-control load default\n"
+  exit 1
 }
 
 usage() {
@@ -52,6 +81,10 @@ usage() {
   printf "\n           Specify a second argument to load ~/.config/kitty/<subdir>/kitty.conf"
   printf "\n           e.g. 'kitty-control load tv' would load ~/.config/kitty/tv/kitty.conf"
   printf "\n           'kitty-control load default' restores the kitty.conf used to start this instance"
+  printf "\n           'kitty-control load --help' displays a help message for the load command"
+  printf "\n    'title <tab title>' Sets the Kitty tab title to \"tab title\""
+  printf "\n          Quote tab titles which contain spaces, e.g. \"This Is My Tab Title\""
+  printf "\n          Use '-m <match>' to specify the tab to match"
   printf "\n    'tran [opacity]' Sets the Kitty background opacity to 0.8"
   printf "\n           Can use 'tran', 'opacity', 'trans' or 'transparent'"
   printf "\n           Specify a second argument to set a custom background opacity:"
@@ -59,18 +92,21 @@ usage() {
   printf "\n    '-a' Indicates modify all windows rather than just the currently active OS window"
   printf "\n    '-b /path/to/image' sets the background image for the specified Kitty windows"
   printf "\n        If /path/to/image is 'none' then any existing image will be removed"
+  printf "\n    '-e' Displays several example invocations and exits"
   printf "\n    '-f' Indicates toggle fullscreen"
   printf "\n    '-m <match>' Specifies the window to match"
   printf "\n    '-t <match>' Specifies the tab to match"
   printf "\n        Window/Tab matching can be used in conjunction with most kitty-control commands"
-  printf "\n        If <match> is 'help' the Kitty documentation URL for matching will be displayed"
+  printf "\n        If <match> is '--help' the Kitty documentation URL for matching will be displayed"
   printf "\n    '-s /path/to/socket' Specifies the socket Kitty is listening on if enabled"
-  printf "\n        If /path/to/socket is 'help' some help on configuring a Kitty socket is provided"
-  printf "\n    '-u or -h' Displays this usage message and exits"
+  printf "\n        If /path/to/socket is '--help' some help on configuring a Kitty socket is provided"
+  printf "\n    '-u' Displays the usage message and exits"
+  printf "\n    '-h' Displays the usage message with examples and exits"
   printf "\nAdjusting the background opacity or font size requires the original kitty.conf"
   printf "\nthat was used for this instance of Kitty to have enabled the following:"
   printf "\n    'dynamic_background_opacity yes' and 'allow_remote_control yes'"
   printf "\nSee https://sw.kovidgoyal.net/kitty/remote-control/#control-kitty-from-scripts\n"
+  [ "$1" == "examples" ] && show_examples
   exit 1
 }
 
@@ -147,8 +183,12 @@ set-foreground() {
   fi
 }
 
+set-title() {
+  kitty @ ${SOCKET} set-tab-title ${OPTS} "$1"
+}
+
 [ "$1" ] || brief_usage
-while getopts ":ab:fm:s:t:hu" flag; do
+while getopts ":ab:efm:s:t:hu" flag; do
   case $flag in
     a)
       OPTS="$OPTS -a"
@@ -169,7 +209,7 @@ while getopts ":ab:fm:s:t:hu" flag; do
       toggle-fullscreen
       ;;
     m)
-      if [ "${OPTARG}" == "help" ]; then
+      if [ "${OPTARG}" == "--help" ]; then
         printf "\nSee https://sw.kovidgoyal.net/kitty/remote-control/#matching-windows-and-tabs\n\n"
         exit 0
       else
@@ -177,7 +217,7 @@ while getopts ":ab:fm:s:t:hu" flag; do
       fi
       ;;
     s)
-      if [ "${OPTARG}" == "help" ]; then
+      if [ "${OPTARG}" == "--help" ]; then
         printf "\nStart kitty as:"
         printf "\n\tkitty -o allow_remote_control=yes --listen-on unix:/tmp/mykitty"
         printf "\nThe kitty '--listen-on' option tells kitty to listen for control messages"
@@ -197,19 +237,25 @@ while getopts ":ab:fm:s:t:hu" flag; do
       fi
       ;;
     t)
-      if [ "${OPTARG}" == "help" ]; then
+      if [ "${OPTARG}" == "--help" ]; then
         printf "\nSee https://sw.kovidgoyal.net/kitty/remote-control/#matching-windows-and-tabs\n\n"
         exit 0
       else
         OPTS="$OPTS -t ${OPTARG}"
       fi
       ;;
-    h|u)
+    e)
+      show_examples
+      ;;
+    h)
+      usage examples
+      ;;
+    u)
       usage
       ;;
     \?)
       echo "Invalid option: $flag"
-      usage
+      brief_usage
       ;;
   esac
 done
@@ -219,12 +265,22 @@ while [ "$1" ]
 do
   case $1 in
     back*)
-      set-background "$2"
-      shift 2
+      if [ "$2" ]; then
+        set-background "$2"
+        shift 2
+      else
+        printf "\nERROR: background keyword requires an argument"
+        brief_usage
+      fi
       ;;
     fore*)
-      set-foreground "$2"
-      shift 2
+      if [ "$2" ]; then
+        set-foreground "$2"
+        shift 2
+      else
+        printf "\nERROR: foreground keyword requires an argument"
+        brief_usage
+      fi
       ;;
     list|ls)
       kitty-list
@@ -232,14 +288,36 @@ do
       ;;
     load|reload)
       if [ "$2" ]; then
-        if [ -f "${CONFDIR}/$2/kitty.conf" ]; then
-          kitty-reload "$2"
-          shift 2
+        if [ "$2" == "--help" ]; then
+          printf "\nThe 'kitty-control load <subdir>' command loads the Kitty configuration"
+          printf "\nfile in '~/.config/kitty/<subdir>/kitty.conf'. The current instance of"
+          printf "\nkitty continues to run and the specified configuration file is loaded."
+          printf "\nAll tabs and state are preserved while the new configuration is loaded."
+          printf "\n\nThe new Kitty configuration file must be prepared beforehand and located"
+          printf "\nin the specified subdirectory in the Kitty configuration folder."
+          printf "\n\nFor example, if you have one Kitty configuration used for a large screen"
+          printf "\nTV and another used for a laptop then placing the TV Kitty configuration"
+          printf "\nin ~/.config/kitty/tv/kitty.conf and the laptop Kitty configuration in"
+          printf "\n~/.config/kitty/laptop/kitty.conf would allow you to switch between these"
+          printf "\ntwo Kitty configurations with kitty-control as follows:"
+          printf "\n\tkitty-control load tv # When your display is the TV as monitor"
+          printf "\n\tkitty-control load laptop # When you're using the laptop built-in display"
+          printf "\n\nTo restore the Kitty configuration to its original setting:"
+          printf "\n\tkitty-control load default\n\n"
+          exit 0
         else
-          [ "$2" == "default" ] || {
-            printf "\n ${CONFDIR}/$2/kitty.conf does not exist\n"
-            shift
-          }
+          if [ -f "${CONFDIR}/$2/kitty.conf" ]; then
+            kitty-reload "$2"
+            shift 2
+          else
+            if [ "$2" == "default" ]; then
+              kitty-reload
+              shift 2
+            else
+              printf "\n ${CONFDIR}/$2/kitty.conf does not exist\n"
+              shift 2
+            fi
+          fi
         fi
       else
         kitty-reload
@@ -275,6 +353,15 @@ do
       else
         kitty-fontsize 0
         shift
+      fi
+      ;;
+    title)
+      if [ "$2" ]; then
+        set-title "$2"
+        shift 2
+      else
+        printf "\nERROR: title keyword requires an argument"
+        brief_usage
       fi
       ;;
     opacity|tran*)
