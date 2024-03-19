@@ -1,0 +1,60 @@
+body {
+	padding: 0 10%;
+}
+ 
+p {
+	text-align: left;
+	font-size: 18px;
+	letter-spacing: 0.08px;
+	line-height: 26px;
+	word-wrap: break-word;
+	margin-bottom: 30px;
+}
+ 
+h1 {
+	font-size: 36px;
+	font-family: jaf-bernino-sans, 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Geneva, Verdana, sans-serif;
+}
+ 
+h2 {
+	font-size: 30px;
+	font-family: jaf-bernino-sans, 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Geneva, Verdana, sans-serif;
+}
+ 
+h3 {
+	font-size: 24px;
+	font-family: jaf-bernino-sans, 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Geneva, Verdana, sans-serif;
+}
+ 
+div {
+	font-family: jaf-bernino-sans, 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Geneva, Verdana, sans-serif;
+	font-size: 14px;
+	line-height: 24px;
+}
+ 
+.pBody li {
+	margin: 10px 0 !important;
+}
+ 
+.pBody {
+	padding-top: 5px !important;
+	padding-bottom: 5px !important;
+}
+ 
+#firstHeading {
+	margin: 50px 50px 0;
+}
+ 
+#bodyContent {
+	margin: 0 50px;	
+}
+ 
+#content {
+	font-family: freight-text-pro, Georgia, Cambria, 'Times New Roman', Times, serif;
+	color: rgba(0, 0, 0, 0.8);
+	border-right: 1px solid #999;
+}
+ 
+#p-personal li {
+	margin-left: 10px !important;
+}
