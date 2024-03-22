@@ -39,7 +39,13 @@ plat_install() {
 if [ "${have_brew}" ]; then
   brew install pyenv
 else
-  curl https://pyenv.run | bash
+  have_curl=$(type -p curl)
+  if [ "${have_curl}" ]; then
+    curl https://pyenv.run | bash
+  else
+    echo "ERROR: curl not found. Install curl and re-run this script"
+    exit 1
+  fi
 fi
 
 grep PYENV_ROOT ~/.zshrc > /dev/null || {
