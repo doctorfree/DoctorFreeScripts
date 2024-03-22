@@ -24,9 +24,21 @@ grep PYENV_ROOT ~/.zshrc > /dev/null || {
 source ~/.zshrc
 
 have_pyenv=$(type -p pyenv)
-[ "${have_pyenv}" ] && pyenv install 3.12.2
+if [ "${have_pyenv}" ]; then
+  pyenv install 3.12.2
+  pyenv global 3.12.2
+else
+  echo "WARNING: pyenv not found. Check the pyenv installation and ~/.zshrc"
+fi
 
 brew install pyenv-virtualenv
+brew install pipx
+have_pipx=$(type -p pipx)
+if [ "${have_pipx}" ]; then
+  pipx ensurepath
+else
+  echo "WARNING: pipx not found. Check the pipx installation and PATH"
+fi
 
 echo "Python virtual environment setup in $HOME/.pyenv"
 echo "Logout and login or run 'source $HOME/.zshrc'"
