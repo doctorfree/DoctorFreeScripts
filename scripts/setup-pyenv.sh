@@ -3,9 +3,32 @@
 # setup-pyenv - setup a pyenv Python virtual environment on macOS using Homebrew
 
 have_brew=$(type -p brew)
-[ "${have_brew}" ] || {
-  echo "Homebrew required. Exiting."
-  exit 1
+have_apt=$(type -p apt)
+have_dnf=$(type -p dnf)
+# Set the Python executable name
+PYTHON=
+have_python3=$(type -p python3)
+if [ "${have_python3}" ]; then
+  PYTHON=python3
+else
+  have_python=$(type -p python)
+  [ "${have_python}" ] && PYTHON=python
+fi
+
+mod_install() {
+  ${PYTHON} -m pip install --user $1
+}
+
+plat_install() {
+  if [ "${have_brew}" ]; then
+    brew install $1
+  else
+    if [ "${have_apt}" ]; then
+      sudo apt install $1
+    else
+      [ "${have_dnf}" ] && sudo dnf install $1
+    fi
+  fi
 }
 
 [ -f ~/.zshrc ] || {
@@ -13,7 +36,11 @@ have_brew=$(type -p brew)
   exit 1
 }
 
-brew install pyenv
+if [ "${have_brew}" ]; then
+  brew install pyenv
+else
+  curl https://pyenv.run | bash
+fi
 
 grep PYENV_ROOT ~/.zshrc > /dev/null || {
   echo '[ -d $HOME/.pyenv ] && export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
@@ -31,8 +58,17 @@ else
   echo "WARNING: pyenv not found. Check the pyenv installation and ~/.zshrc"
 fi
 
-brew install pyenv-virtualenv
-brew install pipx
+plat_install pyenv-virtualenv
+have_pyvirt=$(type -p pyenv-virtualenv)
+[ "${have_pyvirt}" ] || {
+  mod_install pyenv-virtualenv
+}
+plat_install pipx
+have_pipx=$(type -p pipx)
+[ "${have_pipx}" ] || {
+  mod_install pipx
+}
+
 have_pipx=$(type -p pipx)
 if [ "${have_pipx}" ]; then
   pipx ensurepath
