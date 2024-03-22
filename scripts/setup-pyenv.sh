@@ -21,6 +21,13 @@ grep PYENV_ROOT ~/.zshrc > /dev/null || {
   echo -e 'if command -v pyenv > /dev/null; then\n  eval "$(pyenv init --path)"\nfi' >> ~/.zshrc
 }
 
+source ~/.zshrc
+
+have_pyenv=$(type -p pyenv)
+[ "${have_pyenv}" ] && pyenv install 3.12.2
+
+brew install pyenv-virtualenv
+
 echo "Python virtual environment setup in $HOME/.pyenv"
 echo "Logout and login or run 'source $HOME/.zshrc'"
 echo "Run 'pyenv install --list' to list available Python versions"
