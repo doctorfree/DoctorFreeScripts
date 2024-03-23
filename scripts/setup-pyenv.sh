@@ -24,9 +24,9 @@ plat_install() {
     brew install $1
   else
     if [ "${have_apt}" ]; then
-      sudo apt install $1
+      sudo apt install $1 -q -y
     else
-      [ "${have_dnf}" ] && sudo dnf install $1
+      [ "${have_dnf}" ] && sudo dnf install $1 -y
     fi
   fi
 }
@@ -36,16 +36,20 @@ plat_install() {
   exit 1
 }
 
+[ -d ${HOME}/.pyenv ] && {
+  echo "Moving existing $HOME/.pyenv to $HOME/.pyenv$$"
+  mv ${HOME}/.pyenv ${HOME}/.pyenv$$
+  echo "Remove $HOME/.pyenv$$ after setup completes"
+  echo "Press <Enter> to continue"
+  read -r yn
+}
+
 if [ "${have_brew}" ]; then
   brew install pyenv
 else
   have_curl=$(type -p curl)
-  if [ "${have_curl}" ]; then
-    curl https://pyenv.run | bash
-  else
-    echo "ERROR: curl not found. Install curl and re-run this script"
-    exit 1
-  fi
+  [ "${have_curl}" ] || sudo apt install curl -q -y
+  curl --silent https://pyenv.run | bash
 fi
 
 grep PYENV_ROOT ~/.zshrc > /dev/null || {
@@ -53,8 +57,18 @@ grep PYENV_ROOT ~/.zshrc > /dev/null || {
   echo '[ -d $HOME/.pyenv/bin ] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
   echo -e 'if command -v pyenv > /dev/null; then\n  eval "$(pyenv init --path)"\nfi' >> ~/.zshrc
 }
+[ -d $HOME/.pyenv ] && export PYENV_ROOT="$HOME/.pyenv"
+[ -d $HOME/.pyenv/bin ] && export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv > /dev/null; then
+  eval "$(pyenv init --path)"
+fi
 
-source ~/.zshrc
+[ "${have_brew}" ] || {
+  sudo apt install build-essential libssl-dev zlib1g-dev \
+                   libbz2-dev libreadline-dev libsqlite3-dev \
+                   libncursesw5-dev xz-utils tk-dev libxml2-dev \
+                   libxmlsec1-dev libffi-dev liblzma-dev -q -y
+}
 
 have_pyenv=$(type -p pyenv)
 if [ "${have_pyenv}" ]; then
@@ -64,11 +78,7 @@ else
   echo "WARNING: pyenv not found. Check the pyenv installation and ~/.zshrc"
 fi
 
-plat_install pyenv-virtualenv
-have_pyvirt=$(type -p pyenv-virtualenv)
-[ "${have_pyvirt}" ] || {
-  mod_install pyenv-virtualenv
-}
+[ "${have_brew}" ] && brew install pyenv-virtualenv
 plat_install pipx
 have_pipx=$(type -p pipx)
 [ "${have_pipx}" ] || {
