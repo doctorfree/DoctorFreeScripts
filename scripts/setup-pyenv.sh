@@ -125,6 +125,11 @@ fi
 echo "Python virtual environment setup in $HOME/.pyenv"
 echo "Logout and login or run 'source ${SHINIT}'"
 echo "Run 'pyenv install --list' to list available Python versions"
+have_pyenv=$(type -p pyenv)
+[ "${have_pyenv}" ] && {
+  echo "Installed version(s) of Python:"
+  pyenv versions
+}
 [ "${reminder}" ] && {
   echo "Check and remove $HOME/.pyenv$$"
 }
