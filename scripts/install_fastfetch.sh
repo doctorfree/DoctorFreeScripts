@@ -75,7 +75,7 @@ dl_asset() {
       }
       cd
       rm -f "${TEMP_ASS}"
-      rm -rf /tmp/fast$$
+      sudo rm -rf /tmp/fast$$
       printf " done"
     }
   }
