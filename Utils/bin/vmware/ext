@@ -1,25 +1,24 @@
 #!/bin/bash
 #
-# ext - find a VMware employee's telephone number, title, email, manager
+# ext - find an employee's telephone number, title, email, manager
 #
-# Written by Andrew Sharpe (asharpe@vmware.com)
-#
-
-# Set this to your VMware email address
-bind_user=rrecord@vmware.com
-bind_pass='Time=42$$'
-
-#trap "stty echo" 0 1 2 3 14 15
-#/bin/echo LDAP bind password: \\c
-#stty -echo
-#read bind_pass
-#stty echo
+# customize these settings
+bind_user=your@email.com
+bind_pass='your_password'
+host="hornblower"
+ldap="ldap"
+domain="okta"
+org="com"
+ldap_host="${host}.${ldap}.${domain}.${org}"
+#ldap_port=3268
+ldap_port=636
 
 for i
 do
     echo
     echo '--------------------'
     echo Searching for $i
-    ldapsearch -h empdir.vmware.com -w $bind_pass -D $bind_user -p 3268 -b 'DC=vmware,DC=com' '(CN=*'"$i"'*)' | \
+    ldapsearch -h ${ldap_host} -w $bind_pass -D $bind_user -p ${ldap_port} \
+        -b 'DC=${host},DC=${domain},DC=${org}' '(CN=*'"$i"'*)' | \
         egrep '^cn:|^telephoneNumber:|^title:|^l:|^physicalDeliveryOfficeName:|^mail:|^manager'
 done
