@@ -9,7 +9,31 @@ have_apt=$(type -p apt)
 
 # Update and install zsh
 sudo apt update
-sudo apt install -y zsh fzf fonts-powerline
+sudo apt install -y zsh fonts-powerline
+
+# Install fzf fuzzy finder
+[ -f ${HOME}/.local/bin/fzf ] && {
+  mv ${HOME}/.local/bin/fzf ${HOME}/.local/bin/fzf-bak$$
+}
+printf "\nInstalling fzf fuzzy finder\n"
+[ -d ${HOME}/.fzf ] && mv ${HOME}/.fzf ${HOME}/.fzf$$
+git clone --depth 1 https://github.com/junegunn/fzf.git \
+    ${HOME}/.fzf >/dev/null 2>&1
+[ -f ${HOME}/.fzf/install ] && chmod 755 ${HOME}/.fzf/install
+[ -x ${HOME}/.fzf/install ] && ${HOME}/.fzf/install --all >/dev/null 2>&1
+if [ -f ${HOME}/.fzf/bin/fzf ]; then
+  ln -s ${HOME}/.fzf/bin/fzf ${HOME}/.local/bin/fzf
+  rm -f ${HOME}/.local/bin/fzf-bak$$
+else
+  [ -f ${HOME}/.local/bin/fzf-bak$$ ] && {
+    mv ${HOME}/.local/bin/fzf-bak$$ ${HOME}/.local/bin/fzf
+  }
+fi
+if [ -d ${HOME}/.fzf ]; then
+  rm -rf ${HOME}/.fzf$$
+else
+  [ -d ${HOME}/.fzf$$ ] && mv ${HOME}/.fzf$$ ${HOME}/.fzf
+fi
 
 # Change default shell to zsh
 chsh -s $(which zsh)
@@ -43,4 +67,4 @@ EOL
 # Source the .zshrc file
 source ~/.zshrc
 
-echo "Zsh and Oh-My-Zsh have been installed and configured! Please restart your terminal."
+echo "Zsh, fzf, and Oh-My-Zsh have been installed and configured! Please restart your terminal."

@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# gen_fingerprints - generate public key fingerprints from ~/.ssh/*.pub
+#
+# Usage: gen_fingerprints [-a] [-f] [-k keyname] [-n] [-u]
 
 dryrun=
 keyname=

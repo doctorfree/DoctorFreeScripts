@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+# key_gen - generate SSH key pair
+#
+# Usage: key_gen [-e your@email] [-k keyname] [-n] [-u]
 
 def_email="ronaldrecord@gmail.com"
 dryrun=
