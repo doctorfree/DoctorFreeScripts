@@ -45,6 +45,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
 git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+git clone https://github.com/wfxr/forgit.git $ZSH_CUSTOM/plugins/forgit
 
 # Backup current .zshrc if it exists
 [ -f ~/.zshrc ] && cp ~/.zshrc ~/.zshrc$$
